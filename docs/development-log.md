@@ -1,88 +1,89 @@
-Development Log
+# Development Log
 
-⸻
+---
 
-2026-07-28
+# 2026-07-28
 
-Milestone 1 – Backend Foundation
+## Milestone 1 – Backend Foundation
 
-Objective
+### Objective
 
 Set up the initial backend project structure and verify that a modular FastAPI application is working before integrating any external services.
 
-⸻
+---
 
-Completed
+## Completed
 
-Project Setup
+### Project Setup
 
-* Created the overall project folder structure.
-* Created the backend, frontend, docs, infrastructure and scripts folders.
-* Added project README files.
+- Created the overall project folder structure.
+- Created the `backend`, `frontend`, `docs`, `infrastructure`, and `scripts` folders.
+- Added project README files.
 
-FastAPI
+### FastAPI
 
-* Created the FastAPI application.
-* Added the Health module.
-* Implemented modular routing using APIRouter.
-* Registered the Health router with the main application.
-* Verified:
-    * Root endpoint
-    * Health endpoint
-    * Swagger documentation
+- Created the FastAPI application.
+- Added the Health module.
+- Implemented modular routing using `APIRouter`.
+- Registered the Health router with the main application.
+- Verified:
+  - Root endpoint
+  - Health endpoint
+  - Swagger documentation
 
-Development Environment
+### Development Environment
 
-* Created Python virtual environment.
-* Installed FastAPI.
-* Generated requirements.txt.
+- Created a Python virtual environment.
+- Installed FastAPI.
+- Generated `requirements.txt`.
 
-Source Control
+### Source Control
 
-* Initialized Git repository at the project root.
-* Created remote GitHub repository.
-* Configured Git username and email.
-* Pushed initial commit to GitHub.
+- Initialized the Git repository at the project root.
+- Created the remote GitHub repository.
+- Configured Git username and email.
+- Pushed the initial commit to GitHub.
 
-⸻
+---
 
-Architecture Decisions
+## Architecture Decisions
 
-* Single FastAPI application.
-* Feature-based module structure.
-* Each module contains:
-    * api.py
-    * service.py
-    * repository.py
-    * schemas.py
-* Business logic will remain separate from data access.
-* Google Sheets will be accessed through the repository layer.
+- Single FastAPI application.
+- Feature-based module structure.
+- Each module contains:
+  - `api.py`
+  - `service.py`
+  - `repository.py`
+  - `schemas.py`
+- Business logic remains separate from data access.
+- Google Sheets will be accessed through the repository layer.
 
-⸻
+---
 
-Current Status
+## Current Status
 
-✅ Backend foundation complete
+✅ Backend foundation complete.
 
-⸻
+---
 
-Next Milestone
+## Next Milestone
 
-Milestone 2 – Google Sheets Integration
+### Milestone 2 – Google Sheets Integration
 
-Goals:
+#### Goals
 
-* Create application configuration.
-* Connect to Google Sheets using the service account.
-* Verify connection.
-* Read worksheet information.
+- Create the application configuration.
+- Connect to Google Sheets using the service account.
+- Verify the connection.
+- Read worksheet information.
 
-⸻
+---
 
-Notes
+## Notes
 
-FastAPI setup has been fully verified and is working correctly.
+- FastAPI setup has been fully verified and is working correctly.
+- GitHub repository:
 
-Current GitHub repository:
-
+```text
 https://github.com/aatluri/personal-assistant
+```
