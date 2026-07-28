@@ -1,0 +1,50 @@
+# -----------------------
+# Python
+# -----------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Environment Variables
+.env
+
+# Credentials
+backend/credentials/
+
+# Logs
+*.log
+
+# Test & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# -----------------------
+# Node / React
+# -----------------------
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+
+# -----------------------
+# Misc
+# -----------------------
+*.sqlite3
+*.db
