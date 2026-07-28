@@ -1,34 +1,36 @@
-# Personal Assistant Backend
+Personal Assistant Backend
 
-## Overview
+Overview
 
 This backend powers the Personal Assistant application.
 
-Current Module:
-- Health Tracker
+Current module:
+
+* Health Tracker
 
 Technology Stack:
-- Python
-- FastAPI
 
----
+* Python
+* FastAPI
 
-## Prerequisites
+⸻
 
-- Python 3.10+
-- pip
+Prerequisites
 
----
+* Python 3.10+
+* pip
 
-## First Time Setup
+⸻
 
-### 1. Create a virtual environment
+First Time Setup
+
+1. Create a virtual environment
 
 python3 -m venv .venv
 
-### 2. Activate the virtual environment
+2. Activate the virtual environment
 
-macOS/Linux
+macOS / Linux
 
 source .venv/bin/activate
 
@@ -36,73 +38,117 @@ Windows
 
 .venv\Scripts\activate
 
-### 3. Install dependencies
+3. Install dependencies
 
 pip install -r requirements.txt
 
----
+⸻
 
-## Running the Backend
+Running the Backend
 
 Activate the virtual environment
 
 source .venv/bin/activate
 
-Start the development server
+Start the FastAPI development server
 
 fastapi dev app/main.py
 
----
+⸻
 
-## API Documentation
+Verify the Backend
 
-Swagger UI
+Open the following URLs:
 
-http://127.0.0.1:8000/docs
+URL	Expected Result
+http://127.0.0.1:8000	Personal Assistant API is running
+http://127.0.0.1:8000/health/status	Health module status
+http://127.0.0.1:8000/docs	Swagger API documentation
 
-Root Endpoint
+⸻
 
-http://127.0.0.1:8000
+Project Structure
 
-Health Endpoint
+backend/
+│
+├── app/
+│   ├── main.py
+│   ├── config.py
+│   ├── database/
+│   └── modules/
+│       └── health/
+│           ├── api.py
+│           ├── service.py
+│           ├── repository.py
+│           └── schemas.py
+│
+├── credentials/
+├── tests/
+├── requirements.txt
+├── .env
+└── README.md
 
-http://127.0.0.1:8000/health/status
+⸻
 
----
+Architecture
 
-## Project Structure
+The backend follows a layered architecture.
 
-app/
-    main.py
-    config.py
-    database/
-    modules/
-        health/
+Client
+   │
+   ▼
+FastAPI API
+   │
+   ▼
+Service Layer
+   │
+   ▼
+Repository Layer
+   │
+   ▼
+Database Client
+   │
+   ▼
+Google Sheets (currently pending)
 
----
+Responsibilities:
 
-## Current Status
+* api.py → Defines REST API endpoints.
+* service.py → Contains business logic.
+* repository.py → Reads/writes data.
+* database/ → Handles communication with external data sources.
 
-✅ FastAPI project created
+⸻
 
-✅ Health module added
+Current Status
 
-✅ Health router registered
+✅ Completed
 
-⬜ Google Sheets connection
+* Project structure created
+* FastAPI configured
+* Health module created
+* Swagger documentation working
+* Git repository created
+* GitHub repository connected
+* Initial commit pushed
 
-⬜ Daily Log API
+🚧 Next Milestone
 
-⬜ Body Measurements API
+Google Sheets Integration
 
-⬜ Bloodwork API
+⸻
 
----
+Notes
 
-## Notes
+Always activate the virtual environment before running the backend.
 
-Always activate the virtual environment before running the project.
-
-If new packages are installed, update requirements.txt using:
+Whenever new Python packages are installed:
 
 pip freeze > requirements.txt
+
+After making code changes:
+
+git status
+git add .
+git commit -m "Meaningful commit message"
+git push
