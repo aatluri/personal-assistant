@@ -12,6 +12,8 @@ This backend powers the **Personal Assistant** application.
 
 - Python
 - FastAPI
+- Google Sheets
+- Pydantic Settings
 
 ---
 
@@ -50,6 +52,17 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## 4. Configure Environment Variables
+
+Create a `.env` file from `.env.example` and populate the required values.
+
+Example:
+
+```env
+GOOGLE_SERVICE_ACCOUNT_FILE=credentials/service_account.json
+GOOGLE_SHEETS_SPREADSHEET_ID=YOUR_SPREADSHEET_ID
+```
+
 ---
 
 # Running the Backend
@@ -64,6 +77,18 @@ source .venv/bin/activate
 
 ```bash
 fastapi dev app/main.py
+```
+
+---
+
+# Development Utilities
+
+## Test the Google Sheets Connection
+
+From the `backend` directory:
+
+```bash
+python -m tools.test_google_sheets
 ```
 
 ---
@@ -89,15 +114,18 @@ backend/
 │   ├── main.py
 │   ├── config.py
 │   ├── database/
-│   └── modules/
-│       └── health/
-│           ├── api.py
-│           ├── service.py
-│           ├── repository.py
-│           ├── schemas.py
-│           └── __init__.py
+│   │   └── sheets_client.py
+│   ├── modules/
+│   │   └── health/
+│   │       ├── api.py
+│   │       ├── service.py
+│   │       ├── repository.py
+│   │       ├── schemas.py
+│   │       └── __init__.py
+│   └── utils/
 │
 ├── credentials/
+├── tools/
 ├── tests/
 ├── requirements.txt
 ├── .env
@@ -124,10 +152,10 @@ Service Layer
 Repository Layer
    │
    ▼
-Database Client
+Google Sheets Client
    │
    ▼
-Google Sheets (coming in Milestone 2)
+Google Sheets
 ```
 
 ## Layer Responsibilities
@@ -136,8 +164,22 @@ Google Sheets (coming in Milestone 2)
 |--------|----------------|
 | `api.py` | Defines REST API endpoints |
 | `service.py` | Contains business logic |
-| `repository.py` | Reads and writes data |
-| `database/` | Communicates with external data sources (Google Sheets, databases, etc.) |
+| `repository.py` | Reads and writes application data |
+| `database/sheets_client.py` | Creates authenticated Google Sheets client |
+| `config.py` | Loads application configuration from `.env` |
+
+---
+
+# Configuration
+
+Application configuration is managed through `.env`.
+
+Current configuration:
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_SERVICE_ACCOUNT_FILE` | Path to the Google service account credentials |
+| `GOOGLE_SHEETS_SPREADSHEET_ID` | Google Spreadsheet ID |
 
 ---
 
@@ -152,21 +194,31 @@ Google Sheets (coming in Milestone 2)
 - Swagger documentation verified
 - Git repository initialized
 - GitHub repository connected
-- Initial project pushed to GitHub
+- Configuration management implemented
+- Google Sheets client implemented
+- Google Sheets connectivity verified
 
 ---
 
 ## 🚧 Next Milestone
 
-**Google Sheets Integration**
+**Health Repository**
 
-Progress:
+Goals:
 
-- ✅ Service account created
-- ✅ Google Sheets API enabled
-- ✅ Connection to Google Sheets verified
-- ⬜ Build Google Sheets database client
-- ⬜ Integrate with the repository layer
+- Build the Health repository.
+- Read data from the Daily Log worksheet.
+- Return typed Python models.
+- Expose the data through a service layer.
+
+---
+
+# Documentation
+
+Additional project documentation is available in:
+
+- `docs/development-log.md`
+- `docs/decisions/`
 
 ---
 
@@ -174,7 +226,7 @@ Progress:
 
 Always activate the virtual environment before running the backend.
 
-Whenever new Python packages are installed, update the requirements file:
+Whenever new Python packages are installed:
 
 ```bash
 pip freeze > requirements.txt
