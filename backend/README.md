@@ -160,12 +160,13 @@ Google Sheets (coming in Milestone 2)
 
 **Google Sheets Integration**
 
-Goals:
+Progress:
 
-- Connect to Google Sheets using a service account
-- Verify connectivity
-- Read worksheet data
-- Build the repository layer
+- ✅ Service account created
+- ✅ Google Sheets API enabled
+- ✅ Connection to Google Sheets verified
+- ⬜ Build Google Sheets database client
+- ⬜ Integrate with the repository layer
 
 ---
 

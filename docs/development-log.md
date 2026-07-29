@@ -68,15 +68,19 @@ Set up the initial backend project structure and verify that a modular FastAPI a
 
 ## Next Milestone
 
-### Milestone 2 – Google Sheets Integration
+## Milestone 2 – Google Sheets Integration
 
-#### Goals
+### Progress
 
-- Create the application configuration.
-- Connect to Google Sheets using the service account.
-- Verify the connection.
-- Read worksheet information.
+- Created Google Cloud service account.
+- Enabled the Google Sheets API.
+- Shared the spreadsheet with the service account.
+- Successfully connected to Google Sheets using `gspread`.
+- Decided to use `open_by_key()` instead of `open()` to avoid requiring the Google Drive API and to make the connection more reliable.
 
+### Next Step
+
+- Create the reusable Google Sheets client in `backend/app/database/sheets_client.py`.
 ---
 
 ## Notes
