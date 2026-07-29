@@ -91,6 +91,22 @@ From the `backend` directory:
 python -m tools.test_google_sheets
 ```
 
+## Test the Health Repository
+
+From the `backend` directory:
+
+```bash
+python -m tools.test_health_repository
+```
+
+## Test the Health Service
+
+From the `backend` directory:
+
+```bash
+python -m tools.test_health_service
+```
+
 ---
 
 # Verify the Backend
@@ -146,10 +162,10 @@ Client
 FastAPI API
    │
    ▼
-Service Layer
+HealthService
    │
    ▼
-Repository Layer
+HealthRepository
    │
    ▼
 Google Sheets Client
@@ -162,6 +178,7 @@ Google Sheets
 
 | Layer | Responsibility |
 |--------|----------------|
+| `schemas.py` | Defines domain models independent of the data source |
 | `api.py` | Defines REST API endpoints |
 | `service.py` | Contains business logic |
 | `repository.py` | Reads and writes application data |
@@ -180,9 +197,9 @@ Current configuration:
 |----------|-------------|
 | `GOOGLE_SERVICE_ACCOUNT_FILE` | Path to the Google service account credentials |
 | `GOOGLE_SHEETS_SPREADSHEET_ID` | Google Spreadsheet ID |
+| `HEALTH_DAILY_LOG_WORKSHEET` |  Daily_Log |
 
 ---
-
 # Current Status
 
 ## ✅ Completed
@@ -197,20 +214,26 @@ Current configuration:
 - Configuration management implemented
 - Google Sheets client implemented
 - Google Sheets connectivity verified
+- `DailyLog` domain model implemented
+- Health repository implemented
+- Google Sheets to `DailyLog` mapping implemented
+- Health service implemented
+- Repository and service test utilities created
+- End-to-end Health module flow verified
 
 ---
 
 ## 🚧 Next Milestone
 
-**Health Repository**
+**Health API Layer**
 
-Goals:
+### Goals
 
-- Build the Health repository.
-- Read data from the Daily Log worksheet.
-- Return typed Python models.
-- Expose the data through a service layer.
-
+- Implement REST API endpoints for the Health module.
+- Connect the API layer to the Health service.
+- Return `DailyLog` data through FastAPI.
+- Verify all endpoints using Swagger UI.
+- Establish the pattern for future modules (Workout, Nutrition, Email).
 ---
 
 # Documentation

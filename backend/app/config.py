@@ -44,6 +44,8 @@ settings
 
     GOOGLE_SHEETS_SPREADSHEET_ID: str
 
+    HEALTH_DAILY_LOG_WORKSHEET: str
+
     model_config = SettingsConfigDict(
 
         env_file=".env",
