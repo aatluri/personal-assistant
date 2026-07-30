@@ -19,31 +19,24 @@ from app.modules.health.api import router as health_router
 # There is only ONE FastAPI app for the entire project.
 
 app = FastAPI(
-
     title="Personal Assistant API",
-
     description="Backend API for the Personal Assistant application.",
-
     version="0.1.0",
-
 )
 
-# Register the Health module with the main application.
-
-# This makes all routes defined in health/api.py available.
-
-app.include_router(health_router)
 
 # Simple root endpoint.
-
 # Used to verify that the API is running.
 
 @app.get("/")
-
 def root():
-
     return {
 
         "message": "Personal Assistant API is running"
 
     }
+
+# Register the Health module with the main application.
+# This makes all routes defined in health/api.py available.
+
+app.include_router(health_router)
