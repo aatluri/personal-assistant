@@ -1,5 +1,6 @@
 from app.modules.health.repository import HealthRepository
 from app.modules.health.schemas import DailyLog
+from datetime import date
 
 
 class HealthService:
@@ -43,3 +44,37 @@ class HealthService:
         """
 
         return self._repository.get_daily_logs()
+
+    def get_daily_log(self, log_date: date) -> DailyLog | None:
+        """
+        Return the Daily Log for the specified date.
+        If no record exists, return None.
+        """
+
+        return self._repository.get_daily_log(log_date)
+
+    def get_latest_daily_log(self) -> DailyLog | None:
+        """
+        Return the most recent Daily Log.
+        """
+
+        return self._repository.get_latest_daily_log()
+
+    def create_daily_log(self, daily_log: DailyLog) -> None:
+        """
+        Create a new Daily Log.
+        """
+
+        self._repository.create_daily_log(daily_log)
+
+    def update_daily_log(self,log_date: date,daily_log: DailyLog,) -> bool:
+        """
+        Update an existing Daily Log.
+
+        Returns True if the log was updated, otherwise False.
+        """
+
+        return self._repository.update_daily_log(
+            log_date,
+            daily_log,
+        )

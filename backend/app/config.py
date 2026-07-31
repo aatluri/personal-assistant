@@ -9,33 +9,19 @@ class Settings(BaseSettings):
     Values are loaded from the .env file.
 
 .env
-
    │
-
    ▼
-
 app/config.py
-
    │
-
    ▼
-
 settings
-
    │
-
    ├──────────────► sheets_client.py
-
    │
-
    ├──────────────► repositories
-
    │
-
    ├──────────────► services
-
    │
-
    └──────────────► future modules
 
     """

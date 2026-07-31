@@ -117,6 +117,8 @@ Once the server is running, verify the following URLs:
 |------|-----------------|
 | http://127.0.0.1:8000 | Personal Assistant API is running |
 | http://127.0.0.1:8000/health/status | Health module status |
+| http://127.0.0.1:8000/health/daily-logs | Returns all Daily Logs |
+| http://127.0.0.1:8000/health/latest | Returns the latest Daily Log |
 | http://127.0.0.1:8000/docs | Swagger API documentation |
 
 ---
@@ -462,7 +464,16 @@ Current configuration:
 - Health repository implemented
 - Google Sheets to `DailyLog` mapping implemented
 - Health service implemented
+- Health REST API implemented
+- CRUD endpoints implemented
+    - GET /health/status
+    - GET /health/daily-logs
+    - GET /health/daily-logs/{date}
+    - GET /health/latest
+    - POST /health/daily-logs
+    - PUT /health/daily-logs/{date}
 - Repository and service test utilities created
+- Repository refactored to reuse worksheet access
 - End-to-end Health module flow verified
 
 ---
