@@ -458,3 +458,62 @@ AppShell
      ├── SectionCard
      └── PrimaryButton
 ```
+
+# Component Reuse Matrix
+
+## Purpose
+
+This matrix defines where each UI component is used across the Personal Operating System.
+
+Before creating a new component, always check this matrix to determine whether an existing component can be reused.
+
+The goal is to maintain a consistent user experience and minimize duplicate components.
+
+---
+
+| Component | Dashboard | Log Today | Body Measurements | Blood Work | Workouts | Nutrition | Email | Settings |
+|-----------|:---------:|:---------:|:-----------------:|:----------:|:--------:|:---------:|:-----:|:--------:|
+| AppShell | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Sidebar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Header | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| AchievementBanner | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| MetricCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| StatisticTile | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| ProgressBar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| StatusChip | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| SectionCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| TextInput | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| NumberInput | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Dropdown | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| DatePicker | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| TimePicker | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| ToggleSwitch | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| PrimaryButton | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| SecondaryButton | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| SuccessToast | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| ConfirmationDialog | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| EmptyState | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| LoadingSpinner | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| AIInsightCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| AIRecommendationCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| LineChart | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| BarChart | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| CalendarHeatmap | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+
+---
+
+## Guidelines
+
+- **Reuse before creating.** If a component already exists, extend it rather than creating a new one.
+- **Components should be generic.** Avoid creating components that are tied to a specific page.
+- **Visual consistency is mandatory.** Buttons, cards, inputs, and typography should behave identically across the application.
+- **Document new components.** Whenever a new reusable component is introduced, add it to this matrix and document it in this file.
+- **Page-specific layouts are acceptable.** Individual pages can compose components differently, but the underlying building blocks should remain the same.
+
+---
+
+## Future Modules
+
+As new modules are added (Calendar, Finance, Documents, Projects, AI Assistant, etc.), this matrix should be updated to indicate where each component is reused.
+
+This document serves as the single source of truth for the application's design system.
