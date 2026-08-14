@@ -1,16 +1,40 @@
 /*
     NutritionSection
 
-    Displays today's meals and nutritional information.
+    Displays and updates today's meals
+    and nutritional information.
 
-    All input fields are built using the reusable
-    TextInput component.
+    The actual state is owned by LogToday.
 */
 
-import TextInput from "../../../components/TextInput";
-import TextArea from "../../../components/TextArea";
+import type { Dispatch, SetStateAction } from "react";
 
-function NutritionSection() {
+import TextArea from "../../../components/TextArea";
+import TextInput from "../../../components/TextInput";
+import type { DailyLog } from "../../../types/DailyLog";
+
+/*
+    Props received from the parent
+    LogToday component.
+*/
+interface NutritionSectionProps {
+
+    // Complete Daily Log state
+    dailyLog: DailyLog;
+
+    // Function used to update the Daily Log
+    setDailyLog: Dispatch<SetStateAction<DailyLog>>;
+
+}
+
+function NutritionSection({
+
+    dailyLog,
+
+    setDailyLog,
+
+}: NutritionSectionProps) {
+
     return (
 
         <section>
@@ -22,12 +46,32 @@ function NutritionSection() {
             {/* Meals                         */}
             {/* ----------------------------- */}
 
-           <TextArea
+            <TextArea
                 label="Breakfast"
                 id="breakfast"
                 name="breakfast"
                 rows={3}
                 placeholder="Enter breakfast"
+                value={dailyLog.nutrition.breakfast}
+                onChange={(event) => {
+
+                    const newBreakfast = event.target.value;
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            breakfast: newBreakfast,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextArea
@@ -36,6 +80,26 @@ function NutritionSection() {
                 name="lunch"
                 rows={3}
                 placeholder="Enter lunch"
+                value={dailyLog.nutrition.lunch}
+                onChange={(event) => {
+
+                    const newLunch = event.target.value;
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            lunch: newLunch,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextArea
@@ -44,6 +108,26 @@ function NutritionSection() {
                 name="dinner"
                 rows={3}
                 placeholder="Enter dinner"
+                value={dailyLog.nutrition.dinner}
+                onChange={(event) => {
+
+                    const newDinner = event.target.value;
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            dinner: newDinner,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextArea
@@ -52,6 +136,26 @@ function NutritionSection() {
                 name="snacks"
                 rows={3}
                 placeholder="Enter snacks"
+                value={dailyLog.nutrition.snacks}
+                onChange={(event) => {
+
+                    const newSnacks = event.target.value;
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            snacks: newSnacks,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             {/* ----------------------------- */}
@@ -64,7 +168,26 @@ function NutritionSection() {
                 name="protein"
                 type="number"
                 min={0}
-                defaultValue={110}
+                value={dailyLog.nutrition.protein}
+                onChange={(event) => {
+
+                    const newProtein = Number(event.target.value);
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            protein: newProtein,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextInput
@@ -73,7 +196,26 @@ function NutritionSection() {
                 name="carbs"
                 type="number"
                 min={0}
-                defaultValue={130}
+                value={dailyLog.nutrition.carbs}
+                onChange={(event) => {
+
+                    const newCarbs = Number(event.target.value);
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            carbs: newCarbs,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextInput
@@ -82,7 +224,26 @@ function NutritionSection() {
                 name="fat"
                 type="number"
                 min={0}
-                defaultValue={65}
+                value={dailyLog.nutrition.fat}
+                onChange={(event) => {
+
+                    const newFat = Number(event.target.value);
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            fat: newFat,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextInput
@@ -91,7 +252,26 @@ function NutritionSection() {
                 name="fibre"
                 type="number"
                 min={0}
-                defaultValue={30}
+                value={dailyLog.nutrition.fibre}
+                onChange={(event) => {
+
+                    const newFibre = Number(event.target.value);
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            fibre: newFibre,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextInput
@@ -100,7 +280,26 @@ function NutritionSection() {
                 name="sugar"
                 type="number"
                 min={0}
-                defaultValue={12}
+                value={dailyLog.nutrition.sugar}
+                onChange={(event) => {
+
+                    const newSugar = Number(event.target.value);
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            sugar: newSugar,
+
+                        },
+
+                    }));
+
+                }}
             />
 
             <TextInput
@@ -109,12 +308,32 @@ function NutritionSection() {
                 name="caloriesConsumed"
                 type="number"
                 min={0}
-                defaultValue={2100}
+                value={dailyLog.nutrition.caloriesConsumed}
+                onChange={(event) => {
+
+                    const newCaloriesConsumed = Number(event.target.value);
+
+                    setDailyLog((previousDailyLog) => ({
+
+                        ...previousDailyLog,
+
+                        nutrition: {
+
+                            ...previousDailyLog.nutrition,
+
+                            caloriesConsumed: newCaloriesConsumed,
+
+                        },
+
+                    }));
+
+                }}
             />
 
         </section>
 
     );
+
 }
 
 export default NutritionSection;

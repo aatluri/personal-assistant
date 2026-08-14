@@ -1,38 +1,62 @@
 /*
-    This component displays the body-related
-    measurements for the current day.
+    BodySection
 
-    At the moment, it contains only weight.
-    More measurements may be added in future.
+    Displays the user's body-related
+    measurements for the day.
+
+    The state is owned by the parent
+    LogToday component and passed here
+    through props.
 */
 
-function BodySection() {
+import type { Dispatch, SetStateAction } from "react";
+import TextInput from "../../../components/TextInput";
+import type { DailyLog } from "../../../types/DailyLog";
+
+
+
+/*
+    Props received from the parent component.
+*/
+interface BodySectionProps {
+  // Current weight value
+  weight: number;
+
+  // Function used to update the complete dailyLog object
+  setDailyLog: Dispatch<SetStateAction<DailyLog>>;
+}
+
+function BodySection({
+  weight,
+  setDailyLog,
+}: BodySectionProps) {
   return (
     <section>
-
-      {/* Section Heading */}
+      {/* Section heading */}
       <h2>Body</h2>
 
-      {/* Weight Field */}
-      <div>
+      {/* Weight field */}
+      <TextInput
+        label="Weight (kg)"
+        id="weight"
+        name="weight"
+        type="number"
+        min={0}
+        step={0.1}
+        value={weight}
+        onChange={(event) => {
+          const newWeight = Number(event.target.value);
 
-        {/* Label for the weight input */}
-        <label htmlFor="weight">
-          Weight (kg)
-        </label>
-
-        {/* Numeric input for today's weight */}
-        <input
-          id="weight"
-          name="weight"
-          type="number"
-          step="0.1"
-          min="0"
-          defaultValue="80.3"
-        />
-
-      </div>
-
+          /*
+              Copy the existing daily log values,
+              then update only the weight.
+          */
+          setDailyLog((previousDailyLog) => ({
+            ...previousDailyLog,
+            weight: newWeight,
+          }));
+        }}
+      />
     </section>
   );
 }

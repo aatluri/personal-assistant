@@ -1,53 +1,123 @@
 /*
-    This component captures the user's
-    meal timings for the day.
+    MealTimingSection
 
-    These values will later be used to
-    calculate the eating window and
-    fasting window.
+    Displays and updates the meal timing
+    information for the current day.
+
+    The actual state is owned by LogToday.
+    This component receives the current
+    DailyLog object and the function used
+    to update it.
 */
 
-function MealTimingSection() {
-  return (
-    <section>
+import type { Dispatch, SetStateAction } from "react";
 
-      {/* Section Heading */}
-      <h2>Meal Timing</h2>
+import TextInput from "../../../components/TextInput";
+import type { DailyLog } from "../../../types/DailyLog";
 
-      {/* First Meal Time */}
-      <div>
+/*
+    Props received from the parent
+    LogToday component.
+*/
+interface MealTimingSectionProps {
 
-        <label htmlFor="first-meal-time">
-          First Meal Time
-        </label>
+    // Complete Daily Log state
+    dailyLog: DailyLog;
 
-        <input
-          id="first-meal-time"
-          name="firstMealTime"
-          type="time"
-          defaultValue="08:30"
-        />
+    // Function used to update the Daily Log
+    setDailyLog: Dispatch<SetStateAction<DailyLog>>;
 
-      </div>
+}
 
-      {/* Last Meal Time */}
-      <div>
+function MealTimingSection({
 
-        <label htmlFor="last-meal-time">
-          Last Meal Time
-        </label>
+    dailyLog,
 
-        <input
-          id="last-meal-time"
-          name="lastMealTime"
-          type="time"
-          defaultValue="19:45"
-        />
+    setDailyLog,
 
-      </div>
+}: MealTimingSectionProps) {
 
-    </section>
-  );
+    return (
+
+        <section>
+
+            {/* Section Heading */}
+            <h2>Meal Timing</h2>
+
+            {/* First Meal Time */}
+            <TextInput
+                label="First Meal Time"
+                id="first-meal-time"
+                name="firstMealTime"
+                type="time"
+                value={dailyLog.mealTiming.firstMealTime}
+                onChange={(event) => {
+
+                    /*
+                        Triggered whenever the user changes
+                        the First Meal Time.
+
+                        Steps:
+                        1. Read the new time.
+                        2. Copy the existing DailyLog.
+                        3. Copy the Meal Timing object.
+                        4. Update only the First Meal Time.
+                        5. React stores the updated DailyLog
+                           and re-renders the UI.
+                    */
+
+                    const newFirstMealTime = event.target.value;
+                    setDailyLog((previousDailyLog) => ({
+                        ...previousDailyLog,
+                        mealTiming: {
+                            ...previousDailyLog.mealTiming,
+                            firstMealTime: newFirstMealTime,
+
+                        },
+
+                    }));
+
+                }}
+            />
+
+            {/* Last Meal Time */}
+            <TextInput
+                label="Last Meal Time"
+                id="last-meal-time"
+                name="lastMealTime"
+                type="time"
+                value={dailyLog.mealTiming.lastMealTime}
+                onChange={(event) => {
+
+                    /*
+                        Triggered whenever the user changes
+                        the Last Meal Time.
+
+                        Steps:
+                        1. Read the new time.
+                        2. Copy the existing DailyLog.
+                        3. Copy the Meal Timing object.
+                        4. Update only the Last Meal Time.
+                        5. React stores the updated DailyLog
+                           and re-renders the UI.
+                    */
+                    const newLastMealTime = event.target.value;
+                    setDailyLog((previousDailyLog) => ({
+                        ...previousDailyLog,
+                        mealTiming: {
+                            ...previousDailyLog.mealTiming,
+                            lastMealTime: newLastMealTime,
+                        },
+
+                    }));
+
+                }}
+            />
+
+        </section>
+
+    );
+
 }
 
 export default MealTimingSection;

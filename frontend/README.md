@@ -440,3 +440,313 @@ These components can be reused across multiple pages, including:
 - Settings
 
 This avoids duplication, keeps the code consistent, and makes future maintenance much easier.
+
+
+### React State (`useState`)
+
+- State is data that React remembers.
+- Updating state causes React to re-run the component.
+- React compares the new UI with the previous UI and updates only the parts that changed.
+
+Flow:
+
+```text
+User Action
+      ↓
+onChange
+      ↓
+setState(...)
+      ↓
+Component Re-runs
+      ↓
+React compares old and new UI
+      ↓
+Browser updates only the changed elements
+```
+
+## State Ownership
+
+One of the core principles in React is:
+
+> **The parent component owns the data. Child components display and update the data through props.**
+
+This is often referred to as **lifting state up**.
+
+### Why?
+
+If every child component owns its own state, it becomes difficult for the parent component to access all the data.
+
+For example, when the user clicks **Save Daily Log**, we need to send all the page data to the backend:
+
+- Weight
+- Workout
+- Nutrition
+- Hydration
+- Sleep
+- Notes
+
+If each section owns its own state, the parent component has no easy way to collect everything.
+
+Instead, the parent component owns the data and passes it down to the child components.
+
+---
+
+### Before Lifting State
+
+```text
+LogToday
+
+    BodySection
+        owns weight
+```
+
+`BodySection`
+
+```tsx
+const [weight, setWeight] = useState(80.3);
+```
+
+Only `BodySection` knows the current weight.
+
+---
+
+### After Lifting State
+
+```text
+LogToday
+    owns weight
+        │
+        ▼
+    BodySection
+```
+
+The state is moved to the parent.
+
+`LogToday`
+
+```tsx
+const [weight, setWeight] = useState(80.3);
+```
+
+The parent then passes the state to the child:
+
+```tsx
+<BodySection
+    weight={weight}
+    setWeight={setWeight}
+/>
+```
+
+The child component no longer owns the state.
+
+Instead, it receives the current value and the function used to update it.
+
+```tsx
+interface BodySectionProps {
+
+    weight: number;
+
+    setWeight: Dispatch<SetStateAction<number>>;
+
+}
+```
+
+The child uses these props when rendering the input.
+
+```tsx
+<TextInput
+    label="Weight (kg)"
+    value={weight}
+    onChange={(event) => {
+
+        const newWeight = Number(event.target.value);
+
+        setWeight(newWeight);
+
+    }}
+/>
+```
+
+---
+
+### Data Flow
+
+```text
+User types a new weight
+        │
+        ▼
+BodySection
+        │
+        ▼
+setWeight(...)
+        │
+        ▼
+LogToday updates the state
+        │
+        ▼
+React re-renders LogToday
+        │
+        ▼
+The updated weight is passed back to BodySection
+```
+
+---
+
+## React Rendering Flow
+
+The following steps describe what happens when the user opens:
+
+```
+http://localhost:5173/
+```
+
+### 1. Vite serves the application
+
+The browser loads the React application and executes `src/main.tsx`.
+
+---
+
+### 2. `main.tsx` renders the root component
+
+```tsx
+createRoot(document.getElementById("root")!).render(
+    <App />
+);
+```
+
+`App` becomes the root of the application.
+
+---
+
+### 3. React Router determines the page
+
+React Router examines the URL.
+
+```
+http://localhost:5173/
+```
+
+and loads the `LogToday` page.
+It knows because you mapped the / route to the LogToday component in the App.tsx file.
+
+---
+
+### 4. `LogToday` executes
+
+React runs the `LogToday` component.
+
+This component:
+
+- Creates the `dailyLog` state using `useState()`.
+- Renders all page sections.
+- Passes the required data to each section as props.
+- LogToday also
+
+Example:
+
+```tsx
+<WorkoutSection
+    dailyLog={dailyLog}
+    setDailyLog={setDailyLog}
+/>
+```
+
+---
+
+### 5. `WorkoutSection` executes
+
+React runs the `WorkoutSection` component.
+
+It receives:
+
+- `dailyLog`
+- `setDailyLog`
+
+through props.
+
+It then displays values from the shared state.
+
+Example:
+
+```tsx
+value={dailyLog.workoutDuration}
+```
+
+---
+
+### 6. User changes a value
+
+Suppose the user changes:
+
+```
+Workout Duration
+58 → 60
+```
+
+The `onChange` event fires.
+
+```tsx
+setDailyLog((previousDailyLog) => ({
+    ...previousDailyLog,
+    workoutDuration: 60,
+}));
+```
+
+React updates the `dailyLog` state.
+
+---
+
+### 7. React re-renders
+
+Because the state changed:
+
+- `LogToday` runs again.
+- `WorkoutSection` runs again.
+- The updated value is passed to the input.
+- React updates only the changed parts of the page.
+
+---
+
+### Summary
+
+```
+User opens page
+        │
+        ▼
+main.tsx
+        │
+        ▼
+App
+        │
+        ▼
+React Router
+        │
+        ▼
+LogToday
+        │
+        ▼
+Creates dailyLog state
+        │
+        ▼
+Passes state to WorkoutSection
+        │
+        ▼
+WorkoutSection displays the values
+        │
+        ▼
+User changes a value
+        │
+        ▼
+setDailyLog(...)
+        │
+        ▼
+React re-renders the page
+```
+
+### Benefits
+
+- A single source of truth for the page.
+- The parent always has access to all form data.
+- Easier to validate data before saving.
+- Easier to send the complete form to the backend.
+- Child components remain reusable and focused on displaying the UI.
