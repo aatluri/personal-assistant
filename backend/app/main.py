@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # Import the Health module's router.
 # As we add more modules (Email, Workout, Nutrition),
@@ -14,6 +15,7 @@ from fastapi import FastAPI
 
 from app.modules.health.api import router as health_router
 
+
 # Create the main FastAPI application.
 
 # There is only ONE FastAPI app for the entire project.
@@ -24,6 +26,15 @@ app = FastAPI(
     version="0.1.0",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Simple root endpoint.
 # Used to verify that the API is running.

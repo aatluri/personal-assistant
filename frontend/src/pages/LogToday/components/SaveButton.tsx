@@ -1,25 +1,21 @@
 /*
     SaveButton
 
-    Displays the button used to save
-    the daily log.
+    Reusable button used to save
+    the Daily Log.
 */
 
 import Button from "../../../components/Button";
 
-function SaveButton() {
+interface SaveButtonProps {
+    onClick: () => void;
+}
+
+function SaveButton({ onClick }: SaveButtonProps) {
     return (
-
-        <section>
-
-            <Button type="button">
-
-                Save Daily Log
-
-            </Button>
-
-        </section>
-
+        <Button onClick={onClick}>
+            Save Daily Log
+        </Button>
     );
 }
 

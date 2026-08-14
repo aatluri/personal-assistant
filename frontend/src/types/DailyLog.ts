@@ -11,12 +11,10 @@
 export interface DailyLog {
 
     /* ------------------------------ */
-    /* Body                           */
+    /* General                        */
     /* ------------------------------ */
 
-    body: {
-        weight: number;
-    };
+    date: string;
 
     /* ------------------------------ */
     /* Workout                        */
@@ -34,54 +32,88 @@ export interface DailyLog {
 
     };
 
-    hydration: {
-        water: number;
+    /* ------------------------------ */
+    /* Body                           */
+    /* ------------------------------ */
+
+    body: {
+
+        weight: number;
+
     };
 
-    sleep: {
+    /* ------------------------------ */
+    /* Activity                       */
+    /* ------------------------------ */
 
-        sleepStartTime: string,
+    activity: {
 
-        sleepEndTime: string,
+        steps: number;
+        totalCaloriesBurnt: number;
 
-    },
+    };
+
+    /* ------------------------------ */
+    /* Meal Timing                    */
+    /* ------------------------------ */
 
     mealTiming: {
 
-        firstMealTime: string,
+        firstMealTime: string;
+        lastMealTime: string;
 
-        lastMealTime: string,
+    };
 
-    },
+    /* ------------------------------ */
+    /* Nutrition                      */
+    /* ------------------------------ */
 
     nutrition: {
 
-        breakfast: string,
+        breakfast: string;
+        lunch: string;
+        dinner: string;
+        snacks: string;
 
-        lunch: string,
+        protein: number;
+        carbs: number;
+        fat: number;
+        fibre: number;
+        sugar: number;
 
-        dinner: string,
+        caloriesConsumed: number;
 
-        snacks: string,
+    };
 
-        protein: number,
+    /* ------------------------------ */
+    /* Hydration                      */
+    /* ------------------------------ */
 
-        carbs: number,
+    hydration: {
 
-        fat: number,
+        water: number;
 
-        fibre: number,
+    };
 
-        sugar: number,
+    /* ------------------------------ */
+    /* Sleep                          */
+    /* ------------------------------ */
 
-        caloriesConsumed: number,
+    sleep: {
 
-    },
+        sleepStartTime: string;
+        sleepEndTime: string;
+
+    };
+
+    /* ------------------------------ */
+    /* Notes                          */
+    /* ------------------------------ */
 
     notes: {
 
-        notes: string,
+        notes: string;
 
-    },
+    };
 
 }
