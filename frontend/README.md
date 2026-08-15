@@ -49,144 +49,6 @@ frontend/
 - Move only truly reusable components into the shared `components` folder.
 - Separate UI, business logic and API communication.
 
-## How the Frontend Works
-
-When the application is opened in the browser, the following sequence occurs:
-
-```text
-Browser
-    │
-    ▼
-index.html
-    │
-    ▼
-src/main.tsx
-    │
-    ▼
-<App />
-    │
-    ▼
-React Router
-    │
-    ▼
-Selected Page
-    │
-    ▼
-Page Components
-```
-
-### 1. Browser
-
-The user opens:
-
-```
-http://localhost:5173
-```
-
-The browser first loads `index.html`.
-
----
-
-### 2. index.html
-
-The `index.html` file contains the root element where the React application will be rendered.
-
-```html
-<div id="root"></div>
-```
-
-Nothing is displayed yet.
-
----
-
-### 3. main.tsx
-
-`main.tsx` is the application's entry point.
-
-Its responsibility is to start React and render the root component.
-
-```tsx
-createRoot(document.getElementById("root")!).render(
-    <App />
-);
-```
-
----
-
-### 4. App.tsx
-
-`App.tsx` is the root component of the application.
-
-Its responsibility is to configure application-wide features such as:
-
-- Routing
-- Authentication (future)
-- Global layouts (future)
-
-Currently it contains only the router.
-
----
-
-### 5. React Router
-
-React Router examines the current URL.
-
-Example:
-
-```
-/
-```
-
-It matches this route:
-
-```tsx
-<Route path="/" element={<LogToday />} />
-```
-
-React Router therefore renders the `LogToday` page.
-
----
-
-### 6. Page Component
-
-The page component (`LogToday.tsx`) is responsible for assembling the page.
-
-Example:
-
-```
-LogToday
-│
-├── LogTodayHeader
-├── AchievementBanner
-├── Scoreboard
-└── ...
-```
-
-The page itself contains very little logic.
-
----
-
-### 7. Child Components
-
-Each child component is responsible for rendering one section of the page.
-
-Example:
-
-```
-LogTodayHeader
-```
-
-renders only the page header.
-
-```
-AchievementBanner
-```
-
-renders only the achievement banner.
-
-This keeps components small, readable and maintainable.
-
-
 ## React Concepts Learned
 
 ### Components
@@ -592,55 +454,130 @@ The updated weight is passed back to BodySection
 
 ---
 
-## React Rendering Flow
+### Benefits
 
-The following steps describe what happens when the user opens:
+- A single source of truth for the page.
+- The parent always has access to all form data.
+- Easier to validate data before saving.
+- Easier to send the complete form to the backend.
+- Child components remain reusable and focused on displaying the UI.
 
+
+## How the Frontend Works
+
+The following sequence describes what happens from the moment the user opens the application until a Daily Log is saved.
+
+```text
+User opens page
+        │
+        ▼
+main.tsx
+        │
+        ▼
+App.tsx
+        │
+        ▼
+React Router
+        │
+        ▼
+LogToday.tsx
+        │
+        ▼
+GET Daily Log
+        │
+        ▼
+DailyLog State
+        │
+        ▼
+Page Sections
+        │
+        ▼
+User edits values
+        │
+        ▼
+Save Button
+        │
+        ▼
+PUT API
+        │
+        ▼
+Backend
 ```
-http://localhost:5173/
+
+### 1. Application Starts
+
+**Files involved**
+
+- `src/main.tsx`
+- `src/App.tsx`
+
+The browser opens:
+
+```text
+http://localhost:5173
 ```
 
-### 1. Vite serves the application
+`main.tsx` starts the React application by rendering the `App` component.
 
-The browser loads the React application and executes `src/main.tsx`.
+`App.tsx` contains the application's routes. React Router examines the URL and loads the `LogToday` page.
 
 ---
 
-### 2. `main.tsx` renders the root component
+### 2. LogToday Page Loads
 
-```tsx
-createRoot(document.getElementById("root")!).render(
-    <App />
-);
+**File involved**
+
+- `src/pages/LogToday/LogToday.tsx`
+
+When `LogToday` loads:
+
+- `selectedDate` is initialized to today's date.
+- `dailyLog` state is created.
+- A `useEffect()` runs and requests the Daily Log for the selected date.
+
+```text
+selectedDate
+        │
+        ▼
+GET Daily Log
 ```
-
-`App` becomes the root of the application.
 
 ---
 
-### 3. React Router determines the page
+### 3. Daily Log is Loaded
 
-React Router examines the URL.
+**Files involved**
 
+- `src/api/health.ts`
+- `src/pages/LogToday/LogToday.tsx`
+
+The frontend calls:
+
+```text
+GET /health/daily-logs/{date}
 ```
-http://localhost:5173/
-```
 
-and loads the `LogToday` page.
-It knows because you mapped the / route to the LogToday component in the App.tsx file.
+If data exists:
+
+- The backend response is converted into the frontend `DailyLog` model.
+- `setDailyLog()` updates the page state.
+
+If no data exists:
+
+- An empty `DailyLog` is created.
+
+The `dailyLog` state now becomes the single source of truth for the page.
 
 ---
 
-### 4. `LogToday` executes
+### 4. The Page is Rendered
 
-React runs the `LogToday` component.
+**Files involved**
 
-This component:
+- `src/pages/LogToday/LogToday.tsx`
+- `src/pages/LogToday/components/*`
 
-- Creates the `dailyLog` state using `useState()`.
-- Renders all page sections.
-- Passes the required data to each section as props.
-- LogToday also
+`LogToday` passes the `dailyLog` state to each section.
 
 Example:
 
@@ -651,102 +588,102 @@ Example:
 />
 ```
 
----
-
-### 5. `WorkoutSection` executes
-
-React runs the `WorkoutSection` component.
-
-It receives:
-
-- `dailyLog`
-- `setDailyLog`
-
-through props.
-
-It then displays values from the shared state.
-
-Example:
-
-```tsx
-value={dailyLog.workoutDuration}
-```
+Each section displays only the data it is responsible for.
 
 ---
 
-### 6. User changes a value
+### 5. User Updates a Value
 
-Suppose the user changes:
+**Files involved**
 
-```
-Workout Duration
-58 → 60
-```
+- `WorkoutSection.tsx`
+- `NutritionSection.tsx`
+- `BodySection.tsx`
+- (and the other section components)
 
-The `onChange` event fires.
+When the user changes a value:
 
-```tsx
-setDailyLog((previousDailyLog) => ({
-    ...previousDailyLog,
-    workoutDuration: 60,
-}));
-```
-
-React updates the `dailyLog` state.
+- The component's `onChange()` handler is triggered.
+- The component calls `setDailyLog()`.
+- Only the relevant section of the `dailyLog` object is updated.
+- React automatically re-renders the page with the updated values.
 
 ---
 
-### 7. React re-renders
+### 6. User Clicks Save
 
-Because the state changed:
+**Files involved**
 
-- `LogToday` runs again.
-- `WorkoutSection` runs again.
-- The updated value is passed to the input.
-- React updates only the changed parts of the page.
+- `SaveButton.tsx`
+- `LogToday.tsx`
+
+When the Save button is clicked:
+
+- `SaveButton` calls the `onClick` function passed from `LogToday`.
+- `LogToday` calls `saveDailyLog(selectedDate, dailyLog)`.
+
+---
+
+### 7. Daily Log is Saved
+
+**File involved**
+
+- `src/api/health.ts`
+
+The API layer:
+
+- Converts the frontend `DailyLog` model into the backend request model.
+- Sends a PUT request to:
+
+```text
+PUT /health/daily-logs/{selectedDate}
+```
+
+The backend then updates (or creates) the Daily Log in Google Sheets.
 
 ---
 
 ### Summary
 
-```
-User opens page
-        │
-        ▼
+```text
+Browser
+    │
+    ▼
 main.tsx
-        │
-        ▼
-App
-        │
-        ▼
+    │
+    ▼
+App.tsx
+    │
+    ▼
 React Router
-        │
-        ▼
-LogToday
-        │
-        ▼
-Creates dailyLog state
-        │
-        ▼
-Passes state to WorkoutSection
-        │
-        ▼
-WorkoutSection displays the values
-        │
-        ▼
-User changes a value
-        │
-        ▼
-setDailyLog(...)
-        │
-        ▼
-React re-renders the page
+    │
+    ▼
+LogToday.tsx
+    │
+    ▼
+GET Daily Log
+    │
+    ▼
+setDailyLog()
+    │
+    ▼
+Page Sections
+    │
+    ▼
+User edits values
+    │
+    ▼
+setDailyLog()
+    │
+    ▼
+SaveButton
+    │
+    ▼
+saveDailyLog()
+    │
+    ▼
+PUT API
+    │
+    ▼
+Backend
 ```
-
-### Benefits
-
-- A single source of truth for the page.
-- The parent always has access to all form data.
-- Easier to validate data before saving.
-- Easier to send the complete form to the backend.
-- Child components remain reusable and focused on displaying the UI.
