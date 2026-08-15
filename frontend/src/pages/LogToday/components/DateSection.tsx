@@ -17,18 +17,15 @@ import type { DailyLog } from "../../../types/DailyLog";
     Props received from the parent
     LogToday component.
 */
-interface LogDateSectionProps {
-    // Complete Daily Log state
-    dailyLog: DailyLog;
-
-    // Function used to update the Daily Log
-    setDailyLog: Dispatch<SetStateAction<DailyLog>>;
+interface DateSectionProps {
+    selectedDate: string;
+    setSelectedDate: Dispatch<SetStateAction<string>>;
 }
 
-function LogDateSection({
-    dailyLog,
-    setDailyLog,
-}: LogDateSectionProps) {
+function DateSection({
+    selectedDate,
+    setSelectedDate,
+}: DateSectionProps) {
 
     return (
         <section>
@@ -40,7 +37,7 @@ function LogDateSection({
                 id="log-date"
                 name="logDate"
                 type="date"
-                value={dailyLog.date}
+                value={selectedDate}
                 onChange={(event) => {
 
                     /*
@@ -49,11 +46,8 @@ function LogDateSection({
                     */
 
                     const newDate = event.target.value;
-
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        date: newDate,
-                    }));
+                    console.log("Selected Date changed:", newDate);
+                    setSelectedDate(newDate);
 
                 }}
             />
@@ -63,4 +57,4 @@ function LogDateSection({
 
 }
 
-export default LogDateSection;
+export default DateSection;

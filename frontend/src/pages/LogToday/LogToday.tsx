@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { saveDailyLog } from "../../api/health";
+import { getDailyLog, saveDailyLog } from "../../api/health";
 import type { DailyLog } from "../../types/DailyLog";
 
 import AchievementBanner from "./components/AchievementBanner";
@@ -15,7 +15,8 @@ import Scoreboard from "./components/Scoreboard";
 import SleepSection from "./components/SleepSection";
 import WorkoutSection from "./components/WorkoutSection";
 import ActivitySection from "./components/ActivitySection";
-import LogDateSection from "./components/DateSection";
+import DateSection from "./components/DateSection";
+import { createEmptyDailyLog } from "../../utils/createEmptyDailyLog";
 
 function LogToday() {
 
@@ -26,110 +27,60 @@ function LogToday() {
     by the HTML date input.
     */
     const today = new Date().toLocaleDateString("en-CA");
+
     /*
-        Daily Log State
+    Stores the currently selected date.
 
-        This object contains all the data
-        entered on the Log Today page.
-
-        Eventually these values will come
-        from the backend instead of being
-        hardcoded.
+    Changing this value causes the
+    corresponding Daily Log to be loaded.
     */
-    const [dailyLog, setDailyLog] = useState<DailyLog>({
+    const [selectedDate, setSelectedDate] = useState(today);
 
-        /* ------------------------------ */
-        /* General                        */
-        /* ------------------------------ */
 
-        date: today,
+    /*
+    Indicates whether the Daily Log
+    is currently being loaded.
+    */
+    const [isLoading, setIsLoading] = useState(true);
 
-        /* ------------------------------ */
-        /* Workout                        */
-        /* ------------------------------ */
 
-        workout: {
-            workoutType: "HIIT",
-            workoutDuration: 58,
-            workoutCalories: 620,
-            workoutVolume: 5975,
-            workoutSets: 50,
-            averageHeartRate: 140,
-            workoutSummary: `Battle Rope - 5 min
-                            Row - 1.25 km
-                            Push-ups - 70
-                            Kettlebell Swings - 50`,
-        },
+    const [dailyLog, setDailyLog] = useState<DailyLog>(
+    createEmptyDailyLog()
+    );
 
-        /* ------------------------------ */
-        /* Body                           */
-        /* ------------------------------ */
+    console.log("LogToday rendered");
 
-        body: {
-            weight: 80.3,
-        },
+    /*
+        Runs whenever the selected date changes.
 
-        /* ------------------------------ */
-        /* Activity                       */
-        /* ------------------------------ */
+        When the page first loads, dailyLog.date
+        contains today's date, so this also loads
+        today's Daily Log automatically.
+    */
 
-        activity: {
-            steps: 8500,
-            totalCaloriesBurnt: 2450,
-        },
+    useEffect(() => {
+        async function loadDailyLog() {
+            console.log("Loading Daily Log for:", selectedDate);
+            setIsLoading(true);
+            try {
+                const existingDailyLog = await getDailyLog(selectedDate);
 
-        /* ------------------------------ */
-        /* Meal Timing                    */
-        /* ------------------------------ */
+                if (existingDailyLog) {
+                    setDailyLog(existingDailyLog);
+                } else {
+                    setDailyLog(createEmptyDailyLog());
+                }
+            } catch (error) {
+                console.error("Failed to load Daily Log:", error);
+            } finally {
 
-        mealTiming: {
-            firstMealTime: "08:30",
-            lastMealTime: "20:45",
-        },
+                setIsLoading(false);
 
-        /* ------------------------------ */
-        /* Nutrition                      */
-        /* ------------------------------ */
+            }
+        }
 
-        nutrition: {
-            breakfast: "",
-            lunch: "",
-            dinner: "",
-            snacks: "",
-            protein: 110,
-            carbs: 130,
-            fat: 65,
-            fibre: 30,
-            sugar: 12,
-            caloriesConsumed: 2100,
-        },
-
-        /* ------------------------------ */
-        /* Hydration                      */
-        /* ------------------------------ */
-
-        hydration: {
-            water: 3000,
-        },
-
-        /* ------------------------------ */
-        /* Sleep                          */
-        /* ------------------------------ */
-
-        sleep: {
-            sleepStartTime: "23:15",
-            sleepEndTime: "07:57",
-        },
-
-        /* ------------------------------ */
-        /* Notes                          */
-        /* ------------------------------ */
-
-        notes: {
-            notes: "sss",
-        },
-
-    });
+        loadDailyLog();
+    }, [selectedDate]);
 
     /*
         Saves the current Daily Log
@@ -138,7 +89,7 @@ function LogToday() {
     async function handleSaveDailyLog() {
         try {
             console.log(dailyLog);
-            await saveDailyLog(dailyLog);
+            await saveDailyLog(selectedDate, dailyLog);
             alert("Daily Log saved successfully.");
         } catch (error) {
             console.error(error);
@@ -146,19 +97,35 @@ function LogToday() {
         }
     }
 
+    if (isLoading) {
+
+        return (
+            <div>
+                <p>Loading Daily Log...</p>
+            </div>
+        );
+
+    }
+
     return (
         <div>
 
-            <LogTodayHeader />
-
-            <LogDateSection
-                dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
+            <LogTodayHeader
+                selectedDate={selectedDate}
             />
 
-            <AchievementBanner />
+            <DateSection
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+            />
 
-            <Scoreboard />
+            <AchievementBanner
+                dailyLog={dailyLog}
+            />
+
+            <Scoreboard
+                dailyLog={dailyLog}
+            />
 
             <WorkoutSection
                 dailyLog={dailyLog}
@@ -171,11 +138,6 @@ function LogToday() {
             />
 
             <ActivitySection
-                dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
-            />
-
-            <MealTimingSection
                 dailyLog={dailyLog}
                 setDailyLog={setDailyLog}
             />

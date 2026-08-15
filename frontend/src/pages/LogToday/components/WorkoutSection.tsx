@@ -45,9 +45,14 @@ function WorkoutSection({
                 name="workoutType"
                 value={dailyLog.workout.workoutType}
                 onChange={(event) => {
+                    const newWorkoutType = event.target.value;
+
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
-                        workoutType: event.target.value,
+                        workout: {
+                            ...previousDailyLog.workout,
+                            workoutType: newWorkoutType,
+                        },
                     }));
                 }}
             >
@@ -67,9 +72,14 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutDuration}
                 onChange={(event) => {
+                    const newWorkoutDuration = Number(event.target.value);
+
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
-                        workoutDuration: Number(event.target.value),
+                        workout: {
+                            ...previousDailyLog.workout,
+                            workoutDuration: newWorkoutDuration,
+                        },
                     }));
                 }}
             />
@@ -83,9 +93,14 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutCalories}
                 onChange={(event) => {
+                    const newWorkoutCalories = Number(event.target.value);
+
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
-                        workoutCalories: Number(event.target.value),
+                        workout: {
+                            ...previousDailyLog.workout,
+                            workoutCalories: newWorkoutCalories,
+                        },
                     }));
                 }}
             />
@@ -99,9 +114,14 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutVolume}
                 onChange={(event) => {
+                    const newWorkoutVolume = Number(event.target.value);
+
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
-                        workoutVolume: Number(event.target.value),
+                        workout: {
+                            ...previousDailyLog.workout,
+                            workoutVolume: newWorkoutVolume,
+                        },
                     }));
                 }}
             />
@@ -115,9 +135,14 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutSets}
                 onChange={(event) => {
+                    const newWorkoutSets = Number(event.target.value);
+
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
-                        workoutSets: Number(event.target.value),
+                        workout: {
+                            ...previousDailyLog.workout,
+                            workoutSets: newWorkoutSets,
+                        },
                     }));
                 }}
             />
@@ -131,9 +156,14 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.averageHeartRate}
                 onChange={(event) => {
+                    const newAverageHeartRate = Number(event.target.value);
+
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
-                        averageHeartRate: Number(event.target.value),
+                        workout: {
+                            ...previousDailyLog.workout,
+                            averageHeartRate: newAverageHeartRate,
+                        },
                     }));
                 }}
             />
@@ -146,9 +176,14 @@ function WorkoutSection({
                 rows={8}
                 value={dailyLog.workout.workoutSummary}
                 onChange={(event) => {
+                    const newWorkoutSummary = event.target.value;
+
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
-                        workoutSummary: event.target.value,
+                        workout: {
+                            ...previousDailyLog.workout,
+                            workoutSummary: newWorkoutSummary,
+                        },
                     }));
                 }}
             />

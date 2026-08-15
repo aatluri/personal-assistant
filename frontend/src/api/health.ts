@@ -19,9 +19,99 @@ function buildDateTime(date: string, time: string): string {
 }
 
 /*
+    Retrieves a Daily Log for the
+    specified date.
+
+    Returns null if no Daily Log exists.
+*/
+export async function getDailyLog(date: string): Promise<DailyLog | null> {
+
+    const response = await fetch(
+        `http://localhost:8000/health/daily-logs/${date}`
+    );
+
+    /*
+        No Daily Log exists for this date.
+    */
+    if (response.status === 404) {
+        return null;
+    }
+
+    if (!response.ok) {
+        throw new Error("Failed to load Daily Log");
+    }
+
+    const apiResponse = await response.json();
+    console.log("Date passed", date);
+    console.log("GET API Response", apiResponse);
+
+    /*
+        Convert the backend model into
+        the frontend DailyLog model.
+    */
+    const dailyLog: DailyLog = {
+
+
+        workout: {
+            workoutType: apiResponse.workout_type,
+            workoutDuration: apiResponse.workout_duration_min,
+            workoutCalories: apiResponse.workout_calories_burnt,
+            workoutVolume: 0,
+            workoutSets: 0,
+            averageHeartRate: 0,
+            workoutSummary: apiResponse.workout_summary,
+        },
+
+        body: {
+            weight: apiResponse.weight_kg,
+        },
+
+        activity: {
+            steps: apiResponse.steps,
+            totalCaloriesBurnt: apiResponse.total_calories_burnt,
+        },
+
+        mealTiming: {
+            firstMealTime: apiResponse.first_meal_time.substring(11, 16),
+            lastMealTime: apiResponse.last_meal_time.substring(11, 16),
+        },
+
+        nutrition: {
+            breakfast: apiResponse.breakfast ?? "",
+            lunch: apiResponse.lunch ?? "",
+            dinner: apiResponse.dinner ?? "",
+            snacks: apiResponse.snacks ?? "",
+            protein: apiResponse.protein_g,
+            carbs: apiResponse.carbs_g,
+            fat: apiResponse.fat_g,
+            fibre: apiResponse.fibre_g,
+            sugar: apiResponse.sugar_g,
+            caloriesConsumed: apiResponse.calories_consumed,
+        },
+
+        hydration: {
+            water: apiResponse.water_ml,
+        },
+
+        sleep: {
+            sleepStartTime: apiResponse.sleep_start_time.substring(11, 16),
+            sleepEndTime: apiResponse.sleep_end_time.substring(11, 16),
+        },
+
+        notes: {
+            notes: apiResponse.notes ?? "",
+        },
+
+    };
+
+    return dailyLog;
+}
+
+
+/*
     Saves a Daily Log to the backend.
 */
-export async function saveDailyLog(dailyLog: DailyLog): Promise<void> {
+export async function saveDailyLog(selectedDate: string, dailyLog: DailyLog): Promise<void> {
 
     /*
         Convert the frontend DailyLog model
@@ -29,7 +119,7 @@ export async function saveDailyLog(dailyLog: DailyLog): Promise<void> {
     */
     const request = {
 
-        date: dailyLog.date,
+        date: selectedDate,
 
         weight_kg: dailyLog.body.weight,
 
@@ -56,22 +146,22 @@ export async function saveDailyLog(dailyLog: DailyLog): Promise<void> {
         water_ml: dailyLog.hydration.water,
 
         first_meal_time: buildDateTime(
-            dailyLog.date,
+            selectedDate,
             dailyLog.mealTiming.firstMealTime
         ),
 
         last_meal_time: buildDateTime(
-            dailyLog.date,
+            selectedDate,
             dailyLog.mealTiming.lastMealTime
         ),
 
         sleep_start_time: buildDateTime(
-            dailyLog.date,
+            selectedDate,
             dailyLog.sleep.sleepStartTime
         ),
 
         sleep_end_time: buildDateTime(
-            dailyLog.date,
+            selectedDate,
             dailyLog.sleep.sleepEndTime
         ),
 
@@ -82,9 +172,9 @@ export async function saveDailyLog(dailyLog: DailyLog): Promise<void> {
     console.log("API Request", request);
 
     const response = await fetch(
-        "http://localhost:8000/health/daily-logs",
+        `http://localhost:8000/health/daily-logs/${selectedDate}`,
         {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },

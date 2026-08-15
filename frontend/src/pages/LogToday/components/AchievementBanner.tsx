@@ -1,13 +1,28 @@
-// AchievementBanner.tsx
-
 /*
-    This component displays a summary of today's achievements.
+    AchievementBanner
 
-    For now, the values are hardcoded.
-    Later, these will come from the backend API.
+    Displays a summary of today's achievements.
+
+    Some values are currently derived from
+    the Daily Log, while others will be
+    added as future features.
 */
 
-function AchievementBanner() {
+import type { DailyLog } from "../../../types/DailyLog";
+
+interface AchievementBannerProps {
+    dailyLog: DailyLog;
+}
+
+function AchievementBanner({ dailyLog }: AchievementBannerProps) {
+
+    /*
+        Check whether today's protein
+        goal has been achieved.
+    */
+    const proteinGoalAchieved =
+        dailyLog.nutrition.protein >= 130;
+
     return (
         <div>
 
@@ -19,12 +34,12 @@ function AchievementBanner() {
 
             {/* Achievement summary */}
             <p>
-                620 Calories Burned • Day 24 / 90 • Protein Goal Achieved
+                {dailyLog.workout.workoutCalories} Calories Burned • Day 24 / 90 • {proteinGoalAchieved ? "Protein Goal Achieved" : "Protein Goal Pending"}
             </p>
 
         </div>
     );
+
 }
 
-// Make this component available to other files.
 export default AchievementBanner;

@@ -58,7 +58,10 @@ function HydrationSection({
 */
                 setDailyLog((previousDailyLog) => ({
                     ...previousDailyLog,
-                    water: newWater,
+                    hydration: {
+                        ...previousDailyLog.hydration,
+                        water: newWater,
+                    },
                 }));
                 }}
             />

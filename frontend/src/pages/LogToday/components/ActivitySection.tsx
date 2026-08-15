@@ -28,22 +28,6 @@ function ActivitySection({
             <h2>Activity</h2>
 
             <TextInput
-                label="Date"
-                id="date"
-                name="date"
-                type="date"
-                value={dailyLog.date}
-                onChange={(event) => {
-                    const newDate = event.target.value;
-
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        date: newDate,
-                    }));
-                }}
-            />
-
-            <TextInput
                 label="Steps"
                 id="steps"
                 name="steps"
