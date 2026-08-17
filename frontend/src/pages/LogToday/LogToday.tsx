@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import { getDailyLog, saveDailyLog } from "../../api/health";
 import type { DailyLog } from "../../types/DailyLog";
+import type { SetStateAction } from "react";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 import AchievementBanner from "./components/AchievementBanner";
 import BodySection from "./components/BodySection";
@@ -42,7 +44,7 @@ function LogToday() {
     is currently being loaded.
     */
     const [isLoading, setIsLoading] = useState(true);
-
+    const [isDirty, setIsDirty] = useState(false);
 
     const [dailyLog, setDailyLog] = useState<DailyLog>(
     createEmptyDailyLog()
@@ -67,8 +69,10 @@ function LogToday() {
 
                 if (existingDailyLog) {
                     setDailyLog(existingDailyLog);
+                    setIsDirty(false);
                 } else {
                     setDailyLog(createEmptyDailyLog());
+                    setIsDirty(false);
                 }
             } catch (error) {
                 console.error("Failed to load Daily Log:", error);
@@ -90,6 +94,7 @@ function LogToday() {
         try {
             console.log(dailyLog);
             await saveDailyLog(selectedDate, dailyLog);
+            setIsDirty(false);
             alert("Daily Log saved successfully.");
         } catch (error) {
             console.error(error);
@@ -97,12 +102,21 @@ function LogToday() {
         }
     }
 
+    /*
+    Updates the Daily Log and marks
+    the page as having unsaved changes.
+    */
+    function updateDailyLog(
+        action: React.SetStateAction<DailyLog>
+    ) {
+        setIsDirty(true);
+        setDailyLog(action);
+    }
+
     if (isLoading) {
 
         return (
-            <div>
-                <p>Loading Daily Log...</p>
-            </div>
+            <LoadingSpinner />
         );
 
     }
@@ -112,6 +126,7 @@ function LogToday() {
 
             <LogTodayHeader
                 selectedDate={selectedDate}
+                isDirty={isDirty}
             />
 
             <DateSection
@@ -129,42 +144,42 @@ function LogToday() {
 
             <WorkoutSection
                 dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <BodySection
                 weight={dailyLog.body.weight}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <ActivitySection
                 dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <MealTimingSection
                 dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <NutritionSection
                 dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <HydrationSection
                 water={dailyLog.hydration.water}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <SleepSection
                 dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <NotesSection
                 dailyLog={dailyLog}
-                setDailyLog={setDailyLog}
+                setDailyLog={updateDailyLog}
             />
 
             <SaveButton

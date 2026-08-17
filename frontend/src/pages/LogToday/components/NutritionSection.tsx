@@ -171,7 +171,7 @@ function NutritionSection({
                 value={dailyLog.nutrition.protein}
                 onChange={(event) => {
 
-                    const newProtein = Number(event.target.value);
+                    const newProtein = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
 
@@ -199,7 +199,7 @@ function NutritionSection({
                 value={dailyLog.nutrition.carbs}
                 onChange={(event) => {
 
-                    const newCarbs = Number(event.target.value);
+                    const newCarbs = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
 
@@ -227,7 +227,7 @@ function NutritionSection({
                 value={dailyLog.nutrition.fat}
                 onChange={(event) => {
 
-                    const newFat = Number(event.target.value);
+                    const newFat = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
 
@@ -255,7 +255,7 @@ function NutritionSection({
                 value={dailyLog.nutrition.fibre}
                 onChange={(event) => {
 
-                    const newFibre = Number(event.target.value);
+                    const newFibre = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
 
@@ -283,7 +283,7 @@ function NutritionSection({
                 value={dailyLog.nutrition.sugar}
                 onChange={(event) => {
 
-                    const newSugar = Number(event.target.value);
+                    const newSugar = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
 
@@ -311,7 +311,7 @@ function NutritionSection({
                 value={dailyLog.nutrition.caloriesConsumed}
                 onChange={(event) => {
 
-                    const newCaloriesConsumed = Number(event.target.value);
+                    const newCaloriesConsumed = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
 

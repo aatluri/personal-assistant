@@ -35,7 +35,7 @@ function ActivitySection({
                 min={0}
                 value={dailyLog.activity.steps}
                 onChange={(event) => {
-                    const newSteps = Number(event.target.value);
+                    const newSteps = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
@@ -55,7 +55,7 @@ function ActivitySection({
                 min={0}
                 value={dailyLog.activity.totalCaloriesBurnt}
                 onChange={(event) => {
-                    const newCalories = Number(event.target.value);
+                    const newCalories = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,

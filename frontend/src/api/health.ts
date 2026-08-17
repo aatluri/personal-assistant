@@ -14,8 +14,33 @@ import type { DailyLog } from "../types/DailyLog";
     Example:
     08:30 -> 2026-08-14T08:30:00
 */
-function buildDateTime(date: string, time: string): string {
+function buildDateTime(
+    date: string,
+    time: string
+): string | null {
+
+    /*
+        If no time was entered,
+        return null.
+    */
+    if (!time) {
+        return null;
+    }
+
     return `${date}T${time}:00`;
+
+}
+
+/*
+    Converts an empty numeric field into null
+    before sending it to the backend.
+*/
+function buildNumber(
+    value: number | ""
+): number | null {
+
+    return value === "" ? null : value;
+
 }
 
 /*
@@ -53,27 +78,32 @@ export async function getDailyLog(date: string): Promise<DailyLog | null> {
 
 
         workout: {
-            workoutType: apiResponse.workout_type,
-            workoutDuration: apiResponse.workout_duration_min,
-            workoutCalories: apiResponse.workout_calories_burnt,
+            workoutType: apiResponse.workout_type ?? "",
+            workoutDuration: apiResponse.workout_duration_min ?? 0,
+            workoutCalories: apiResponse.workout_calories_burnt ?? 0,
+            /*
+                These fields are currently not stored by
+                the backend, so they remain 0 for now.
+            */
             workoutVolume: 0,
             workoutSets: 0,
             averageHeartRate: 0,
-            workoutSummary: apiResponse.workout_summary,
+
+            workoutSummary: apiResponse.workout_summary ?? "",
         },
 
         body: {
-            weight: apiResponse.weight_kg,
+             weight: apiResponse.weight_kg ?? 0,
         },
 
         activity: {
-            steps: apiResponse.steps,
-            totalCaloriesBurnt: apiResponse.total_calories_burnt,
+            steps: apiResponse.steps ?? 0,
+            totalCaloriesBurnt: apiResponse.total_calories_burnt ?? 0,
         },
 
         mealTiming: {
-            firstMealTime: apiResponse.first_meal_time.substring(11, 16),
-            lastMealTime: apiResponse.last_meal_time.substring(11, 16),
+            firstMealTime: apiResponse.first_meal_time? apiResponse.first_meal_time.substring(11, 16): "",
+            lastMealTime: apiResponse.last_meal_time? apiResponse.last_meal_time.substring(11, 16): "",
         },
 
         nutrition: {
@@ -81,21 +111,21 @@ export async function getDailyLog(date: string): Promise<DailyLog | null> {
             lunch: apiResponse.lunch ?? "",
             dinner: apiResponse.dinner ?? "",
             snacks: apiResponse.snacks ?? "",
-            protein: apiResponse.protein_g,
-            carbs: apiResponse.carbs_g,
-            fat: apiResponse.fat_g,
-            fibre: apiResponse.fibre_g,
-            sugar: apiResponse.sugar_g,
-            caloriesConsumed: apiResponse.calories_consumed,
+            protein: apiResponse.protein_g ?? 0,
+            carbs: apiResponse.carbs_g ?? 0,
+            fat: apiResponse.fat_g ?? 0,
+            fibre: apiResponse.fibre_g ?? 0,
+            sugar: apiResponse.sugar_g ?? 0,
+            caloriesConsumed: apiResponse.calories_consumed ?? 0,
         },
 
         hydration: {
-            water: apiResponse.water_ml,
+            water: apiResponse.water_ml ?? 0,
         },
 
         sleep: {
-            sleepStartTime: apiResponse.sleep_start_time.substring(11, 16),
-            sleepEndTime: apiResponse.sleep_end_time.substring(11, 16),
+            sleepStartTime: apiResponse.sleep_start_time? apiResponse.sleep_start_time.substring(11, 16): "",
+            sleepEndTime: apiResponse.sleep_end_time? apiResponse.sleep_end_time.substring(11, 16): "",
         },
 
         notes: {
@@ -121,29 +151,29 @@ export async function saveDailyLog(selectedDate: string, dailyLog: DailyLog): Pr
 
         date: selectedDate,
 
-        weight_kg: dailyLog.body.weight,
+        weight_kg: buildNumber(dailyLog.body.weight),
 
         workout_type: dailyLog.workout.workoutType,
         workout_summary: dailyLog.workout.workoutSummary,
-        workout_duration_min: dailyLog.workout.workoutDuration,
-        workout_calories_burnt: dailyLog.workout.workoutCalories,
+        workout_duration_min: buildNumber(dailyLog.workout.workoutDuration),
+        workout_calories_burnt: buildNumber(dailyLog.workout.workoutCalories),
 
-        steps: dailyLog.activity.steps,
-        total_calories_burnt: dailyLog.activity.totalCaloriesBurnt,
+        steps: buildNumber(dailyLog.activity.steps),
+        total_calories_burnt: buildNumber(dailyLog.activity.totalCaloriesBurnt),
 
         breakfast: dailyLog.nutrition.breakfast,
         lunch: dailyLog.nutrition.lunch,
         dinner: dailyLog.nutrition.dinner,
         snacks: dailyLog.nutrition.snacks,
 
-        protein_g: dailyLog.nutrition.protein,
-        carbs_g: dailyLog.nutrition.carbs,
-        fibre_g: dailyLog.nutrition.fibre,
-        fat_g: dailyLog.nutrition.fat,
-        sugar_g: dailyLog.nutrition.sugar,
-        calories_consumed: dailyLog.nutrition.caloriesConsumed,
+        protein_g: buildNumber(dailyLog.nutrition.protein),
+        carbs_g: buildNumber(dailyLog.nutrition.carbs),
+        fibre_g: buildNumber(dailyLog.nutrition.fibre),
+        fat_g: buildNumber(dailyLog.nutrition.fat),
+        sugar_g: buildNumber(dailyLog.nutrition.sugar),
+        calories_consumed: buildNumber(dailyLog.nutrition.caloriesConsumed),
 
-        water_ml: dailyLog.hydration.water,
+        water_ml: buildNumber(dailyLog.hydration.water),
 
         first_meal_time: buildDateTime(
             selectedDate,

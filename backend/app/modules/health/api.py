@@ -94,10 +94,13 @@ def create_daily_log(daily_log: DailyLog,) -> None:
     health_service.create_daily_log(daily_log)
 
 
-@router.put("/daily-logs/{log_date}",response_model=DailyLog,)
-def update_daily_log(log_date: date,daily_log: DailyLog,) -> DailyLog:
+@router.put("/daily-logs/{log_date}", response_model=DailyLog)
+def update_daily_log(
+    log_date: date,
+    daily_log: DailyLog,
+) -> DailyLog:
     """
-    Update the Daily Log for the specified date.
+    Update or create the Daily Log for the specified date.
     """
 
     if daily_log.date != log_date:
@@ -106,16 +109,10 @@ def update_daily_log(log_date: date,daily_log: DailyLog,) -> DailyLog:
             detail="The URL date must match the Daily Log date.",
         )
 
-    updated = health_service.update_daily_log(
+    health_service.upsert_daily_log(
         log_date,
         daily_log,
     )
-
-    if not updated:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Daily Log not found.",
-        )
 
     return daily_log
 

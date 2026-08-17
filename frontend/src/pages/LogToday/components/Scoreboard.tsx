@@ -8,6 +8,7 @@
 */
 
 import type { DailyLog } from "../../../types/DailyLog";
+import { calculateSleepDuration } from "../../../utils/calculateSleepDuration";
 
 interface ScoreboardProps {
     dailyLog: DailyLog;
@@ -18,7 +19,7 @@ function Scoreboard({ dailyLog }: ScoreboardProps) {
     /*
         Convert water from ml to litres.
     */
-    const waterLitres = (dailyLog.hydration.water / 1000).toFixed(1);
+    const waterLitres =dailyLog.hydration.water === ""? "-": (dailyLog.hydration.water / 1000).toFixed(1);
 
     return (
         <div>
@@ -36,11 +37,15 @@ function Scoreboard({ dailyLog }: ScoreboardProps) {
             </p>
 
             <p>
-                Sleep: Coming Soon
+                Sleep:{" "}
+                {calculateSleepDuration(
+                    dailyLog.sleep.sleepStartTime,
+                    dailyLog.sleep.sleepEndTime
+                )}
             </p>
 
             <p>
-                Steps: {dailyLog.activity.steps.toLocaleString()}
+                Steps: {(dailyLog.activity.steps ?? 0).toLocaleString()}
             </p>
 
             <p>

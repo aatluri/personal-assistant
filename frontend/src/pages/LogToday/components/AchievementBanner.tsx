@@ -20,8 +20,7 @@ function AchievementBanner({ dailyLog }: AchievementBannerProps) {
         Check whether today's protein
         goal has been achieved.
     */
-    const proteinGoalAchieved =
-        dailyLog.nutrition.protein >= 130;
+    const proteinGoalAchieved = dailyLog.nutrition.protein !== "" && dailyLog.nutrition.protein >= 130;
 
     return (
         <div>

@@ -19,7 +19,7 @@ import type { DailyLog } from "../../../types/DailyLog";
 */
 interface BodySectionProps {
     // Current weight value
-    weight: number;
+    weight: number | "";
 
     // Function used to update the complete DailyLog object
     setDailyLog: Dispatch<SetStateAction<DailyLog>>;
@@ -46,7 +46,7 @@ function BodySection({
                 step={0.1}
                 value={weight}
                 onChange={(event) => {
-                    const newWeight = Number(event.target.value);
+                    const newWeight =event.target.value === ""? "": Number(event.target.value);
 
                     /*
                         Triggered whenever the user changes the Weight input.

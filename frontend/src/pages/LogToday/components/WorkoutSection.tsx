@@ -72,7 +72,7 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutDuration}
                 onChange={(event) => {
-                    const newWorkoutDuration = Number(event.target.value);
+                    const newWorkoutDuration = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
@@ -93,7 +93,7 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutCalories}
                 onChange={(event) => {
-                    const newWorkoutCalories = Number(event.target.value);
+                    const newWorkoutCalories = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
@@ -114,7 +114,7 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutVolume}
                 onChange={(event) => {
-                    const newWorkoutVolume = Number(event.target.value);
+                    const newWorkoutVolume = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
@@ -135,7 +135,7 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.workoutSets}
                 onChange={(event) => {
-                    const newWorkoutSets = Number(event.target.value);
+                    const newWorkoutSets = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,
@@ -156,7 +156,7 @@ function WorkoutSection({
                 min={0}
                 value={dailyLog.workout.averageHeartRate}
                 onChange={(event) => {
-                    const newAverageHeartRate = Number(event.target.value);
+                    const newAverageHeartRate = event.target.value === ""? "": Number(event.target.value);
 
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,

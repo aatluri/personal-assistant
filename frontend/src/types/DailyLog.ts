@@ -18,11 +18,11 @@ export interface DailyLog {
     workout: {
 
         workoutType: string;
-        workoutDuration: number;
-        workoutCalories: number;
-        workoutVolume: number;
-        workoutSets: number;
-        averageHeartRate: number;
+        workoutDuration: number | "";
+        workoutCalories: number | "";
+        workoutVolume: number | "";
+        workoutSets: number | "";
+        averageHeartRate: number | "";
         workoutSummary: string;
 
     };
@@ -33,7 +33,7 @@ export interface DailyLog {
 
     body: {
 
-        weight: number;
+        weight: number | "";
 
     };
 
@@ -43,8 +43,8 @@ export interface DailyLog {
 
     activity: {
 
-        steps: number;
-        totalCaloriesBurnt: number;
+        steps: number | "";
+        totalCaloriesBurnt: number | "";
 
     };
 
@@ -70,13 +70,13 @@ export interface DailyLog {
         dinner: string;
         snacks: string;
 
-        protein: number;
-        carbs: number;
-        fat: number;
-        fibre: number;
-        sugar: number;
+        protein: number | "";
+        carbs: number | "";
+        fat: number | "";
+        fibre: number | "";
+        sugar: number | "";
 
-        caloriesConsumed: number;
+        caloriesConsumed: number | "";
 
     };
 
@@ -86,7 +86,7 @@ export interface DailyLog {
 
     hydration: {
 
-        water: number;
+        water: number | "";
 
     };
 

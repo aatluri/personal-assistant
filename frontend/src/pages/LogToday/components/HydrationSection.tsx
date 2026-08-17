@@ -14,7 +14,7 @@ import type { DailyLog } from "../../../types/DailyLog";
 interface HydrationSectionProps {
 
     // Current weight
-    water: number;
+    water: number | "";
     // Function used to update the complete dailyLog object
     setDailyLog: Dispatch<SetStateAction<DailyLog>>;
 
@@ -51,7 +51,7 @@ function HydrationSection({
     6. React stores the updated DailyLog and re-renders the UI.
 */
                 onChange={(event) => {
-                const newWater = Number(event.target.value);
+                const newWater = event.target.value === ""? "": Number(event.target.value);
 
 /*
     Copy the existing daily log values,then update only the water. For example the weight, workout section etc..

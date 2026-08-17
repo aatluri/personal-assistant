@@ -8,10 +8,12 @@
 
 interface LogTodayHeaderProps {
     selectedDate: string;
+    isDirty: boolean;
 }
 
 function LogTodayHeader({
     selectedDate,
+    isDirty,
 }: LogTodayHeaderProps) {
 
     /*
@@ -37,10 +39,6 @@ function LogTodayHeader({
             <div>
 
                 <div>
-                    <p>Good Evening</p>
-                </div>
-
-                <div>
                     <p>{formattedDate}</p>
                 </div>
 
@@ -49,11 +47,7 @@ function LogTodayHeader({
             <div>
 
                 <div>
-                    <p>Day 24 / 90</p>
-                </div>
-
-                <div>
-                    <p>✓ Saved</p>
+                    <p>{isDirty ? "● Unsaved Changes" : "✓ Saved"}</p>
                 </div>
 
             </div>

@@ -67,14 +67,20 @@ class HealthService:
 
         self._repository.create_daily_log(daily_log)
 
-    def update_daily_log(self,log_date: date,daily_log: DailyLog,) -> bool:
+    def upsert_daily_log(
+        self,
+        log_date: date,
+        daily_log: DailyLog,
+    ) -> None:
         """
-        Update an existing Daily Log.
-
-        Returns True if the log was updated, otherwise False.
+        Update the Daily Log if it exists.
+        Otherwise create a new Daily Log.
         """
 
-        return self._repository.update_daily_log(
+        updated = self._repository.update_daily_log(
             log_date,
             daily_log,
         )
+
+        if not updated:
+            self._repository.create_daily_log(daily_log)

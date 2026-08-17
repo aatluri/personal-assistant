@@ -17,11 +17,11 @@ export function createEmptyDailyLog(): DailyLog {
 
         workout: {
             workoutType: "",
-            workoutDuration: 0,
-            workoutCalories: 0,
-            workoutVolume: 0,
-            workoutSets: 0,
-            averageHeartRate: 0,
+            workoutDuration: "",
+            workoutCalories: "",
+            workoutVolume: "",
+            workoutSets: "",
+            averageHeartRate: "",
             workoutSummary: "",
         },
 
@@ -30,7 +30,7 @@ export function createEmptyDailyLog(): DailyLog {
         /* ------------------------------ */
 
         body: {
-            weight: 0,
+            weight: "",
         },
 
         /* ------------------------------ */
@@ -38,8 +38,8 @@ export function createEmptyDailyLog(): DailyLog {
         /* ------------------------------ */
 
         activity: {
-            steps: 0,
-            totalCaloriesBurnt: 0,
+            steps: "",
+            totalCaloriesBurnt: "",
         },
 
         /* ------------------------------ */
@@ -60,12 +60,12 @@ export function createEmptyDailyLog(): DailyLog {
             lunch: "",
             dinner: "",
             snacks: "",
-            protein: 0,
-            carbs: 0,
-            fat: 0,
-            fibre: 0,
-            sugar: 0,
-            caloriesConsumed: 0,
+            protein: "",
+            carbs: "",
+            fat: "",
+            fibre: "",
+            sugar: "",
+            caloriesConsumed: "",
         },
 
         /* ------------------------------ */
@@ -73,7 +73,7 @@ export function createEmptyDailyLog(): DailyLog {
         /* ------------------------------ */
 
         hydration: {
-            water: 0,
+            water: "",
         },
 
         /* ------------------------------ */
