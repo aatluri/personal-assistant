@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // This is the page we want to display when the user visits "/".
 import LogToday from "./pages/LogToday/LogToday";
 
+
 function App() {
   return (
     /*
