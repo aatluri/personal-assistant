@@ -9,52 +9,58 @@
 
 import type { TextareaHTMLAttributes } from "react";
 
-/*
-    Extend the standard HTML textarea attributes.
-
-    This automatically supports:
-    - rows
-    - cols
-    - placeholder
-    - defaultValue
-    - disabled
-    - required
-    - ...etc.
-*/
 interface TextAreaProps
     extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 
     // Text displayed above the textarea
     label: string;
-
 }
 
 function TextArea({
-
     label,
-
     ...textAreaProps
-
 }: TextAreaProps) {
 
     return (
-
         <div>
 
-            {/* Label */}
-            <label htmlFor={textAreaProps.id}>
+            <label
+                htmlFor={textAreaProps.id}
+                className="
+                    block
+                    mb-2
+                    text-sm
+                    font-medium
+                    text-slate-700
+                "
+            >
                 {label}
             </label>
 
-            {/* Text Area */}
             <textarea
                 {...textAreaProps}
+                className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-slate-300
+                    bg-white
+                    px-4
+                    py-3
+                    text-base
+                    text-slate-900
+                    placeholder:text-slate-400
+                    focus:border-blue-600
+                    focus:ring-2
+                    focus:ring-blue-100
+                    focus:outline-none
+                    transition
+                    resize-y
+                "
             />
 
         </div>
-
     );
-
 }
 
 export default TextArea;

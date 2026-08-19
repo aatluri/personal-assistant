@@ -1,47 +1,42 @@
 /*
     Button
 
-    A reusable button component.
-
-    It wraps the standard HTML <button> element
-    and supports all normal button attributes.
+    Reusable button component used
+    throughout the application.
 */
 
 import type { ButtonHTMLAttributes } from "react";
 
-/*
-    Extend the standard HTML button attributes.
-
-    This automatically supports:
-    - type
-    - disabled
-    - onClick
-    - ...etc.
-*/
 interface ButtonProps
-    extends ButtonHTMLAttributes<HTMLButtonElement> {
-
-    // Text displayed inside the button
-    children: React.ReactNode;
-
-}
+    extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 function Button({
-
     children,
-
+    className = "",
     ...buttonProps
-
 }: ButtonProps) {
 
     return (
-
-        <button {...buttonProps}>
-
+        <button
+            {...buttonProps}
+            className={`
+                w-full
+                h-12
+                rounded-xl
+                bg-blue-600
+                text-white
+                font-medium
+                transition
+                hover:bg-blue-700
+                active:scale-[0.98]
+                disabled:bg-slate-300
+                disabled:text-slate-500
+                disabled:cursor-not-allowed
+                ${className}
+            `}
+        >
             {children}
-
         </button>
-
     );
 
 }

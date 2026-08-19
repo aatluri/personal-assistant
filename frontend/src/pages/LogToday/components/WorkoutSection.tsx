@@ -35,158 +35,202 @@ function WorkoutSection({
     return (
         <section>
 
-            {/* Section Heading */}
-            <h2>Workout</h2>
-
-            {/* Workout Type */}
-            <Select
-                label="Workout Type"
-                id="workout-type"
-                name="workoutType"
-                value={dailyLog.workout.workoutType}
-                onChange={(event) => {
-                    const newWorkoutType = event.target.value;
-
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        workout: {
-                            ...previousDailyLog.workout,
-                            workoutType: newWorkoutType,
-                        },
-                    }));
-                }}
+            <div
+                className="
+                    space-y-6
+                "
             >
-                <option value="HIIT">HIIT</option>
-                <option value="Strength">Strength</option>
-                <option value="Cardio">Cardio</option>
-                <option value="Mobility">Mobility</option>
-                <option value="Rest">Rest</option>
-            </Select>
 
-            {/* Workout Duration */}
-            <TextInput
-                label="Duration (minutes)"
-                id="workout-duration"
-                name="workoutDuration"
-                type="number"
-                min={0}
-                value={dailyLog.workout.workoutDuration}
-                onChange={(event) => {
-                    const newWorkoutDuration = event.target.value === ""? "": Number(event.target.value);
+                {/* Workout Type */}
+                <Select
+                    label="Workout Type"
+                    id="workout-type"
+                    name="workoutType"
+                    value={dailyLog.workout.workoutType}
+                    onChange={(event) => {
+                        const newWorkoutType = event.target.value;
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        workout: {
-                            ...previousDailyLog.workout,
-                            workoutDuration: newWorkoutDuration,
-                        },
-                    }));
-                }}
-            />
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            workout: {
+                                ...previousDailyLog.workout,
+                                workoutType: newWorkoutType,
+                            },
+                        }));
+                    }}
+                >
+                    <option value="HIIT">HIIT</option>
+                    <option value="Strength">Strength</option>
+                    <option value="Cardio">Cardio</option>
+                    <option value="Mobility">Mobility</option>
+                    <option value="Rest">Rest</option>
+                </Select>
 
-            {/* Calories Burnt */}
-            <TextInput
-                label="Calories Burnt"
-                id="workout-calories"
-                name="workoutCalories"
-                type="number"
-                min={0}
-                value={dailyLog.workout.workoutCalories}
-                onChange={(event) => {
-                    const newWorkoutCalories = event.target.value === ""? "": Number(event.target.value);
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-4
+                    "
+                >
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        workout: {
-                            ...previousDailyLog.workout,
-                            workoutCalories: newWorkoutCalories,
-                        },
-                    }));
-                }}
-            />
+                    {/* Workout Duration */}
+                    <TextInput
+                        label="Duration (minutes)"
+                        id="workout-duration"
+                        name="workoutDuration"
+                        type="number"
+                        min={0}
+                        value={dailyLog.workout.workoutDuration}
+                        onChange={(event) => {
+                            const newWorkoutDuration =
+                                event.target.value === ""
+                                    ? ""
+                                    : Number(event.target.value);
 
-            {/* Workout Volume */}
-            <TextInput
-                label="Volume (kg)"
-                id="workout-volume"
-                name="workoutVolume"
-                type="number"
-                min={0}
-                value={dailyLog.workout.workoutVolume}
-                onChange={(event) => {
-                    const newWorkoutVolume = event.target.value === ""? "": Number(event.target.value);
+                            setDailyLog((previousDailyLog) => ({
+                                ...previousDailyLog,
+                                workout: {
+                                    ...previousDailyLog.workout,
+                                    workoutDuration: newWorkoutDuration,
+                                },
+                            }));
+                        }}
+                    />
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        workout: {
-                            ...previousDailyLog.workout,
-                            workoutVolume: newWorkoutVolume,
-                        },
-                    }));
-                }}
-            />
+                    {/* Calories Burnt */}
+                    <TextInput
+                        label="Calories Burnt"
+                        id="workout-calories"
+                        name="workoutCalories"
+                        type="number"
+                        min={0}
+                        value={dailyLog.workout.workoutCalories}
+                        onChange={(event) => {
+                            const newWorkoutCalories =
+                                event.target.value === ""
+                                    ? ""
+                                    : Number(event.target.value);
 
-            {/* Number of Sets */}
-            <TextInput
-                label="Sets"
-                id="workout-sets"
-                name="workoutSets"
-                type="number"
-                min={0}
-                value={dailyLog.workout.workoutSets}
-                onChange={(event) => {
-                    const newWorkoutSets = event.target.value === ""? "": Number(event.target.value);
+                            setDailyLog((previousDailyLog) => ({
+                                ...previousDailyLog,
+                                workout: {
+                                    ...previousDailyLog.workout,
+                                    workoutCalories: newWorkoutCalories,
+                                },
+                            }));
+                        }}
+                    />
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        workout: {
-                            ...previousDailyLog.workout,
-                            workoutSets: newWorkoutSets,
-                        },
-                    }));
-                }}
-            />
+                </div>
 
-            {/* Average Heart Rate */}
-            <TextInput
-                label="Average Heart Rate (bpm)"
-                id="average-heart-rate"
-                name="averageHeartRate"
-                type="number"
-                min={0}
-                value={dailyLog.workout.averageHeartRate}
-                onChange={(event) => {
-                    const newAverageHeartRate = event.target.value === ""? "": Number(event.target.value);
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-4
+                    "
+                >
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        workout: {
-                            ...previousDailyLog.workout,
-                            averageHeartRate: newAverageHeartRate,
-                        },
-                    }));
-                }}
-            />
+                    {/* Workout Volume */}
+                    <TextInput
+                        label="Volume (kg)"
+                        id="workout-volume"
+                        name="workoutVolume"
+                        type="number"
+                        min={0}
+                        value={dailyLog.workout.workoutVolume}
+                        onChange={(event) => {
+                            const newWorkoutVolume =
+                                event.target.value === ""
+                                    ? ""
+                                    : Number(event.target.value);
 
-            {/* Workout Summary */}
-            <TextArea
-                label="Workout Summary"
-                id="workout-summary"
-                name="workoutSummary"
-                rows={8}
-                value={dailyLog.workout.workoutSummary}
-                onChange={(event) => {
-                    const newWorkoutSummary = event.target.value;
+                            setDailyLog((previousDailyLog) => ({
+                                ...previousDailyLog,
+                                workout: {
+                                    ...previousDailyLog.workout,
+                                    workoutVolume: newWorkoutVolume,
+                                },
+                            }));
+                        }}
+                    />
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        workout: {
-                            ...previousDailyLog.workout,
-                            workoutSummary: newWorkoutSummary,
-                        },
-                    }));
-                }}
-            />
+                    {/* Number of Sets */}
+                    <TextInput
+                        label="Sets"
+                        id="workout-sets"
+                        name="workoutSets"
+                        type="number"
+                        min={0}
+                        value={dailyLog.workout.workoutSets}
+                        onChange={(event) => {
+                            const newWorkoutSets =
+                                event.target.value === ""
+                                    ? ""
+                                    : Number(event.target.value);
+
+                            setDailyLog((previousDailyLog) => ({
+                                ...previousDailyLog,
+                                workout: {
+                                    ...previousDailyLog.workout,
+                                    workoutSets: newWorkoutSets,
+                                },
+                            }));
+                        }}
+                    />
+
+                </div>
+
+                {/* Average Heart Rate */}
+                <div className="md:w-1/2">
+                    <TextInput
+                        label="Average Heart Rate (bpm)"
+                        id="average-heart-rate"
+                        name="averageHeartRate"
+                        type="number"
+                        min={0}
+                        value={dailyLog.workout.averageHeartRate}
+                        onChange={(event) => {
+                            const newAverageHeartRate =
+                                event.target.value === ""
+                                    ? ""
+                                    : Number(event.target.value);
+
+                            setDailyLog((previousDailyLog) => ({
+                                ...previousDailyLog,
+                                workout: {
+                                    ...previousDailyLog.workout,
+                                    averageHeartRate: newAverageHeartRate,
+                                },
+                            }));
+                        }}
+                    />
+                </div>
+
+                {/* Workout Summary */}
+                <TextArea
+                    label="Workout Summary"
+                    id="workout-summary"
+                    name="workoutSummary"
+                    rows={8}
+                    value={dailyLog.workout.workoutSummary}
+                    onChange={(event) => {
+                        const newWorkoutSummary = event.target.value;
+
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            workout: {
+                                ...previousDailyLog.workout,
+                                workoutSummary: newWorkoutSummary,
+                            },
+                        }));
+                    }}
+                />
+
+            </div>
 
         </section>
     );

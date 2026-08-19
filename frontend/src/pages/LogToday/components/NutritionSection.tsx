@@ -39,296 +39,326 @@ function NutritionSection({
 
         <section>
 
-            {/* Section Heading */}
-            <h2>Nutrition</h2>
+            <div
+            className="
+                    space-y-6
+                "
+            >
+                {/* ----------------------------- */}
+                {/* Meals                         */}
+                {/* ----------------------------- */}
 
-            {/* ----------------------------- */}
-            {/* Meals                         */}
-            {/* ----------------------------- */}
+                <TextArea
+                    label="Breakfast"
+                    id="breakfast"
+                    name="breakfast"
+                    rows={3}
+                    placeholder="Enter breakfast"
+                    value={dailyLog.nutrition.breakfast}
+                    onChange={(event) => {
 
-            <TextArea
-                label="Breakfast"
-                id="breakfast"
-                name="breakfast"
-                rows={3}
-                placeholder="Enter breakfast"
-                value={dailyLog.nutrition.breakfast}
-                onChange={(event) => {
+                        const newBreakfast = event.target.value;
 
-                    const newBreakfast = event.target.value;
+                        setDailyLog((previousDailyLog) => ({
 
-                    setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
 
-                        ...previousDailyLog,
+                            nutrition: {
 
-                        nutrition: {
+                                ...previousDailyLog.nutrition,
 
-                            ...previousDailyLog.nutrition,
+                                breakfast: newBreakfast,
 
-                            breakfast: newBreakfast,
+                            },
 
-                        },
+                        }));
 
-                    }));
+                    }}
+                />
 
-                }}
-            />
+                <TextArea
+                    label="Lunch"
+                    id="lunch"
+                    name="lunch"
+                    rows={3}
+                    placeholder="Enter lunch"
+                    value={dailyLog.nutrition.lunch}
+                    onChange={(event) => {
 
-            <TextArea
-                label="Lunch"
-                id="lunch"
-                name="lunch"
-                rows={3}
-                placeholder="Enter lunch"
-                value={dailyLog.nutrition.lunch}
-                onChange={(event) => {
+                        const newLunch = event.target.value;
 
-                    const newLunch = event.target.value;
+                        setDailyLog((previousDailyLog) => ({
 
-                    setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
 
-                        ...previousDailyLog,
+                            nutrition: {
 
-                        nutrition: {
+                                ...previousDailyLog.nutrition,
 
-                            ...previousDailyLog.nutrition,
+                                lunch: newLunch,
 
-                            lunch: newLunch,
+                            },
 
-                        },
+                        }));
 
-                    }));
+                    }}
+                />
 
-                }}
-            />
+                <TextArea
+                    label="Dinner"
+                    id="dinner"
+                    name="dinner"
+                    rows={3}
+                    placeholder="Enter dinner"
+                    value={dailyLog.nutrition.dinner}
+                    onChange={(event) => {
 
-            <TextArea
-                label="Dinner"
-                id="dinner"
-                name="dinner"
-                rows={3}
-                placeholder="Enter dinner"
-                value={dailyLog.nutrition.dinner}
-                onChange={(event) => {
+                        const newDinner = event.target.value;
 
-                    const newDinner = event.target.value;
+                        setDailyLog((previousDailyLog) => ({
 
-                    setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
 
-                        ...previousDailyLog,
+                            nutrition: {
 
-                        nutrition: {
+                                ...previousDailyLog.nutrition,
 
-                            ...previousDailyLog.nutrition,
+                                dinner: newDinner,
 
-                            dinner: newDinner,
+                            },
 
-                        },
+                        }));
 
-                    }));
+                    }}
+                />
 
-                }}
-            />
+                <TextArea
+                    label="Snacks"
+                    id="snacks"
+                    name="snacks"
+                    rows={3}
+                    placeholder="Enter snacks"
+                    value={dailyLog.nutrition.snacks}
+                    onChange={(event) => {
 
-            <TextArea
-                label="Snacks"
-                id="snacks"
-                name="snacks"
-                rows={3}
-                placeholder="Enter snacks"
-                value={dailyLog.nutrition.snacks}
-                onChange={(event) => {
+                        const newSnacks = event.target.value;
 
-                    const newSnacks = event.target.value;
+                        setDailyLog((previousDailyLog) => ({
 
-                    setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
 
-                        ...previousDailyLog,
+                            nutrition: {
 
-                        nutrition: {
+                                ...previousDailyLog.nutrition,
 
-                            ...previousDailyLog.nutrition,
+                                snacks: newSnacks,
 
-                            snacks: newSnacks,
+                            },
 
-                        },
+                        }));
 
-                    }));
+                    }}
+                />
 
-                }}
-            />
+                {/* ----------------------------- */}
+                {/* Macronutrients                */}
+                {/* ----------------------------- */}
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-4
+                    "
+                >
+                    <TextInput
+                        label="Protein (g)"
+                        id="protein"
+                        name="protein"
+                        type="number"
+                        min={0}
+                        value={dailyLog.nutrition.protein}
+                        onChange={(event) => {
 
-            {/* ----------------------------- */}
-            {/* Macronutrients                */}
-            {/* ----------------------------- */}
+                            const newProtein = event.target.value === ""? "": Number(event.target.value);
 
-            <TextInput
-                label="Protein (g)"
-                id="protein"
-                name="protein"
-                type="number"
-                min={0}
-                value={dailyLog.nutrition.protein}
-                onChange={(event) => {
+                            setDailyLog((previousDailyLog) => ({
 
-                    const newProtein = event.target.value === ""? "": Number(event.target.value);
+                                ...previousDailyLog,
 
-                    setDailyLog((previousDailyLog) => ({
+                                nutrition: {
 
-                        ...previousDailyLog,
+                                    ...previousDailyLog.nutrition,
 
-                        nutrition: {
+                                    protein: newProtein,
 
-                            ...previousDailyLog.nutrition,
+                                },
 
-                            protein: newProtein,
+                            }));
 
-                        },
+                        }}
+                    />
 
-                    }));
+                    <TextInput
+                        label="Carbs (g)"
+                        id="carbs"
+                        name="carbs"
+                        type="number"
+                        min={0}
+                        value={dailyLog.nutrition.carbs}
+                        onChange={(event) => {
 
-                }}
-            />
+                            const newCarbs = event.target.value === ""? "": Number(event.target.value);
 
-            <TextInput
-                label="Carbs (g)"
-                id="carbs"
-                name="carbs"
-                type="number"
-                min={0}
-                value={dailyLog.nutrition.carbs}
-                onChange={(event) => {
+                            setDailyLog((previousDailyLog) => ({
 
-                    const newCarbs = event.target.value === ""? "": Number(event.target.value);
+                                ...previousDailyLog,
 
-                    setDailyLog((previousDailyLog) => ({
+                                nutrition: {
 
-                        ...previousDailyLog,
+                                    ...previousDailyLog.nutrition,
 
-                        nutrition: {
+                                    carbs: newCarbs,
 
-                            ...previousDailyLog.nutrition,
+                                },
 
-                            carbs: newCarbs,
+                            }));
 
-                        },
+                        }}
+                    />
+                </div>
 
-                    }));
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-4
+                    "
+                >
+                    <TextInput
+                        label="Fat (g)"
+                        id="fat"
+                        name="fat"
+                        type="number"
+                        min={0}
+                        value={dailyLog.nutrition.fat}
+                        onChange={(event) => {
 
-                }}
-            />
+                            const newFat = event.target.value === ""? "": Number(event.target.value);
 
-            <TextInput
-                label="Fat (g)"
-                id="fat"
-                name="fat"
-                type="number"
-                min={0}
-                value={dailyLog.nutrition.fat}
-                onChange={(event) => {
+                            setDailyLog((previousDailyLog) => ({
 
-                    const newFat = event.target.value === ""? "": Number(event.target.value);
+                                ...previousDailyLog,
 
-                    setDailyLog((previousDailyLog) => ({
+                                nutrition: {
 
-                        ...previousDailyLog,
+                                    ...previousDailyLog.nutrition,
 
-                        nutrition: {
+                                    fat: newFat,
 
-                            ...previousDailyLog.nutrition,
+                                },
 
-                            fat: newFat,
+                            }));
 
-                        },
+                        }}
+                    />
 
-                    }));
+                    <TextInput
+                        label="Fibre (g)"
+                        id="fibre"
+                        name="fibre"
+                        type="number"
+                        min={0}
+                        value={dailyLog.nutrition.fibre}
+                        onChange={(event) => {
 
-                }}
-            />
+                            const newFibre = event.target.value === ""? "": Number(event.target.value);
 
-            <TextInput
-                label="Fibre (g)"
-                id="fibre"
-                name="fibre"
-                type="number"
-                min={0}
-                value={dailyLog.nutrition.fibre}
-                onChange={(event) => {
+                            setDailyLog((previousDailyLog) => ({
 
-                    const newFibre = event.target.value === ""? "": Number(event.target.value);
+                                ...previousDailyLog,
 
-                    setDailyLog((previousDailyLog) => ({
+                                nutrition: {
 
-                        ...previousDailyLog,
+                                    ...previousDailyLog.nutrition,
 
-                        nutrition: {
+                                    fibre: newFibre,
 
-                            ...previousDailyLog.nutrition,
+                                },
 
-                            fibre: newFibre,
+                            }));
 
-                        },
+                        }}
+                    />
+                </div>
 
-                    }));
+                <div
+                    className="
+                        grid
+                        grid-cols-1
+                        md:grid-cols-2
+                        gap-4
+                    "
+                >
 
-                }}
-            />
+                    <TextInput
+                        label="Sugar (g)"
+                        id="sugar"
+                        name="sugar"
+                        type="number"
+                        min={0}
+                        value={dailyLog.nutrition.sugar}
+                        onChange={(event) => {
 
-            <TextInput
-                label="Sugar (g)"
-                id="sugar"
-                name="sugar"
-                type="number"
-                min={0}
-                value={dailyLog.nutrition.sugar}
-                onChange={(event) => {
+                            const newSugar = event.target.value === ""? "": Number(event.target.value);
 
-                    const newSugar = event.target.value === ""? "": Number(event.target.value);
+                            setDailyLog((previousDailyLog) => ({
 
-                    setDailyLog((previousDailyLog) => ({
+                                ...previousDailyLog,
 
-                        ...previousDailyLog,
+                                nutrition: {
 
-                        nutrition: {
+                                    ...previousDailyLog.nutrition,
 
-                            ...previousDailyLog.nutrition,
+                                    sugar: newSugar,
 
-                            sugar: newSugar,
+                                },
 
-                        },
+                            }));
 
-                    }));
+                        }}
+                    />
 
-                }}
-            />
+                    <TextInput
+                        label="Calories Consumed"
+                        id="calories-consumed"
+                        name="caloriesConsumed"
+                        type="number"
+                        min={0}
+                        value={dailyLog.nutrition.caloriesConsumed}
+                        onChange={(event) => {
 
-            <TextInput
-                label="Calories Consumed"
-                id="calories-consumed"
-                name="caloriesConsumed"
-                type="number"
-                min={0}
-                value={dailyLog.nutrition.caloriesConsumed}
-                onChange={(event) => {
+                            const newCaloriesConsumed = event.target.value === ""? "": Number(event.target.value);
 
-                    const newCaloriesConsumed = event.target.value === ""? "": Number(event.target.value);
+                            setDailyLog((previousDailyLog) => ({
 
-                    setDailyLog((previousDailyLog) => ({
+                                ...previousDailyLog,
 
-                        ...previousDailyLog,
+                                nutrition: {
 
-                        nutrition: {
+                                    ...previousDailyLog.nutrition,
 
-                            ...previousDailyLog.nutrition,
+                                    caloriesConsumed: newCaloriesConsumed,
 
-                            caloriesConsumed: newCaloriesConsumed,
+                                },
 
-                        },
+                            }));
 
-                    }));
-
-                }}
-            />
+                        }}
+                    />
+                </div>
+            </div>
 
         </section>
 

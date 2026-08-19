@@ -41,9 +41,6 @@ function MealTimingSection({
 
         <section>
 
-            {/* Section Heading */}
-            <h2>Meal Timing</h2>
-
             {/* First Meal Time */}
             <TextInput
                 label="First Meal Time"

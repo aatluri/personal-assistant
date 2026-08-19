@@ -25,47 +25,62 @@ function ActivitySection({
     return (
         <section>
 
-            <h2>Activity</h2>
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-4
+                "
+            >
 
-            <TextInput
-                label="Steps"
-                id="steps"
-                name="steps"
-                type="number"
-                min={0}
-                value={dailyLog.activity.steps}
-                onChange={(event) => {
-                    const newSteps = event.target.value === ""? "": Number(event.target.value);
+                <TextInput
+                    label="Steps"
+                    id="steps"
+                    name="steps"
+                    type="number"
+                    min={0}
+                    value={dailyLog.activity.steps}
+                    onChange={(event) => {
+                        const newSteps =
+                            event.target.value === ""
+                                ? ""
+                                : Number(event.target.value);
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        activity: {
-                            ...previousDailyLog.activity,
-                            steps: newSteps,
-                        },
-                    }));
-                }}
-            />
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            activity: {
+                                ...previousDailyLog.activity,
+                                steps: newSteps,
+                            },
+                        }));
+                    }}
+                />
 
-            <TextInput
-                label="Total Calories Burnt"
-                id="total-calories-burnt"
-                name="totalCaloriesBurnt"
-                type="number"
-                min={0}
-                value={dailyLog.activity.totalCaloriesBurnt}
-                onChange={(event) => {
-                    const newCalories = event.target.value === ""? "": Number(event.target.value);
+                <TextInput
+                    label="Total Calories Burnt"
+                    id="total-calories-burnt"
+                    name="totalCaloriesBurnt"
+                    type="number"
+                    min={0}
+                    value={dailyLog.activity.totalCaloriesBurnt}
+                    onChange={(event) => {
+                        const newCalories =
+                            event.target.value === ""
+                                ? ""
+                                : Number(event.target.value);
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        activity: {
-                            ...previousDailyLog.activity,
-                            totalCaloriesBurnt: newCalories,
-                        },
-                    }));
-                }}
-            />
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            activity: {
+                                ...previousDailyLog.activity,
+                                totalCaloriesBurnt: newCalories,
+                            },
+                        }));
+                    }}
+                />
+
+            </div>
 
         </section>
     );

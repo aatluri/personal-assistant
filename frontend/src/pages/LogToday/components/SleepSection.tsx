@@ -29,85 +29,66 @@ interface SleepSectionProps {
 function SleepSection({
     dailyLog,
     setDailyLog,
-
 }: SleepSectionProps) {
 
     return (
+
         <section>
-            {/* Section Heading */}
-            <h2>Sleep</h2>
 
-            {/* Sleep Start Time */}
-            <TextInput
-                label="Sleep Start Time"
-                id="sleep-start-time"
-                name="sleepStartTime"
-                type="time"
-                value={dailyLog.sleep.sleepStartTime}
-                onChange={(event) => {
+            <div
+                className="
+                    grid
+                    grid-cols-1
+                    md:grid-cols-2
+                    gap-4
+                "
+            >
 
-                    /*
-                        Triggered whenever the user changes
-                        the Sleep Start Time.
+                {/* Sleep Start Time */}
+                <TextInput
+                    label="Sleep Start Time"
+                    id="sleep-start-time"
+                    name="sleepStartTime"
+                    type="time"
+                    value={dailyLog.sleep.sleepStartTime}
+                    onChange={(event) => {
 
-                        Steps:
-                        1. Read the new time.
-                        2. Copy the existing DailyLog.
-                        3. Copy the Sleep object.
-                        4. Update only the Sleep Start Time.
-                        5. React stores the updated DailyLog
-                           and re-renders the UI.
-                    */
+                        const newSleepStartTime = event.target.value;
 
-                    const newSleepStartTime = event.target.value;
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            sleep: {
+                                ...previousDailyLog.sleep,
+                                sleepStartTime: newSleepStartTime,
+                            },
+                        }));
 
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        sleep: {
-                            ...previousDailyLog.sleep,
-                            sleepStartTime: newSleepStartTime,
+                    }}
+                />
 
-                        },
+                {/* Sleep End Time */}
+                <TextInput
+                    label="Sleep End Time"
+                    id="sleep-end-time"
+                    name="sleepEndTime"
+                    type="time"
+                    value={dailyLog.sleep.sleepEndTime}
+                    onChange={(event) => {
 
-                    }));
+                        const newSleepEndTime = event.target.value;
 
-                }}
-            />
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            sleep: {
+                                ...previousDailyLog.sleep,
+                                sleepEndTime: newSleepEndTime,
+                            },
+                        }));
 
-            {/* Sleep End Time */}
-            <TextInput
-                label="Sleep End Time"
-                id="sleep-end-time"
-                name="sleepEndTime"
-                type="time"
-                value={dailyLog.sleep.sleepEndTime}
-                onChange={(event) => {
+                    }}
+                />
 
-                    /*
-                        Triggered whenever the user changes
-                        the Sleep End Time.
-
-                        Steps:
-                        1. Read the new time.
-                        2. Copy the existing DailyLog.
-                        3. Copy the Sleep object.
-                        4. Update only the Sleep End Time.
-                        5. React stores the updated DailyLog
-                           and re-renders the UI.
-                    */
-
-                    const newSleepEndTime = event.target.value;
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        sleep: {
-                            ...previousDailyLog.sleep,
-                            sleepEndTime: newSleepEndTime,
-                        },
-
-                    }));
-
-                }}
-            />
+            </div>
 
         </section>
 

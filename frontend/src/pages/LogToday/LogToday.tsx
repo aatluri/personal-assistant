@@ -19,6 +19,8 @@ import WorkoutSection from "./components/WorkoutSection";
 import ActivitySection from "./components/ActivitySection";
 import DateSection from "./components/DateSection";
 import { createEmptyDailyLog } from "../../utils/createEmptyDailyLog";
+import PageContainer from "../../components/PageContainer";
+import CollapsibleCard from "../../components/CollapsibleCard";
 
 function LogToday() {
 
@@ -122,71 +124,109 @@ function LogToday() {
     }
 
     return (
-        <div>
+        <PageContainer>
 
-            <LogTodayHeader
-                selectedDate={selectedDate}
-                isDirty={isDirty}
-            />
+            <div
+                className="
+                    space-y-8
+                "
+            >
 
-            <DateSection
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-            />
+                <LogTodayHeader
+                    selectedDate={selectedDate}
+                    isDirty={isDirty}
+                />
 
-            <AchievementBanner
-                dailyLog={dailyLog}
-            />
+                <DateSection
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                />
 
-            <Scoreboard
-                dailyLog={dailyLog}
-            />
+                <AchievementBanner
+                    dailyLog={dailyLog}
+                />
 
-            <WorkoutSection
-                dailyLog={dailyLog}
-                setDailyLog={updateDailyLog}
-            />
+                <Scoreboard
+                    dailyLog={dailyLog}
+                />
 
-            <BodySection
-                weight={dailyLog.body.weight}
-                setDailyLog={updateDailyLog}
-            />
+                <CollapsibleCard title="Workout">
 
-            <ActivitySection
-                dailyLog={dailyLog}
-                setDailyLog={updateDailyLog}
-            />
+                    <WorkoutSection
+                        dailyLog={dailyLog}
+                        setDailyLog={updateDailyLog}
+                    />
 
-            <MealTimingSection
-                dailyLog={dailyLog}
-                setDailyLog={updateDailyLog}
-            />
+                </CollapsibleCard>
 
-            <NutritionSection
-                dailyLog={dailyLog}
-                setDailyLog={updateDailyLog}
-            />
+                <CollapsibleCard title="Body">
 
-            <HydrationSection
-                water={dailyLog.hydration.water}
-                setDailyLog={updateDailyLog}
-            />
+                    <BodySection
+                        weight={dailyLog.body.weight}
+                        setDailyLog={updateDailyLog}
+                    />
 
-            <SleepSection
-                dailyLog={dailyLog}
-                setDailyLog={updateDailyLog}
-            />
+                </CollapsibleCard>
 
-            <NotesSection
-                dailyLog={dailyLog}
-                setDailyLog={updateDailyLog}
-            />
+                <CollapsibleCard title="Activity">
 
-            <SaveButton
-                onClick={handleSaveDailyLog}
-            />
+                    <ActivitySection
+                        dailyLog={dailyLog}
+                        setDailyLog={updateDailyLog}
+                    />
 
-        </div>
+                </CollapsibleCard>
+
+                <CollapsibleCard title="Meal Timing">
+
+                    <MealTimingSection
+                        dailyLog={dailyLog}
+                        setDailyLog={updateDailyLog}
+                    />
+
+                </CollapsibleCard>
+
+                <CollapsibleCard title="Nutrition">
+
+                    <NutritionSection
+                        dailyLog={dailyLog}
+                        setDailyLog={updateDailyLog}
+                    />
+
+                </CollapsibleCard>
+
+                <CollapsibleCard title="Hydration">
+
+                    <HydrationSection
+                        water={dailyLog.hydration.water}
+                        setDailyLog={updateDailyLog}
+                    />
+
+                </CollapsibleCard>
+
+                <CollapsibleCard title="Sleep">
+
+                    <SleepSection
+                        dailyLog={dailyLog}
+                        setDailyLog={updateDailyLog}
+                    />
+
+                </CollapsibleCard>
+
+                <CollapsibleCard title="Notes">
+
+                    <NotesSection
+                        dailyLog={dailyLog}
+                        setDailyLog={updateDailyLog}
+                    />
+
+                </CollapsibleCard>
+
+                <SaveButton
+                    onClick={handleSaveDailyLog}
+                />
+            </div>
+        </PageContainer>
     );
 }
 

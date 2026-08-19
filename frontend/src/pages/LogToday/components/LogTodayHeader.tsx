@@ -30,25 +30,53 @@ function LogTodayHeader({
     );
 
     return (
-        <div>
+        <div
+            className="
+                mb-8
+            "
+        >
 
-            <h1>Log Today</h1>
+            <h1
+                className="
+                    text-3xl
+                    font-bold
+                    text-slate-900
+                "
+            >
+                Log Today
+            </h1>
 
-            <hr />
+            <div
+                className="
+                    mt-3
+                    flex
+                    items-center
+                    justify-between
+                "
+            >
 
-            <div>
+                <p
+                    className="
+                        text-base
+                        text-slate-600
+                    "
+                >
+                    {formattedDate}
+                </p>
 
-                <div>
-                    <p>{formattedDate}</p>
-                </div>
-
-            </div>
-
-            <div>
-
-                <div>
-                    <p>{isDirty ? "● Unsaved Changes" : "✓ Saved"}</p>
-                </div>
+                <p
+                    className={`
+                        text-sm
+                        font-medium
+                        ${
+                            isDirty
+                                ? "text-amber-600"
+                                : "text-green-600"
+                        }
+                    `}
+                >
+                    {isDirty ? "● Unsaved Changes" : "✓ Saved"}
+                </p>
 
             </div>
 

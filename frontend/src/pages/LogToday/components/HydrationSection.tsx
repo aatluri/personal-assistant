@@ -5,6 +5,7 @@
 */
 
 import type { Dispatch, SetStateAction } from "react";
+
 import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
@@ -13,9 +14,10 @@ import type { DailyLog } from "../../../types/DailyLog";
 */
 interface HydrationSectionProps {
 
-    // Current weight
+    // Current water intake
     water: number | "";
-    // Function used to update the complete dailyLog object
+
+    // Function used to update the complete DailyLog object
     setDailyLog: Dispatch<SetStateAction<DailyLog>>;
 
 }
@@ -24,51 +26,54 @@ function HydrationSection({
     water,
     setDailyLog,
 }: HydrationSectionProps) {
+
     return (
 
         <section>
 
-            {/* Section Heading */}
-            <h2>Hydration</h2>
+            <div
+                className="
+                    space-y-6
+                    md:w-1/2
+                "
+            >
 
-            <TextInput
-                label="Water (ml)"
-                id="water"
-                name="water"
-                type="number"
-                min={0}
-                step={100}
-                value={water}
-/*
-    Triggered whenever the user changes the Water input.
+                <TextInput
+                    label="Water (ml)"
+                    id="water"
+                    name="water"
+                    type="number"
+                    min={0}
+                    step={100}
+                    value={water}
+                    onChange={(event) => {
 
-    Steps:
-    1. Read the new water value entered by the user and store it in newWater.
-    2. React provides the current DailyLog object.
-    3. Copy the entire DailyLog using the spread operator.
-    4. Copy the hydration object.
-    5. Update only the water field.
-    6. React stores the updated DailyLog and re-renders the UI.
-*/
-                onChange={(event) => {
-                const newWater = event.target.value === ""? "": Number(event.target.value);
+                        const newWater =
+                            event.target.value === ""
+                                ? ""
+                                : Number(event.target.value);
 
-/*
-    Copy the existing daily log values,then update only the water. For example the weight, workout section etc..
-*/
-                setDailyLog((previousDailyLog) => ({
-                    ...previousDailyLog,
-                    hydration: {
-                        ...previousDailyLog.hydration,
-                        water: newWater,
-                    },
-                }));
-                }}
-            />
+                        /*
+                            Copy the existing Daily Log
+                            and update only the water field.
+                        */
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            hydration: {
+                                ...previousDailyLog.hydration,
+                                water: newWater,
+                            },
+                        }));
+
+                    }}
+                />
+
+            </div>
 
         </section>
 
     );
+
 }
 
 export default HydrationSection;

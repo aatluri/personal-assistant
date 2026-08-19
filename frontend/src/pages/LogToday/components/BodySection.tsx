@@ -33,40 +33,49 @@ function BodySection({
     return (
         <section>
 
-            {/* Section heading */}
-            <h2>Body</h2>
+            <div
+                className="
+                    space-y-6
+                    md:w-1/2
+                "
+            >
 
-            {/* Weight field */}
-            <TextInput
-                label="Weight (kg)"
-                id="weight"
-                name="weight"
-                type="number"
-                min={0}
-                step={0.1}
-                value={weight}
-                onChange={(event) => {
-                    const newWeight =event.target.value === ""? "": Number(event.target.value);
+                {/* Weight field */}
+                <TextInput
+                    label="Weight (kg)"
+                    id="weight"
+                    name="weight"
+                    type="number"
+                    min={0}
+                    step={0.1}
+                    value={weight}
+                    onChange={(event) => {
+                        const newWeight =
+                            event.target.value === ""
+                                ? ""
+                                : Number(event.target.value);
 
-                    /*
-                        Triggered whenever the user changes the Weight input.
+                        /*
+                            Triggered whenever the user changes the Weight input.
 
-                        Steps:
-                        1. Read the new weight value.
-                        2. Copy the existing DailyLog.
-                        3. Copy the body object.
-                        4. Update only the weight field.
-                        5. React stores the updated DailyLog and re-renders the UI.
-                    */
-                    setDailyLog((previousDailyLog) => ({
-                        ...previousDailyLog,
-                        body: {
-                            ...previousDailyLog.body,
-                            weight: newWeight,
-                        },
-                    }));
-                }}
-            />
+                            Steps:
+                            1. Read the new weight value.
+                            2. Copy the existing DailyLog.
+                            3. Copy the body object.
+                            4. Update only the weight field.
+                            5. React stores the updated DailyLog and re-renders the UI.
+                        */
+                        setDailyLog((previousDailyLog) => ({
+                            ...previousDailyLog,
+                            body: {
+                                ...previousDailyLog.body,
+                                weight: newWeight,
+                            },
+                        }));
+                    }}
+                />
+
+            </div>
 
         </section>
     );
