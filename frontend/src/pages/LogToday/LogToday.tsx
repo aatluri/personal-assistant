@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
+import {
+    Activity,
+    Apple,
+    Bed,
+    CalendarClock,
+    Dumbbell,
+    GlassWater,
+    NotebookPen,
+    User,
+} from "lucide-react";
 
 import { getDailyLog, saveDailyLog } from "../../api/health";
 import type { DailyLog } from "../../types/DailyLog";
-import type { SetStateAction } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
-
-import AchievementBanner from "./components/AchievementBanner";
 import BodySection from "./components/BodySection";
 import HydrationSection from "./components/HydrationSection";
 import LogTodayHeader from "./components/LogTodayHeader";
@@ -13,7 +20,6 @@ import MealTimingSection from "./components/MealTimingSection";
 import NotesSection from "./components/NotesSection";
 import NutritionSection from "./components/NutritionSection";
 import SaveButton from "./components/SaveButton";
-import Scoreboard from "./components/Scoreboard";
 import SleepSection from "./components/SleepSection";
 import WorkoutSection from "./components/WorkoutSection";
 import ActivitySection from "./components/ActivitySection";
@@ -133,7 +139,6 @@ function LogToday() {
             >
 
                 <LogTodayHeader
-                    selectedDate={selectedDate}
                     isDirty={isDirty}
                 />
 
@@ -142,15 +147,12 @@ function LogToday() {
                     setSelectedDate={setSelectedDate}
                 />
 
-                <AchievementBanner
-                    dailyLog={dailyLog}
-                />
 
-                <Scoreboard
-                    dailyLog={dailyLog}
-                />
-
-                <CollapsibleCard title="Workout">
+                <CollapsibleCard
+                    title="Workout"
+                    icon={Dumbbell}
+                    iconColor="text-blue-600"
+                >
 
                     <WorkoutSection
                         dailyLog={dailyLog}
@@ -159,7 +161,11 @@ function LogToday() {
 
                 </CollapsibleCard>
 
-                <CollapsibleCard title="Body">
+                <CollapsibleCard
+                    title="Body"
+                    icon={User}
+                    iconColor="text-violet-600"
+                >
 
                     <BodySection
                         weight={dailyLog.body.weight}
@@ -168,7 +174,11 @@ function LogToday() {
 
                 </CollapsibleCard>
 
-                <CollapsibleCard title="Activity">
+                <CollapsibleCard
+                    title="Activity"
+                    icon={Activity}
+                    iconColor="text-orange-500"
+                >
 
                     <ActivitySection
                         dailyLog={dailyLog}
@@ -177,7 +187,11 @@ function LogToday() {
 
                 </CollapsibleCard>
 
-                <CollapsibleCard title="Meal Timing">
+                <CollapsibleCard
+                    title="Meal Timing"
+                    icon={CalendarClock}
+                    iconColor="text-amber-500"
+                >
 
                     <MealTimingSection
                         dailyLog={dailyLog}
@@ -186,7 +200,11 @@ function LogToday() {
 
                 </CollapsibleCard>
 
-                <CollapsibleCard title="Nutrition">
+                <CollapsibleCard
+                    title="Nutrition"
+                    icon={Apple}
+                    iconColor="text-green-600"
+                >
 
                     <NutritionSection
                         dailyLog={dailyLog}
@@ -195,7 +213,11 @@ function LogToday() {
 
                 </CollapsibleCard>
 
-                <CollapsibleCard title="Hydration">
+                <CollapsibleCard
+                    title="Hydration"
+                    icon={GlassWater}
+                    iconColor="text-cyan-600"
+                >
 
                     <HydrationSection
                         water={dailyLog.hydration.water}
@@ -204,7 +226,11 @@ function LogToday() {
 
                 </CollapsibleCard>
 
-                <CollapsibleCard title="Sleep">
+                <CollapsibleCard
+                    title="Sleep"
+                    icon={Bed}
+                    iconColor="text-indigo-600"
+                >
 
                     <SleepSection
                         dailyLog={dailyLog}
@@ -213,7 +239,11 @@ function LogToday() {
 
                 </CollapsibleCard>
 
-                <CollapsibleCard title="Notes">
+                <CollapsibleCard
+                    title="Notes"
+                    icon={NotebookPen}
+                    iconColor="text-slate-600"
+                >
 
                     <NotesSection
                         dailyLog={dailyLog}
@@ -224,6 +254,7 @@ function LogToday() {
 
                 <SaveButton
                     onClick={handleSaveDailyLog}
+                    isDirty={isDirty}
                 />
             </div>
         </PageContainer>

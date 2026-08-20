@@ -7,27 +7,13 @@
 */
 
 interface LogTodayHeaderProps {
-    selectedDate: string;
     isDirty: boolean;
 }
 
 function LogTodayHeader({
-    selectedDate,
     isDirty,
 }: LogTodayHeaderProps) {
 
-    /*
-        Format the selected date into
-        a more readable form.
-    */
-    const formattedDate = new Date(selectedDate).toLocaleDateString(
-        "en-IN",
-        {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-        }
-    );
 
     return (
         <div
@@ -54,15 +40,6 @@ function LogTodayHeader({
                     justify-between
                 "
             >
-
-                <p
-                    className="
-                        text-base
-                        text-slate-600
-                    "
-                >
-                    {formattedDate}
-                </p>
 
                 <p
                     className={`

@@ -382,6 +382,7 @@ Cards should have the following appearance:
 | Border | 1px Light Grey |
 | Shadow | Very subtle |
 | Padding | 24px |
+| Card Title Typography | text-xl font-semibold tracking-tight text-slate-900 |
 
 Cards should appear light and clean without excessive visual effects.
 
@@ -498,6 +499,9 @@ All form controls should have a consistent appearance.
 | Background | White |
 | Padding | 12px Horizontal |
 | Width | 100% of available space |
+| Typography Field Labes  | text-sm font-medium text-slate-700 |
+
+
 
 Text Areas should use the same styling while allowing vertical expansion.
 

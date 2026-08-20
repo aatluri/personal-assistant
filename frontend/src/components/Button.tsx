@@ -26,12 +26,23 @@ function Button({
                 bg-blue-600
                 text-white
                 font-medium
-                transition
+                shadow-sm
+                transition-all
+                duration-200
+
                 hover:bg-blue-700
+                hover:shadow-md
+                hover:-translate-y-0.5
+
+                active:translate-y-0
                 active:scale-[0.98]
-                disabled:bg-slate-300
+
+                disabled:bg-slate-200
                 disabled:text-slate-500
+                disabled:shadow-none
+                disabled:translate-y-0
                 disabled:cursor-not-allowed
+
                 ${className}
             `}
         >
