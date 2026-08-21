@@ -53,6 +53,7 @@ function LogToday() {
     */
     const [isLoading, setIsLoading] = useState(true);
     const [isDirty, setIsDirty] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "failed">("saved");
 
     const [dailyLog, setDailyLog] = useState<DailyLog>(
     createEmptyDailyLog()
@@ -95,19 +96,26 @@ function LogToday() {
     }, [selectedDate]);
 
     /*
-        Saves the current Daily Log
-        to the backend.
+    Saves the current Daily Log
+    to the backend.
     */
     async function handleSaveDailyLog() {
+
+        setSaveStatus("saving");
+
         try {
+
             console.log(dailyLog);
             await saveDailyLog(selectedDate, dailyLog);
             setIsDirty(false);
-            alert("Daily Log saved successfully.");
+            setSaveStatus("saved");
+
         } catch (error) {
             console.error(error);
-            alert("Failed to save Daily Log.");
+            setSaveStatus("failed");
+
         }
+
     }
 
     /*
@@ -118,6 +126,7 @@ function LogToday() {
         action: React.SetStateAction<DailyLog>
     ) {
         setIsDirty(true);
+        setSaveStatus("idle");
         setDailyLog(action);
     }
 
@@ -255,6 +264,7 @@ function LogToday() {
                 <SaveButton
                     onClick={handleSaveDailyLog}
                     isDirty={isDirty}
+                    saveStatus={saveStatus}
                 />
             </div>
         </PageContainer>

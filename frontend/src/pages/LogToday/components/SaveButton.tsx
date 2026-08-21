@@ -3,9 +3,6 @@
 
     Sticky action bar used to save
     the Daily Log.
-
-    The button is enabled only when
-    there are unsaved changes.
 */
 
 import Button from "../../../components/Button";
@@ -13,18 +10,46 @@ import Button from "../../../components/Button";
 interface SaveButtonProps {
     onClick: () => void;
     isDirty: boolean;
+    saveStatus: "idle" | "saving" | "saved" | "failed";
 }
 
 function SaveButton({
     onClick,
     isDirty,
+    saveStatus,
 }: SaveButtonProps) {
 
+    /*
+        Determine the button text based
+        on the current save state.
+    */
+    function getButtonText() {
+
+        switch (saveStatus) {
+
+            case "saving":
+                return "Saving...";
+
+            case "failed":
+                return "⚠ Save Failed - Try Again";
+
+            case "saved":
+                return "✓ All Changes Saved";
+
+            default:
+                return "Save Changes";
+
+        }
+
+    }
+
     return (
+
         <div
             className="
                 fixed
-                bottom-0
+                bottom-16
+                md:bottom-0
                 left-0
                 right-0
                 z-50
@@ -36,22 +61,28 @@ function SaveButton({
                 shadow-[0_-2px_8px_rgba(0,0,0,0.05)]
             "
         >
+
             <div
                 className="
                     mx-auto
                     max-w-3xl
                 "
             >
+
                 <Button
                     onClick={onClick}
-                    disabled={!isDirty}
+                    disabled={
+                        saveStatus === "saving" ||
+                        (!isDirty && saveStatus !== "failed")
+                    }
                 >
-                    {isDirty
-                        ? "Save Changes"
-                        : "✓ All Changes Saved"}
+                    {getButtonText()}
                 </Button>
+
             </div>
+
         </div>
+
     );
 
 }
