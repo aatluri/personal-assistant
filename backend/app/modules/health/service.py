@@ -1,6 +1,5 @@
 from app.modules.health.repository import HealthRepository
 from app.modules.health.schemas import DailyLog, BodyMeasurements
-from app.modules.health.schemas import DailyLog
 from datetime import date
 
 
@@ -23,12 +22,21 @@ class HealthService:
 
     def __init__(self):
         """
-        Create an instance of the HealthRepository.
+        Create the Repository used by the HealthService.
+
+        The Service delegates all data access to the Repository.
 
         As the application grows, dependency injection can be used
         instead of creating the repository directly.
         """
         self._repository = HealthRepository()
+
+
+# -----------------------------------------------------------------------------
+# Daily Log
+#
+# Business operations for Daily Logs.
+# -----------------------------------------------------------------------------
 
     def get_daily_logs(self) -> list[DailyLog]:
         """
@@ -43,7 +51,6 @@ class HealthService:
         - Perform calculations
         - Combine data from multiple repositories
         """
-
         return self._repository.get_daily_logs()
 
     def get_daily_log(self, log_date: date) -> DailyLog | None:
@@ -51,14 +58,12 @@ class HealthService:
         Return the Daily Log for the specified date.
         If no record exists, return None.
         """
-
         return self._repository.get_daily_log(log_date)
 
     def get_latest_daily_log(self) -> DailyLog | None:
         """
         Return the most recent Daily Log.
         """
-
         return self._repository.get_latest_daily_log()
 
     def create_daily_log(self, daily_log: DailyLog) -> None:
@@ -68,14 +73,10 @@ class HealthService:
 
         self._repository.create_daily_log(daily_log)
 
-    def upsert_daily_log(
-        self,
-        log_date: date,
-        daily_log: DailyLog,
-    ) -> None:
+    def upsert_daily_log(self,log_date: date,daily_log: DailyLog,) -> None:
         """
-        Update the Daily Log if it exists.
-        Otherwise create a new Daily Log.
+        Update the Daily Log if it already exists.
+        If no matching record is found, create a new one instead.
         """
 
         updated = self._repository.update_daily_log(
@@ -86,58 +87,41 @@ class HealthService:
         if not updated:
             self._repository.create_daily_log(daily_log)
 
+# -----------------------------------------------------------------------------
+# Body Measurements
+#
+# Business operations for Body Measurements.
+# -----------------------------------------------------------------------------
 
     def get_body_measurements(self) -> list[BodyMeasurements]:
         """
         Retrieve all Body Measurements.
         """
-
         return self._repository.get_body_measurements()
 
 
-    def get_body_measurement(
-        self,
-        measurement_date: date,
-    ) -> BodyMeasurements | None:
+    def get_body_measurement(self,measurement_date: date,) -> BodyMeasurements | None:
         """
         Return the Body Measurements for the specified date.
         If no record exists, return None.
         """
-
-        return self._repository.get_body_measurement(
-            measurement_date
-        )
+        return self._repository.get_body_measurement(measurement_date)
 
 
-    def create_body_measurement(
-        self,
-        body_measurement: BodyMeasurements,
-    ) -> None:
+    def create_body_measurement(self,body_measurement: BodyMeasurements,) -> None:
         """
         Create a new Body Measurements record.
         """
-
-        self._repository.create_body_measurement(
-            body_measurement
-        )
+        self._repository.create_body_measurement(body_measurement)
 
 
-    def upsert_body_measurement(
-        self,
-        measurement_date: date,
-        body_measurement: BodyMeasurements,
-    ) -> None:
+    def upsert_body_measurement(self,measurement_date: date,body_measurement: BodyMeasurements,) -> None:
         """
-        Update the Body Measurements if they exist.
-        Otherwise create a new Body Measurements record.
+        Update the Body Measurement if it already exists.
+        If no matching record is found, create a new one instead.
         """
 
-        updated = self._repository.update_body_measurement(
-            measurement_date,
-            body_measurement,
-        )
+        updated = self._repository.update_body_measurement(measurement_date,body_measurement,)
 
         if not updated:
-            self._repository.create_body_measurement(
-                body_measurement,
-            )
+            self._repository.create_body_measurement(body_measurement,)

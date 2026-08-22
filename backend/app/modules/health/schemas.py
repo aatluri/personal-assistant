@@ -1,9 +1,24 @@
+"""
+Health Schemas
+
+Defines the Pydantic models used by the Health module.
+
+These models represent the application's domain objects and are used by:
+- The API layer for request and response validation.
+- The Repository layer when reading from and writing to Google Sheets.
+- The Service layer when passing data through the application.
+"""
 from datetime import date, datetime
 
 from pydantic import BaseModel
 
 
 class DailyLog(BaseModel):
+    """
+    Represents a single Daily Log entry.
+
+    Each instance corresponds to one row in the Daily_Log worksheet.
+    """
     date: date
 
     weight_kg: float | None = None
@@ -39,6 +54,11 @@ class DailyLog(BaseModel):
 
 
 class BodyMeasurements(BaseModel):
+    """
+    Represents a single Body Measurements entry.
+
+    Each instance corresponds to one row in the BodyMeasurements worksheet.
+    """
     date: date
 
     body_fat_percent: float | None = None

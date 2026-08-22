@@ -22,13 +22,13 @@ This backend powers the **Personal Assistant** application.
 
 ## First Time Setup
 
-### 1. Create a Virtual Environment
+### Create a Virtual Environment
 
 ```bash
 python3 -m venv .venv
 ```
 
-### 2. Activate the Virtual Environment
+### Activate the Virtual Environment
 
 #### macOS / Linux
 
@@ -42,13 +42,13 @@ source .venv/bin/activate
 .venv\Scripts\activate
 ```
 
-### 3. Install Dependencies
+### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure Environment Variables
+### Configure Environment Variables
 
 Create a `.env` file from `.env.example` and populate the required values.
 
@@ -263,18 +263,97 @@ JSON Response
 
 # Configuration
 
-Application configuration is managed through `.env`.
+Application configuration is managed through the `.env` file.
 
-Current configuration:
+The `.env` file contains environment-specific settings such as:
 
-| Variable | Description |
-|----------|-------------|
-| `GOOGLE_SERVICE_ACCOUNT_FILE` | Path to the Google service account credentials |
-| `GOOGLE_SHEETS_SPREADSHEET_ID` | Google Spreadsheet ID |
-| `HEALTH_DAILY_LOG_WORKSHEET` |  Daily_Log |
+- Google Sheets connection details
+- Google service account credentials
+- Worksheet names
+- Other application configuration
+
+The application loads these values through `app/config.py`, making them available throughout the backend via the `settings` object.
 
 ---
 
+## Adding a New Field to the backend data store
+
+When a new field is added to an existing data store, update the following components:
+
+1. **Data Store**
+   - Add the new column to the datastore.
+
+2. **schemas.py**
+   - Add the new field to the corresponding Pydantic model.
+
+3. **repository.py**
+   - Update `_row_to_<entity>()` to read the new column.
+   - Update `_<entity>_to_row()` to write the new column.
+
+4. **API**
+   - No changes required if the existing endpoints already return the updated schema.
+
+5. **Service**
+   - No changes required unless business logic for the new field is needed.
+
+6. **Configuration**
+   - No changes required unless the new field requires additional configuration.
+
+7. **Testing**
+   - Verify the GET endpoint returns the new field.
+   - Verify the POST/PUT endpoint correctly persists the new field.
+
+
+
+## Renaming a Column in the Backend datastore
+
+When a worksheet column is renamed, update the following components:
+
+1. **Google Sheet**
+   - Rename the column.
+
+2. **repository.py**
+   - Update the column name in `_row_to_<entity>()`.
+
+3. **Testing**
+   - Verify the GET endpoint still returns the correct data.
+   - Verify the POST/PUT endpoint continues to read and write the correct column.
+
+
+
+## Adding a New Worksheet / Entity
+
+When a new worksheet (for example, `BodyMeasurements`) is added to the Google Spreadsheet, the following backend changes are required:
+
+1. **Google Sheet**
+   - Create the new worksheet.
+
+2. **Configuration**
+   - Add a new worksheet setting to `.env`.
+   - Add the corresponding setting in `app/config.py`.
+
+3. **schemas.py**
+   - Create a new Pydantic model for the new entity.
+
+4. **repository.py**
+   - Add a method to retrieve the worksheet.
+   - Add methods to read records.
+   - Add methods to retrieve a single record.
+   - Add methods to create and update records.
+   - Add methods to convert worksheet rows to Pydantic models and vice versa.
+
+5. **service.py**
+   - Add methods that expose the Repository functionality.
+
+6. **api.py**
+   - Add the required CRUD endpoints.
+   - Expose the new Pydantic model through the API.
+
+7. **Testing**
+   - Verify all GET, POST and PUT endpoints.
+   - Verify data is correctly read from and written to the new worksheet.
+
+---
 
 # Documentation
 

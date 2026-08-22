@@ -34,8 +34,21 @@ class HealthRepository:
     """
 
     def _empty_to_none(self, value):
+        """
+        Convert empty worksheet values into None.
+
+        Google Sheets returns an empty string for blank cells.
+        Numeric values, including 0, are preserved.
+        """
         return None if value == "" else value
 
+
+# -----------------------------------------------------------------------------
+# Daily Log
+#
+# Methods responsible for reading and writing Daily Log records
+# from the Daily_Log worksheet.
+# -----------------------------------------------------------------------------
 
     def get_daily_logs(self) -> list[DailyLog]:
         """
@@ -50,37 +63,8 @@ class HealthRepository:
         6. Return a list of DailyLog objects.
         """
 
-
         worksheet = self._get_daily_log_worksheet()
-
-
-        # ---------------------------------------------------------------------
-        # Read every row from the worksheet.
-        #
-        # get_all_records() returns a list of dictionaries.
-        #
-        # Example:
-        #
-        # [
-        #     {
-        #         "Date": "August 1, 2026",
-        #         "Weight (kg)": 79,
-        #         "Workout Type": "HIIT",
-        #         ...
-        #     },
-        #     ...
-        # ]
-        # ---------------------------------------------------------------------
         rows = worksheet.get_all_records()
-
-        # ---------------------------------------------------------------------
-        # Convert every worksheet row into a DailyLog object.
-        #
-        # Instead of placing all the conversion logic here, we delegate that
-        # responsibility to a private helper method.
-        #
-        # This keeps get_daily_logs() short and focused on retrieving data.
-        # ---------------------------------------------------------------------
         return [
             self._row_to_daily_log(row)
             for row in rows
@@ -143,6 +127,8 @@ class HealthRepository:
 
         rows = worksheet.get_all_values()
 
+        # Search the worksheet for a row with the matching date.
+        # If found, replace the entire row with the updated values.
         # Row 1 contains the worksheet headers, so data starts at row 2.
         for row_number, row in enumerate(rows[1:], start=2):
             if not row or not row[0]:
@@ -167,26 +153,32 @@ class HealthRepository:
         return False
 
     def _get_daily_log_worksheet(self):
-            """
-            Return the Daily_Log worksheet.
-            """
+        """
+        Return a reference to the Daily_Log worksheet.
 
-            # Create an authenticated Google Sheets client.
-            client = get_sheets_client()
+        All Daily Log repository methods use this helper
+        instead of creating their own Google Sheets connection.
+        """
 
-            # Open the spreadsheet using its ID from the application configuration.
-            spreadsheet = client.open_by_key(
-                settings.GOOGLE_SHEETS_SPREADSHEET_ID
-            )
+        # Create an authenticated Google Sheets client.
+        client = get_sheets_client()
 
-            return spreadsheet.worksheet(
-                settings.HEALTH_DAILY_LOG_WORKSHEET
-            )
+        # Open the spreadsheet using its ID from the application configuration.
+        spreadsheet = client.open_by_key(
+            settings.GOOGLE_SHEETS_SPREADSHEET_ID
+        )
+
+        return spreadsheet.worksheet(
+            settings.HEALTH_DAILY_LOG_WORKSHEET
+        )
 
 
     def _daily_log_to_row(self,daily_log: DailyLog,) -> list:
         """
-        Convert a DailyLog object into a worksheet row.
+        Convert a DailyLog object into the list format
+        expected by Google Sheets.
+
+        The column order must match the worksheet exactly.
         """
 
         return [
@@ -353,6 +345,14 @@ class HealthRepository:
             notes=row["Notes"] or None,
         )
 
+
+# -----------------------------------------------------------------------------
+# Body Measurements
+#
+# Methods responsible for reading and writing Body Measurements
+# from the BodyMeasurements worksheet.
+# -----------------------------------------------------------------------------
+
     def get_body_measurements(self) -> list[BodyMeasurements]:
         """
         Retrieves every record from the BodyMeasurements worksheet.
@@ -384,10 +384,7 @@ class HealthRepository:
         ]
 
 
-    def get_body_measurement(
-    self,
-    measurement_date: date,
-) -> BodyMeasurements | None:
+    def get_body_measurement(self,measurement_date: date,) -> BodyMeasurements | None:
         """
         Return the Body Measurements for the specified date.
 
@@ -403,10 +400,7 @@ class HealthRepository:
 
         return None
 
-    def create_body_measurement(
-    self,
-    body_measurement: BodyMeasurements,
-) -> None:
+    def create_body_measurement(self,body_measurement: BodyMeasurements,) -> None:
         """
         Create a new Body Measurements record.
 
@@ -424,11 +418,7 @@ class HealthRepository:
             value_input_option="USER_ENTERED",
         )
 
-    def update_body_measurement(
-    self,
-    measurement_date: date,
-    body_measurement: BodyMeasurements,
-    ) -> bool:
+    def update_body_measurement(self,measurement_date: date,body_measurement: BodyMeasurements,) -> bool:
         """
         Update an existing Body Measurements record identified
         by its date.
@@ -442,6 +432,8 @@ class HealthRepository:
 
         rows = worksheet.get_all_values()
 
+        # Search the worksheet for a row with the matching date.
+        # If found, replace the entire row with the updated values.
         # Row 1 contains the worksheet headers, so data starts at row 2.
         for row_number, row in enumerate(rows[1:], start=2):
 

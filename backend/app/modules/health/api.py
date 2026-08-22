@@ -1,3 +1,18 @@
+"""
+Health API
+
+Exposes the Health module through REST endpoints.
+
+Responsibilities:
+- Receive HTTP requests from clients.
+- Validate request and response models using Pydantic.
+- Delegate business logic to the HealthService.
+- Return HTTP responses.
+
+The API layer should not contain business logic or access
+Google Sheets directly.
+"""
+
 from fastapi import APIRouter
 from datetime import date
 from fastapi import HTTPException
@@ -37,30 +52,29 @@ def get_health_status() -> dict[str, str]:
     }
 
 
+# -----------------------------------------------------------------------------
+# Daily Log Endpoints
+#
+# Endpoints for creating, retrieving and updating Daily Logs.
+# -----------------------------------------------------------------------------
+
 @router.get("/daily-logs",response_model=list[DailyLog],)
 def get_daily_logs() -> list[DailyLog]:
     """
     Return all Health Daily Log records.
-
-    Request flow:
-
-        API
-        ↓
-        HealthService
-        ↓
-        HealthRepository
-        ↓
-        Google Sheets
-
-    FastAPI uses the DailyLog response model to validate and serialize
-    the returned objects into JSON.
     """
     return health_service.get_daily_logs()
+
+
 
 @router.get("/daily-logs/{log_date}",response_model=DailyLog,)
 def get_daily_log(log_date: date) -> DailyLog:
     """
-    Return the Daily Log for a specific date.
+    Retrieve the Daily Log for the specified date.
+
+    Returns:
+        - The matching DailyLog if found.
+        - HTTP 404 if no record exists.
     """
     daily_log = health_service.get_daily_log(log_date)
     if daily_log is None:
@@ -71,6 +85,8 @@ def get_daily_log(log_date: date) -> DailyLog:
     return daily_log
 
 @router.get("/latest",response_model=DailyLog,)
+
+
 def get_latest_daily_log() -> DailyLog:
     """
     Return the most recent Daily Log.
@@ -96,12 +112,11 @@ def create_daily_log(daily_log: DailyLog,) -> None:
 
 
 @router.put("/daily-logs/{log_date}", response_model=DailyLog)
-def update_daily_log(
-    log_date: date,
-    daily_log: DailyLog,
-) -> DailyLog:
+def update_daily_log(log_date: date,daily_log: DailyLog,) -> DailyLog:
     """
-    Update or create the Daily Log for the specified date.
+    Update an existing Daily Log or create one if it does not exist.
+
+    The date in the URL must match the date contained in the request body.
     """
 
     if daily_log.date != log_date:
@@ -117,21 +132,20 @@ def update_daily_log(
 
     return daily_log
 
-@router.get(
-    "/body-measurements",
-    response_model=list[BodyMeasurements],
-)
+
+# -----------------------------------------------------------------------------
+# Body Measurements Endpoints
+#
+# Endpoints for creating, retrieving and updating Body Measurements.
+# -----------------------------------------------------------------------------
+
+@router.get( "/body-measurements",response_model=list[BodyMeasurements],)
 def get_body_measurements():
     return health_service.get_body_measurements()
 
 
-@router.get(
-    "/body-measurements/{measurement_date}",
-    response_model=BodyMeasurements,
-)
-def get_body_measurement(
-    measurement_date: date,
-) -> BodyMeasurements:
+@router.get("/body-measurements/{measurement_date}",response_model=BodyMeasurements,)
+def get_body_measurement(measurement_date: date,) -> BodyMeasurements:
     """
     Return the Body Measurements for a specific date.
     """
@@ -148,13 +162,8 @@ def get_body_measurement(
 
     return body_measurement
 
-@router.post(
-    "/body-measurements",
-    status_code=status.HTTP_201_CREATED,
-)
-def create_body_measurement(
-    body_measurement: BodyMeasurements,
-) -> None:
+@router.post("/body-measurements",status_code=status.HTTP_201_CREATED,)
+def create_body_measurement(body_measurement: BodyMeasurements,) -> None:
     """
     Create a new Body Measurements record.
     """
@@ -163,10 +172,7 @@ def create_body_measurement(
         body_measurement
     )
 
-@router.put(
-    "/body-measurements/{measurement_date}",
-    response_model=BodyMeasurements,
-)
+@router.put("/body-measurements/{measurement_date}",response_model=BodyMeasurements,)
 def update_body_measurement(
     measurement_date: date,
     body_measurement: BodyMeasurements,
