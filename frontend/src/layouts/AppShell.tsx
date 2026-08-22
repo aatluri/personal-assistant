@@ -6,15 +6,32 @@
     Responsibilities:
     - Desktop sidebar
     - Mobile bottom navigation
+    - Mobile More menu
     - Main content area
 */
 
+import { useState } from "react";
+
+import { Ellipsis } from "lucide-react";
+
 import { Outlet } from "react-router-dom";
 
+import MoreMenu from "../components/MoreMenu";
 import NavigationItem from "../components/NavigationItem";
-import { navigationItems } from "../navigation/navigation";
+
+import {
+    desktopNavigationItems,
+    mobileNavigationItems,
+} from "../navigation/navigation";
 
 function AppShell() {
+
+    /*
+        Controls whether the mobile
+        More bottom sheet is visible.
+    */
+    const [isMoreMenuOpen, setIsMoreMenuOpen] =
+        useState(false);
 
     return (
 
@@ -39,7 +56,7 @@ function AppShell() {
                 "
             >
 
-                {/* Logo */}
+                {/* App Name */}
                 <div
                     className="
                         border-b
@@ -69,7 +86,7 @@ function AppShell() {
                     "
                 >
 
-                    {navigationItems.map((item) => (
+                    {desktopNavigationItems.map((item) => (
 
                         <NavigationItem
                             key={item.to}
@@ -110,19 +127,74 @@ function AppShell() {
                 "
             >
 
-                {navigationItems.map((item) => (
+                {mobileNavigationItems.map((item) => {
 
-                    <NavigationItem
-                        key={item.to}
-                        to={item.to}
-                        label={item.shortLabel}
-                        icon={item.icon}
-                        mobile
-                    />
+                    /*
+                        More is not a route.
 
-                ))}
+                        It opens the mobile bottom sheet
+                        instead of navigating to another page.
+                    */
+                    if (item.label === "More") {
+
+                        return (
+
+                            <button
+                                key="more"
+                                type="button"
+                                onClick={() =>
+                                    setIsMoreMenuOpen(true)
+                                }
+                                className="
+                                    flex
+                                    flex-1
+                                    flex-col
+                                    items-center
+                                    gap-1
+                                    py-3
+                                    text-xs
+                                    text-slate-500
+                                    transition-colors
+                                    hover:text-blue-600
+                                "
+                            >
+
+                                <Ellipsis size={20} />
+
+                                <span>More</span>
+
+                            </button>
+
+                        );
+
+                    }
+
+                    /*
+                        Normal mobile navigation item.
+                    */
+                    return (
+
+                        <NavigationItem
+                            key={item.to}
+                            to={item.to}
+                            label={item.shortLabel}
+                            icon={item.icon}
+                            mobile
+                        />
+
+                    );
+
+                })}
 
             </nav>
+
+            {/* Mobile More Bottom Sheet */}
+            <MoreMenu
+                isOpen={isMoreMenuOpen}
+                onClose={() =>
+                    setIsMoreMenuOpen(false)
+                }
+            />
 
         </div>
 

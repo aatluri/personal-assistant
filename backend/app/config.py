@@ -32,6 +32,8 @@ settings
 
     HEALTH_DAILY_LOG_WORKSHEET: str
 
+    HEALTH_BODY_MEASUREMENTS_WORKSHEET: str
+
     model_config = SettingsConfigDict(
 
         env_file=".env",

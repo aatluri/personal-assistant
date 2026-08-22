@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from fastapi import status
 
 from app.modules.health.schemas import DailyLog
+from app.modules.health.schemas import BodyMeasurements
 from app.modules.health.service import HealthService
 
 
@@ -116,3 +117,73 @@ def update_daily_log(
 
     return daily_log
 
+@router.get(
+    "/body-measurements",
+    response_model=list[BodyMeasurements],
+)
+def get_body_measurements():
+    return health_service.get_body_measurements()
+
+
+@router.get(
+    "/body-measurements/{measurement_date}",
+    response_model=BodyMeasurements,
+)
+def get_body_measurement(
+    measurement_date: date,
+) -> BodyMeasurements:
+    """
+    Return the Body Measurements for a specific date.
+    """
+
+    body_measurement = health_service.get_body_measurement(
+        measurement_date
+    )
+
+    if body_measurement is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Body Measurements not found.",
+        )
+
+    return body_measurement
+
+@router.post(
+    "/body-measurements",
+    status_code=status.HTTP_201_CREATED,
+)
+def create_body_measurement(
+    body_measurement: BodyMeasurements,
+) -> None:
+    """
+    Create a new Body Measurements record.
+    """
+
+    health_service.create_body_measurement(
+        body_measurement
+    )
+
+@router.put(
+    "/body-measurements/{measurement_date}",
+    response_model=BodyMeasurements,
+)
+def update_body_measurement(
+    measurement_date: date,
+    body_measurement: BodyMeasurements,
+) -> BodyMeasurements:
+    """
+    Update or create the Body Measurements for the specified date.
+    """
+
+    if body_measurement.date != measurement_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The URL date must match the Body Measurements date.",
+        )
+
+    health_service.upsert_body_measurement(
+        measurement_date,
+        body_measurement,
+    )
+
+    return body_measurement

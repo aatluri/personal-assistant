@@ -1,4 +1,5 @@
 from app.modules.health.repository import HealthRepository
+from app.modules.health.schemas import DailyLog, BodyMeasurements
 from app.modules.health.schemas import DailyLog
 from datetime import date
 
@@ -84,3 +85,59 @@ class HealthService:
 
         if not updated:
             self._repository.create_daily_log(daily_log)
+
+
+    def get_body_measurements(self) -> list[BodyMeasurements]:
+        """
+        Retrieve all Body Measurements.
+        """
+
+        return self._repository.get_body_measurements()
+
+
+    def get_body_measurement(
+        self,
+        measurement_date: date,
+    ) -> BodyMeasurements | None:
+        """
+        Return the Body Measurements for the specified date.
+        If no record exists, return None.
+        """
+
+        return self._repository.get_body_measurement(
+            measurement_date
+        )
+
+
+    def create_body_measurement(
+        self,
+        body_measurement: BodyMeasurements,
+    ) -> None:
+        """
+        Create a new Body Measurements record.
+        """
+
+        self._repository.create_body_measurement(
+            body_measurement
+        )
+
+
+    def upsert_body_measurement(
+        self,
+        measurement_date: date,
+        body_measurement: BodyMeasurements,
+    ) -> None:
+        """
+        Update the Body Measurements if they exist.
+        Otherwise create a new Body Measurements record.
+        """
+
+        updated = self._repository.update_body_measurement(
+            measurement_date,
+            body_measurement,
+        )
+
+        if not updated:
+            self._repository.create_body_measurement(
+                body_measurement,
+            )

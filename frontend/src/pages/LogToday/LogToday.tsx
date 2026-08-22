@@ -19,7 +19,7 @@ import LogTodayHeader from "./components/LogTodayHeader";
 import MealTimingSection from "./components/MealTimingSection";
 import NotesSection from "./components/NotesSection";
 import NutritionSection from "./components/NutritionSection";
-import SaveButton from "./components/SaveButton";
+import SaveButton from "../../components/SaveButton";
 import SleepSection from "./components/SleepSection";
 import WorkoutSection from "./components/WorkoutSection";
 import ActivitySection from "./components/ActivitySection";

@@ -17,6 +17,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import History from "./pages/History/History";
 import LogToday from "./pages/LogToday/LogToday";
 import Settings from "./pages/Settings/Settings";
+import LogBodyMeasurements from "./pages/LogBodyMeasurements/LogBodyMeasurements";
+
 
 function App() {
 
@@ -38,6 +40,11 @@ function App() {
                     <Route
                         path="/log-today"
                         element={<LogToday />}
+                    />
+
+                    <Route
+                        path="/body-measurements"
+                        element={<LogBodyMeasurements />}
                     />
 
                     <Route

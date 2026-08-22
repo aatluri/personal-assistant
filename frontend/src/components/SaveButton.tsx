@@ -5,7 +5,7 @@
     the Daily Log.
 */
 
-import Button from "../../../components/Button";
+import Button from "./Button";
 
 interface SaveButtonProps {
     onClick: () => void;
