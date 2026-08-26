@@ -516,3 +516,119 @@ src/pages/LogBodyMeasurements/components/BodyMeasurementsSection.tsx
 ```
 
 If a visual change should affect only one section, change the Tailwind classes in that specific component rather than modifying a shared component.
+
+
+## Adding a New Field to the Frontend
+
+Assume a new field called **Resting Heart Rate** has already been exposed by the backend APIs.
+
+The following frontend changes are required:
+
+1. **Update the TypeScript model**
+   - **File:** `src/types/DailyLog.ts`
+   - Add the new field to the `DailyLog` interface.
+
+2. **Update the empty model**
+   - **File:** `src/utils/createEmptyDailyLog.ts`
+   - Add a default value for the new field.
+
+3. **Update the API layer (if required)**
+   - **File:** `src/api/health.ts`
+   - If the frontend and backend field names differ, update the mapping.
+   - If the field names are identical, no changes are required.
+
+4. **Add the field to the UI**
+   - **File:** The appropriate page section.
+   - Example:
+     ```text
+     src/pages/LogToday/components/BodySection.tsx
+     ```
+   - Add the corresponding `TextInput`, `Select`, or other UI component.
+
+5. **Bind the field to the page state**
+   - **File:** The page that owns the state.
+   - Example:
+     ```text
+     src/pages/LogToday/LogToday.tsx
+     ```
+   - Update the page state (`dailyLog`) to include the new field.
+   - Pass the field and the `setDailyLog()` function to the appropriate section component.
+   - The section component then uses `setDailyLog()` to update the field whenever the user changes its value.
+
+6. **Test the page**
+   - Verify the field loads correctly from the backend.
+   - Verify changes update the page state.
+   - Verify the value is saved successfully.
+   - Reload the page and confirm the value is persisted.
+
+
+## Adding a New Page
+
+Assume we want to add a new page called **Body Measurements**.
+
+The following frontend changes are required:
+
+1. **Create the TypeScript model**
+   - **File:**
+     ```text
+     src/types/BodyMeasurements.ts
+     ```
+   - Create the interface that represents the page's data model.
+
+2. **Create the empty model**
+   - **File:**
+     ```text
+     src/utils/createEmptyBodyMeasurements.ts
+     ```
+   - Create a helper that returns a new empty `BodyMeasurements` object.
+
+3. **Update the API layer**
+   - **File:**
+     ```text
+     src/api/health.ts
+     ```
+   - Add the API methods required by the page.
+   - Example:
+     - `getBodyMeasurement()`
+     - `saveBodyMeasurement()`
+
+4. **Create the page**
+   - **File:**
+     ```text
+     src/pages/LogBodyMeasurements/LogBodyMeasurements.tsx
+     ```
+   - Create the page that owns the React state.
+   - Implement the page lifecycle:
+     - Load data from the backend.
+     - Manage page state.
+     - Handle saving.
+     - Pass state to the page sections.
+
+5. **Create the page sections**
+   - **Files:**
+     ```text
+     src/pages/LogBodyMeasurements/components/*
+     ```
+   - Create the components responsible for rendering each section of the page.
+   - Keep page-specific UI inside these components.
+
+6. **Register the page with React Router**
+   - **File:**
+     ```text
+     src/App.tsx
+     ```
+   - Add a new route so React Router can load the page.
+
+7. **Update the navigation**
+   - **File:**
+     ```text
+     src/navigation/navigation.ts
+     ```
+   - Add the page to the desktop and/or mobile navigation as appropriate.
+
+8. **Test the page**
+   - Verify the page loads correctly.
+   - Verify data is retrieved from the backend.
+   - Verify changes update the page state.
+   - Verify data is saved successfully.
+   - Reload the page and confirm the saved values are displayed.
