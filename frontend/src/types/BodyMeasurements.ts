@@ -1,11 +1,20 @@
 /*
     BodyMeasurements
 
-    Defines the structure of all data stored
-    for the Body Measurements page.
+    Defines the structure of the Body Measurements
+    object used throughout the frontend.
+
+    This interface represents the page state and is
+    shared between:
+    - API layer
+    - Page components
+    - Utility functions
 */
 
 export interface BodyMeasurements {
+    /*
+        Measurement date in YYYY-MM-DD format.
+    */
 
     date: string;
 

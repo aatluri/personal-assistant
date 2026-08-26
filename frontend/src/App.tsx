@@ -4,9 +4,9 @@
     Root component of the application.
 
     Responsibilities:
-    - Configure routing
-    - Load the shared AppShell
-    - Display pages inside the AppShell
+    - Configure application routing.
+    - Load the shared AppShell.
+    - Define which page is displayed for each URL.
 */
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -24,9 +24,27 @@ function App() {
 
     return (
 
+        /*
+            BrowserRouter enables client-side routing.
+
+            It watches the browser URL and ensures
+            the correct page is rendered without
+            refreshing the browser.
+        */
+
         <BrowserRouter>
 
+            {/* Define all application routes. */}
+
             <Routes>
+                 {/*
+                    All pages are rendered inside
+                    the shared AppShell.
+
+                    AppShell provides the common layout,
+                    including the navigation and page
+                    content area.
+                */}
 
                 <Route
                     element={<AppShell />}

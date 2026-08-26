@@ -1,24 +1,65 @@
 /*
     Button
 
-    Reusable button component used
-    throughout the application.
+    Reusable button component used throughout the application.
+
+    Responsibilities:
+    - Provide a consistent look and feel for all buttons.
+    - Support all standard HTML button attributes.
+    - Allow pages to add additional styling when required.
 */
 
 import type { ButtonHTMLAttributes } from "react";
 
-interface ButtonProps
-    extends ButtonHTMLAttributes<HTMLButtonElement> {}
+/*
+    By extending ButtonHTMLAttributes, this component
+    automatically supports all normal HTML button properties
+    such as:
+    - onClick
+    - disabled
+    - type
+    - title
+    - ...etc.
+*/
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
+/*
+    children
+        The content displayed inside the button.
+
+    className
+        Optional additional Tailwind classes supplied
+        by the caller.
+
+    buttonProps
+        Collects all remaining HTML button attributes
+        and passes them directly to the underlying
+        <button> element.
+*/
 function Button({
-    children,
-    className = "",
-    ...buttonProps
-}: ButtonProps) {
+    children
+    ,className = ""
+    ,...buttonProps
+    }: ButtonProps) {
 
     return (
+         /*
+            Spread all standard HTML button attributes
+            onto the native button element.
+
+            Example:
+                disabled
+                onClick
+                type
+        */
         <button
             {...buttonProps}
+            /*
+                Apply the application's default button styling.
+
+                Any classes supplied by the caller are appended,
+                allowing page-specific styling when needed.
+            */
             className={`
                 w-full
                 h-12
@@ -46,6 +87,7 @@ function Button({
                 ${className}
             `}
         >
+            {/* Display the content supplied by the caller. */}
             {children}
         </button>
     );

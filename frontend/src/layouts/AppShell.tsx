@@ -1,13 +1,13 @@
 /*
     AppShell
 
-    Shared application layout.
+    Shared application layout used by every page.
 
     Responsibilities:
-    - Desktop sidebar
-    - Mobile bottom navigation
-    - Mobile More menu
-    - Main content area
+    - Render the desktop sidebar.
+    - Render the mobile bottom navigation.
+    - Display the mobile More menu.
+    - Provide the main content area where pages are displayed.
 */
 
 import { useState } from "react";
@@ -27,14 +27,23 @@ import {
 function AppShell() {
 
     /*
-        Controls whether the mobile
-        More bottom sheet is visible.
+        Tracks whether the mobile
+        More menu is currently open.
     */
     const [isMoreMenuOpen, setIsMoreMenuOpen] =
         useState(false);
 
     return (
 
+        /*
+            Overall application layout.
+
+            Contains:
+            - Desktop sidebar
+            - Main content area
+            - Mobile navigation
+            - Mobile More menu
+        */
         <div
             className="
                 min-h-screen
@@ -43,7 +52,12 @@ function AppShell() {
             "
         >
 
-            {/* Desktop Sidebar */}
+            {/*
+                Desktop sidebar.
+
+                Hidden on mobile devices and displayed
+                only on medium screens and larger.
+            */}
             <aside
                 className="
                     hidden
@@ -56,7 +70,7 @@ function AppShell() {
                 "
             >
 
-                {/* App Name */}
+                {/* Display the application name. */}
                 <div
                     className="
                         border-b
@@ -77,7 +91,12 @@ function AppShell() {
 
                 </div>
 
-                {/* Desktop Navigation */}
+               {/*
+                    Render the desktop navigation.
+
+                    The navigation items are defined in
+                    navigation/navigation.ts.
+                */}
                 <nav
                     className="
                         flex-1
@@ -101,7 +120,18 @@ function AppShell() {
 
             </aside>
 
-            {/* Main Content */}
+           {/*
+                Main content area.
+
+                <Outlet /> is provided by React Router
+                and renders whichever page matches the
+                current URL.
+
+                Examples:
+                    /log-today
+                    /body-measurements
+                    /settings
+            */}
             <main
                 className="
                     flex-1
@@ -111,7 +141,12 @@ function AppShell() {
                 <Outlet />
             </main>
 
-            {/* Mobile Bottom Navigation */}
+            {/*
+                Mobile bottom navigation.
+
+                Hidden on desktop and displayed only
+                on smaller screens.
+            */}
             <nav
                 className="
                     fixed
@@ -130,10 +165,10 @@ function AppShell() {
                 {mobileNavigationItems.map((item) => {
 
                     /*
-                        More is not a route.
+                        "More" is not a navigation route.
 
-                        It opens the mobile bottom sheet
-                        instead of navigating to another page.
+                        Instead of navigating to another page,
+                        it opens the More bottom sheet.
                     */
                     if (item.label === "More") {
 
@@ -170,7 +205,11 @@ function AppShell() {
                     }
 
                     /*
-                        Normal mobile navigation item.
+                        Render a normal navigation item.
+
+                        NavigationItem is responsible for
+                        handling navigation and highlighting
+                        the active page.
                     */
                     return (
 
@@ -188,7 +227,12 @@ function AppShell() {
 
             </nav>
 
-            {/* Mobile More Bottom Sheet */}
+            {/*
+                Mobile More menu.
+
+                The visibility of this component is
+                controlled by the isMoreMenuOpen state.
+            */}
             <MoreMenu
                 isOpen={isMoreMenuOpen}
                 onClose={() =>

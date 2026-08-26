@@ -1,18 +1,37 @@
 /*
     TextArea
 
-    A reusable textarea component.
+    Reusable multi-line text input component used
+    throughout the application.
 
-    It wraps the standard HTML <textarea> element
-    and accepts all normal HTML textarea attributes.
+    Responsibilities:
+    - Provide a consistent look and feel for all text areas.
+    - Support all standard HTML textarea attributes.
+    - Display a label above the text area.
 */
 
 import type { TextareaHTMLAttributes } from "react";
 
+
+/*
+    By extending TextareaHTMLAttributes, this component
+    automatically supports all normal HTML textarea
+    properties such as:
+    - value
+    - onChange
+    - placeholder
+    - rows
+    - disabled
+    - required
+    - ...etc.
+*/
 interface TextAreaProps
     extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 
-    // Text displayed above the textarea
+    /*
+        label
+            Text displayed above the text area.
+    */
     label: string;
 }
 
@@ -23,7 +42,7 @@ function TextArea({
 
     return (
         <div>
-
+            {/* Display the label for the text area. */}
             <label
                 htmlFor={textAreaProps.id}
                 className="
@@ -37,6 +56,19 @@ function TextArea({
                 {label}
             </label>
 
+            {/*
+                Render the HTML <textarea> element.
+
+                Spread all remaining HTML textarea
+                attributes onto the element.
+
+                Example:
+                    value
+                    onChange
+                    placeholder
+                    rows
+                    disabled
+            */}
             <textarea
                 {...textAreaProps}
                 className="

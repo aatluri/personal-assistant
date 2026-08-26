@@ -1,8 +1,11 @@
 /*
     LoadingSpinner
 
-    Displays a simple loading message
-    while data is being retrieved.
+    Displays a loading indicator while the page
+    is waiting for data from the backend.
+
+    This component is typically shown while an
+    API request is in progress.
 */
 
 function LoadingSpinner() {
@@ -11,6 +14,7 @@ function LoadingSpinner() {
 
         <div>
 
+            {/* Loading message displayed to the user. */}
             <p>Loading...</p>
 
         </div>

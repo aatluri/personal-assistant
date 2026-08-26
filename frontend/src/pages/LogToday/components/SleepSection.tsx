@@ -2,9 +2,14 @@
     SleepSection
 
     Displays and updates the user's
-    sleep start and end times.
+    sleep information.
 
-    The actual state is owned by LogToday.
+    Responsibilities:
+    - Display sleep-related fields.
+    - Update the DailyLog state when values change.
+    - Keep the UI focused only on sleep data.
+
+    The page state is owned by LogToday.
 */
 
 import type { Dispatch, SetStateAction } from "react";
@@ -13,8 +18,11 @@ import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
 /*
-    Props received from the parent
-    LogToday component.
+    dailyLog
+        The current Daily Log displayed on the page.
+
+    setDailyLog
+        Callback used to update the page state.
 */
 interface SleepSectionProps {
 
@@ -30,7 +38,9 @@ function SleepSection({
     dailyLog,
     setDailyLog,
 }: SleepSectionProps) {
-
+    /*
+        Display the Sleep section.
+    */
     return (
 
         <section>
@@ -51,6 +61,11 @@ function SleepSection({
                     name="sleepStartTime"
                     type="time"
                     value={dailyLog.sleep.sleepStartTime}
+                    /*
+                        Update only the Sleep Start Time
+                        while preserving the rest of
+                        the DailyLog.
+                    */
                     onChange={(event) => {
 
                         const newSleepStartTime = event.target.value;
@@ -73,6 +88,11 @@ function SleepSection({
                     name="sleepEndTime"
                     type="time"
                     value={dailyLog.sleep.sleepEndTime}
+                    /*
+                        Update only the Sleep End Time
+                        while preserving the rest of
+                        the DailyLog.
+                    */
                     onChange={(event) => {
 
                         const newSleepEndTime = event.target.value;

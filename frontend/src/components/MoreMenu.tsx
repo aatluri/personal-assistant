@@ -4,8 +4,12 @@
     Mobile bottom sheet used to display
     secondary navigation options.
 
-    This is shown when the user taps
-    "More" in the mobile bottom navigation.
+    Responsibilities:
+    - Display navigation items that do not fit
+      in the mobile bottom navigation.
+    - Allow the user to navigate to additional pages.
+    - Close automatically when the user selects
+      an option or taps outside the menu.
 */
 
 import {
@@ -16,6 +20,14 @@ import {
 
 import { Link } from "react-router-dom";
 
+
+/*
+    isOpen
+        Determines whether the menu is visible.
+
+    onClose
+        Callback used to close the menu.
+*/
 interface MoreMenuProps {
     isOpen: boolean;
     onClose: () => void;
@@ -27,8 +39,11 @@ function MoreMenu({
 }: MoreMenuProps) {
 
     /*
-        Do not render anything when
+        Do not render the component when
         the menu is closed.
+
+        Returning null tells React that
+        nothing should be displayed.
     */
     if (!isOpen) {
         return null;
@@ -37,7 +52,12 @@ function MoreMenu({
     return (
 
         <>
-            {/* Background overlay */}
+            {/*
+                Semi-transparent background shown behind
+                the bottom sheet.
+
+                Clicking the overlay closes the menu.
+            */}
             <div
                 className="
                     fixed
@@ -49,7 +69,12 @@ function MoreMenu({
                 onClick={onClose}
             />
 
-            {/* Bottom Sheet */}
+            {/*
+                Bottom sheet containing the additional
+                navigation options.
+
+                This is displayed only on mobile devices.
+            */}
             <div
                 className="
                     fixed
@@ -67,7 +92,7 @@ function MoreMenu({
                 "
             >
 
-                {/* Header */}
+                {/* Menu header */}
                 <div
                     className="
                         mb-4
@@ -89,6 +114,12 @@ function MoreMenu({
                         More
                     </h2>
 
+                    {/*
+                        Close button.
+
+                        Executes the callback supplied
+                        by the parent component.
+                    */}
                     <button
                         type="button"
                         onClick={onClose}
@@ -105,10 +136,15 @@ function MoreMenu({
 
                 </div>
 
-                {/* Menu Items */}
+                 {/* Additional navigation options */}
                 <div className="space-y-2">
 
-                    {/* Body Measurements */}
+                    {/*
+                        Navigate to the Body Measurements page.
+
+                        The menu is automatically closed after
+                        navigation.
+                    */}
                     <Link
                         to="/body-measurements"
                         onClick={onClose}
@@ -153,7 +189,12 @@ function MoreMenu({
 
                     </Link>
 
-                    {/* Settings */}
+                    {/*
+                        Navigate to the Settings page.
+
+                        The menu is automatically closed after
+                        navigation.
+                    */}
                     <Link
                         to="/settings"
                         onClick={onClose}

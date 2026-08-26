@@ -1,8 +1,17 @@
 /*
     HydrationSection
 
-    Displays the user's water intake for the day.
+    Displays and updates the user's
+    daily water intake.
+
+    Responsibilities:
+    - Display hydration-related fields.
+    - Update the DailyLog state when values change.
+    - Keep the UI focused only on hydration data.
+
+    The page state is owned by LogToday.
 */
+
 
 import type { Dispatch, SetStateAction } from "react";
 
@@ -10,7 +19,12 @@ import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
 /*
-    Props received from the parent component.
+    water
+        Current water intake displayed
+        on the page.
+
+    setDailyLog
+        Callback used to update the page state.
 */
 interface HydrationSectionProps {
 
@@ -29,6 +43,9 @@ function HydrationSection({
 
     return (
 
+        /*
+            Display the Hydration section.
+        */
         <section>
 
             <div
@@ -46,6 +63,10 @@ function HydrationSection({
                     min={0}
                     step={100}
                     value={water}
+                    /*
+                        Update only the Water value while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
 
                         const newWater =

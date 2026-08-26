@@ -1,11 +1,14 @@
 /*
     DailyLog
 
-    Defines the structure of all data stored
-    for the Log Today page.
+    Defines the structure of the Daily Log
+    object used throughout the frontend.
 
-    The data is grouped by section so it
-    matches the UI and is easier to maintain.
+    This interface represents the page state and is
+    shared between:
+    - API layer
+    - Page components
+    - Utility functions
 */
 
 export interface DailyLog {

@@ -1,20 +1,24 @@
 /*
     TextInput
 
-    A reusable input component that wraps the
-    standard HTML <input> element.
+    Reusable input component used throughout
+    the application.
 
-    It accepts all normal HTML input attributes,
-    along with a custom label.
+    Responsibilities:
+    - Provide a consistent look and feel for all input fields.
+    - Support all standard HTML input attributes.
+    - Display a label above the input.
 */
+
 
 import type { InputHTMLAttributes } from "react";
 
 /*
-    Create our own props by extending the standard
-    HTML input props.
-
-    This means our component automatically supports:
+    By extending InputHTMLAttributes, this component
+    automatically supports all normal HTML input
+    properties such as:
+    - value
+    - onChange
     - min
     - max
     - step
@@ -22,14 +26,17 @@ import type { InputHTMLAttributes } from "react";
     - required
     - disabled
     - defaultValue
-    - ...and many more.
+    - ...etc.
 */
 
 /*This tells TypeScript: “Our component should support everything a normal HTML <input> supports.”*/
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 
-    // Text displayed above the input
+    /*
+        label
+            Text displayed above the input field.
+    */
     label: string;
 
 }
@@ -50,7 +57,7 @@ function TextInput({
 
         <div>
 
-            {/* Label */}
+            {/* Display the label for the input field. */}
             <label
                 htmlFor={inputProps.id}
                 className="
@@ -64,7 +71,21 @@ function TextInput({
                 {label}
             </label>
 
-            {/* Input */}
+            {/*
+                Render the HTML <input> element.
+
+                Spread all remaining HTML input
+                attributes onto the element.
+
+                Example:
+                    value
+                    onChange
+                    placeholder
+                    min
+                    max
+                    step
+                    disabled
+            */}
             <input
                 {...inputProps}
                 className="

@@ -1,13 +1,15 @@
 /*
     MealTimingSection
 
-    Displays and updates the meal timing
-    information for the current day.
+    Displays and updates the user's
+    meal timing information.
 
-    The actual state is owned by LogToday.
-    This component receives the current
-    DailyLog object and the function used
-    to update it.
+    Responsibilities:
+    - Display meal timing fields.
+    - Update the DailyLog state when values change.
+    - Keep the UI focused only on meal timing data.
+
+    The page state is owned by LogToday.
 */
 
 import type { Dispatch, SetStateAction } from "react";
@@ -16,8 +18,11 @@ import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
 /*
-    Props received from the parent
-    LogToday component.
+    dailyLog
+        The current Daily Log displayed on the page.
+
+    setDailyLog
+        Callback used to update the page state.
 */
 interface MealTimingSectionProps {
 
@@ -39,6 +44,9 @@ function MealTimingSection({
 
     return (
 
+        /*
+            Display the Meal Timing section.
+        */
         <section>
 
             {/* First Meal Time */}
@@ -48,9 +56,7 @@ function MealTimingSection({
                 name="firstMealTime"
                 type="time"
                 value={dailyLog.mealTiming.firstMealTime}
-                onChange={(event) => {
-
-                    /*
+                /*
                         Triggered whenever the user changes
                         the First Meal Time.
 
@@ -58,10 +64,12 @@ function MealTimingSection({
                         1. Read the new time.
                         2. Copy the existing DailyLog.
                         3. Copy the Meal Timing object.
-                        4. Update only the First Meal Time.
+                        4.Update only the First Meal Time while preserving the rest of the DailyLog.
                         5. React stores the updated DailyLog
                            and re-renders the UI.
-                    */
+                */
+
+                onChange={(event) => {
 
                     const newFirstMealTime = event.target.value;
                     setDailyLog((previousDailyLog) => ({
@@ -84,9 +92,7 @@ function MealTimingSection({
                 name="lastMealTime"
                 type="time"
                 value={dailyLog.mealTiming.lastMealTime}
-                onChange={(event) => {
-
-                    /*
+                /*
                         Triggered whenever the user changes
                         the Last Meal Time.
 
@@ -94,10 +100,11 @@ function MealTimingSection({
                         1. Read the new time.
                         2. Copy the existing DailyLog.
                         3. Copy the Meal Timing object.
-                        4. Update only the Last Meal Time.
+                        4. Update only the Last Meal Time while preserving the rest ofthe DailyLog.
                         5. React stores the updated DailyLog
                            and re-renders the UI.
                     */
+                onChange={(event) => {
                     const newLastMealTime = event.target.value;
                     setDailyLog((previousDailyLog) => ({
                         ...previousDailyLog,

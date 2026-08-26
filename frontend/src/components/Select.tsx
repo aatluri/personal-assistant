@@ -1,10 +1,13 @@
 /*
     Select
 
-    A reusable dropdown component.
+    Reusable dropdown component used throughout
+    the application.
 
-    It wraps the standard HTML <select> element
-    and accepts all normal HTML select attributes.
+    Responsibilities:
+    - Provide a consistent look and feel for all dropdowns.
+    - Support all standard HTML select attributes.
+    - Display a label above the dropdown.
 */
 
 import type {
@@ -12,13 +15,30 @@ import type {
     SelectHTMLAttributes,
 } from "react";
 
+/*
+    By extending SelectHTMLAttributes, this component
+    automatically supports all normal HTML select
+    properties such as:
+    - value
+    - onChange
+    - disabled
+    - required
+    - ...etc.
+*/
 interface SelectProps
     extends SelectHTMLAttributes<HTMLSelectElement> {
 
-    // Text displayed above the select
+    /*
+        label
+            Text displayed above the dropdown.
+    */
     label: string;
 
-    // Options displayed inside the select
+    /*
+        children
+            The list of <option> elements displayed
+            inside the dropdown.
+    */
     children: ReactNode;
 }
 
@@ -30,7 +50,7 @@ function Select({
 
     return (
         <div>
-
+             {/* Display the label for the dropdown. */}
             <label
                 htmlFor={selectProps.id}
                 className="
@@ -43,7 +63,18 @@ function Select({
             >
                 {label}
             </label>
+            {/*
+                Render the HTML <select> element.
 
+                Spread all remaining HTML select
+                attributes onto the element.
+
+                Example:
+                    value
+                    onChange
+                    disabled
+                    required
+            */}
             <select
                 {...selectProps}
                 className="
@@ -63,6 +94,7 @@ function Select({
                     transition
                 "
             >
+                {/* Display the options supplied by the caller. */}
                 {children}
             </select>
 

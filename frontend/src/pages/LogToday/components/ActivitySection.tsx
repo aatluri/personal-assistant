@@ -4,14 +4,25 @@
     Displays and updates the user's
     daily activity information.
 
-    The actual state is owned by LogToday.
-*/
+    Responsibilities:
+    - Display activity-related fields.
+    - Update the DailyLog state when values change.
+    - Keep the UI focused only on activity data.
 
+    The page state is owned by LogToday.
+*/
 import type { Dispatch, SetStateAction } from "react";
 
 import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
+/*
+    dailyLog
+        The current Daily Log displayed on the page.
+
+    setDailyLog
+        Callback used to update the page state.
+*/
 interface ActivitySectionProps {
     dailyLog: DailyLog;
     setDailyLog: Dispatch<SetStateAction<DailyLog>>;
@@ -23,6 +34,12 @@ function ActivitySection({
 }: ActivitySectionProps) {
 
     return (
+        /*
+            Display the Activity section.
+
+            The section is arranged as a responsive
+            two-column grid on larger screens.
+        */
         <section>
 
             <div
@@ -41,6 +58,11 @@ function ActivitySection({
                     type="number"
                     min={0}
                     value={dailyLog.activity.steps}
+
+                    /*
+                        Update only the Steps value while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
                         const newSteps =
                             event.target.value === ""
@@ -64,6 +86,11 @@ function ActivitySection({
                     type="number"
                     min={0}
                     value={dailyLog.activity.totalCaloriesBurnt}
+                     /*
+                        Update only the Total Calories Burnt
+                        value while preserving the rest of
+                        the DailyLog.
+                    */
                     onChange={(event) => {
                         const newCalories =
                             event.target.value === ""

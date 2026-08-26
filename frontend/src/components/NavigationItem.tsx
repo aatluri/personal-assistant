@@ -1,12 +1,34 @@
 /*
     NavigationItem
 
-    Reusable navigation link used by the
-    desktop sidebar and mobile bottom navigation.
+    Reusable navigation link used by both the
+    desktop sidebar and the mobile navigation.
+
+    Responsibilities:
+    - Display the navigation icon and label.
+    - Navigate to the requested page.
+    - Highlight the currently active page.
+    - Apply different layouts for desktop and mobile.
 */
 
 import type { LucideIcon } from "lucide-react";
 import { NavLink } from "react-router-dom";
+
+
+/*
+    to
+        The route this navigation item points to.
+
+    label
+        The text displayed beside (or below) the icon.
+
+    icon
+        The Lucide icon displayed for the navigation item.
+
+    mobile
+        Determines whether the mobile or desktop
+        navigation layout should be used.
+*/
 
 interface NavigationItemProps {
     to: string;
@@ -23,11 +45,22 @@ function NavigationItem({
 }: NavigationItemProps) {
 
     return (
+        /*
+            NavLink automatically determines whether
+            this route is currently active.
+
+            The isActive property is then used to
+            apply the appropriate styling.
+        */
 
         <NavLink
             to={to}
             className={({ isActive }) =>
 
+                /*
+                    Use a compact vertical layout for
+                    the mobile bottom navigation.
+                */
                 mobile
 
                     ? `
@@ -45,7 +78,10 @@ function NavigationItem({
                                 : "text-slate-500"
                         }
                     `
-
+                    /*
+                        Use a wider horizontal layout for
+                        the desktop sidebar navigation.
+                    */
                     : `
                         flex
                         items-center
@@ -62,9 +98,9 @@ function NavigationItem({
                     `
             }
         >
-
+            {/* Display the navigation icon. */}
             <Icon size={20} />
-
+            {/* Display the navigation label. */}
             <span>{label}</span>
 
         </NavLink>

@@ -1,9 +1,19 @@
 /*
     LogTodayHeader
 
-    Displays the page heading and
-    information about the selected
-    Daily Log.
+    Displays the page heading together
+    with the current save status.
+
+    Responsibilities:
+    - Display the page title.
+    - Indicate whether the page contains
+      unsaved changes.
+*/
+
+/*
+    isDirty
+        Indicates whether the page
+        contains unsaved changes.
 */
 
 interface LogTodayHeaderProps {
@@ -16,6 +26,10 @@ function LogTodayHeader({
 
 
     return (
+        /*
+            Display the page heading and
+            current save status.
+        */
         <div
             className="
                 mb-8
@@ -40,7 +54,12 @@ function LogTodayHeader({
                     justify-between
                 "
             >
+                {/*
+                        Display the current save status.
 
+                        The colour and text change depending
+                        on whether the page has unsaved changes.
+                */}
                 <p
                     className={`
                         text-sm

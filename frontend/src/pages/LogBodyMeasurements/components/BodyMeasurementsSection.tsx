@@ -1,8 +1,15 @@
 /*
     BodyMeasurementsSection
 
-    Displays and edits the user's
+    Displays and updates the user's
     body measurements.
+
+    Responsibilities:
+    - Display body measurement fields.
+    - Update the BodyMeasurements state when values change.
+    - Keep the UI focused only on body measurement data.
+
+    The page state is owned by LogBodyMeasurements.
 */
 
 import type { Dispatch, SetStateAction } from "react";
@@ -10,6 +17,15 @@ import type { Dispatch, SetStateAction } from "react";
 import TextInput from "../../../components/TextInput";
 import type { BodyMeasurements } from "../../../types/BodyMeasurements";
 
+
+/*
+    bodyMeasurements
+        The current Body Measurements
+        displayed on the page.
+
+    setBodyMeasurements
+        Callback used to update the page state.
+*/
 interface BodyMeasurementsSectionProps {
 
     bodyMeasurements: BodyMeasurements;
@@ -29,6 +45,10 @@ function BodyMeasurementsSection({
 
     /*
         Update a single numeric measurement.
+
+        This helper is shared by all numeric
+        measurement fields to avoid repeating
+        the same update logic.
     */
     function updateMeasurement(
 
@@ -48,7 +68,9 @@ function BodyMeasurementsSection({
     }
 
     /*
-        Update the notes field.
+        Update only the Notes field while
+        preserving the rest of the
+        BodyMeasurements object.
     */
     function updateNotes(
         value: string,
@@ -63,7 +85,9 @@ function BodyMeasurementsSection({
         }));
 
     }
-
+    /*
+        Display the Body Measurements section.
+    */
     return (
 
         <section>
@@ -85,6 +109,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.bodyFat}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "bodyFat",
@@ -104,6 +133,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.muscleMass}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "muscleMass",
@@ -123,6 +157,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.visceralFat}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "visceralFat",
@@ -144,6 +183,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.neck}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "neck",
@@ -163,6 +207,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.chest}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "chest",
@@ -181,6 +230,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.waist}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "waist",
@@ -200,6 +254,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.stomach}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "stomach",
@@ -219,6 +278,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.leftArm}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "leftArm",
@@ -238,6 +302,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.rightArm}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "rightArm",
@@ -257,6 +326,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.leftForearm}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "leftForearm",
@@ -276,6 +350,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.rightForearm}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "rightForearm",
@@ -295,6 +374,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.leftThigh}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "leftThigh",
@@ -314,6 +398,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.rightThigh}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "rightThigh",
@@ -333,6 +422,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.leftCalf}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "leftCalf",
@@ -352,6 +446,11 @@ function BodyMeasurementsSection({
                     min={0}
                     step={0.1}
                     value={bodyMeasurements.rightCalf}
+                    /*
+                        Update only the selected measurement
+                        while preserving the rest of the
+                        BodyMeasurements object.
+                    */
                     onChange={(event) =>
                         updateMeasurement(
                             "rightCalf",
@@ -372,6 +471,11 @@ function BodyMeasurementsSection({
                         min={0}
                         step={0.1}
                         value={bodyMeasurements.hips}
+                        /*
+                            Update only the selected measurement
+                            while preserving the rest of the
+                            BodyMeasurements object.
+                        */
                         onChange={(event) =>
                             updateMeasurement(
                                 "hips",
@@ -391,6 +495,9 @@ function BodyMeasurementsSection({
                         name="notes"
                         type="text"
                         value={bodyMeasurements.notes}
+                        /*
+                            Update only the Notes field.
+                        */
                         onChange={(event) =>
                             updateNotes(event.target.value)
                         }

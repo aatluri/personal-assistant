@@ -1,12 +1,15 @@
 /*
     WorkoutSection
 
-    Displays and updates the workout-related
-    fields from the shared DailyLog state.
+    Displays and updates the user's
+    workout information.
 
-    The actual state is owned by LogToday.
-    This component only reads values from dailyLog
-    and updates them through setDailyLog.
+    Responsibilities:
+    - Display workout-related fields.
+    - Update the DailyLog state when values change.
+    - Keep the UI focused only on workout data.
+
+    The page state is owned by LogToday.
 */
 
 import type { Dispatch, SetStateAction } from "react";
@@ -17,7 +20,11 @@ import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
 /*
-    Props received from the parent LogToday component.
+    dailyLog
+        The current Daily Log displayed on the page.
+
+    setDailyLog
+        Callback used to update the page state.
 */
 interface WorkoutSectionProps {
     // Complete Daily Log state
@@ -31,7 +38,9 @@ function WorkoutSection({
     dailyLog,
     setDailyLog,
 }: WorkoutSectionProps) {
-
+    /*
+        Display the Workout section.
+    */
     return (
         <section>
 
@@ -47,6 +56,10 @@ function WorkoutSection({
                     id="workout-type"
                     name="workoutType"
                     value={dailyLog.workout.workoutType}
+                    /*
+                        Update only the Workout Type while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
                         const newWorkoutType = event.target.value;
 
@@ -83,6 +96,10 @@ function WorkoutSection({
                         type="number"
                         min={0}
                         value={dailyLog.workout.workoutDuration}
+                        /*
+                            Update only theDuration (minutes)while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
                             const newWorkoutDuration =
                                 event.target.value === ""
@@ -107,6 +124,10 @@ function WorkoutSection({
                         type="number"
                         min={0}
                         value={dailyLog.workout.workoutCalories}
+                        /*
+                            Update only the workoutCalories while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
                             const newWorkoutCalories =
                                 event.target.value === ""
@@ -142,6 +163,10 @@ function WorkoutSection({
                         type="number"
                         min={0}
                         value={dailyLog.workout.workoutVolume}
+                        /*
+                            Update only the workoutVolume while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
                             const newWorkoutVolume =
                                 event.target.value === ""
@@ -166,6 +191,10 @@ function WorkoutSection({
                         type="number"
                         min={0}
                         value={dailyLog.workout.workoutSets}
+                        /*
+                            Update only the workoutSets while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
                             const newWorkoutSets =
                                 event.target.value === ""
@@ -193,6 +222,10 @@ function WorkoutSection({
                         type="number"
                         min={0}
                         value={dailyLog.workout.averageHeartRate}
+                        /*
+                            Update only the averageHeartRate while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
                             const newAverageHeartRate =
                                 event.target.value === ""
@@ -217,6 +250,10 @@ function WorkoutSection({
                     name="workoutSummary"
                     rows={8}
                     value={dailyLog.workout.workoutSummary}
+                    /*
+                        Update only the workoutSummary while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
                         const newWorkoutSummary = event.target.value;
 

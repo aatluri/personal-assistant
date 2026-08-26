@@ -1,8 +1,16 @@
 /*
     Health API
 
-    Contains all API calls related to
-    the Health module.
+    Acts as the communication layer between the frontend and the backend.
+
+    Responsibilities:
+    - Send HTTP requests to the backend.
+    - Convert backend API models into frontend models.
+    - Convert frontend models into backend request models.
+    - Hide HTTP and JSON details from the rest of the application.
+
+    The page components should never call fetch() directly.
+    They should always communicate through this API layer.
 */
 
 import type { DailyLog } from "../types/DailyLog";
@@ -15,15 +23,12 @@ import type { BodyMeasurements } from "../types/BodyMeasurements";
     Example:
     08:30 -> 2026-08-14T08:30:00
 */
-function buildDateTime(
-    date: string,
-    time: string
-): string | null {
+function buildDateTime(date: string,time: string): string | null {
 
-    /*
-        If no time was entered,
-        return null.
-    */
+/*
+    If no time was entered,
+    return null.
+*/
     if (!time) {
         return null;
     }
@@ -36,12 +41,8 @@ function buildDateTime(
     Converts an empty numeric field into null
     before sending it to the backend.
 */
-function buildNumber(
-    value: number | ""
-): number | null {
-
+function buildNumber(value: number | ""): number | null {
     return value === "" ? null : value;
-
 }
 
 /*
@@ -51,6 +52,17 @@ function buildNumber(
     Returns null if no Daily Log exists.
 */
 export async function getDailyLog(date: string): Promise<DailyLog | null> {
+    /*
+    Retrieves the Daily Log for the specified date.
+
+    Workflow:
+    1. Send a GET request to the backend.
+    2. Receive the backend response.
+    3. Convert the backend model into the frontend DailyLog model.
+    4. Return the DailyLog object to the page.
+
+    Returns null if no Daily Log exists.
+    */
 
     const response = await fetch(
         `http://localhost:8000/health/daily-logs/${date}`
@@ -140,13 +152,21 @@ export async function getDailyLog(date: string): Promise<DailyLog | null> {
 
 
 /*
-    Saves a Daily Log to the backend.
+    Saves a Daily Log.
+
+    Workflow:
+    1. Convert the frontend model into the backend API model.
+    2. Send a PUT request.
+    3. Throw an error if the save fails.
 */
 export async function saveDailyLog(selectedDate: string, dailyLog: DailyLog): Promise<void> {
 
     /*
-        Convert the frontend DailyLog model
-        into the format expected by the API.
+    Convert the frontend model into the
+    format expected by the backend.
+
+    This performs the reverse mapping of
+    getDailyLog().
     */
     const request = {
 
@@ -202,6 +222,11 @@ export async function saveDailyLog(selectedDate: string, dailyLog: DailyLog): Pr
 
     console.log("API Request", request);
 
+    /*
+    Send the updated Daily Log
+    to the backend.
+    */
+
     const response = await fetch(
         `http://localhost:8000/health/daily-logs/${selectedDate}`,
         {
@@ -226,14 +251,17 @@ export async function saveDailyLog(selectedDate: string, dailyLog: DailyLog): Pr
 }
 
 /*
-    Retrieves the Body Measurements
-    for the specified date.
+    Retrieves the Body Measurements for the specified date.
+
+    Workflow:
+    1. Send a GET request to the backend.
+    2. Receive the backend response.
+    3. Convert the backend model into the frontend BodyMeasurements model.
+    4. Return the BodyMeasurements object.
 
     Returns null if no record exists.
 */
-export async function getBodyMeasurement(
-    date: string
-): Promise<BodyMeasurements | null> {
+export async function getBodyMeasurement(date: string): Promise<BodyMeasurements | null> {
 
     const response = await fetch(
         `http://localhost:8000/health/body-measurements/${date}`
@@ -249,6 +277,10 @@ export async function getBodyMeasurement(
 
     const apiResponse = await response.json();
 
+    /*
+    Convert the backend API model into
+    the frontend BodyMeasurements model.
+    */
     const bodyMeasurements: BodyMeasurements = {
 
         date,
@@ -282,14 +314,19 @@ export async function getBodyMeasurement(
 }
 
 /*
-    Saves Body Measurements
-    to the backend.
-*/
-export async function saveBodyMeasurement(
-    selectedDate: string,
-    bodyMeasurement: BodyMeasurements,
-): Promise<void> {
+    Saves Body Measurements.
 
+    Workflow:
+    1. Convert the frontend model into the backend API model.
+    2. Send a PUT request.
+    3. Throw an error if the save fails.
+*/
+export async function saveBodyMeasurement(selectedDate: string,bodyMeasurement: BodyMeasurements,): Promise<void> {
+
+    /*
+    Convert the frontend model into the
+    format expected by the backend.
+    */
     const request = {
 
         date: selectedDate,
@@ -319,6 +356,10 @@ export async function saveBodyMeasurement(
         notes: bodyMeasurement.notes,
     };
 
+    /*
+    Send the updated Body Measurements
+    to the backend.
+    */
     const response = await fetch(
         `http://localhost:8000/health/body-measurements/${selectedDate}`,
         {

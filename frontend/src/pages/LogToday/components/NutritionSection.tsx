@@ -1,10 +1,15 @@
 /*
     NutritionSection
 
-    Displays and updates today's meals
-    and nutritional information.
+    Displays and updates the user's
+    meals and nutritional information.
 
-    The actual state is owned by LogToday.
+    Responsibilities:
+    - Display meal and nutrition fields.
+    - Update the DailyLog state when values change.
+    - Keep the UI focused only on nutrition data.
+
+    The page state is owned by LogToday.
 */
 
 import type { Dispatch, SetStateAction } from "react";
@@ -14,8 +19,11 @@ import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
 /*
-    Props received from the parent
-    LogToday component.
+    dailyLog
+        The current Daily Log displayed on the page.
+
+    setDailyLog
+        Callback used to update the page state.
 */
 interface NutritionSectionProps {
 
@@ -35,6 +43,15 @@ function NutritionSection({
 
 }: NutritionSectionProps) {
 
+    /*
+        Display the Nutrition section.
+
+        This section contains:
+        - Meals
+        - Macronutrients
+        - Calories
+    */
+
     return (
 
         <section>
@@ -44,9 +61,7 @@ function NutritionSection({
                     space-y-6
                 "
             >
-                {/* ----------------------------- */}
-                {/* Meals                         */}
-                {/* ----------------------------- */}
+               {/* Meals */}
 
                 <TextArea
                     label="Breakfast"
@@ -55,6 +70,10 @@ function NutritionSection({
                     rows={3}
                     placeholder="Enter breakfast"
                     value={dailyLog.nutrition.breakfast}
+                    /*
+                        Update only the Breakfast value while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
 
                         const newBreakfast = event.target.value;
@@ -83,6 +102,10 @@ function NutritionSection({
                     rows={3}
                     placeholder="Enter lunch"
                     value={dailyLog.nutrition.lunch}
+                    /*
+                        Update only the lunch value while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
 
                         const newLunch = event.target.value;
@@ -111,6 +134,10 @@ function NutritionSection({
                     rows={3}
                     placeholder="Enter dinner"
                     value={dailyLog.nutrition.dinner}
+                    /*
+                        Update only the Dinner value while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
 
                         const newDinner = event.target.value;
@@ -139,6 +166,10 @@ function NutritionSection({
                     rows={3}
                     placeholder="Enter snacks"
                     value={dailyLog.nutrition.snacks}
+                    /*
+                        Update only the Snacks value while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
 
                         const newSnacks = event.target.value;
@@ -160,9 +191,7 @@ function NutritionSection({
                     }}
                 />
 
-                {/* ----------------------------- */}
                 {/* Macronutrients                */}
-                {/* ----------------------------- */}
                 <div
                     className="
                         grid
@@ -178,24 +207,19 @@ function NutritionSection({
                         type="number"
                         min={0}
                         value={dailyLog.nutrition.protein}
+                        /*
+                            Update only the Protein value while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
-
                             const newProtein = event.target.value === ""? "": Number(event.target.value);
-
                             setDailyLog((previousDailyLog) => ({
-
                                 ...previousDailyLog,
-
                                 nutrition: {
-
                                     ...previousDailyLog.nutrition,
-
                                     protein: newProtein,
-
                                 },
-
                             }));
-
                         }}
                     />
 
@@ -206,24 +230,19 @@ function NutritionSection({
                         type="number"
                         min={0}
                         value={dailyLog.nutrition.carbs}
+                        /*
+                            Update only the Carbs value while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
-
                             const newCarbs = event.target.value === ""? "": Number(event.target.value);
-
                             setDailyLog((previousDailyLog) => ({
-
                                 ...previousDailyLog,
-
                                 nutrition: {
-
                                     ...previousDailyLog.nutrition,
-
                                     carbs: newCarbs,
-
                                 },
-
                             }));
-
                         }}
                     />
                 </div>
@@ -243,22 +262,18 @@ function NutritionSection({
                         type="number"
                         min={0}
                         value={dailyLog.nutrition.fat}
+                        /*
+                            Update only the Fat value while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
-
                             const newFat = event.target.value === ""? "": Number(event.target.value);
-
                             setDailyLog((previousDailyLog) => ({
-
                                 ...previousDailyLog,
-
                                 nutrition: {
-
                                     ...previousDailyLog.nutrition,
-
                                     fat: newFat,
-
                                 },
-
                             }));
 
                         }}
@@ -271,24 +286,19 @@ function NutritionSection({
                         type="number"
                         min={0}
                         value={dailyLog.nutrition.fibre}
+                        /*
+                            Update only the Fibre value while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
-
                             const newFibre = event.target.value === ""? "": Number(event.target.value);
-
                             setDailyLog((previousDailyLog) => ({
-
                                 ...previousDailyLog,
-
                                 nutrition: {
-
                                     ...previousDailyLog.nutrition,
-
                                     fibre: newFibre,
-
                                 },
-
                             }));
-
                         }}
                     />
                 </div>
@@ -309,24 +319,19 @@ function NutritionSection({
                         type="number"
                         min={0}
                         value={dailyLog.nutrition.sugar}
+                        /*
+                            Update only the Sugar value while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
-
                             const newSugar = event.target.value === ""? "": Number(event.target.value);
-
                             setDailyLog((previousDailyLog) => ({
-
                                 ...previousDailyLog,
-
                                 nutrition: {
-
                                     ...previousDailyLog.nutrition,
-
                                     sugar: newSugar,
-
                                 },
-
                             }));
-
                         }}
                     />
 
@@ -337,24 +342,19 @@ function NutritionSection({
                         type="number"
                         min={0}
                         value={dailyLog.nutrition.caloriesConsumed}
+                        /*
+                            Update only the Calories Consumed value while
+                            preserving the rest of the DailyLog.
+                        */
                         onChange={(event) => {
-
                             const newCaloriesConsumed = event.target.value === ""? "": Number(event.target.value);
-
                             setDailyLog((previousDailyLog) => ({
-
                                 ...previousDailyLog,
-
                                 nutrition: {
-
                                     ...previousDailyLog.nutrition,
-
                                     caloriesConsumed: newCaloriesConsumed,
-
                                 },
-
                             }));
-
                         }}
                     />
                 </div>

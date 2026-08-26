@@ -1,3 +1,16 @@
+/*
+    Navigation
+
+    Defines the application's navigation structure.
+
+    Responsibilities:
+    - List all available pages.
+    - Provide the labels displayed in the navigation.
+    - Specify the icon for each page.
+    - Allow desktop and mobile navigation to have
+      different layouts.
+*/
+
 import {
     BarChart3,
     CalendarDays,
@@ -7,6 +20,13 @@ import {
     Settings,
 } from "lucide-react";
 
+/*
+    Navigation items displayed in the
+    desktop sidebar.
+
+    Desktop has enough space to display
+    all available pages.
+*/
 export const desktopNavigationItems = [
     {
         to: "/",
@@ -40,6 +60,16 @@ export const desktopNavigationItems = [
     },
 ];
 
+/*
+    Navigation items displayed in the
+    mobile bottom navigation.
+
+    Since mobile has limited space, only the
+    most frequently used pages are displayed.
+
+    Additional pages are accessed through
+    the "More" menu.
+*/
 export const mobileNavigationItems = [
     {
         to: "/",
@@ -60,6 +90,13 @@ export const mobileNavigationItems = [
         icon: CalendarDays,
     },
     {
+        /*
+            "More" is not a route.
+
+            It is handled specially by AppShell,
+            which opens the More bottom sheet
+            instead of navigating to another page.
+        */
         to: "#",
         label: "More",
         shortLabel: "More",

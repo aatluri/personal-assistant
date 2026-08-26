@@ -1,3 +1,16 @@
+/*
+    LogToday
+
+    Page responsible for viewing and editing
+    the Daily Log for a selected date.
+
+    Responsibilities:
+    - Load the Daily Log from the backend.
+    - Maintain the page state.
+    - Pass state to the page sections.
+    - Save changes back to the backend.
+*/
+
 import { useEffect, useState } from "react";
 import {
     Activity,
@@ -33,23 +46,35 @@ function LogToday() {
 
     /*
     Today's date in YYYY-MM-DD format.
-    This matches the format required
-    by the HTML date input.
+
+    Used as the default date when the page
+    is first opened.
     */
     const today = new Date().toLocaleDateString("en-CA");
 
     /*
-    Stores the currently selected date.
+    Currently selected date.
 
-    Changing this value causes the
-    corresponding Daily Log to be loaded.
+    Changing this value automatically
+    reloads the Daily Log for the
+    selected date.
     */
     const [selectedDate, setSelectedDate] = useState(today);
 
 
-    /*
-    Indicates whether the Daily Log
-    is currently being loaded.
+   /*
+    Page state.
+
+    isLoading
+        Indicates whether data is currently
+        being loaded from the backend.
+
+    isDirty
+        Indicates whether the page contains
+        unsaved changes.
+
+    saveStatus
+        Tracks the current save operation.
     */
     const [isLoading, setIsLoading] = useState(true);
     const [isDirty, setIsDirty] = useState(false);
@@ -59,14 +84,14 @@ function LogToday() {
     createEmptyDailyLog()
     );
 
-    console.log("LogToday rendered");
-
     /*
-        Runs whenever the selected date changes.
+    Whenever the selected date changes:
 
-        When the page first loads, dailyLog.date
-        contains today's date, so this also loads
-        today's Daily Log automatically.
+        1. Request the Daily Log from
+        the backend.
+        2. Populate the page state.
+        3. If no record exists, create
+        an empty DailyLog object.
     */
 
     useEffect(() => {
@@ -91,13 +116,23 @@ function LogToday() {
 
             }
         }
-
+        /*
+            Retrieve the Daily Log for
+            the selected date.
+        */
         loadDailyLog();
+        /*
+            The [selectedDate] is called the dependency array.
+            It tells React to Run this effect whenever selectedDate changes
+        */
     }, [selectedDate]);
 
-    /*
-    Saves the current Daily Log
-    to the backend.
+   /*
+        Save the current Daily Log
+        to the backend.
+
+        The Save button invokes
+        this method.
     */
     async function handleSaveDailyLog() {
 
@@ -119,8 +154,11 @@ function LogToday() {
     }
 
     /*
-    Updates the Daily Log and marks
-    the page as having unsaved changes.
+        Update the page state whenever the
+        user changes a value.
+
+        Also marks the page as having
+        unsaved changes.
     */
     function updateDailyLog(
         action: React.SetStateAction<DailyLog>
@@ -130,6 +168,11 @@ function LogToday() {
         setDailyLog(action);
     }
 
+    /*
+        Display a loading indicator while
+        the Daily Log is being retrieved
+        from the backend.
+    */
     if (isLoading) {
 
         return (
@@ -138,6 +181,26 @@ function LogToday() {
 
     }
 
+    /*
+        Page Layout
+
+        PageContainer
+            Provides the standard page layout.
+
+        LogTodayHeader
+            Displays the page heading and
+            save status.
+
+        DateSection
+            Allows the user to choose the
+            log date.
+
+        CollapsibleCard
+            Groups each section of the Daily Log.
+
+        SaveButton
+            Saves the current Daily Log.
+    */
     return (
         <PageContainer>
 

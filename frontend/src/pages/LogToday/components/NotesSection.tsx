@@ -4,7 +4,12 @@
     Displays and updates the user's
     notes for the current day.
 
-    The actual state is owned by LogToday.
+    Responsibilities:
+    - Display the notes field.
+    - Update the DailyLog state when the notes change.
+    - Keep the UI focused only on notes.
+
+    The page state is owned by LogToday.
 */
 
 import type { Dispatch, SetStateAction } from "react";
@@ -13,8 +18,11 @@ import TextArea from "../../../components/TextArea";
 import type { DailyLog } from "../../../types/DailyLog";
 
 /*
-    Props received from the parent
-    LogToday component.
+    dailyLog
+        The current Daily Log displayed on the page.
+
+    setDailyLog
+        Callback used to update the page state.
 */
 interface NotesSectionProps {
 
@@ -32,6 +40,9 @@ function NotesSection({
 }: NotesSectionProps) {
 
     return (
+        /*
+            Display the Notes section.
+        */
 
         <section>
 
@@ -48,9 +59,8 @@ function NotesSection({
                     rows={6}
                     placeholder="Enter any notes for today"
                     value={dailyLog.notes.notes}
-                    onChange={(event) => {
 
-                        /*
+                    /*
                             Triggered whenever the user changes
                             the Notes field.
 
@@ -58,11 +68,12 @@ function NotesSection({
                             1. Read the new notes entered by the user.
                             2. Copy the existing DailyLog.
                             3. Copy the Notes object.
-                            4. Update only the Notes field.
+                            4. Update only the Notes field whilepreserving the rest of the DailyLog.
                             5. React stores the updated DailyLog
                                and re-renders the UI.
                         */
 
+                    onChange={(event) => {
                         const newNotes = event.target.value;
 
                         setDailyLog((previousDailyLog) => ({

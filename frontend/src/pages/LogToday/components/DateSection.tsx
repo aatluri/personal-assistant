@@ -1,13 +1,29 @@
 /*
     DateSection
 
-    Displays and updates the date
-    for the current Daily Log.
+    Displays and updates the date for
+    the current Daily Log.
+
+    Responsibilities:
+    - Display the selected date.
+    - Allow the user to move to the previous
+      or next day.
+    - Allow the user to select a date directly.
+
+    The selected date is owned by LogToday.
 */
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 
+/*
+    selectedDate
+        Currently selected date.
+
+    setSelectedDate
+        Callback used to update the
+        selected date.
+*/
 interface DateSectionProps {
     selectedDate: string;
     setSelectedDate: Dispatch<SetStateAction<string>>;
@@ -20,7 +36,7 @@ function DateSection({
 
     /*
         Convert the selected date into
-        a readable format.
+        a user-friendly format for display.
     */
     const formattedDate = new Date(selectedDate).toLocaleDateString(
         "en-IN",
@@ -33,7 +49,11 @@ function DateSection({
     );
 
     /*
-        Move one day backwards.
+        Move to the previous day.
+
+        Updating the selected date causes
+        LogToday to automatically reload
+        the Daily Log for that date.
     */
     function goToPreviousDay() {
 
@@ -47,7 +67,11 @@ function DateSection({
     }
 
     /*
-        Move one day forwards.
+        Move to the next day.
+
+        Updating the selected date causes
+        LogToday to automatically reload
+        the Daily Log for that date.
     */
     function goToNextDay() {
 
@@ -61,7 +85,14 @@ function DateSection({
     }
 
     return (
+        /*
+            Display the date selector.
 
+            The user can either:
+            - Move one day forwards/backwards.
+            - Select a date directly using
+              the date picker.
+        */
         <section
             className="
                 rounded-2xl
@@ -95,7 +126,7 @@ function DateSection({
                     md:justify-between
                 "
             >
-
+                {/* Previous / Next day navigation */}
                 <div
                     className="
                         flex
@@ -117,6 +148,7 @@ function DateSection({
                         <ChevronLeft size={22} />
                     </button>
 
+                    {/* Display the formatted date. */}
                     <p
                         className="
                             min-w-[240px]
@@ -144,6 +176,13 @@ function DateSection({
 
                 </div>
 
+                {/*
+                    Native HTML date picker.
+
+                    Changing the selected date
+                    automatically reloads the
+                    corresponding Daily Log.
+                */}
                 <input
                     type="date"
                     value={selectedDate}

@@ -1,12 +1,30 @@
 /*
     SaveButton
 
-    Sticky action bar used to save
-    the Daily Log.
+    Sticky action bar displayed at the bottom
+    of logging pages.
+
+    Responsibilities:
+    - Provide a consistent location for saving data.
+    - Display the current save status.
+    - Prevent unnecessary or duplicate saves.
 */
 
 import Button from "./Button";
 
+/*
+    onClick
+        Callback executed when the Save button
+        is clicked.
+
+    isDirty
+        Indicates whether the page contains
+        unsaved changes.
+
+    saveStatus
+        Represents the current state of the
+        save operation.
+*/
 interface SaveButtonProps {
     onClick: () => void;
     isDirty: boolean;
@@ -20,8 +38,8 @@ function SaveButton({
 }: SaveButtonProps) {
 
     /*
-        Determine the button text based
-        on the current save state.
+        Determine the button text based on
+        the current save status.
     */
     function getButtonText() {
 
@@ -44,7 +62,13 @@ function SaveButton({
     }
 
     return (
+        /*
+            Sticky container displayed at the bottom
+            of the page.
 
+            The position is adjusted on mobile to sit
+            above the bottom navigation bar.
+        */
         <div
             className="
                 fixed
@@ -61,7 +85,10 @@ function SaveButton({
                 shadow-[0_-2px_8px_rgba(0,0,0,0.05)]
             "
         >
-
+            {/*
+                Centre the Save button and align it
+                with the rest of the page content.
+            */}
             <div
                 className="
                     mx-auto
@@ -71,11 +98,19 @@ function SaveButton({
 
                 <Button
                     onClick={onClick}
+                    /*
+                        Disable the button when:
+                        - A save is already in progress.
+                        - There are no unsaved changes
+                          (unless the previous save failed,
+                          in which case the user can retry).
+                    */
                     disabled={
                         saveStatus === "saving" ||
                         (!isDirty && saveStatus !== "failed")
                     }
                 >
+                    {/* Display the appropriate button text. */}
                     {getButtonText()}
                 </Button>
 

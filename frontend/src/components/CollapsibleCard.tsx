@@ -1,17 +1,36 @@
 /*
     CollapsibleCard
 
-    A reusable card that can be
-    expanded and collapsed.
+    Reusable card component whose contents can be
+    expanded or collapsed by the user.
 
-    Used for sections on the
-    Log Today page.
+    Responsibilities:
+    - Display a section heading with an icon.
+    - Show or hide the section content.
+    - Provide a consistent appearance for expandable
+      sections throughout the application.
 */
 
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
+
+
+/*
+    title
+        Text displayed in the card header.
+
+    icon
+        Lucide icon displayed beside the title.
+
+    iconColor
+        Tailwind class used to style the icon.
+
+    children
+        The content displayed when the card
+        is expanded.
+*/
 
 interface CollapsibleCardProps {
     title: string;
@@ -27,10 +46,21 @@ function CollapsibleCard({
     children,
 }: CollapsibleCardProps) {
 
+
+    /*
+        Tracks whether the card is currently
+        expanded or collapsed.
+
+        The card starts in the expanded state.
+    */
     const [expanded, setExpanded] = useState(true);
 
     return (
 
+        /*
+            Render the outer card using the
+            application's standard card styling.
+        */
         <section
             className="
                 overflow-hidden
@@ -44,7 +74,12 @@ function CollapsibleCard({
                 hover:shadow-md
             "
         >
+            {/*
+                Card header.
 
+                Clicking anywhere on the header
+                toggles the expanded state.
+            */}
             <button
                 type="button"
                 onClick={() => setExpanded(!expanded)}
@@ -90,7 +125,10 @@ function CollapsibleCard({
                     </h2>
 
                 </div>
-
+                {/*
+                    Chevron icon that rotates to indicate
+                    whether the card is expanded.
+                */}
                 <ChevronDown
                     size={22}
                     className={`
@@ -102,6 +140,13 @@ function CollapsibleCard({
                 />
 
             </button>
+            {/*
+                Expandable content area.
+
+                The content always exists in the DOM,
+                but CSS is used to smoothly expand
+                and collapse it.
+            */}
 
             <div
                 className={`
@@ -115,7 +160,7 @@ function CollapsibleCard({
                     }
                 `}
             >
-
+                {/* Display the content supplied by the caller. */}
                 <div
                     className="
                         px-6

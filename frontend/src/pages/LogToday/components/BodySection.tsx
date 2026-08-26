@@ -1,12 +1,15 @@
 /*
     BodySection
 
-    Displays the user's body-related
-    measurements for the day.
+    Displays and updates the user's
+    body-related information.
 
-    The state is owned by the parent
-    LogToday component and passed here
-    through props.
+    Responsibilities:
+    - Display body-related fields.
+    - Update the DailyLog state when values change.
+    - Keep the UI focused only on body data.
+
+    The page state is owned by LogToday.
 */
 
 import type { Dispatch, SetStateAction } from "react";
@@ -15,7 +18,11 @@ import TextInput from "../../../components/TextInput";
 import type { DailyLog } from "../../../types/DailyLog";
 
 /*
-    Props received from the parent component.
+    weight
+        Current weight displayed on the page.
+
+    setDailyLog
+        Callback used to update the page state.
 */
 interface BodySectionProps {
     // Current weight value
@@ -31,6 +38,9 @@ function BodySection({
 }: BodySectionProps) {
 
     return (
+        /*
+            Display the Body section.
+        */
         <section>
 
             <div
@@ -49,6 +59,10 @@ function BodySection({
                     min={0}
                     step={0.1}
                     value={weight}
+                    /*
+                        Update only the Weight value while
+                        preserving the rest of the DailyLog.
+                    */
                     onChange={(event) => {
                         const newWeight =
                             event.target.value === ""
