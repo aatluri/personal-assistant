@@ -371,32 +371,6 @@ When a new worksheet (for example, `BodyMeasurements`) is added to the Google Sp
 
 ---
 
-# Documentation
-
-Additional project documentation is available in:
-
-- `docs/decisions/`
-
----
-
-# Notes
-
-Always activate the virtual environment before running the backend.
-
-Whenever new Python packages are installed:
-
-```bash
-pip freeze > requirements.txt
-```
-
-Typical Git workflow:
-
-```bash
-git status
-git add .
-git commit -m "Meaningful commit message"
-git push
-```
 
 
 ## Testing
@@ -459,4 +433,25 @@ Run all tests with detailed output:
 
 ```bash
 pytest -v
+```
+
+---
+
+## Notes
+
+Always activate the virtual environment before running the backend.
+
+Whenever new Python packages are installed:
+
+```bash
+pip freeze > requirements.txt
+```
+
+Typical Git workflow:
+
+```bash
+git status
+git add .
+git commit -m "Meaningful commit message"
+git push
 ```
