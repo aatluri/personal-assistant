@@ -22,6 +22,22 @@ This backend powers the **Personal Assistant** application.
 
 ## First Time Setup
 
+### Clone the Git Repository
+
+Clone the project to your local machine.
+
+```bash
+git clone <repository-url>
+```
+
+### Navigate to the Backend Folder
+
+Move into the backend folder before installing dependencies or running the application.
+
+```bash
+cd personal-assistant/backend
+```
+
 ### Create a Virtual Environment
 
 ```bash
@@ -380,4 +396,67 @@ git status
 git add .
 git commit -m "Meaningful commit message"
 git push
+```
+
+
+## Testing
+
+The backend is tested at multiple levels. Each level focuses on a different part of the application.
+
+#### Repository Tests
+
+Repository tests verify that the repository correctly reads from and writes to the data source.
+
+Example:
+- `get_daily_logs()` returns all Daily Log records.
+- `update_body_measurement()` updates the correct worksheet row.
+
+#### Repository Helper Tests
+
+Repository helper tests verify the internal helper methods used to convert data between Google Sheets and the application's models.
+
+Example:
+- `_row_to_daily_log()` converts a worksheet row into a `DailyLog` object.
+- `_daily_log_to_row()` converts a `DailyLog` object into a worksheet row.
+
+#### Service Tests
+
+Service tests verify the application's business logic and ensure that the Service layer correctly interacts with the Repository layer.
+
+Example:
+- `HealthService.get_daily_logs()` returns all Daily Logs from the repository.
+- `HealthService.create_daily_log()` delegates the save operation to the repository.
+
+#### API Tests
+
+API tests verify the FastAPI endpoints by sending HTTP requests and validating the responses.
+
+Example:
+- `GET /health/daily-logs` returns a list of Daily Logs.
+- `POST /health/daily-logs` creates a new Daily Log and returns the correct status code.
+
+### Running Tests
+
+Run all backend tests:
+
+```bash
+pytest
+```
+
+Run a specific test file:
+
+```bash
+pytest tests/repository/test_health_repository.py
+```
+
+Run a specific test method:
+
+```bash
+pytest tests/repository/test_health_repository.py::test_get_daily_logs
+```
+
+Run all tests with detailed output:
+
+```bash
+pytest -v
 ```
