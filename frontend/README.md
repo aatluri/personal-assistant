@@ -632,3 +632,116 @@ The following frontend changes are required:
    - Verify changes update the page state.
    - Verify data is saved successfully.
    - Reload the page and confirm the saved values are displayed.
+
+
+## Testing
+
+The frontend is tested at multiple levels. Each level verifies a different part of the application.
+
+### Utility Tests
+
+Utility tests verify small helper functions and calculations.
+
+Example:
+- `calculateSleepDuration()` returns the correct sleep duration.
+- `createEmptyDailyLog()` returns a correctly initialised object.
+
+### Reusable Component Tests
+
+Reusable component tests verify that shared UI components render correctly and respond to user interactions.
+
+For reusable component tests, we:
+- Render the component into a virtual DOM (provided by React Testing Library + JSDOM).
+- Verify what the user would see (text, labels, values, buttons, etc.).
+- Simulate user interactions (typing, clicking, selecting).
+- Verify the component responds correctly (calls callbacks, updates rendered output, becomes disabled, etc.).
+
+We generally don't inspect the raw HTML. Instead, we query the DOM the same way a user or assistive technology would (e.g., getByLabelText, getByRole, getByText). This makes the tests more realistic and less fragile.
+
+Example:
+- `TextInput` displays the supplied value and calls `onChange()` when the user types.
+- `Button` calls the supplied `onClick()` callback when clicked.
+
+### Section Component Tests
+
+Section component tests verify that each section correctly displays data and updates the shared page state.
+
+For Section Component Tests, we still render the component into a virtual DOM, but the focus is on state updates rather than just rendering.
+- Render the section with some initial page state.
+- Verify the fields display the supplied values.
+- Simulate user interactions (typing, selecting, etc.).
+- Verify that the section requests the correct state update by checking the setDailyLog/setBodyMeasurements callback and ensuring only the intended field changes while the rest of the state is preserved.
+
+So, reusable component tests answer "Does this component work?", while section component tests answer "Does this section correctly update the page state?"
+
+Example:
+- `WorkoutSection` updates the workout duration when the user changes the input field.
+- `NutritionSection` updates only the nutrition fields without affecting the rest of the `DailyLog`.
+
+### Page Tests
+
+Page tests verify that complete pages render correctly and that all sections, page state, and backend interactions work together as expected.
+
+- We render the entire page into a virtual DOM
+- mock the backend API
+- simulate user interactions
+- verify that the page renders correctly and updates its state and calls the backend with the correct data.
+
+Example:
+- `LogToday` loads data from the backend and displays all sections correctly.
+- `LogBodyMeasurements` updates the page state when measurements change and saves the updated data to the backend.
+
+### Routing Tests
+
+Routing tests verify that the application's routing is configured correctly and that the correct page is displayed for each URL.
+This is the testing for the src\App.tsx
+
+Example:
+- Navigating to `/log-today` displays the `LogToday` page.
+- Navigating to `/body-measurements` displays the `LogBodyMeasurements` page.
+
+
+### API Layer Tests
+
+API layer tests verify that the frontend communicates with the backend correctly.
+This is the testing for the src\api\health.ts
+
+We:
+- Mock the browser's `fetch()` function.
+- Verify the correct HTTP request is sent.
+- Verify backend responses are converted into frontend models.
+- Verify errors are handled correctly.
+
+Example:
+- `getDailyLog()` retrieves a Daily Log and converts it into a `DailyLog` object.
+- `saveBodyMeasurement()` sends the correct request payload to the backend.
+
+#### Running Tests
+
+Run all frontend tests:
+
+```bash
+npm test -- --run
+```
+
+Run a specific test file:
+
+```bash
+npx vitest src/components/TextInput.test.tsx -- --run
+```
+
+Run all tests with code coverage:
+
+```bash
+npm run test:coverage
+```
+
+Run a single test by name
+```bash
+npx vitest --run -t "saves successfully"
+```
+
+Run all tests matching a pattern
+```bash
+npx vitest --run LogBodyMeasurements
+```

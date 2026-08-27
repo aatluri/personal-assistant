@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1787812979596" clover="3.2.0">
+  <project timestamp="1787812979596" name="All files">
+    <metrics statements="37" coveredstatements="37" conditionals="31" coveredconditionals="29" methods="17" coveredmethods="17" elements="85" coveredelements="83" complexity="0" loc="37" ncloc="37" packages="2" files="13" classes="13"/>
+    <package name="components">
+      <metrics statements="21" coveredstatements="21" conditionals="25" coveredconditionals="24" methods="14" coveredmethods="14"/>
+      <file name="Button.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/Button.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="1" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <line num="45" count="14" type="stmt"/>
+      </file>
+      <file name="CollapsibleCard.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/CollapsibleCard.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <line num="56" count="10" type="stmt"/>
+        <line num="58" count="10" type="stmt"/>
+        <line num="85" count="3" type="stmt"/>
+      </file>
+      <file name="LoadingSpinner.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/LoadingSpinner.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="13" count="2" type="stmt"/>
+      </file>
+      <file name="NavigationItem.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/NavigationItem.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="7" coveredconditionals="6" methods="2" coveredmethods="2"/>
+        <line num="47" count="6" type="stmt"/>
+        <line num="64" count="6" type="cond" truecount="2" falsecount="0"/>
+      </file>
+      <file name="PageContainer.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/PageContainer.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="28" count="3" type="stmt"/>
+      </file>
+      <file name="ProgressBar.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/ProgressBar.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="6" coveredconditionals="6" methods="1" coveredmethods="1"/>
+        <line num="75" count="6" type="stmt"/>
+        <line num="80" count="6" type="stmt"/>
+      </file>
+      <file name="SaveButton.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/SaveButton.tsx">
+        <metrics statements="6" coveredstatements="6" conditionals="7" coveredconditionals="7" methods="2" coveredmethods="2"/>
+        <line num="46" count="8" type="cond" truecount="4" falsecount="0"/>
+        <line num="49" count="2" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="64" count="8" type="stmt"/>
+      </file>
+      <file name="Select.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/Select.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="51" count="6" type="stmt"/>
+      </file>
+      <file name="TextArea.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/TextArea.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="43" count="6" type="stmt"/>
+      </file>
+      <file name="TextInput.tsx" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/components/TextInput.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="5" type="stmt"/>
+        <line num="62" count="5" type="stmt"/>
+      </file>
+    </package>
+    <package name="utils">
+      <metrics statements="16" coveredstatements="16" conditionals="6" coveredconditionals="5" methods="3" coveredmethods="3"/>
+      <file name="calculateSleepDuration.ts" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/utils/calculateSleepDuration.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="23" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="24" count="3" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="45" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="55" count="2" type="cond" truecount="1" falsecount="1"/>
+        <line num="56" count="2" type="stmt"/>
+        <line num="62" count="2" type="stmt"/>
+        <line num="69" count="2" type="stmt"/>
+        <line num="70" count="2" type="stmt"/>
+        <line num="75" count="2" type="stmt"/>
+      </file>
+      <file name="createEmptyBodyMeasurements.ts" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/utils/createEmptyBodyMeasurements.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="13" count="1" type="stmt"/>
+      </file>
+      <file name="createEmptyDailyLog.ts" path="/Users/adarshatluri/Development/personal-assistant/frontend/src/utils/createEmptyDailyLog.ts">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="12" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
