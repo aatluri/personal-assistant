@@ -50,3 +50,6 @@ frontend/dist/
 # -----------------------
 *.sqlite3
 *.db
+
+# Test Data
+tools/test_data/

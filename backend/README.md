@@ -455,3 +455,80 @@ git add .
 git commit -m "Meaningful commit message"
 git push
 ```
+
+
+
+## Lab Report PDF Extraction
+
+The Health module supports extracting structured lab results from uploaded PDF reports.
+
+### Endpoint
+
+`POST /health/lab-reports/extract`
+
+The endpoint accepts a PDF lab report and returns extracted report metadata and marker results.
+
+**Extraction does not save any data to Google Sheets.** The returned data is intended to populate the UI so the user can review or edit the values before saving.
+
+### How It Works
+
+1. The user uploads a lab report PDF.
+2. FastAPI receives the PDF and creates a temporary local file.
+3. The backend loads all active markers from `Lab_Marker_Definitions`.
+4. A compact list of marker definitions is prepared containing:
+   - `marker_key`
+   - `display_name`
+   - `category`
+   - `panel`
+   - `default_unit`
+5. The PDF and marker definitions are sent to OpenAI.
+6. OpenAI extracts:
+   - Report metadata
+   - All laboratory test results found in the PDF
+7. Each extracted test is mapped to an existing `Marker_Key`.
+8. A `Marker_Key` is only used when the test can be confidently mapped to one of the supplied marker definitions. New marker keys are never invented.
+9. Tests that cannot be confidently mapped are returned separately in `unmapped_results`.
+10. The structured extraction is returned to the UI.
+11. The temporary PDF is deleted.
+12. The user can review or edit the populated values before saving them.
+
+### Extraction Response
+
+The response contains:
+
+- `report_date`
+- `collection_date`
+- `report_datetime`
+- `report_type`
+- `laboratory_name`
+- `file_name`
+- `results`
+- `unmapped_results`
+
+Each mapped result contains:
+
+- `marker_key`
+- `reported_name`
+- `numerical_value`
+- `text_value`
+- `unit`
+
+Numeric results are stored in `numerical_value`. Non-numeric results such as `Negative`, `Nil`, or `1 to 2` are returned in `text_value`.
+
+Dates are normalized during extraction:
+
+- Dates: `YYYY-MM-DD`
+- Date/time values: `YYYY-MM-DD HH:MM:SS`
+
+Units are preserved exactly as reported by the laboratory and are not converted.
+
+### Flow
+
+PDF Upload
+→ FastAPI `/lab-reports/extract`
+→ Load active `Lab_Marker_Definitions`
+→ OpenAI extraction and Marker_Key mapping
+→ Structured response
+→ UI fields populated
+→ User reviews/edits
+→ Save

@@ -53,6 +53,18 @@ from app.modules.health.lab_service import (
     create_lab_report_record,
 )
 
+from fastapi import UploadFile, File
+import os
+import tempfile
+
+from app.modules.health.lab_extraction_schemas import (
+    LabReportExtraction,
+)
+
+from app.modules.health.lab_extraction_service import (
+    extract_lab_report,
+)
+
 
 
 # All endpoints defined in this router will begin with /health.
@@ -672,3 +684,61 @@ def update_lab_result_endpoint(
         )
 
     return updated_result
+
+
+# ---------------------------------------------------------
+# Extract Lab Report PDF
+# ---------------------------------------------------------
+
+@router.post(
+    "/lab-reports/extract",
+    response_model=LabReportExtraction,
+)
+async def extract_lab_report_endpoint(
+    file: UploadFile = File(...),
+):
+    """
+    Extract lab report metadata and results from an uploaded PDF.
+
+    This endpoint does not save anything to Google Sheets.
+    It only returns extracted data for the UI to review.
+    """
+
+    # Only allow PDF files.
+    if file.content_type != "application/pdf":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only PDF files are supported",
+        )
+
+    temp_file_path = None
+
+    try:
+        # Create a temporary PDF file.
+        with tempfile.NamedTemporaryFile(
+            delete=False,
+            suffix=".pdf",
+        ) as temp_file:
+
+            temp_file_path = temp_file.name
+
+            # Read the uploaded PDF and write it temporarily.
+            file_content = await file.read()
+            temp_file.write(file_content)
+
+        # Extract the report.
+        extraction = extract_lab_report(
+            file_path=temp_file_path,
+            file_name=file.filename or "lab_report.pdf",
+        )
+
+        return extraction
+
+    finally:
+        # Always remove the temporary PDF,
+        # even if extraction fails.
+        if (
+            temp_file_path
+            and os.path.exists(temp_file_path)
+        ):
+            os.remove(temp_file_path)
