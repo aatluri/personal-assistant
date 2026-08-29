@@ -12,13 +12,6 @@
 
 
 import type { InputHTMLAttributes } from "react";
-import { afterEach } from "vitest";
-import { cleanup } from "@testing-library/react";
-
-
-afterEach(() => {
-    cleanup();
-});
 
 /*
     By extending InputHTMLAttributes, this component

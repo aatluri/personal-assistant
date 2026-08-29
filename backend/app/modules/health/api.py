@@ -18,9 +18,40 @@ from datetime import date
 from fastapi import HTTPException
 from fastapi import status
 
-from app.modules.health.schemas import DailyLog
-from app.modules.health.schemas import BodyMeasurements
+from app.modules.health.schemas import DailyLog,BodyMeasurements
 from app.modules.health.service import HealthService
+from app.modules.health.lab_schemas import (
+    LabReport,
+    LabReportCreate,
+    LabMarkerDefinition,
+    LabMarkerInterpretation,
+    LabMarkerReferenceRange,
+    LabResult,
+)
+from app.modules.health.lab_repository import (
+    get_lab_report,
+    list_lab_reports,
+    update_lab_report,
+    create_lab_marker_definition,
+    update_lab_marker_definition,
+    get_lab_marker_definition,
+    list_lab_marker_definitions,
+    create_lab_marker_reference_range,
+    get_lab_marker_reference_range,
+    list_lab_marker_reference_ranges,
+    update_lab_marker_reference_range,
+    create_lab_marker_interpretation,
+    get_lab_marker_interpretation,
+    list_lab_marker_interpretations,
+    update_lab_marker_interpretation,
+    create_lab_result,
+    get_lab_result,
+    list_lab_results,
+    update_lab_result,
+)
+from app.modules.health.lab_service import (
+    create_lab_report_record,
+)
 
 
 
@@ -193,3 +224,451 @@ def update_body_measurement(
     )
 
     return body_measurement
+
+# =========================================================
+# LAB REPORTS
+# =========================================================
+
+
+# ---------------------------------------------------------
+# Create
+# This calls the service create method to generate the key
+# That method calls the repository method to create the record in the database.
+# ---------------------------------------------------------
+
+@router.post(
+    "/lab-reports",
+    response_model=LabReport,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_lab_report_endpoint(
+    report: LabReportCreate,
+):
+    return create_lab_report_record(report)
+
+
+# ---------------------------------------------------------
+# Get
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-reports/{report_key}",
+    response_model=LabReport,
+)
+def get_lab_report_endpoint(
+    report_key: str,
+):
+    report = get_lab_report(report_key)
+
+    if report is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab report not found",
+        )
+
+    return report
+
+
+# ---------------------------------------------------------
+# List
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-reports",
+    response_model=list[LabReport],
+)
+def list_lab_reports_endpoint():
+    return list_lab_reports()
+
+
+# ---------------------------------------------------------
+# Update
+# ---------------------------------------------------------
+
+@router.put(
+    "/lab-reports/{report_key}",
+    response_model=LabReport,
+)
+def update_lab_report_endpoint(
+    report_key: str,
+    report: LabReport,
+):
+    updated_report = update_lab_report(
+        report_key,
+        report,
+    )
+
+    if updated_report is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab report not found",
+        )
+
+    return updated_report
+
+
+# =========================================================
+# LAB MARKER DEFINITIONS
+# =========================================================
+
+
+# ---------------------------------------------------------
+# Create
+# ---------------------------------------------------------
+
+@router.post(
+    "/lab-marker-definitions",
+    response_model=LabMarkerDefinition,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_lab_marker_definition_endpoint(
+    definition: LabMarkerDefinition,
+):
+    return create_lab_marker_definition(definition)
+
+
+# ---------------------------------------------------------
+# Get
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-marker-definitions/{marker_key}",
+    response_model=LabMarkerDefinition,
+)
+def get_lab_marker_definition_endpoint(
+    marker_key: str,
+):
+    definition = get_lab_marker_definition(marker_key)
+
+    if definition is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab marker definition not found",
+        )
+
+    return definition
+
+
+# ---------------------------------------------------------
+# List
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-marker-definitions",
+    response_model=list[LabMarkerDefinition],
+)
+def list_lab_marker_definitions_endpoint():
+    return list_lab_marker_definitions()
+
+
+# ---------------------------------------------------------
+# Update
+# ---------------------------------------------------------
+
+@router.put(
+    "/lab-marker-definitions/{marker_key}",
+    response_model=LabMarkerDefinition,
+)
+def update_lab_marker_definition_endpoint(
+    marker_key: str,
+    definition: LabMarkerDefinition,
+):
+    updated_definition = update_lab_marker_definition(
+        marker_key,
+        definition,
+    )
+
+    if updated_definition is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab marker definition not found",
+        )
+
+    return updated_definition
+
+# =========================================================
+# LAB MARKER REFERENCE RANGES
+# =========================================================
+
+
+# ---------------------------------------------------------
+# Create
+# ---------------------------------------------------------
+
+@router.post(
+    "/lab-marker-reference-ranges",
+    response_model=LabMarkerReferenceRange,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_lab_marker_reference_range_endpoint(
+    reference_range: LabMarkerReferenceRange,
+):
+    return create_lab_marker_reference_range(
+        reference_range
+    )
+
+
+# ---------------------------------------------------------
+# Get
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-marker-reference-ranges/{marker_key}",
+    response_model=LabMarkerReferenceRange,
+)
+def get_lab_marker_reference_range_endpoint(
+    marker_key: str,
+    gender: str,
+    min_age: int | None = None,
+    max_age: int | None = None,
+):
+    reference_range = get_lab_marker_reference_range(
+        marker_key,
+        gender,
+        min_age,
+        max_age,
+    )
+
+    if reference_range is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab marker reference range not found",
+        )
+
+    return reference_range
+
+
+# ---------------------------------------------------------
+# List
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-marker-reference-ranges",
+    response_model=list[LabMarkerReferenceRange],
+)
+def list_lab_marker_reference_ranges_endpoint(
+    marker_key: str | None = None,
+):
+    return list_lab_marker_reference_ranges(
+        marker_key
+    )
+
+
+# ---------------------------------------------------------
+# Update
+# ---------------------------------------------------------
+
+@router.put(
+    "/lab-marker-reference-ranges/{marker_key}",
+    response_model=LabMarkerReferenceRange,
+)
+def update_lab_marker_reference_range_endpoint(
+    marker_key: str,
+    reference_range: LabMarkerReferenceRange,
+    gender: str,
+    min_age: int | None = None,
+    max_age: int | None = None,
+):
+    updated_reference_range = (
+        update_lab_marker_reference_range(
+            marker_key,
+            gender,
+            min_age,
+            max_age,
+            reference_range,
+        )
+    )
+
+    if updated_reference_range is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab marker reference range not found",
+        )
+
+    return updated_reference_range
+
+
+# =========================================================
+# LAB MARKER INTERPRETATIONS
+# =========================================================
+
+
+# ---------------------------------------------------------
+# Create
+# ---------------------------------------------------------
+
+@router.post(
+    "/lab-marker-interpretations",
+    response_model=LabMarkerInterpretation,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_lab_marker_interpretation_endpoint(
+    interpretation: LabMarkerInterpretation,
+):
+    return create_lab_marker_interpretation(
+        interpretation
+    )
+
+
+# ---------------------------------------------------------
+# Get
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-marker-interpretations/{marker_key}",
+    response_model=LabMarkerInterpretation,
+)
+def get_lab_marker_interpretation_endpoint(
+    marker_key: str,
+    label: str,
+):
+    interpretation = get_lab_marker_interpretation(
+        marker_key,
+        label,
+    )
+
+    if interpretation is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab marker interpretation not found",
+        )
+
+    return interpretation
+
+
+# ---------------------------------------------------------
+# List
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-marker-interpretations",
+    response_model=list[LabMarkerInterpretation],
+)
+def list_lab_marker_interpretations_endpoint(
+    marker_key: str | None = None,
+):
+    return list_lab_marker_interpretations(
+        marker_key
+    )
+
+
+# ---------------------------------------------------------
+# Update
+# ---------------------------------------------------------
+
+@router.put(
+    "/lab-marker-interpretations/{marker_key}",
+    response_model=LabMarkerInterpretation,
+)
+def update_lab_marker_interpretation_endpoint(
+    marker_key: str,
+    interpretation: LabMarkerInterpretation,
+    label: str,
+):
+    updated_interpretation = (
+        update_lab_marker_interpretation(
+            marker_key,
+            label,
+            interpretation,
+        )
+    )
+
+    if updated_interpretation is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab marker interpretation not found",
+        )
+
+    return updated_interpretation
+
+
+# =========================================================
+# LAB RESULTS
+# =========================================================
+
+
+# ---------------------------------------------------------
+# Create
+# ---------------------------------------------------------
+
+@router.post(
+    "/lab-results",
+    response_model=LabResult,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_lab_result_endpoint(
+    result: LabResult,
+):
+    return create_lab_result(result)
+
+
+# ---------------------------------------------------------
+# Get
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-results/{report_key}",
+    response_model=LabResult,
+)
+def get_lab_result_endpoint(
+    report_key: str,
+    marker_key: str,
+):
+    result = get_lab_result(
+        report_key,
+        marker_key,
+    )
+
+    if result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab result not found",
+        )
+
+    return result
+
+
+# ---------------------------------------------------------
+# List
+# ---------------------------------------------------------
+
+@router.get(
+    "/lab-results",
+    response_model=list[LabResult],
+)
+def list_lab_results_endpoint(
+    report_key: str | None = None,
+    marker_key: str | None = None,
+):
+    return list_lab_results(
+        report_key,
+        marker_key,
+    )
+
+
+# ---------------------------------------------------------
+# Update
+# ---------------------------------------------------------
+
+@router.put(
+    "/lab-results/{report_key}",
+    response_model=LabResult,
+)
+def update_lab_result_endpoint(
+    report_key: str,
+    result: LabResult,
+    marker_key: str,
+):
+    updated_result = update_lab_result(
+        report_key,
+        marker_key,
+        result,
+    )
+
+    if updated_result is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lab result not found",
+        )
+
+    return updated_result

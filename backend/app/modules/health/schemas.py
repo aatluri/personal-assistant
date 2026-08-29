@@ -19,7 +19,7 @@ class DailyLog(BaseModel):
 
     Each instance corresponds to one row in the Daily_Log worksheet.
     """
-    date: date
+    date: date #primary key
 
     weight_kg: float | None = None
 

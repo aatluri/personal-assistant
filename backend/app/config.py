@@ -34,6 +34,16 @@ settings
 
     HEALTH_BODY_MEASUREMENTS_WORKSHEET: str
 
+    LAB_REPORTS_WORKSHEET: str
+
+    LAB_MARKER_DEFINITIONS_WORKSHEET: str
+
+    LAB_MARKER_REFERENCE_RANGES_WORKSHEET: str
+
+    LAB_MARKER_INTERPRETATIONS_WORKSHEET: str
+
+    LAB_RESULTS_WORKSHEET: str
+
     model_config = SettingsConfigDict(
 
         env_file=".env",
