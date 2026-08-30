@@ -28,6 +28,11 @@ from app.modules.health.lab_schemas import (
     LabMarkerReferenceRange,
     LabResult,
 )
+
+from app.modules.health.lab_save_schemas import (
+    LabReportSaveRequest,
+    LabReportSaveResponse,
+)
 from app.modules.health.lab_repository import (
     get_lab_report,
     list_lab_reports,
@@ -51,6 +56,7 @@ from app.modules.health.lab_repository import (
 )
 from app.modules.health.lab_service import (
     create_lab_report_record,
+    save_lab_report,
 )
 
 from fastapi import UploadFile, File
@@ -742,3 +748,27 @@ async def extract_lab_report_endpoint(
             and os.path.exists(temp_file_path)
         ):
             os.remove(temp_file_path)
+
+
+@router.post(
+    "/lab-reports/save",
+    response_model=LabReportSaveResponse,
+)
+def save_lab_report_endpoint(
+    save_request: LabReportSaveRequest,
+):
+    """
+    Save a complete lab report and its marker results.
+
+    The frontend sends:
+    - Lab report metadata
+    - All marker values currently entered in the UI
+
+    The service layer:
+    - Generates the Report_Key
+    - Creates or updates the Lab_Reports record
+    - Ignores empty marker results
+    - Creates or updates non-empty Lab_Results
+    """
+
+    return save_lab_report(save_request)
