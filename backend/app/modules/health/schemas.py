@@ -61,6 +61,8 @@ class BodyMeasurements(BaseModel):
     """
     date: date
 
+    weight_kg: float  | None = None
+    body_mass_index: float  | None = None
     body_fat_percent: float | None = None
     muscle_mass_percent: float | None = None
     visceral_fat: float | None = None

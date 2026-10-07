@@ -17,7 +17,8 @@ export function createEmptyBodyMeasurements(): BodyMeasurements {
         /* ------------------------------ */
         /* Body Composition               */
         /* ------------------------------ */
-
+        weight: "",
+        bodyMassIndex: "",
         bodyFat: "",
         muscleMass: "",
         visceralFat: "",

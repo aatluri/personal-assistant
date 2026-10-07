@@ -22,6 +22,8 @@ export interface BodyMeasurements {
     /* Body Composition               */
     /* ------------------------------ */
 
+    weight: number | "";
+    bodyMassIndex: number | "";
     bodyFat: number | "";
     muscleMass: number | "";
     visceralFat: number | "";

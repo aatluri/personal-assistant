@@ -284,7 +284,8 @@ export async function getBodyMeasurement(date: string): Promise<BodyMeasurements
     const bodyMeasurements: BodyMeasurements = {
 
         date,
-
+        weight: apiResponse.weight_kg ?? "",
+        bodyMassIndex: apiResponse.body_mass_index ?? "",
         bodyFat: apiResponse.body_fat_percent ?? "",
         muscleMass: apiResponse.muscle_mass_percent ?? "",
         visceralFat: apiResponse.visceral_fat ?? "",
@@ -330,7 +331,8 @@ export async function saveBodyMeasurement(selectedDate: string,bodyMeasurement: 
     const request = {
 
         date: selectedDate,
-
+        weight_kg: buildNumber(bodyMeasurement.weight),
+        body_mass_index: buildNumber(bodyMeasurement.bodyMassIndex),
         body_fat_percent: buildNumber(bodyMeasurement.bodyFat),
         muscle_mass_percent: buildNumber(bodyMeasurement.muscleMass),
         visceral_fat: buildNumber(bodyMeasurement.visceralFat),

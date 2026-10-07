@@ -551,9 +551,40 @@ The following frontend changes are required:
      ```text
      src/pages/LogToday/LogToday.tsx
      ```
-   - Update the page state (`dailyLog`) to include the new field.
-   - Pass the field and the `setDailyLog()` function to the appropriate section component.
-   - The section component then uses `setDailyLog()` to update the field whenever the user changes its value.
+
+   - The page typically owns the complete model as state:
+     ```tsx
+     const [dailyLog, setDailyLog] = useState<DailyLog>(
+         createEmptyDailyLog()
+     );
+     ```
+
+   - If the page already passes the complete model and state updater to the appropriate section:
+     ```tsx
+     <WorkoutSection
+         dailyLog={dailyLog}
+         setDailyLog={updateDailyLog}
+     />
+     ```
+     then **no change to the page-level component is normally required** when adding another field to that existing section.
+
+   - Once the new field has been added to:
+     - the TypeScript model,
+     - the empty model,
+     - the API mapping, and
+     - the section component,
+
+     it automatically becomes part of the object held by the page state.
+
+   - A change to the page-level component **is required** when:
+     - the field must be passed individually to the section rather than as part of the complete model, or
+     - an entirely new section/card is being added to the page.
+
+   - For example, if `LogToday.tsx` already passes the complete `dailyLog` object to `WorkoutSection`, adding a new field such as `Resting Heart Rate` inside that section does not require a change to `LogToday.tsx`.
+
+   - This is the case for LogBodyMeasurments.tsx. When we added weight and body mass index, we didnt have to touch LogBodyMeasurements.tsx.
+
+   - However, if a completely new `Health Metrics` section is introduced, `LogToday.tsx` must be updated to render the new section and pass it the required state.
 
 6. **Test the page**
    - Verify the field loads correctly from the backend.

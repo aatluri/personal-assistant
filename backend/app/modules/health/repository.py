@@ -450,9 +450,9 @@ class HealthRepository:
                 updated_row = self._body_measurement_to_row(
                     body_measurement,
                 )
-
+                # This has the columns which are to be considered in the respective google sheet.
                 worksheet.update(
-                    range_name=f"A{row_number}:R{row_number}",
+                    range_name=f"A{row_number}:T{row_number}",
                     values=[updated_row],
                     value_input_option="USER_ENTERED",
                 )
@@ -491,6 +491,9 @@ class HealthRepository:
         return [
 
             body_measurement.date.strftime(DATE_FORMAT),
+
+            body_measurement.weight_kg,
+            body_measurement.body_mass_index,
 
             body_measurement.body_fat_percent,
             body_measurement.muscle_mass_percent,
@@ -549,6 +552,8 @@ class HealthRepository:
             # Google Sheets returns an empty string for blank cells.
             # Using "or None" converts empty strings into None.
             # -------------------------------------------------------------
+            weight_kg=self._empty_to_none(row["Weight (kg)"]),
+            body_mass_index=self._empty_to_none(row["Body Mass Index"]),
             body_fat_percent=self._empty_to_none(row["Body Fat (%)"]),
             muscle_mass_percent=self._empty_to_none(row["Muscle Mass (%)"]),
             visceral_fat=self._empty_to_none(row["Visceral Fat (%)"]),

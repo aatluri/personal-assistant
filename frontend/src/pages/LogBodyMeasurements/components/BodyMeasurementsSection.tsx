@@ -100,6 +100,44 @@ function BodyMeasurementsSection({
                 "
             >
 
+                {/* Weight */}
+                <TextInput
+                    label="Weight (kg)"
+                    id="weight"
+                    name="weight"
+                    type="number"
+                    min={0}
+                    step={0.1}
+                    value={bodyMeasurements.weight}
+                    onChange={(event) =>
+                        updateMeasurement(
+                            "weight",
+                            event.target.value === ""
+                                ? ""
+                                : Number(event.target.value)
+                        )
+                    }
+                />
+
+                {/* Body Mass Index */}
+                <TextInput
+                    label="Body Mass Index (BMI)"
+                    id="bodyMassIndex"
+                    name="bodyMassIndex"
+                    type="number"
+                    min={0}
+                    step={0.1}
+                    value={bodyMeasurements.bodyMassIndex}
+                    onChange={(event) =>
+                        updateMeasurement(
+                            "bodyMassIndex",
+                            event.target.value === ""
+                                ? ""
+                                : Number(event.target.value)
+                        )
+                    }
+                />
+
                 {/* Body Fat */}
                 <TextInput
                     label="Body Fat (%)"
