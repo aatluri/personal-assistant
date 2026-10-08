@@ -122,6 +122,10 @@ def create_body_measurement_row(**overrides) -> dict:
     row = {
         "Date": "August 26, 2026",
 
+        "Weight (kg)": 80,
+        "Body Mass Index": 26.7,
+
+
         "Body Fat (%)": 18,
         "Muscle Mass (%)": 42,
         "Visceral Fat (%)": 8,
@@ -160,6 +164,10 @@ def create_body_measurement(**overrides) -> BodyMeasurements:
 
     measurement = BodyMeasurements(
         date=date(2026, 8, 26),
+
+        weight_kg=80,
+        body_mass_index=26.7,
+
 
         body_fat_percent=18,
         muscle_mass_percent=42,

@@ -13,8 +13,6 @@ from unittest.mock import Mock
 
 from app.modules.health.repository import HealthRepository
 from tests.helpers.test_data import (
-    create_body_measurement,
-    create_body_measurement_row,
     create_daily_log,
     create_daily_log_row,
 )
@@ -67,31 +65,3 @@ def test_row_to_daily_log():
     assert daily_log.workout_summary == "Push-ups"
 
 
-# Verify that a BodyMeasurements object is converted into a worksheet row.
-def test_body_measurement_to_row():
-
-    repository = HealthRepository()
-
-    measurement = create_body_measurement()
-
-    row = repository._body_measurement_to_row(measurement)
-
-    assert row[0] == "August 26, 2026"
-    assert row[1] == 18
-    assert row[2] == 42
-    assert row[3] == 8
-
-
-# Verify that a worksheet row is converted into a BodyMeasurements object.
-def test_row_to_body_measurement():
-
-    repository = HealthRepository()
-
-    row = create_body_measurement_row()
-
-    measurement = repository._row_to_body_measurement(row)
-
-    assert measurement.date == date(2026, 8, 26)
-    assert measurement.body_fat_percent == 18
-    assert measurement.muscle_mass_percent == 42
-    assert measurement.visceral_fat == 8

@@ -61,6 +61,14 @@ describe("BodyMeasurementsSection", () => {
         );
 
         expect(
+            screen.getByLabelText("Weight (kg)")
+        ).toBeInTheDocument();
+
+        expect(
+            screen.getByLabelText("Body Mass Index (BMI)")
+        ).toBeInTheDocument();
+
+        expect(
             screen.getByLabelText("Body Fat (%)")
         ).toBeInTheDocument();
 
@@ -137,6 +145,8 @@ describe("BodyMeasurementsSection", () => {
         const bodyMeasurements =
             createEmptyBodyMeasurements();
 
+        bodyMeasurements.weight = 80.2;
+        bodyMeasurements.bodyMassIndex = 26.8;
         bodyMeasurements.bodyFat = 18.5;
         bodyMeasurements.muscleMass = 42.3;
         bodyMeasurements.visceralFat = 8;
@@ -161,6 +171,14 @@ describe("BodyMeasurementsSection", () => {
                 setBodyMeasurements={vi.fn()}
             />
         );
+
+        expect(
+            screen.getByDisplayValue("80.2")
+        ).toBeInTheDocument();
+
+        expect(
+            screen.getByDisplayValue("26.8")
+        ).toBeInTheDocument();
 
         expect(
             screen.getByDisplayValue("18.5")
@@ -229,6 +247,92 @@ describe("BodyMeasurementsSection", () => {
         expect(
             screen.getByDisplayValue("Feeling stronger")
         ).toBeInTheDocument();
+
+    });
+
+    // Verify that changing Weight updates the BodyMeasurements.
+    test("updates weight", () => {
+
+        const bodyMeasurements =
+            createEmptyBodyMeasurements();
+
+        const setBodyMeasurements = vi.fn();
+
+        render(
+            <BodyMeasurementsSection
+                bodyMeasurements={bodyMeasurements}
+                setBodyMeasurements={setBodyMeasurements}
+            />
+        );
+
+        fireEvent.change(
+            screen.getByLabelText("Weight (kg)"),
+            {
+                target: {
+                    value: "80.2",
+                },
+            }
+        );
+
+        expect(setBodyMeasurements).toHaveBeenCalled();
+
+        const updateFunction =
+            setBodyMeasurements.mock.calls[0][0] as (
+                bodyMeasurements: BodyMeasurements
+            ) => BodyMeasurements;
+
+        const previousBodyMeasurements =
+            createEmptyBodyMeasurements();
+
+        const updatedBodyMeasurements =
+            updateFunction(previousBodyMeasurements);
+
+        expect(
+            updatedBodyMeasurements.weight
+        ).toBe(80.2);
+
+    });
+
+    // Verify that changing BMI updates the BodyMeasurements.
+    test("updates body mass index", () => {
+
+        const bodyMeasurements =
+            createEmptyBodyMeasurements();
+
+        const setBodyMeasurements = vi.fn();
+
+        render(
+            <BodyMeasurementsSection
+                bodyMeasurements={bodyMeasurements}
+                setBodyMeasurements={setBodyMeasurements}
+            />
+        );
+
+        fireEvent.change(
+            screen.getByLabelText("Body Mass Index (BMI)"),
+            {
+                target: {
+                    value: "26.8",
+                },
+            }
+        );
+
+        expect(setBodyMeasurements).toHaveBeenCalled();
+
+        const updateFunction =
+            setBodyMeasurements.mock.calls[0][0] as (
+                bodyMeasurements: BodyMeasurements
+            ) => BodyMeasurements;
+
+        const previousBodyMeasurements =
+            createEmptyBodyMeasurements();
+
+        const updatedBodyMeasurements =
+            updateFunction(previousBodyMeasurements);
+
+        expect(
+            updatedBodyMeasurements.bodyMassIndex
+        ).toBe(26.8);
 
     });
 

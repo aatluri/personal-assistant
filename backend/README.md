@@ -305,9 +305,11 @@ When a new field is added to an existing data store, update the following compon
 3. **repository.py**
    - Update `_row_to_<entity>()` to read the new column.
    - Update `_<entity>_to_row()` to write the new column.
+   - If the repository uses a hardcoded worksheet update range (for example `A:R`), update the range to include the new columns.
 
 4. **API**
-   - No changes required if the existing endpoints already return the updated schema.
+   - No code changes required if the existing endpoints already use and return the updated Pydantic schema.
+   - Verify the new fields appear correctly in Swagger/API responses.
 
 5. **Service**
    - No changes required unless business logic for the new field is needed.
@@ -316,8 +318,16 @@ When a new field is added to an existing data store, update the following compon
    - No changes required unless the new field requires additional configuration.
 
 7. **Testing**
-   - Verify the GET endpoint returns the new field.
-   - Verify the POST/PUT endpoint correctly persists the new field.
+   - Update the test-data helpers so fake datastore rows include the new fields.
+   - Update the test-data model factory so generated model objects include the new fields.
+   - Update repository helper tests:
+     - Verify `_row_to_<entity>()` reads the new fields correctly.
+     - Verify `_<entity>_to_row()` writes the new fields in the correct positions.
+   - Update repository tests to verify the new fields are returned correctly.
+   - Run the tests for the affected entity first.
+   - Run the complete backend test suite to ensure the changes have not affected existing functionality.
+   - Verify the GET endpoint returns the new fields.
+   - Verify the POST/PUT endpoint correctly persists the new fields.
 
 
 

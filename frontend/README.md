@@ -587,10 +587,14 @@ The following frontend changes are required:
    - However, if a completely new `Health Metrics` section is introduced, `LogToday.tsx` must be updated to render the new section and pass it the required state.
 
 6. **Test the page**
-   - Verify the field loads correctly from the backend.
-   - Verify changes update the page state.
-   - Verify the value is saved successfully.
-   - Reload the page and confirm the value is persisted.
+   - Update the component tests to verify the new field is rendered.
+   - Update the supplied-values test to verify an existing value is displayed correctly.
+   - Add a test to verify changing the field correctly updates the page state.
+   - Run the affected component test suite.
+   - Run the complete frontend test suite to ensure existing functionality is not affected.
+   - Manually verify the field loads correctly from the backend.
+   - Manually change and save the value.
+   - Reload the page and confirm the saved value is persisted.
 
 
 ## Adding a New Page
