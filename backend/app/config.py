@@ -44,6 +44,8 @@ settings
 
     LAB_RESULTS_WORKSHEET: str
 
+    HEALTH_WORKOUT_METRICS_WORKSHEET: str
+
     OPENAI_API_KEY: str
 
     model_config = SettingsConfigDict(

@@ -8,7 +8,7 @@ These models represent the application's domain objects and are used by:
 - The Repository layer when reading from and writing to Google Sheets.
 - The Service layer when passing data through the application.
 """
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from pydantic import BaseModel
 
@@ -86,3 +86,26 @@ class BodyMeasurements(BaseModel):
     right_calf_cm: float | None = None
 
     notes: str | None = None
+
+
+
+class WorkoutMetrics(BaseModel):
+
+    """
+    Represents a single Workout Metrics entry.
+
+    Each instance corresponds to one row in the Workout_Metrics worksheet.
+    """
+
+    date: date
+    workout_type: str
+    workout_start_time: datetime #unique ket
+    workout_end_time: datetime
+    workout_duration: timedelta
+
+    total_energy_kcal: float | None = None
+    active_energy_kcal: float | None = None
+    max_heart_rate_bpm: float | None = None
+    avg_heart_rate_bpm: float | None = None
+    distance_mi: float | None = None
+    avg_speed_mph: float | None = None

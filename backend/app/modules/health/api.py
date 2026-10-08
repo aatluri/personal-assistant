@@ -14,11 +14,15 @@ Google Sheets directly.
 """
 
 from fastapi import APIRouter
-from datetime import date
+from datetime import date, datetime
 from fastapi import HTTPException
 from fastapi import status
 
-from app.modules.health.schemas import DailyLog,BodyMeasurements
+from app.modules.health.schemas import (
+    DailyLog,
+    BodyMeasurements,
+    WorkoutMetrics,
+)
 from app.modules.health.service import HealthService
 from app.modules.health.lab_schemas import (
     LabReport,
@@ -27,6 +31,13 @@ from app.modules.health.lab_schemas import (
     LabMarkerInterpretation,
     LabMarkerReferenceRange,
     LabResult,
+)
+from app.modules.health.body_measurements_service import (
+    BodyMeasurementsService,
+)
+
+from app.modules.health.workout_metrics_service import (
+    WorkoutMetricsService,
 )
 
 from app.modules.health.lab_save_schemas import (
@@ -80,11 +91,16 @@ router = APIRouter(
 )
 
 
-# Create the Health service used by the API endpoints.
+# Create the services used by the API endpoints.
 #
 # The API layer does not communicate with Google Sheets directly.
 # It calls the service layer, which then calls the repository.
+
 health_service = HealthService()
+
+body_measurements_service = BodyMeasurementsService()
+
+workout_metrics_service = WorkoutMetricsService()
 
 
 @router.get("/status")
@@ -190,7 +206,7 @@ def update_daily_log(log_date: date,daily_log: DailyLog,) -> DailyLog:
 
 @router.get( "/body-measurements",response_model=list[BodyMeasurements],)
 def get_body_measurements():
-    return health_service.get_body_measurements()
+    return body_measurements_service.get_body_measurements()
 
 
 @router.get("/body-measurements/{measurement_date}",response_model=BodyMeasurements,)
@@ -199,7 +215,7 @@ def get_body_measurement(measurement_date: date,) -> BodyMeasurements:
     Return the Body Measurements for a specific date.
     """
 
-    body_measurement = health_service.get_body_measurement(
+    body_measurement = body_measurements_service.get_body_measurement(
         measurement_date
     )
 
@@ -217,31 +233,113 @@ def create_body_measurement(body_measurement: BodyMeasurements,) -> None:
     Create a new Body Measurements record.
     """
 
-    health_service.create_body_measurement(
+    body_measurements_service.create_body_measurement(
         body_measurement
     )
 
-@router.put("/body-measurements/{measurement_date}",response_model=BodyMeasurements,)
+@router.put(
+    "/body-measurements",
+    response_model=BodyMeasurements,
+)
 def update_body_measurement(
-    measurement_date: date,
     body_measurement: BodyMeasurements,
 ) -> BodyMeasurements:
     """
-    Update or create the Body Measurements for the specified date.
+    Update or create a Body Measurements record.
+
+    The date contained in the request body is used
+    to identify the record.
     """
 
-    if body_measurement.date != measurement_date:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The URL date must match the Body Measurements date.",
-        )
-
-    health_service.upsert_body_measurement(
-        measurement_date,
+    body_measurements_service.upsert_body_measurement(
+        body_measurement.date,
         body_measurement,
     )
 
     return body_measurement
+
+# -----------------------------------------------------------------------------
+# Workout Metrics Endpoints
+#
+# Endpoints for creating, retrieving and updating Workout Metrics.
+# -----------------------------------------------------------------------------
+
+@router.get(
+    "/workout-metrics",
+    response_model=list[WorkoutMetrics],
+)
+def get_workout_metrics() -> list[WorkoutMetrics]:
+    """
+    Return all Workout Metrics records.
+    """
+
+    return workout_metrics_service.get_workout_metrics()
+
+
+@router.get(
+    "/workout-metric",
+    response_model=WorkoutMetrics,
+)
+def get_workout_metric(
+    workout_start_time: datetime,
+) -> WorkoutMetrics:
+    """
+    Return the Workout Metrics record for the specified
+    Workout Start Time.
+
+    The Workout Start Time is supplied as a query parameter.
+    """
+
+    workout_metric = workout_metrics_service.get_workout_metric(
+        workout_start_time
+    )
+
+    if workout_metric is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Workout Metrics not found.",
+        )
+
+    return workout_metric
+
+@router.post(
+    "/workout-metrics",
+    status_code=status.HTTP_201_CREATED,
+)
+def create_workout_metric(
+    workout_metric: WorkoutMetrics,
+) -> None:
+    """
+    Create a new Workout Metrics record.
+    """
+
+    workout_metrics_service.create_workout_metric(
+        workout_metric
+    )
+
+
+@router.put(
+    "/workout-metrics",
+    response_model=WorkoutMetrics,
+)
+def update_workout_metric(
+    workout_metric: WorkoutMetrics,
+) -> WorkoutMetrics:
+    """
+    Update or create a Workout Metrics record.
+
+    The Workout Start Time contained in the request body
+    is used to identify the record.
+    """
+
+    workout_metrics_service.upsert_workout_metric(
+        workout_metric.workout_start_time,
+        workout_metric,
+    )
+
+    return workout_metric
+
+
 
 # =========================================================
 # LAB REPORTS

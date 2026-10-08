@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from unittest.mock import Mock
 
 from fastapi.testclient import TestClient
@@ -8,6 +8,7 @@ from app.modules.health import api
 from tests.helpers.test_data import (
     create_daily_log,
     create_body_measurement,
+    create_workout_metric,
 )
 
 client = TestClient(app)
@@ -225,7 +226,7 @@ def test_get_body_measurements():
         create_body_measurement()
     ]
 
-    api.health_service = service
+    api.body_measurements_service = service
 
     response = client.get(
         "/health/body-measurements"
@@ -249,7 +250,7 @@ def test_get_body_measurement_found():
         create_body_measurement()
     )
 
-    api.health_service = service
+    api.body_measurements_service = service
 
     response = client.get(
         "/health/body-measurements/2026-08-26"
@@ -269,7 +270,7 @@ def test_get_body_measurement_not_found():
 
     service.get_body_measurement.return_value = None
 
-    api.health_service = service
+    api.body_measurements_service = service
 
     response = client.get(
         "/health/body-measurements/2026-08-26"
@@ -283,7 +284,7 @@ def test_create_body_measurement():
 
     service = Mock()
 
-    api.health_service = service
+    api.body_measurements_service = service
 
     response = client.post(
         "/health/body-measurements",
@@ -302,14 +303,14 @@ def test_update_body_measurement():
 
     service = Mock()
 
-    api.health_service = service
+    api.body_measurements_service = service
 
     payload = create_body_measurement().model_dump(
         mode="json"
     )
 
     response = client.put(
-        "/health/body-measurements/2026-08-26",
+        "/health/body-measurements",
         json=payload,
     )
 
@@ -318,23 +319,127 @@ def test_update_body_measurement():
     service.upsert_body_measurement.assert_called_once()
 
 
-# Verify that a 400 response is returned when the URL date
-# does not match the request body date.
-def test_update_body_measurement_date_mismatch():
+
+# ============================================================================
+# Workout Metrics
+# ============================================================================
+
+
+# Verify that all Workout Metrics are returned successfully.
+
+def test_get_workout_metrics():
 
     service = Mock()
 
-    api.health_service = service
+    service.get_workout_metrics.return_value = [
+        create_workout_metric()
+    ]
 
-    payload = create_body_measurement().model_dump(
+    api.workout_metrics_service = service
+
+    response = client.get(
+        "/health/workout-metrics"
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data) == 1
+
+    service.get_workout_metrics.assert_called_once()
+
+
+# Verify that Workout Metrics are returned when the requested
+# Workout Start Time exists.
+
+def test_get_workout_metric_found():
+
+    service = Mock()
+
+    service.get_workout_metric.return_value = (
+        create_workout_metric()
+    )
+
+    api.workout_metrics_service = service
+
+    response = client.get(
+    "/health/workout-metric",
+    params={
+        "workout_start_time": "2026-10-08T06:30:00"
+    },
+)
+
+    assert response.status_code == 200
+
+    service.get_workout_metric.assert_called_once_with(
+        datetime(2026, 10, 8, 6, 30, 0)
+    )
+
+
+# Verify that a 404 response is returned when
+# Workout Metrics do not exist.
+
+def test_get_workout_metric_not_found():
+
+    service = Mock()
+
+    service.get_workout_metric.return_value = None
+
+    api.workout_metrics_service = service
+
+    response = client.get(
+    "/health/workout-metric",
+    params={
+        "workout_start_time": "2026-10-08T06:30:00"
+    },
+    )
+
+    assert response.status_code == 404
+
+
+# Verify that a new Workout Metrics record can be created.
+
+def test_create_workout_metric():
+
+    service = Mock()
+
+    api.workout_metrics_service = service
+
+    response = client.post(
+        "/health/workout-metrics",
+        json=create_workout_metric().model_dump(
+            mode="json"
+        ),
+    )
+
+    assert response.status_code == 201
+
+    service.create_workout_metric.assert_called_once()
+
+
+# Verify that an existing Workout Metrics record is updated.
+
+def test_update_workout_metric():
+
+    service = Mock()
+
+    api.workout_metrics_service = service
+
+    workout_metric = create_workout_metric()
+
+    payload = workout_metric.model_dump(
         mode="json"
     )
 
-    payload["date"] = "2026-08-25"
-
     response = client.put(
-        "/health/body-measurements/2026-08-26",
+        "/health/workout-metrics",
         json=payload,
     )
 
-    assert response.status_code == 400
+    assert response.status_code == 200
+
+    service.upsert_workout_metric.assert_called_once_with(
+        workout_metric.workout_start_time,
+        workout_metric,
+    )

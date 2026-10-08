@@ -3,6 +3,10 @@ from datetime import date
 from app.modules.health.schemas import DailyLog
 from app.modules.health.schemas import BodyMeasurements
 
+from datetime import date, datetime, timedelta
+
+from app.modules.health.schemas import WorkoutMetrics
+
 
 # ---------------------------------------------------------------------
 # Daily Log
@@ -195,3 +199,47 @@ def create_body_measurement(**overrides) -> BodyMeasurements:
     )
 
     return measurement.model_copy(update=overrides)
+
+# ---------------------------------------------------------------------
+# Workout Metrics
+# ---------------------------------------------------------------------
+
+
+def create_workout_metric() -> WorkoutMetrics:
+    """
+    Create a WorkoutMetrics object used by repository helper tests.
+    """
+
+    return WorkoutMetrics(
+        date=date(2026, 10, 8),
+        workout_type="Functional Strength Training",
+        workout_start_time=datetime(2026, 10, 8, 6, 30, 0),
+        workout_end_time=datetime(2026, 10, 8, 7, 30, 0),
+        workout_duration=timedelta(hours=1),
+        total_energy_kcal=500,
+        active_energy_kcal=420,
+        max_heart_rate_bpm=175,
+        avg_heart_rate_bpm=145,
+        distance_mi=3.2,
+        avg_speed_mph=6.4,
+    )
+
+
+def create_workout_metric_row() -> dict:
+    """
+    Create a Google Sheets-style row used by repository helper tests.
+    """
+
+    return {
+        "Date": "October 08, 2026",
+        "Workout Type": "Functional Strength Training",
+        "Workout Start Time": "October 08, 2026 06:30:00",
+        "Workout End Time": "October 08, 2026 07:30:00",
+        "Workout Duration": "01:00:00",
+        "Total Energy (kcal)": 500,
+        "Active Energy (kcal)": 420,
+        "Max Heart Rate (bpm)": 175,
+        "Avg Heart Rate (bpm)": 145,
+        "Distance (mi)": 3.2,
+        "Avg Speed (mi/hr)": 6.4,
+    }
