@@ -1,7 +1,13 @@
 from datetime import date
 
-from app.modules.health.schemas import DailyLog
-from app.modules.health.schemas import BodyMeasurements
+from app.modules.health.schemas import (
+    DailyLog,
+    BodyMeasurements,
+    WorkoutMetrics,
+    SleepMetrics,
+    NutritionMetrics,
+    HealthMetrics,
+)
 
 from datetime import date, datetime, timedelta
 
@@ -243,3 +249,226 @@ def create_workout_metric_row() -> dict:
         "Distance (mi)": 3.2,
         "Avg Speed (mi/hr)": 6.4,
     }
+
+
+# ---------------------------------------------------------------------
+# Sleep Metrics
+# ---------------------------------------------------------------------
+
+def create_sleep_metric(**overrides) -> SleepMetrics:
+    """
+    Create a SleepMetrics object used by repository and service tests.
+
+    Individual fields can be overridden.
+
+    Example:
+        create_sleep_metric(total_sleep_duration_hr=8.0)
+    """
+
+    sleep_metric = SleepMetrics(
+        date=date(2026, 10, 8),
+
+        sleep_start_time=datetime(2026, 10, 7, 23, 0, 0),
+        sleep_end_time=datetime(2026, 10, 8, 7, 0, 0),
+
+        total_sleep_duration_hr=7.5,
+        core_sleep_hr=4.0,
+        rem_sleep_hr=1.5,
+        deep_sleep_hr=1.5,
+        awake_hr=0.5,
+
+        source="Apple Watch",
+    )
+
+    return sleep_metric.model_copy(update=overrides)
+
+
+def create_sleep_metric_row(**overrides) -> dict:
+    """
+    Create a Google Sheets-style Sleep Metrics row used by repository tests.
+
+    Individual values can be overridden.
+
+    Example:
+        create_sleep_metric_row(**{"Deep Sleep (hr)": 2.0})
+    """
+
+    row = {
+        "Date": "October 08, 2026",
+
+        "Sleep Start Time": "October 07, 2026 23:00:00",
+        "Sleep End Time": "October 08, 2026 07:00:00",
+
+        "Total Sleep Duration (hr)": 7.5,
+        "Core Sleep (hr)": 4.0,
+        "Rem Sleep (hr)": 1.5,
+        "Deep Sleep (hr)": 1.5,
+        "Awake (hr)": 0.5,
+
+        "Source": "Apple Watch",
+    }
+
+    row.update(overrides)
+
+    return row
+
+
+
+# ---------------------------------------------------------------------
+# Nutrition Metrics
+# ---------------------------------------------------------------------
+
+def create_nutrition_metric(**overrides) -> NutritionMetrics:
+    """
+    Create a NutritionMetrics object used by repository and service tests.
+
+    Individual fields can be overridden.
+
+    Example:
+        create_nutrition_metric(protein_g=120)
+    """
+
+    nutrition_metric = NutritionMetrics(
+        date=date(2026, 10, 8),
+
+        dietary_energy_kcal=1800,
+
+        protein_g=110,
+        carbohydrates_g=180,
+        fiber_g=30,
+        sugar_g=40,
+
+        total_fat_g=60,
+        saturated_fat_g=18,
+        polyunsaturated_fat_g=12,
+        monounsaturated_fat_g=25,
+
+        water_fl_oz_us=100,
+        cholesterol_mg=250,
+
+        source="Foodnoms",
+    )
+
+    return nutrition_metric.model_copy(update=overrides)
+
+
+def create_nutrition_metric_row(**overrides) -> dict:
+    """
+    Create a Google Sheets-style Nutrition Metrics row used by repository tests.
+
+    Individual values can be overridden.
+
+    Example:
+        create_nutrition_metric_row(**{"Protein (g)": 120})
+    """
+
+    row = {
+        "Date": "October 08, 2026",
+
+        "Dietary Energy (kcal)": 1800,
+
+        "Protein (g)": 110,
+        "Carbohydrates (g)": 180,
+        "Fiber (g)": 30,
+        "Sugar (g)": 40,
+
+        "Total Fat (g)": 60,
+        "Saturated Fat (g)": 18,
+        "Polyunsaturated Fat (g)": 12,
+        "Monounsaturated Fat (g)": 25,
+
+        "Water (fl_oz_us)": 100,
+        "Cholesterol (mg)": 250,
+
+        "Source": "Foodnoms",
+    }
+
+    row.update(overrides)
+
+    return row
+
+
+# ---------------------------------------------------------------------
+# Health Metrics
+# ---------------------------------------------------------------------
+
+def create_health_metric(**overrides) -> HealthMetrics:
+    """
+    Create a HealthMetrics object used by repository and service tests.
+
+    Individual fields can be overridden.
+
+    Example:
+        create_health_metric(step_count=12000)
+    """
+
+    health_metric = HealthMetrics(
+        date=date(2026, 10, 8),
+
+        step_count=10000,
+
+        active_energy_kcal=650,
+        resting_energy_kcal=1800,
+
+        atrial_fibrillation_burden_percent=0,
+        blood_oxygen_saturation_percent=98,
+        breathing_disturbances_count=2,
+        cardio_recovery_bpm=30,
+
+        flights_climbed=8,
+
+        heart_rate_min_bpm=45,
+        heart_rate_max_bpm=175,
+        heart_rate_variability_ms=55,
+
+        physical_effort_kcal_hr_kg=4.5,
+
+        respiratory_rate_bpm=16,
+        resting_heart_rate_bpm=52,
+
+        source="Apple Watch",
+    )
+
+    return health_metric.model_copy(update=overrides)
+
+
+def create_health_metric_row(**overrides) -> dict:
+    """
+    Create a Google Sheets-style Health Metrics row used by repository tests.
+
+    Individual values can be overridden.
+
+    Example:
+        create_health_metric_row(**{"Step Count (count)": 12000})
+    """
+
+    row = {
+        "Date": "October 08, 2026",
+
+        "Step Count (count)": 10000,
+
+        "Active Energy (kcal)": 650,
+        "Resting Energy (kcal)": 1800,
+
+        "Atrial Fibrillation Burden (%)": 0,
+        "Blood Oxygen Saturation (%)": 98,
+        "Breathing Disturbances (count)": 2,
+        "Cardio Recovery (count/min)": 30,
+
+        "Flights Climbed (count)": 8,
+
+        "Heart Rate [Min] (count/min)": 45,
+        "Heart Rate [Max] (count/min)": 175,
+        "Heart Rate Variability (ms)": 55,
+
+        "Physical Effort (kcal/hr¬∑kg)": 4.5,
+
+        "Respiratory Rate (count/min)": 16,
+        "Resting Heart Rate (count/min)": 52,
+
+        "Source": "Apple Watch",
+    }
+
+    row.update(overrides)
+
+    return row

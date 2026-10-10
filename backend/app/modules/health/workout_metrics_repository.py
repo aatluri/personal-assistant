@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-
+from datetime import date, datetime, timedelta
 from app.config import settings
 from app.database.sheets_client import get_sheets_client
 from app.modules.health.schemas import WorkoutMetrics
@@ -50,6 +49,15 @@ class WorkoutMetricsRepository:
             self._row_to_workout_metrics(row)
             for row in rows
         ]
+
+    def get_workout_metrics_by_date(self,workout_date: date,) -> list[WorkoutMetrics]:
+            workout_metrics = self.get_workout_metrics()
+
+            return [
+                workout_metric
+                for workout_metric in workout_metrics
+                if workout_metric.date == workout_date
+            ]
 
     def get_workout_metric(
         self,

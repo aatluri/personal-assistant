@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date,datetime
 from unittest.mock import Mock
 
 from app.modules.health.workout_metrics_service import (
@@ -35,6 +35,7 @@ def test_get_workout_metrics():
     )
 
     repository.get_workout_metrics.assert_called_once()
+
 
 
 # Verify that Workout Metrics are returned when the requested
@@ -151,4 +152,26 @@ def test_upsert_workout_metric_create():
 
     repository.create_workout_metric.assert_called_once_with(
         workout_metric
+    )
+
+def test_get_workout_metrics_by_date():
+    service = WorkoutMetricsService()
+
+    workout_metrics = [
+        create_workout_metric(),
+    ]
+
+    service._repository = Mock()
+    service._repository.get_workout_metrics_by_date.return_value = (
+        workout_metrics
+    )
+
+    result = service.get_workout_metrics_by_date(
+        date(2026, 10, 8)
+    )
+
+    assert result == workout_metrics
+
+    service._repository.get_workout_metrics_by_date.assert_called_once_with(
+        date(2026, 10, 8)
     )

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from app.modules.health.workout_metrics_repository import (
     WorkoutMetricsRepository,
@@ -46,6 +46,11 @@ class WorkoutMetricsService:
         """
         return self._repository.get_workout_metrics()
 
+
+    def get_workout_metrics_by_date(self,workout_date: date,) -> list[WorkoutMetrics]:
+        return self._repository.get_workout_metrics_by_date(
+            workout_date
+        )
 
     def get_workout_metric(
         self,

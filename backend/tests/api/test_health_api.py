@@ -349,6 +349,29 @@ def test_get_workout_metrics():
 
     service.get_workout_metrics.assert_called_once()
 
+# Verify that Workout Metrics for a specific date are returned successfully.
+def test_get_workout_metrics_by_date():
+    workout_metric = create_workout_metric()
+
+    service = Mock()
+    service.get_workout_metrics_by_date.return_value = [
+        workout_metric
+    ]
+
+    api.workout_metrics_service = service
+
+    response = client.get(
+        "/health/workout-metrics",
+        params={
+            "workout_date": "2026-10-08",
+        },
+    )
+
+    assert response.status_code == 200
+
+    service.get_workout_metrics_by_date.assert_called_once_with(
+        date(2026, 10, 8)
+    )
 
 # Verify that Workout Metrics are returned when the requested
 # Workout Start Time exists.

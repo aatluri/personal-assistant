@@ -18,6 +18,7 @@ import History from "./pages/History/History";
 import LogToday from "./pages/LogToday/LogToday";
 import Settings from "./pages/Settings/Settings";
 import LogBodyMeasurements from "./pages/LogBodyMeasurements/LogBodyMeasurements";
+import LogWorkoutMetrics from "./pages/WorkoutMetrics/LogWorkoutMetrics";
 
 
 function App() {
@@ -73,6 +74,11 @@ function App() {
                     <Route
                         path="/settings"
                         element={<Settings />}
+                    />
+
+                    <Route
+                        path="/workout-metrics"
+                        element={<LogWorkoutMetrics />}
                     />
 
                 </Route>

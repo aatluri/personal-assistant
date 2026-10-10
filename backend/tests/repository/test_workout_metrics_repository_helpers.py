@@ -1,5 +1,5 @@
 from datetime import date, datetime, timedelta
-
+from unittest.mock import Mock
 
 from app.modules.health.workout_metrics_repository import (
     WorkoutMetricsRepository,
@@ -115,3 +115,4 @@ def test_timedelta_to_duration():
     )
 
     assert result == "01:30:45"
+

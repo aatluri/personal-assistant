@@ -12,7 +12,7 @@ Each test follows the same sequence:
    or calls the worksheet with the expected arguments.
 """
 
-from datetime import datetime
+from datetime import date, datetime
 from unittest.mock import Mock
 
 from app.modules.health.workout_metrics_repository import (
@@ -202,3 +202,68 @@ def test_update_workout_metric_not_found():
     assert updated is False
 
     worksheet.update.assert_not_called()
+
+
+
+def test_get_workout_metrics_by_date():
+    repository = WorkoutMetricsRepository()
+
+    workout_1 = create_workout_metric()
+
+    workout_2 = create_workout_metric().model_copy(
+        update={
+            "workout_start_time": datetime(
+                2026,
+                10,
+                8,
+                18,
+                30,
+            )
+        }
+    )
+
+    workout_3 = create_workout_metric().model_copy(
+        update={
+            "date": date(2026, 10, 9),
+            "workout_start_time": datetime(
+                2026,
+                10,
+                9,
+                6,
+                30,
+            ),
+        }
+    )
+
+    repository.get_workout_metrics = Mock(
+        return_value=[
+            workout_1,
+            workout_2,
+            workout_3,
+        ]
+    )
+
+    result = repository.get_workout_metrics_by_date(
+        date(2026, 10, 8)
+    )
+
+    assert result == [
+        workout_1,
+        workout_2,
+    ]
+
+
+def test_get_workout_metrics_by_date_no_workouts():
+    repository = WorkoutMetricsRepository()
+
+    repository.get_workout_metrics = Mock(
+        return_value=[
+            create_workout_metric(),
+        ]
+    )
+
+    result = repository.get_workout_metrics_by_date(
+        date(2026, 10, 9)
+    )
+
+    assert result == []

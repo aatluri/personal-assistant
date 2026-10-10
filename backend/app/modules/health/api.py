@@ -22,6 +22,9 @@ from app.modules.health.schemas import (
     DailyLog,
     BodyMeasurements,
     WorkoutMetrics,
+    SleepMetrics,
+    HealthMetrics,
+    NutritionMetrics
 )
 from app.modules.health.service import HealthService
 from app.modules.health.lab_schemas import (
@@ -34,6 +37,15 @@ from app.modules.health.lab_schemas import (
 )
 from app.modules.health.body_measurements_service import (
     BodyMeasurementsService,
+)
+from app.modules.health.sleep_metrics_service import (
+    SleepMetricsService,
+)
+from app.modules.health.health_metrics_service import (
+    HealthMetricsService,
+)
+from app.modules.health.nutrition_metrics_service import (
+    NutritionMetricsService,
 )
 
 from app.modules.health.workout_metrics_service import (
@@ -101,6 +113,12 @@ health_service = HealthService()
 body_measurements_service = BodyMeasurementsService()
 
 workout_metrics_service = WorkoutMetricsService()
+
+sleep_metrics_service = SleepMetricsService()
+
+health_metrics_service = HealthMetricsService()
+
+nutrition_metrics_service = NutritionMetricsService()
 
 
 @router.get("/status")
@@ -204,12 +222,12 @@ def update_daily_log(log_date: date,daily_log: DailyLog,) -> DailyLog:
 # Endpoints for creating, retrieving and updating Body Measurements.
 # -----------------------------------------------------------------------------
 
-@router.get( "/body-measurements",response_model=list[BodyMeasurements],)
+@router.get( "/body-measurements",response_model=list[BodyMeasurements],tags=["BodyMeasurement Metrics"],)
 def get_body_measurements():
     return body_measurements_service.get_body_measurements()
 
 
-@router.get("/body-measurements/{measurement_date}",response_model=BodyMeasurements,)
+@router.get("/body-measurements/{measurement_date}",response_model=BodyMeasurements,tags=["BodyMeasurement Metrics"],)
 def get_body_measurement(measurement_date: date,) -> BodyMeasurements:
     """
     Return the Body Measurements for a specific date.
@@ -227,7 +245,7 @@ def get_body_measurement(measurement_date: date,) -> BodyMeasurements:
 
     return body_measurement
 
-@router.post("/body-measurements",status_code=status.HTTP_201_CREATED,)
+@router.post("/body-measurements",status_code=status.HTTP_201_CREATED,tags=["BodyMeasurement Metrics"],)
 def create_body_measurement(body_measurement: BodyMeasurements,) -> None:
     """
     Create a new Body Measurements record.
@@ -240,6 +258,7 @@ def create_body_measurement(body_measurement: BodyMeasurements,) -> None:
 @router.put(
     "/body-measurements",
     response_model=BodyMeasurements,
+    tags=["BodyMeasurement Metrics"],
 )
 def update_body_measurement(
     body_measurement: BodyMeasurements,
@@ -267,18 +286,26 @@ def update_body_measurement(
 @router.get(
     "/workout-metrics",
     response_model=list[WorkoutMetrics],
+    tags=["Workout Metrics"],
 )
-def get_workout_metrics() -> list[WorkoutMetrics]:
-    """
-    Return all Workout Metrics records.
-    """
+def get_workout_metrics(
+    workout_date: date | None = None,
+) -> list[WorkoutMetrics]:
+
+    if workout_date is not None:
+        return workout_metrics_service.get_workout_metrics_by_date(
+            workout_date
+        )
 
     return workout_metrics_service.get_workout_metrics()
+
+
 
 
 @router.get(
     "/workout-metric",
     response_model=WorkoutMetrics,
+    tags=["Workout Metrics"],
 )
 def get_workout_metric(
     workout_start_time: datetime,
@@ -305,6 +332,7 @@ def get_workout_metric(
 @router.post(
     "/workout-metrics",
     status_code=status.HTTP_201_CREATED,
+    tags=["Workout Metrics"],
 )
 def create_workout_metric(
     workout_metric: WorkoutMetrics,
@@ -321,6 +349,7 @@ def create_workout_metric(
 @router.put(
     "/workout-metrics",
     response_model=WorkoutMetrics,
+    tags=["Workout Metrics"],
 )
 def update_workout_metric(
     workout_metric: WorkoutMetrics,
@@ -339,8 +368,256 @@ def update_workout_metric(
 
     return workout_metric
 
+# -----------------------------------------------------------------------------
+# Sleep Metrics Endpoints
+#
+# Endpoints for creating, retrieving and updating Sleep Metrics.
+# -----------------------------------------------------------------------------
+
+@router.get(
+    "/sleep-metrics",
+    response_model=list[SleepMetrics],
+    tags=["Sleep Metrics"],
+)
+def get_sleep_metrics() -> list[SleepMetrics]:
+    """
+    Return all Sleep Metrics records.
+    """
+
+    return sleep_metrics_service.get_sleep_metrics()
 
 
+@router.get(
+    "/sleep-metrics/{metric_date}",
+    response_model=SleepMetrics,
+    tags=["Sleep Metrics"],
+)
+def get_sleep_metric(
+    metric_date: date,
+) -> SleepMetrics:
+    """
+    Return the Sleep Metrics for a specific date.
+    """
+
+    sleep_metric = sleep_metrics_service.get_sleep_metric(
+        metric_date
+    )
+
+    if sleep_metric is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Sleep Metrics not found.",
+        )
+
+    return sleep_metric
+
+
+@router.post(
+    "/sleep-metrics",
+    status_code=status.HTTP_201_CREATED,
+    tags=["Sleep Metrics"],
+)
+def create_sleep_metric(
+    sleep_metric: SleepMetrics,
+) -> None:
+    """
+    Create a new Sleep Metrics record.
+    """
+
+    sleep_metrics_service.create_sleep_metric(
+        sleep_metric
+    )
+
+
+@router.put(
+    "/sleep-metrics",
+    response_model=SleepMetrics,
+    tags=["Sleep Metrics"],
+)
+def update_sleep_metric(
+    sleep_metric: SleepMetrics,
+) -> SleepMetrics:
+    """
+    Update or create a Sleep Metrics record.
+
+    The date contained in the request body is used
+    to identify the record.
+    """
+
+    sleep_metrics_service.upsert_sleep_metric(
+        sleep_metric.date,
+        sleep_metric,
+    )
+
+    return sleep_metric
+
+
+# -----------------------------------------------------------------------------
+# Health Metrics Endpoints
+#
+# Endpoints for creating, retrieving and updating Health Metrics.
+# -----------------------------------------------------------------------------
+
+@router.get(
+    "/health-metrics",
+    response_model=list[HealthMetrics],
+    tags=["Health Metrics"],
+)
+def get_health_metrics() -> list[HealthMetrics]:
+    """
+    Return all Health Metrics records.
+    """
+
+    return health_metrics_service.get_health_metrics()
+
+
+@router.get(
+    "/health-metrics/{metric_date}",
+    response_model=HealthMetrics,
+    tags=["Health Metrics"],
+)
+def get_health_metric(
+    metric_date: date,
+) -> HealthMetrics:
+    """
+    Return the Health Metrics for a specific date.
+    """
+
+    health_metric = health_metrics_service.get_health_metric(
+        metric_date
+    )
+
+    if health_metric is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Health Metrics not found.",
+        )
+
+    return health_metric
+
+
+@router.post(
+    "/health-metrics",
+    status_code=status.HTTP_201_CREATED,
+    tags=["Health Metrics"],
+)
+def create_health_metric(
+    health_metric: HealthMetrics,
+) -> None:
+    """
+    Create a new Health Metrics record.
+    """
+
+    health_metrics_service.create_health_metric(
+        health_metric
+    )
+
+
+@router.put(
+    "/health-metrics",
+    response_model=HealthMetrics,
+    tags=["Health Metrics"],
+)
+def update_health_metric(
+    health_metric: HealthMetrics,
+) -> HealthMetrics:
+    """
+    Update or create a Health Metrics record.
+
+    The date contained in the request body is used
+    to identify the record.
+    """
+
+    health_metrics_service.upsert_health_metric(
+        health_metric.date,
+        health_metric,
+    )
+
+    return health_metric
+
+
+# -----------------------------------------------------------------------------
+# Nutrition Metrics Endpoints
+#
+# Endpoints for creating, retrieving and updating Nutrition Metrics.
+# -----------------------------------------------------------------------------
+
+@router.get(
+    "/nutrition-metrics",
+    response_model=list[NutritionMetrics],
+    tags=["Nutrition Metrics"],
+)
+def get_nutrition_metrics() -> list[NutritionMetrics]:
+    """
+    Return all Nutrition Metrics records.
+    """
+
+    return nutrition_metrics_service.get_nutrition_metrics()
+
+
+@router.get(
+    "/nutrition-metrics/{metric_date}",
+    response_model=NutritionMetrics,
+    tags=["Nutrition Metrics"],
+)
+def get_nutrition_metric(
+    metric_date: date,
+) -> NutritionMetrics:
+    """
+    Return the Nutrition Metrics for a specific date.
+    """
+
+    nutrition_metric = nutrition_metrics_service.get_nutrition_metric(
+        metric_date
+    )
+
+    if nutrition_metric is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nutrition Metrics not found.",
+        )
+
+    return nutrition_metric
+
+
+@router.post(
+    "/nutrition-metrics",
+    status_code=status.HTTP_201_CREATED,
+    tags=["Nutrition Metrics"],
+)
+def create_nutrition_metric(
+    nutrition_metric: NutritionMetrics,
+) -> None:
+    """
+    Create a new Nutrition Metrics record.
+    """
+
+    nutrition_metrics_service.create_nutrition_metric(
+        nutrition_metric
+    )
+
+
+@router.put(
+    "/nutrition-metrics",
+    response_model=NutritionMetrics,
+    tags=["Nutrition Metrics"],
+)
+def update_nutrition_metric(
+    nutrition_metric: NutritionMetrics,
+) -> NutritionMetrics:
+    """
+    Update or create a Nutrition Metrics record.
+
+    The date contained in the request body is used
+    to identify the record.
+    """
+
+    nutrition_metrics_service.upsert_nutrition_metric(
+        nutrition_metric.date,
+        nutrition_metric,
+    )
+
+    return nutrition_metric
 # =========================================================
 # LAB REPORTS
 # =========================================================
