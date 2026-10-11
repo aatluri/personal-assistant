@@ -12,10 +12,14 @@
 */
 
 import {
+    Apple,
     BarChart3,
     CalendarDays,
     ClipboardPen,
+    Dumbbell,
     Ellipsis,
+    HeartPulse,
+    Moon,
     Ruler,
     Settings,
 } from "lucide-react";
@@ -45,6 +49,30 @@ export const desktopNavigationItems = [
         label: "Body Measurements",
         shortLabel: "Body",
         icon: Ruler,
+    },
+    {
+        to: "/workout-metrics",
+        label: "Workout Metrics",
+        shortLabel: "Workout",
+        icon: Dumbbell,
+    },
+    {
+        to: "/sleep-metrics",
+        label: "Sleep Metrics",
+        shortLabel: "Sleep",
+        icon: Moon,
+    },
+    {
+        to: "/nutrition-metrics",
+        label: "Nutrition Metrics",
+        shortLabel: "Nutrition",
+        icon: Apple,
+    },
+    {
+        to: "/health-metrics",
+        label: "Health Metrics",
+        shortLabel: "Health",
+        icon: HeartPulse,
     },
     {
         to: "/history",

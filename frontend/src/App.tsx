@@ -19,6 +19,9 @@ import LogToday from "./pages/LogToday/LogToday";
 import Settings from "./pages/Settings/Settings";
 import LogBodyMeasurements from "./pages/LogBodyMeasurements/LogBodyMeasurements";
 import LogWorkoutMetrics from "./pages/WorkoutMetrics/LogWorkoutMetrics";
+import LogSleepMetrics from "./pages/LogSleepMetrics/LogSleepMetrics";
+import LogNutritionMetrics from "./pages/LogNutritionMetrics/LogNutritionMetrics";
+import LogHealthMetrics from "./pages/LogHealthMetrics/LogHealthMetrics";
 
 
 function App() {
@@ -67,6 +70,26 @@ function App() {
                     />
 
                     <Route
+                        path="/workout-metrics"
+                        element={<LogWorkoutMetrics />}
+                    />
+
+                    <Route
+                        path="/sleep-metrics"
+                        element={<LogSleepMetrics />}
+                    />
+
+                    <Route
+                        path="/nutrition-metrics"
+                        element={<LogNutritionMetrics />}
+                    />
+
+                    <Route
+                        path="/health-metrics"
+                        element={<LogHealthMetrics />}
+                    />
+
+                    <Route
                         path="/history"
                         element={<History />}
                     />
@@ -74,11 +97,6 @@ function App() {
                     <Route
                         path="/settings"
                         element={<Settings />}
-                    />
-
-                    <Route
-                        path="/workout-metrics"
-                        element={<LogWorkoutMetrics />}
                     />
 
                 </Route>

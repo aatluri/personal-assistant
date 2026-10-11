@@ -13,6 +13,10 @@
 */
 
 import {
+    Apple,
+    Dumbbell,
+    HeartPulse,
+    Moon,
     Ruler,
     Settings,
     X,
@@ -183,6 +187,187 @@ function MoreMenu({
                                 "
                             >
                                 Log body measurements
+                            </p>
+
+                        </div>
+
+                    </Link>
+
+                    {/* Workout Metrics */}
+                    <Link
+                        to="/workout-metrics"
+                        onClick={onClose}
+                        className="
+                            flex
+                            items-center
+                            gap-4
+                            rounded-2xl
+                            px-4
+                            py-4
+                            transition-colors
+                            hover:bg-slate-50
+                        "
+                    >
+
+                        <Dumbbell
+                            size={24}
+                            className="text-emerald-600"
+                        />
+
+                        <div>
+
+                            <p
+                                className="
+                                    font-medium
+                                    text-slate-900
+                                "
+                            >
+                                Workout Metrics
+                            </p>
+
+                            <p
+                                className="
+                                    text-sm
+                                    text-slate-500
+                                "
+                            >
+                                Log workout metrics
+                            </p>
+
+                        </div>
+
+                    </Link>
+
+
+                    {/* Sleep Metrics */}
+                    <Link
+                        to="/sleep-metrics"
+                        onClick={onClose}
+                        className="
+                            flex
+                            items-center
+                            gap-4
+                            rounded-2xl
+                            px-4
+                            py-4
+                            transition-colors
+                            hover:bg-slate-50
+                        "
+                    >
+
+                        <Moon
+                            size={24}
+                            className="text-indigo-600"
+                        />
+
+                        <div>
+
+                            <p
+                                className="
+                                    font-medium
+                                    text-slate-900
+                                "
+                            >
+                                Sleep Metrics
+                            </p>
+
+                            <p
+                                className="
+                                    text-sm
+                                    text-slate-500
+                                "
+                            >
+                                Log sleep metrics
+                            </p>
+
+                        </div>
+
+                    </Link>
+
+                    {/* Nutrition Metrics */}
+                    <Link
+                        to="/nutrition-metrics"
+                        onClick={onClose}
+                        className="
+                            flex
+                            items-center
+                            gap-4
+                            rounded-2xl
+                            px-4
+                            py-4
+                            transition-colors
+                            hover:bg-slate-50
+                        "
+                    >
+
+                        <Apple
+                            size={24}
+                            className="text-green-600"
+                        />
+
+                        <div>
+
+                            <p
+                                className="
+                                    font-medium
+                                    text-slate-900
+                                "
+                            >
+                                Nutrition Metrics
+                            </p>
+
+                            <p
+                                className="
+                                    text-sm
+                                    text-slate-500
+                                "
+                            >
+                                Log nutrition metrics
+                            </p>
+
+                        </div>
+
+                    </Link>
+
+                    {/* Health Metrics */}
+                    <Link
+                        to="/health-metrics"
+                        onClick={onClose}
+                        className="
+                            flex
+                            items-center
+                            gap-4
+                            rounded-2xl
+                            px-4
+                            py-4
+                            transition-colors
+                            hover:bg-slate-50
+                        "
+                    >
+
+                        <HeartPulse
+                            size={24}
+                            className="text-red-600"
+                        />
+
+                        <div>
+
+                            <p
+                                className="
+                                    font-medium
+                                    text-slate-900
+                                "
+                            >
+                                Health Metrics
+                            </p>
+
+                            <p
+                                className="
+                                    text-sm
+                                    text-slate-500
+                                "
+                            >
+                                Log health metrics
                             </p>
 
                         </div>

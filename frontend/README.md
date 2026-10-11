@@ -617,15 +617,19 @@ The following frontend changes are required:
      ```
    - Create a helper that returns a new empty `BodyMeasurements` object.
 
-3. **Update the API layer**
+3. **Create the API layer**
    - **File:**
      ```text
-     src/api/health.ts
+     src/api/<pageName>.ts
      ```
-   - Add the API methods required by the page.
+   - Create the API methods required by the page.
+   - The API layer is responsible for:
+     - Sending requests to the backend.
+     - Converting backend models into frontend models.
+     - Converting frontend models into backend request models.
    - Example:
-     - `getBodyMeasurement()`
-     - `saveBodyMeasurement()`
+     - `getSleepMetric()`
+     - `saveSleepMetric()`
 
 4. **Create the page**
    - **File:**
@@ -655,11 +659,17 @@ The following frontend changes are required:
    - Add a new route so React Router can load the page.
 
 7. **Update the navigation**
-   - **File:**
+   - **Desktop Navigation:**
      ```text
      src/navigation/navigation.ts
      ```
-   - Add the page to the desktop and/or mobile navigation as appropriate.
+   - Add the page to `desktopNavigationItems`.
+
+   - **Mobile More Menu (if applicable):**
+     ```text
+     src/components/MoreMenu.tsx
+     ```
+   - Add secondary pages to the mobile More menu.
 
 8. **Test the page**
    - Verify the page loads correctly.

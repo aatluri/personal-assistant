@@ -149,7 +149,6 @@ def get_daily_logs() -> list[DailyLog]:
     return health_service.get_daily_logs()
 
 
-
 @router.get("/daily-logs/{log_date}",response_model=DailyLog,tags=["Daily Log Metrics"],)
 def get_daily_log(log_date: date) -> DailyLog:
     """
@@ -167,6 +166,7 @@ def get_daily_log(log_date: date) -> DailyLog:
         )
     return daily_log
 
+
 @router.get("/latest",response_model=DailyLog,tags=["Daily Log Metrics"],)
 def get_latest_daily_log() -> DailyLog:
     """
@@ -182,6 +182,7 @@ def get_latest_daily_log() -> DailyLog:
         )
 
     return latest_log
+
 
 @router.post("/daily-logs",status_code=status.HTTP_201_CREATED,tags=["Daily Log Metrics"],)
 def create_daily_log(daily_log: DailyLog,) -> None:
