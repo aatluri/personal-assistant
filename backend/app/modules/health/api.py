@@ -121,7 +121,7 @@ health_metrics_service = HealthMetricsService()
 nutrition_metrics_service = NutritionMetricsService()
 
 
-@router.get("/status")
+@router.get("/status",tags=["API Health"],)
 def get_health_status() -> dict[str, str]:
     """
     Verify that the Health module is available.
@@ -141,7 +141,7 @@ def get_health_status() -> dict[str, str]:
 # Endpoints for creating, retrieving and updating Daily Logs.
 # -----------------------------------------------------------------------------
 
-@router.get("/daily-logs",response_model=list[DailyLog],)
+@router.get("/daily-logs",response_model=list[DailyLog],tags=["Daily Log Metrics"],)
 def get_daily_logs() -> list[DailyLog]:
     """
     Return all Health Daily Log records.
@@ -150,7 +150,7 @@ def get_daily_logs() -> list[DailyLog]:
 
 
 
-@router.get("/daily-logs/{log_date}",response_model=DailyLog,)
+@router.get("/daily-logs/{log_date}",response_model=DailyLog,tags=["Daily Log Metrics"],)
 def get_daily_log(log_date: date) -> DailyLog:
     """
     Retrieve the Daily Log for the specified date.
@@ -167,9 +167,7 @@ def get_daily_log(log_date: date) -> DailyLog:
         )
     return daily_log
 
-@router.get("/latest",response_model=DailyLog,)
-
-
+@router.get("/latest",response_model=DailyLog,tags=["Daily Log Metrics"],)
 def get_latest_daily_log() -> DailyLog:
     """
     Return the most recent Daily Log.
@@ -185,7 +183,7 @@ def get_latest_daily_log() -> DailyLog:
 
     return latest_log
 
-@router.post("/daily-logs",status_code=status.HTTP_201_CREATED,)
+@router.post("/daily-logs",status_code=status.HTTP_201_CREATED,tags=["Daily Log Metrics"],)
 def create_daily_log(daily_log: DailyLog,) -> None:
     """
     Create a new Daily Log.
@@ -194,7 +192,7 @@ def create_daily_log(daily_log: DailyLog,) -> None:
     health_service.create_daily_log(daily_log)
 
 
-@router.put("/daily-logs/{log_date}", response_model=DailyLog)
+@router.put("/daily-logs/{log_date}", response_model=DailyLog,tags=["Daily Log Metrics"],)
 def update_daily_log(log_date: date,daily_log: DailyLog,) -> DailyLog:
     """
     Update an existing Daily Log or create one if it does not exist.
@@ -633,6 +631,7 @@ def update_nutrition_metric(
     "/lab-reports",
     response_model=LabReport,
     status_code=status.HTTP_201_CREATED,
+    tags=["Lab Reports"],
 )
 def create_lab_report_endpoint(
     report: LabReportCreate,
@@ -647,6 +646,7 @@ def create_lab_report_endpoint(
 @router.get(
     "/lab-reports/{report_key}",
     response_model=LabReport,
+    tags=["Lab Reports"],
 )
 def get_lab_report_endpoint(
     report_key: str,
@@ -669,6 +669,7 @@ def get_lab_report_endpoint(
 @router.get(
     "/lab-reports",
     response_model=list[LabReport],
+    tags=["Lab Reports"],
 )
 def list_lab_reports_endpoint():
     return list_lab_reports()
@@ -681,6 +682,7 @@ def list_lab_reports_endpoint():
 @router.put(
     "/lab-reports/{report_key}",
     response_model=LabReport,
+    tags=["Lab Reports"],
 )
 def update_lab_report_endpoint(
     report_key: str,
@@ -713,6 +715,7 @@ def update_lab_report_endpoint(
     "/lab-marker-definitions",
     response_model=LabMarkerDefinition,
     status_code=status.HTTP_201_CREATED,
+    tags=["Lab Marker Definitions"],
 )
 def create_lab_marker_definition_endpoint(
     definition: LabMarkerDefinition,
@@ -727,6 +730,7 @@ def create_lab_marker_definition_endpoint(
 @router.get(
     "/lab-marker-definitions/{marker_key}",
     response_model=LabMarkerDefinition,
+    tags=["Lab Marker Definitions"],
 )
 def get_lab_marker_definition_endpoint(
     marker_key: str,
@@ -749,6 +753,7 @@ def get_lab_marker_definition_endpoint(
 @router.get(
     "/lab-marker-definitions",
     response_model=list[LabMarkerDefinition],
+    tags=["Lab Marker Definitions"],
 )
 def list_lab_marker_definitions_endpoint():
     return list_lab_marker_definitions()
@@ -761,6 +766,7 @@ def list_lab_marker_definitions_endpoint():
 @router.put(
     "/lab-marker-definitions/{marker_key}",
     response_model=LabMarkerDefinition,
+    tags=["Lab Marker Definitions"],
 )
 def update_lab_marker_definition_endpoint(
     marker_key: str,
@@ -792,6 +798,7 @@ def update_lab_marker_definition_endpoint(
     "/lab-marker-reference-ranges",
     response_model=LabMarkerReferenceRange,
     status_code=status.HTTP_201_CREATED,
+    tags=["Lab Marker Reference Ranges"],
 )
 def create_lab_marker_reference_range_endpoint(
     reference_range: LabMarkerReferenceRange,
@@ -808,6 +815,7 @@ def create_lab_marker_reference_range_endpoint(
 @router.get(
     "/lab-marker-reference-ranges/{marker_key}",
     response_model=LabMarkerReferenceRange,
+    tags=["Lab Marker Reference Ranges"],
 )
 def get_lab_marker_reference_range_endpoint(
     marker_key: str,
@@ -838,6 +846,7 @@ def get_lab_marker_reference_range_endpoint(
 @router.get(
     "/lab-marker-reference-ranges",
     response_model=list[LabMarkerReferenceRange],
+    tags=["Lab Marker Reference Ranges"],
 )
 def list_lab_marker_reference_ranges_endpoint(
     marker_key: str | None = None,
@@ -854,6 +863,7 @@ def list_lab_marker_reference_ranges_endpoint(
 @router.put(
     "/lab-marker-reference-ranges/{marker_key}",
     response_model=LabMarkerReferenceRange,
+    tags=["Lab Marker Reference Ranges"],
 )
 def update_lab_marker_reference_range_endpoint(
     marker_key: str,
@@ -894,6 +904,7 @@ def update_lab_marker_reference_range_endpoint(
     "/lab-marker-interpretations",
     response_model=LabMarkerInterpretation,
     status_code=status.HTTP_201_CREATED,
+    tags=["Lab Marker Interpretations"],
 )
 def create_lab_marker_interpretation_endpoint(
     interpretation: LabMarkerInterpretation,
@@ -910,6 +921,7 @@ def create_lab_marker_interpretation_endpoint(
 @router.get(
     "/lab-marker-interpretations/{marker_key}",
     response_model=LabMarkerInterpretation,
+    tags=["Lab Marker Interpretations"],
 )
 def get_lab_marker_interpretation_endpoint(
     marker_key: str,
@@ -936,6 +948,7 @@ def get_lab_marker_interpretation_endpoint(
 @router.get(
     "/lab-marker-interpretations",
     response_model=list[LabMarkerInterpretation],
+    tags=["Lab Marker Interpretations"],
 )
 def list_lab_marker_interpretations_endpoint(
     marker_key: str | None = None,
@@ -952,6 +965,7 @@ def list_lab_marker_interpretations_endpoint(
 @router.put(
     "/lab-marker-interpretations/{marker_key}",
     response_model=LabMarkerInterpretation,
+    tags=["Lab Marker Interpretations"],
 )
 def update_lab_marker_interpretation_endpoint(
     marker_key: str,
@@ -988,6 +1002,7 @@ def update_lab_marker_interpretation_endpoint(
     "/lab-results",
     response_model=LabResult,
     status_code=status.HTTP_201_CREATED,
+    tags=["Lab Results"],
 )
 def create_lab_result_endpoint(
     result: LabResult,
@@ -1002,6 +1017,7 @@ def create_lab_result_endpoint(
 @router.get(
     "/lab-results/{report_key}",
     response_model=LabResult,
+    tags=["Lab Results"],
 )
 def get_lab_result_endpoint(
     report_key: str,
@@ -1028,6 +1044,7 @@ def get_lab_result_endpoint(
 @router.get(
     "/lab-results",
     response_model=list[LabResult],
+    tags=["Lab Results"],
 )
 def list_lab_results_endpoint(
     report_key: str | None = None,
@@ -1046,6 +1063,7 @@ def list_lab_results_endpoint(
 @router.put(
     "/lab-results/{report_key}",
     response_model=LabResult,
+    tags=["Lab Results"],
 )
 def update_lab_result_endpoint(
     report_key: str,
@@ -1074,6 +1092,7 @@ def update_lab_result_endpoint(
 @router.post(
     "/lab-reports/extract",
     response_model=LabReportExtraction,
+    tags=["Lab Results"],
 )
 async def extract_lab_report_endpoint(
     file: UploadFile = File(...),
