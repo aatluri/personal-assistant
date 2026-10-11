@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
     getWorkoutMetricsByDate,
     saveWorkoutMetric,
-} from "../../api/health";
+} from "../../api/workoutMetrics";
 
 import type { WorkoutMetrics } from "../../types/WorkoutMetrics";
 

@@ -18,7 +18,7 @@ import History from "./pages/History/History";
 import LogToday from "./pages/LogToday/LogToday";
 import Settings from "./pages/Settings/Settings";
 import LogBodyMeasurements from "./pages/LogBodyMeasurements/LogBodyMeasurements";
-import LogWorkoutMetrics from "./pages/WorkoutMetrics/LogWorkoutMetrics";
+import LogWorkoutMetrics from "./pages/LogWorkoutMetrics/LogWorkoutMetrics";
 import LogSleepMetrics from "./pages/LogSleepMetrics/LogSleepMetrics";
 import LogNutritionMetrics from "./pages/LogNutritionMetrics/LogNutritionMetrics";
 import LogHealthMetrics from "./pages/LogHealthMetrics/LogHealthMetrics";

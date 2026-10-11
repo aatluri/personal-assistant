@@ -17,7 +17,7 @@ import { User } from "lucide-react";
 import {
     getBodyMeasurement,
     saveBodyMeasurement,
-} from "../../api/health";
+} from "../../api/bodyMeasurements";
 
 import type { BodyMeasurements } from "../../types/BodyMeasurements";
 
