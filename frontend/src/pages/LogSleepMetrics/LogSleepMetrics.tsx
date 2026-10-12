@@ -62,6 +62,8 @@ function LogSleepMetrics() {
         "idle" | "saving" | "saved" | "failed"
     >("saved");
 
+    const [loadError, setLoadError] = useState(false);
+
     /*
     Holds the Sleep Metrics currently
     displayed on the page.
@@ -81,6 +83,7 @@ function LogSleepMetrics() {
         async function loadSleepMetrics() {
 
             setIsLoading(true);
+            setLoadError(false);
 
             try {
 
@@ -110,6 +113,7 @@ function LogSleepMetrics() {
                     "Failed to load Sleep Metrics:",
                     error
                 );
+                setLoadError(true);
 
             } finally {
 
@@ -195,6 +199,24 @@ function LogSleepMetrics() {
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                 />
+
+
+                {loadError && (
+                    <div
+                        className="
+                            rounded-xl
+                            border
+                            border-red-200
+                            bg-red-50
+                            px-4
+                            py-3
+                            text-sm
+                            text-red-700
+                        "
+                    >
+                        Unable to load data. Please check your connection and try again.
+                    </div>
+                )}
 
                 <CollapsibleCard
                     title="Sleep Metrics"

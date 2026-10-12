@@ -1,3 +1,235 @@
+/*
+LogWorkoutMetrics
+-----------------
+
+This is the main page component for viewing, creating,
+editing, and saving workouts for a selected date.
+
+STATE MANAGEMENT
+
+This component owns all Workout Metrics state.
+
+1. selectedDate
+   The date currently being viewed.
+
+   When selectedDate changes, the useEffect runs again
+   and loads all workouts belonging to that date from
+   the backend.
+
+2. workouts
+   An array containing all workouts returned by the
+   backend for selectedDate.
+
+   Unlike most of our other health metrics, Workout
+   Metrics can contain multiple records for the same date.
+
+   Example:
+       Morning Run
+       Evening Strength Training
+
+3. selectedWorkout
+   The workout currently being displayed in
+   WorkoutMetricsSection.
+
+   This is separate from the workouts array because the
+   user may be editing the selected workout before those
+   changes have been saved to the backend.
+
+   When workouts are loaded, the first workout is selected
+   automatically.
+
+   Clicking a workout card changes selectedWorkout.
+
+   Clicking Add Workout creates a new empty WorkoutMetrics
+   object and makes that the selectedWorkout.
+
+4. isLoading
+   Indicates whether workouts are currently being loaded
+   from the backend.
+
+   While true, the page displays LoadingSpinner.
+
+5. isDirty
+   Indicates whether selectedWorkout contains changes that
+   have not yet been saved.
+
+   Editing any field or creating a new workout sets this
+   to true.
+
+   Loading an existing workout or successfully saving a
+   workout sets it back to false.
+
+6. saveStatus
+   Tracks the state of the save operation.
+
+       "idle"   = unsaved changes exist
+       "saving" = save request is running
+       "saved"  = data is saved
+       "failed" = previous save attempt failed
+
+   SaveButton uses isDirty and saveStatus together to
+   determine its label and whether it should be enabled.
+
+7. loadError
+   Indicates that loading workouts from the backend failed.
+   When true, an error message is displayed.
+
+
+LOADING WORKOUTS
+
+The useEffect depends on selectedDate.
+
+Whenever selectedDate changes:
+
+    getWorkoutMetricsByDate(selectedDate)
+
+is called.
+
+The returned array is stored in workouts.
+
+If at least one workout exists:
+    selectedWorkout = first workout
+
+If no workouts exist:
+    selectedWorkout = null
+
+Because the data has just come from the backend:
+    isDirty = false
+    saveStatus = "saved"
+
+
+ADDING A WORKOUT
+
+handleAddWorkout() creates a new object using:
+
+    createEmptyWorkoutMetrics()
+
+Its date is set to selectedDate and it becomes the
+selectedWorkout.
+
+It is NOT immediately added to the workouts array because
+it has not been saved yet.
+
+Instead:
+
+    isDirty = true
+    saveStatus = "idle"
+
+The new workout appears in WorkoutMetricsSection where the
+user can enter its details.
+
+
+EDITING A WORKOUT
+
+WorkoutMetricsSection receives:
+
+    workoutMetrics={selectedWorkout}
+
+and a setWorkoutMetrics callback.
+
+WorkoutMetricsSection does not own the workout state.
+
+Whenever one of its fields changes, it calls the callback
+provided by this page.
+
+The callback:
+
+    1. Sets isDirty to true.
+    2. Sets saveStatus to "idle".
+    3. Updates selectedWorkout.
+
+This keeps the actual state management in the page while
+allowing WorkoutMetricsSection to behave like an editable
+form.
+
+
+SAVING A WORKOUT
+
+handleSaveWorkout() first validates the required fields:
+
+    workoutStartTime
+    workoutEndTime
+    workoutDuration
+
+Workout Start Time is particularly important because it is
+used as the unique key for a workout.
+
+If validation succeeds:
+
+    saveStatus = "saving"
+
+The selected workout is sent to the backend using:
+
+    saveWorkoutMetric(selectedWorkout)
+
+After a successful save, we deliberately reload all workouts
+for selectedDate from the backend instead of manually adding
+or modifying the workouts array.
+
+This ensures the frontend state reflects exactly what is
+stored by the backend.
+
+After reloading, the saved workout is found by matching its
+workoutStartTime and is made selectedWorkout again.
+
+Finally:
+
+    isDirty = false
+    saveStatus = "saved"
+
+If saving fails:
+
+    saveStatus = "failed"
+
+isDirty remains true because the user's changes have not
+actually been saved.
+
+
+WORKOUT LIST VS SELECTED WORKOUT
+
+The two pieces of state have different purposes:
+
+    workouts
+        = saved workouts loaded from the backend
+
+    selectedWorkout
+        = the workout currently being viewed/edited
+
+This distinction is important when creating or editing a
+workout.
+
+Changes are made to selectedWorkout first. The workouts
+array is refreshed from the backend only after a successful
+save.
+
+
+COMPONENT RESPONSIBILITIES
+
+LogWorkoutMetrics handles:
+
+    - loading data
+    - backend API calls
+    - selected date
+    - list of workouts
+    - selected workout
+    - creating workouts
+    - save validation
+    - saving
+    - dirty state
+    - save status
+    - load errors
+
+WorkoutMetricsSection handles:
+
+    - displaying the workout form
+    - converting input changes into WorkoutMetrics updates
+
+SaveButton handles:
+
+    - displaying the appropriate save status
+    - enabling/disabling the save action
+*/
+
 import { useEffect, useState } from "react";
 
 import {
@@ -43,12 +275,14 @@ export default function LogWorkoutMetrics() {
     const [workouts, setWorkouts] =
         useState<WorkoutMetrics[]>([]);
 
+
     /*
     Workout currently selected for
     viewing or editing.
     */
     const [selectedWorkout, setSelectedWorkout] =
         useState<WorkoutMetrics | null>(null);
+
 
     /*
     Tracks whether Workout Metrics are
@@ -62,16 +296,41 @@ export default function LogWorkoutMetrics() {
     Tracks whether the selected workout
     has unsaved changes.
     */
-    const [isDirty, setIsDirty] = useState(false);
+    const [isDirty, setIsDirty] =
+        useState(false);
+
 
     /*
     Tracks the current save status.
 
-    Used by SaveButton to show whether
-    the workout is saved or saving.
+    idle:
+        There are unsaved changes.
+
+    saving:
+        A save request is in progress.
+
+    saved:
+        All changes have been saved.
+
+    failed:
+        The previous save failed.
     */
     const [saveStatus, setSaveStatus] =
-        useState<"saved" | "saving">("saved");
+        useState<
+            "idle" |
+            "saving" |
+            "saved" |
+            "failed"
+        >("saved");
+
+
+    /*
+    Tracks whether loading Workout Metrics
+    failed.
+    */
+    const [loadError, setLoadError] =
+        useState(false);
+
 
     /*
     Load Workout Metrics whenever the
@@ -82,6 +341,7 @@ export default function LogWorkoutMetrics() {
         async function loadWorkoutMetrics() {
 
             setIsLoading(true);
+            setLoadError(false);
 
             try {
 
@@ -91,25 +351,52 @@ export default function LogWorkoutMetrics() {
                     );
 
                 setWorkouts(data);
+
+
                 /*
                 If workouts exist for the selected date,
                 select the first one automatically.
 
-                If there are no workouts, nothing is selected.
+                If there are no workouts,
+                nothing is selected.
                 */
                 if (data.length > 0) {
-                    setSelectedWorkout(data[0]);
+
+                    setSelectedWorkout(
+                        data[0]
+                    );
+
                 } else {
-                    setSelectedWorkout(null);
+
+                    setSelectedWorkout(
+                        null
+                    );
                 }
+
+
+                /*
+                The data has just been loaded from
+                the backend, so there are no
+                unsaved changes.
+                */
                 setIsDirty(false);
+                setSaveStatus("saved");
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to load Workout Metrics:",
+                    error
+                );
+
+                setLoadError(true);
 
             } finally {
 
                 setIsLoading(false);
-
             }
         }
+
 
         loadWorkoutMetrics();
 
@@ -124,20 +411,31 @@ export default function LogWorkoutMetrics() {
         return <LoadingSpinner />;
     }
 
+
     /*
     Creates a new empty workout for
     the currently selected date.
     */
     function handleAddWorkout() {
 
-        const newWorkout = createEmptyWorkoutMetrics();
+        const newWorkout =
+            createEmptyWorkoutMetrics();
 
-        newWorkout.date = selectedDate;
+        newWorkout.date =
+            selectedDate;
 
-        setSelectedWorkout(newWorkout);
+        setSelectedWorkout(
+            newWorkout
+        );
 
+
+        /*
+        The new workout has not been saved yet.
+        */
         setIsDirty(true);
+        setSaveStatus("idle");
     }
+
 
     async function handleSaveWorkout() {
 
@@ -145,40 +443,58 @@ export default function LogWorkoutMetrics() {
             return;
         }
 
+
         /*
         Workout Start Time is required because
         it is the unique key for a workout.
         */
         if (!selectedWorkout.workoutStartTime) {
-            alert("Please enter a Workout Start Time.");
+
+            alert(
+                "Please enter a Workout Start Time."
+            );
+
             return;
         }
+
 
         /*
         Workout End Time is required by the
         backend WorkoutMetrics model.
         */
         if (!selectedWorkout.workoutEndTime) {
-            alert("Please enter a Workout End Time.");
+
+            alert(
+                "Please enter a Workout End Time."
+            );
+
             return;
         }
+
 
         /*
         Workout Duration is required by the
         backend WorkoutMetrics model.
         */
         if (!selectedWorkout.workoutDuration) {
-            alert("Please enter a Workout Duration.");
+
+            alert(
+                "Please enter a Workout Duration."
+            );
+
             return;
         }
 
+
         setSaveStatus("saving");
+
 
         try {
 
             await saveWorkoutMetric(
                 selectedWorkout
             );
+
 
             /*
             Reload the workouts for this date.
@@ -192,7 +508,9 @@ export default function LogWorkoutMetrics() {
                     selectedDate
                 );
 
+
             setWorkouts(data);
+
 
             /*
             Find the workout that was just saved
@@ -205,25 +523,45 @@ export default function LogWorkoutMetrics() {
                         selectedWorkout.workoutStartTime
                 );
 
+
             if (savedWorkout) {
-                setSelectedWorkout(savedWorkout);
+
+                setSelectedWorkout(
+                    savedWorkout
+                );
             }
 
+
+            /*
+            The save completed successfully.
+            */
             setIsDirty(false);
             setSaveStatus("saved");
 
         } catch (error) {
 
-            setSaveStatus("saved");
+            /*
+            Keep the workout dirty because the
+            changes have not been saved.
+
+            Mark the save as failed so the
+            SaveButton allows the user to retry.
+            */
+            setSaveStatus("failed");
+
 
             console.error(
                 "Failed to save Workout Metrics:",
                 error
             );
 
-            alert("Failed to save Workout Metrics.");
+
+            alert(
+                "Failed to save Workout Metrics."
+            );
         }
     }
+
 
     return (
         <PageContainer>
@@ -232,12 +570,33 @@ export default function LogWorkoutMetrics() {
                 isDirty={isDirty}
             />
 
+
             <DateSection
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
             />
 
+
+            {loadError && (
+                <div
+                    className="
+                        rounded-xl
+                        border
+                        border-red-200
+                        bg-red-50
+                        px-4
+                        py-3
+                        text-sm
+                        text-red-700
+                    "
+                >
+                    Unable to load data. Please check your connection and try again.
+                </div>
+            )}
+
+
             <div>
+
                 <div className="mt-8 mb-8">
 
                     {/* Section heading and Add Workout action */}
@@ -246,6 +605,7 @@ export default function LogWorkoutMetrics() {
                         <h2 className="text-lg font-semibold text-slate-900">
                             Workouts
                         </h2>
+
 
                         <button
                             type="button"
@@ -278,13 +638,23 @@ export default function LogWorkoutMetrics() {
                                     selectedWorkout?.workoutStartTime ===
                                     workout.workoutStartTime;
 
+
                                 return (
                                     <button
                                         key={workout.workoutStartTime}
                                         type="button"
                                         onClick={() => {
-                                            setSelectedWorkout(workout);
+
+                                            setSelectedWorkout(
+                                                workout
+                                            );
+
+                                            /*
+                                            This workout came from the backend,
+                                            so it has no unsaved changes.
+                                            */
                                             setIsDirty(false);
+                                            setSaveStatus("saved");
                                         }}
                                         className={`
                                             rounded-2xl border p-4
@@ -297,6 +667,7 @@ export default function LogWorkoutMetrics() {
                                             }
                                         `}
                                     >
+
                                         <div className="flex items-start gap-3">
 
                                             <div
@@ -312,6 +683,7 @@ export default function LogWorkoutMetrics() {
                                                 />
                                             </div>
 
+
                                             <div className="min-w-0">
 
                                                 <div
@@ -325,6 +697,7 @@ export default function LogWorkoutMetrics() {
                                                         "Workout"}
                                                 </div>
 
+
                                                 <div
                                                     className="
                                                         mt-1 text-sm
@@ -333,6 +706,7 @@ export default function LogWorkoutMetrics() {
                                                 >
                                                     {workout.workoutStartTime}
                                                 </div>
+
 
                                                 <div
                                                     className="
@@ -377,13 +751,23 @@ export default function LogWorkoutMetrics() {
 
                 </div>
 
+
                 {selectedWorkout && (
+
                     <WorkoutMetricsSection
                         workoutMetrics={selectedWorkout}
 
                         setWorkoutMetrics={(action) => {
 
+                            /*
+                            Any edit creates an unsaved change.
+
+                            Reset saveStatus to idle so the
+                            SaveButton displays "Save Changes".
+                            */
                             setIsDirty(true);
+                            setSaveStatus("idle");
+
 
                             setSelectedWorkout((previous) => {
 
@@ -391,23 +775,35 @@ export default function LogWorkoutMetrics() {
                                     return null;
                                 }
 
+
                                 if (typeof action === "function") {
-                                    return action(previous);
+
+                                    return action(
+                                        previous
+                                    );
                                 }
+
 
                                 return action;
                             });
                         }}
                     />
+
                 )}
+
+
                 {selectedWorkout && (
-                <SaveButton
-                    onClick={handleSaveWorkout}
-                    isDirty={isDirty}
-                    saveStatus={saveStatus}
-                />
+
+                    <SaveButton
+                        onClick={handleSaveWorkout}
+                        isDirty={isDirty}
+                        saveStatus={saveStatus}
+                    />
+
                 )}
+
             </div>
+
         </PageContainer>
     );
 }

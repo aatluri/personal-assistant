@@ -53,6 +53,8 @@ function LogHealthMetrics() {
             createEmptyHealthMetrics()
         );
 
+    const [loadError, setLoadError] = useState(false);
+
 
     /*
     Reload Health Metrics whenever the selected
@@ -63,6 +65,7 @@ function LogHealthMetrics() {
         async function loadHealthMetrics() {
 
             setIsLoading(true);
+            setLoadError(false);
 
             try {
 
@@ -90,6 +93,8 @@ function LogHealthMetrics() {
                     "Failed to load Health Metrics:",
                     error
                 );
+
+                setLoadError(true);
 
             } finally {
 
@@ -169,6 +174,23 @@ function LogHealthMetrics() {
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                 />
+
+                {loadError && (
+                    <div
+                        className="
+                            rounded-xl
+                            border
+                            border-red-200
+                            bg-red-50
+                            px-4
+                            py-3
+                            text-sm
+                            text-red-700
+                        "
+                    >
+                        Unable to load data. Please check your connection and try again.
+                    </div>
+                )}
 
                 <CollapsibleCard
                     title="Health Metrics"

@@ -72,6 +72,9 @@ function LogNutritionMetrics() {
         );
 
 
+    const [loadError, setLoadError] = useState(false);
+
+
     /*
     Whenever the selected date changes,
     retrieve Nutrition Metrics from the backend.
@@ -81,6 +84,7 @@ function LogNutritionMetrics() {
         async function loadNutritionMetrics() {
 
             setIsLoading(true);
+            setLoadError(false);
 
             try {
 
@@ -110,6 +114,7 @@ function LogNutritionMetrics() {
                     "Failed to load Nutrition Metrics:",
                     error
                 );
+                setLoadError(true);
 
             } finally {
 
@@ -195,6 +200,23 @@ function LogNutritionMetrics() {
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                 />
+
+                {loadError && (
+                    <div
+                        className="
+                            rounded-xl
+                            border
+                            border-red-200
+                            bg-red-50
+                            px-4
+                            py-3
+                            text-sm
+                            text-red-700
+                        "
+                    >
+                        Unable to load data. Please check your connection and try again.
+                    </div>
+                )}
 
                 <CollapsibleCard
                     title="Nutrition Metrics"

@@ -67,7 +67,7 @@ function LogBodyMeasurements() {
     */
     const [isLoading, setIsLoading] = useState(true);
     const [isDirty, setIsDirty] = useState(false);
-
+    const [loadError, setLoadError] = useState(false);
     const [saveStatus, setSaveStatus] = useState<
         "idle" | "saving" | "saved" | "failed"
     >("saved");
@@ -101,6 +101,7 @@ function LogBodyMeasurements() {
         async function loadBodyMeasurements() {
 
             setIsLoading(true);
+            setLoadError(false);
 
             try {
 
@@ -124,10 +125,12 @@ function LogBodyMeasurements() {
 
             } catch (error) {
 
+
                 console.error(
                     "Failed to load Body Measurements:",
                     error
                 );
+                setLoadError(true);
 
             } finally {
 
@@ -235,6 +238,27 @@ function LogBodyMeasurements() {
                     selectedDate={selectedDate}
                     setSelectedDate={setSelectedDate}
                 />
+
+
+                {loadError && (
+
+                    <div
+                        className="
+                            rounded-xl
+                            border
+                            border-red-200
+                            bg-red-50
+                            px-4
+                            py-3
+                            text-sm
+                            text-red-700
+                        "
+                    >
+                        Unable to load data. Please check your connection and try again.
+                    </div>
+
+                )}
+
 
                 <CollapsibleCard
                     title="Body Measurements"
