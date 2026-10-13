@@ -6,40 +6,74 @@ import {
 
 import {
     afterEach,
+    beforeEach,
     describe,
     expect,
     test,
+    vi,
 } from "vitest";
 
 import App from "./App";
 
-/*
-    Clean up the rendered components after each test.
+import * as workoutMetricsApi from "./api/workoutMetrics";
+import * as sleepMetricsApi from "./api/sleepMetrics";
+import * as nutritionMetricsApi from "./api/nutritionMetrics";
+import * as healthMetricsApi from "./api/healthMetrics";
 
-    This ensures each test starts with
-    a clean virtual DOM.
-*/
+
+vi.mock("./api/workoutMetrics", () => ({
+    getWorkoutMetricsByDate: vi.fn(),
+    saveWorkoutMetric: vi.fn(),
+}));
+
+vi.mock("./api/sleepMetrics", () => ({
+    getSleepMetric: vi.fn(),
+    saveSleepMetric: vi.fn(),
+}));
+
+vi.mock("./api/nutritionMetrics", () => ({
+    getNutritionMetric: vi.fn(),
+    saveNutritionMetric: vi.fn(),
+}));
+
+vi.mock("./api/healthMetrics", () => ({
+    getHealthMetric: vi.fn(),
+    saveHealthMetric: vi.fn(),
+}));
+
+
 afterEach(() => {
     cleanup();
 });
 
-/*
-    App Tests
 
-    Each test follows the same sequence:
+beforeEach(() => {
 
-    1. Set the browser URL.
-    2. Render the App.
-    3. Verify that the correct page is displayed.
+    vi.clearAllMocks();
 
-    The tests verify:
-    - Each route renders the correct page.
-*/
+    // Workout Metrics can contain multiple records per date.
+    vi.mocked(
+        workoutMetricsApi.getWorkoutMetricsByDate
+    ).mockResolvedValue([]);
+
+    // These metric pages contain one record per date.
+    vi.mocked(
+        sleepMetricsApi.getSleepMetric
+    ).mockResolvedValue(null);
+
+    vi.mocked(
+        nutritionMetricsApi.getNutritionMetric
+    ).mockResolvedValue(null);
+
+    vi.mocked(
+        healthMetricsApi.getHealthMetric
+    ).mockResolvedValue(null);
+
+});
+
 
 describe("App", () => {
 
-    // Verify that navigating to the Dashboard route
-    // displays the Dashboard page.
     test("renders Dashboard route", () => {
 
         window.history.pushState(
@@ -62,8 +96,6 @@ describe("App", () => {
     });
 
 
-    // Verify that navigating to the Log Today route
-    // displays the Log Today page.
     test("renders Log Today route", () => {
 
         window.history.pushState(
@@ -81,8 +113,6 @@ describe("App", () => {
     });
 
 
-    // Verify that navigating to the Body Measurements
-    // route displays the Body Measurements page.
     test("renders Body Measurements route", () => {
 
         window.history.pushState(
@@ -100,8 +130,74 @@ describe("App", () => {
     });
 
 
-    // Verify that navigating to the History route
-    // displays the History page.
+    test("renders Workout Metrics route", async () => {
+
+        window.history.pushState(
+            {},
+            "",
+            "/workout-metrics"
+        );
+
+        render(<App />);
+
+        expect(
+            await screen.findByText("Workouts")
+        ).toBeInTheDocument();
+
+    });
+
+
+    test("renders Sleep Metrics route", async () => {
+
+        window.history.pushState(
+            {},
+            "",
+            "/sleep-metrics"
+        );
+
+        render(<App />);
+
+        expect(
+            await screen.findByText("Sleep Metrics")
+        ).toBeInTheDocument();
+
+    });
+
+
+    test("renders Nutrition Metrics route", async () => {
+
+        window.history.pushState(
+            {},
+            "",
+            "/nutrition-metrics"
+        );
+
+        render(<App />);
+
+        expect(
+            await screen.findByText("Nutrition Metrics")
+        ).toBeInTheDocument();
+
+    });
+
+
+    test("renders Health Metrics route", async () => {
+
+        window.history.pushState(
+            {},
+            "",
+            "/health-metrics"
+        );
+
+        render(<App />);
+
+        expect(
+            await screen.findByText("Health Metrics")
+        ).toBeInTheDocument();
+
+    });
+
+
     test("renders History route", () => {
 
         window.history.pushState(
@@ -124,8 +220,6 @@ describe("App", () => {
     });
 
 
-    // Verify that navigating to the Settings route
-    // displays the Settings page.
     test("renders Settings route", () => {
 
         window.history.pushState(
