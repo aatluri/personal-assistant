@@ -19,6 +19,7 @@ env/
 
 # Credentials
 backend/credentials/
+data_importer/credentials/
 
 # Logs
 *.log

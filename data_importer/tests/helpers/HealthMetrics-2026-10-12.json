@@ -1,0 +1,678 @@
+{
+  "data" : {
+    "metrics" : [
+      {
+        "name" : "active_energy",
+        "units" : "kcal",
+        "data" : [
+          {
+            "source" : "ADARSH’s Apple Watch|Withings",
+            "qty" : 301.96316587905153,
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ]
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 13
+          }
+        ],
+        "name" : "apple_stand_hour",
+        "units" : "count"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 56,
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ],
+        "name" : "apple_stand_time",
+        "units" : "min"
+      },
+      {
+        "name" : "biotin",
+        "data" : [
+          {
+            "qty" : 1.3824000000000001,
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "units" : "mcg"
+      },
+      {
+        "units" : "%",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 95.833333333333329,
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ],
+        "name" : "blood_oxygen_saturation"
+      },
+      {
+        "data" : [
+          {
+            "qty" : 26.147844314575195,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Withings"
+          }
+        ],
+        "name" : "body_fat_percentage",
+        "units" : "%"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 27.224851608276367,
+            "source" : "Withings"
+          }
+        ],
+        "units" : "count",
+        "name" : "body_mass_index"
+      },
+      {
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 73.038362047102964
+          }
+        ],
+        "units" : "mg",
+        "name" : "caffeine"
+      },
+      {
+        "name" : "calcium",
+        "units" : "mg",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 444.76895117138389
+          }
+        ]
+      },
+      {
+        "name" : "carbohydrates",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "qty" : 128.85525398970924,
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "units" : "g"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 700.14854530856417,
+            "source" : "Foodnoms"
+          }
+        ],
+        "name" : "cholesterol",
+        "units" : "mg"
+      },
+      {
+        "units" : "mg",
+        "name" : "copper",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Foodnoms",
+            "qty" : 0.66995945338450735
+          }
+        ]
+      },
+      {
+        "units" : "kcal",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 1903.3880324764116
+          }
+        ],
+        "name" : "dietary_energy"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 54.134606603484457
+          }
+        ],
+        "name" : "environmental_audio_exposure",
+        "units" : "dBASPL"
+      },
+      {
+        "name" : "fiber",
+        "data" : [
+          {
+            "qty" : 20.999300000000002,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Foodnoms"
+          }
+        ],
+        "units" : "g"
+      },
+      {
+        "name" : "folate",
+        "units" : "mcg",
+        "data" : [
+          {
+            "qty" : 171.12884339019732,
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ]
+      },
+      {
+        "name" : "headphone_audio_exposure",
+        "data" : [
+          {
+            "source" : "ADARSH’s iPhone 12 pro max",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 66.04853437062178
+          }
+        ],
+        "units" : "dBASPL"
+      },
+      {
+        "data" : [
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "Max" : 107,
+            "Avg" : 47.892513452088977,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "Min" : 37
+          }
+        ],
+        "name" : "heart_rate",
+        "units" : "count\/min"
+      },
+      {
+        "units" : "ms",
+        "data" : [
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 75.166652053071118
+          }
+        ],
+        "name" : "heart_rate_variability"
+      },
+      {
+        "name" : "iron",
+        "units" : "mg",
+        "data" : [
+          {
+            "qty" : 7.2053768678039463,
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ]
+      },
+      {
+        "data" : [
+          {
+            "qty" : 131.10890160256852,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Withings"
+          }
+        ],
+        "name" : "lean_body_mass",
+        "units" : "lb"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 237.31886780394609,
+            "source" : "Foodnoms"
+          }
+        ],
+        "units" : "mg",
+        "name" : "magnesium"
+      },
+      {
+        "name" : "manganese",
+        "data" : [
+          {
+            "qty" : 0.23959999999999998,
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "units" : "mg"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Foodnoms",
+            "qty" : 1.6800000000000002
+          }
+        ],
+        "units" : "mcg",
+        "name" : "molybdenum"
+      },
+      {
+        "name" : "monounsaturated_fat",
+        "units" : "g",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Foodnoms",
+            "qty" : 31.891712719308853
+          }
+        ]
+      },
+      {
+        "name" : "niacin",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 8.5223970018428723,
+            "source" : "Foodnoms"
+          }
+        ],
+        "units" : "mg"
+      },
+      {
+        "units" : "mg",
+        "name" : "phosphorus",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 665.33669778687636
+          }
+        ]
+      },
+      {
+        "name" : "physical_effort",
+        "units" : "kcal\/hr·kg",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 3.3663265449660167
+          }
+        ]
+      },
+      {
+        "name" : "polyunsaturated_fat",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 17.160608954263104,
+            "source" : "Foodnoms"
+          }
+        ],
+        "units" : "g"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Foodnoms",
+            "qty" : 1921.2810025304291
+          }
+        ],
+        "name" : "potassium",
+        "units" : "mg"
+      },
+      {
+        "name" : "protein",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 110.76380735383653
+          }
+        ],
+        "units" : "g"
+      },
+      {
+        "data" : [
+          {
+            "qty" : 17.040816326530614,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ],
+        "units" : "count\/min",
+        "name" : "respiratory_rate"
+      },
+      {
+        "name" : "basal_energy_burned",
+        "units" : "kcal",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 1845.3776789350886,
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ]
+      },
+      {
+        "units" : "count\/min",
+        "data" : [
+          {
+            "qty" : 43,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "name" : "resting_heart_rate"
+      },
+      {
+        "name" : "riboflavin",
+        "units" : "mg",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "qty" : 0.67362215914023194,
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ]
+      },
+      {
+        "name" : "saturated_fat",
+        "units" : "g",
+        "data" : [
+          {
+            "qty" : 32.303865863331765,
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ]
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 69.065959051177572,
+            "source" : "Foodnoms"
+          }
+        ],
+        "units" : "mcg",
+        "name" : "selenium"
+      },
+      {
+        "data" : [
+          {
+            "sleepEnd" : "2026-10-12 07:24:32 +0530",
+            "sleepStart" : "2026-10-11 23:59:40 +0530",
+            "inBedEnd" : "2026-10-12 07:24:32 +0530",
+            "rem" : 2.2268496308392951,
+            "asleep" : 0,
+            "totalSleep" : 7.2311092640293966,
+            "inBedStart" : "2026-10-11 23:59:40 +0530",
+            "core" : 4.1034824874997131,
+            "inBed" : 0,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "awake" : 0.18348037805822159,
+            "deep" : 0.90077714569038825,
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ],
+        "name" : "sleep_analysis",
+        "units" : "hr"
+      },
+      {
+        "units" : "mg",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 2082.8800633788173
+          }
+        ],
+        "name" : "sodium"
+      },
+      {
+        "name" : "stair_speed_down",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 0.8382001600031882,
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ],
+        "units" : "ft\/s"
+      },
+      {
+        "data" : [
+          {
+            "qty" : 4042,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "name" : "step_count",
+        "units" : "count"
+      },
+      {
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "qty" : 21.803088073218703,
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "name" : "dietary_sugar",
+        "units" : "g"
+      },
+      {
+        "name" : "thiamin",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 0.42301210423746699,
+            "source" : "Foodnoms"
+          }
+        ],
+        "units" : "mg"
+      },
+      {
+        "name" : "total_fat",
+        "units" : "g",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 106.25185883182397,
+            "source" : "Foodnoms"
+          }
+        ]
+      },
+      {
+        "name" : "vitamin_a",
+        "data" : [
+          {
+            "qty" : 555.54089218567378,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Foodnoms"
+          }
+        ],
+        "units" : "mcg"
+      },
+      {
+        "data" : [
+          {
+            "qty" : 1.2586788728648048,
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "name" : "vitamin_b12",
+        "units" : "mcg"
+      },
+      {
+        "name" : "vitamin_b6",
+        "units" : "mg",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 0.44666494762766423,
+            "source" : "Foodnoms"
+          }
+        ]
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Foodnoms",
+            "qty" : 18.346884339019731
+          }
+        ],
+        "units" : "mg",
+        "name" : "vitamin_c"
+      },
+      {
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "qty" : 4.0423060341183827,
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "name" : "vitamin_d",
+        "units" : "mcg"
+      },
+      {
+        "units" : "mg",
+        "data" : [
+          {
+            "qty" : 6.6479084337952354,
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "name" : "vitamin_e"
+      },
+      {
+        "name" : "vitamin_k",
+        "units" : "mcg",
+        "data" : [
+          {
+            "source" : "Foodnoms",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 30.645545577421547
+          }
+        ]
+      },
+      {
+        "units" : "mi",
+        "name" : "walking_running_distance",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 1.8954728449085758,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          }
+        ]
+      },
+      {
+        "name" : "walking_asymmetry_percentage",
+        "data" : [
+          {
+            "qty" : 6.666666666666667,
+            "source" : "ADARSH’s iPhone 12 pro max",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "units" : "%"
+      },
+      {
+        "data" : [
+          {
+            "qty" : 30.599999999999998,
+            "source" : "ADARSH’s iPhone 12 pro max",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ],
+        "name" : "walking_double_support_percentage",
+        "units" : "%"
+      },
+      {
+        "data" : [
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 75
+          }
+        ],
+        "units" : "count\/min",
+        "name" : "walking_heart_rate_average"
+      },
+      {
+        "name" : "walking_speed",
+        "units" : "mi\/hr",
+        "data" : [
+          {
+            "qty" : 2.2698324139963795,
+            "source" : "ADARSH’s iPhone 12 pro max",
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ]
+      },
+      {
+        "units" : "in",
+        "name" : "walking_step_length",
+        "data" : [
+          {
+            "source" : "ADARSH’s iPhone 12 pro max",
+            "qty" : 24.062065771190369,
+            "date" : "2026-10-12 00:00:00 +0530"
+          }
+        ]
+      },
+      {
+        "name" : "dietary_water",
+        "units" : "fl_oz_us",
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 119.54744040255206,
+            "source" : "Foodnoms"
+          }
+        ]
+      },
+      {
+        "units" : "lb",
+        "data" : [
+          {
+            "qty" : 177.5647316252014,
+            "date" : "2026-10-12 00:00:00 +0530",
+            "source" : "Withings"
+          }
+        ],
+        "name" : "weight_body_mass"
+      },
+      {
+        "data" : [
+          {
+            "date" : "2026-10-12 00:00:00 +0530",
+            "qty" : 4.6927673067667763,
+            "source" : "Foodnoms"
+          }
+        ],
+        "name" : "zinc",
+        "units" : "mg"
+      }
+    ]
+  }
+}

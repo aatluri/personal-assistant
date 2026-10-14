@@ -8,8 +8,10 @@ class Settings(BaseSettings):
     Values are loaded from the .env file.
     """
 
-    # Base URL of the Personal Assistant backend API.
     PERSONAL_ASSISTANT_API_URL: str
+    GOOGLE_SERVICE_ACCOUNT_FILE: str
+    HEALTH_METRICS_DRIVE_FOLDER_ID: str
+    HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -17,5 +19,4 @@ class Settings(BaseSettings):
     )
 
 
-# Single settings instance that can be imported throughout the application.
 settings = Settings()
