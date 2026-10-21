@@ -6,6 +6,12 @@ from app.config import settings
 from app.modules.health.importers.health_metrics_importer import (
     import_health_metrics,
 )
+from app.modules.health.importers.nutrition_metrics_importer import (
+    import_nutrition_metrics,
+)
+from app.modules.health.importers.sleep_metrics_importer import (
+    import_sleep_metrics,
+)
 
 
 FAILED_PREFIX = "FAILED_"
@@ -18,6 +24,9 @@ def process_health_metrics_files() -> list[dict]:
     """
     Process all Health Metrics JSON files currently waiting
     in the Google Drive incoming folder.
+
+    Each file contains Health Metrics, Nutrition Metrics,
+    and Sleep Metrics data.
     """
 
     drive_client = GoogleDriveClient()
@@ -40,16 +49,39 @@ def process_health_metrics_files() -> list[dict]:
         print(f"Processing: {file_name}")
 
         try:
+            # Read the JSON file only once.
             export_data = drive_client.read_json_file(
                 file_id
             )
 
-            result = import_health_metrics(
+            # Import Health Metrics.
+            health_result = import_health_metrics(
                 export_data,
                 backend_client,
             )
 
-            results.append(result)
+            # Import Nutrition Metrics.
+            nutrition_result = import_nutrition_metrics(
+                export_data,
+                backend_client,
+            )
+
+            # Import Sleep Metrics.
+            sleep_result = import_sleep_metrics(
+                export_data,
+                backend_client,
+            )
+
+            # The file is considered successfully processed
+            # only if all three imports complete successfully.
+            results.append(
+                {
+                    "file_name": file_name,
+                    "health_metrics": health_result,
+                    "nutrition_metrics": nutrition_result,
+                    "sleep_metrics": sleep_result,
+                }
+            )
 
             # If this file failed during a previous run,
             # restore its original filename after success.

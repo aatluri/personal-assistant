@@ -1,7 +1,7 @@
 from datetime import datetime, date
 
 from app.config import settings
-from app.database.sheets_client import get_sheets_client
+from app.database.sheets_client import get_spreadsheet
 from app.modules.health.schemas import SleepMetrics
 
 
@@ -133,14 +133,10 @@ class SleepMetricsRepository:
 
     def _get_sleep_metrics_worksheet(self):
         """
-        Return the Sleep_Metrics worksheet.
+        Return the Sleep_Metrics worksheet from the shared spreadsheet.
         """
 
-        client = get_sheets_client()
-
-        spreadsheet = client.open_by_key(
-            settings.GOOGLE_SHEETS_SPREADSHEET_ID
-        )
+        spreadsheet = get_spreadsheet()
 
         return spreadsheet.worksheet(
             settings.HEALTH_SLEEP_METRICS_WORKSHEET

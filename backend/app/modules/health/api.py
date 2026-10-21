@@ -41,7 +41,7 @@ from app.modules.health.body_measurements_service import (
 from app.modules.health.sleep_metrics_service import (
     SleepMetricsService,
 )
-from app.modules.health.health_metrics_service import (
+from app.modules.health.health_metrics.health_metrics_service import (
     HealthMetricsService,
 )
 from app.modules.health.nutrition_metrics_service import (

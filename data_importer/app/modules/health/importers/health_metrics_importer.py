@@ -6,10 +6,14 @@ from app.modules.health.mappings.health_metrics_mapping import (
 )
 
 
-def build_health_metrics_payload(export_data: dict) -> dict:
+def build_health_metrics_payload(
+    export_data: dict,
+) -> dict | None:
     """
     Transform Health Auto Export JSON into the payload expected
     by the Personal Assistant Health Metrics API.
+
+    Returns None if the export contains no Health Metrics data.
     """
 
     # Get all metrics from the Health Auto Export JSON.
@@ -56,8 +60,6 @@ def build_health_metrics_payload(export_data: dict) -> dict:
         # Most metrics use "qty".
         # Heart Rate uses fields such as "Min" and "Max".
         # The mapping determines which field to use.
-
-        # Extract the value from the Health Auto Export record.
         value = data_record.get(value_field)
 
         # Apply any type conversion defined in the mapping.
@@ -82,11 +84,13 @@ def build_health_metrics_payload(export_data: dict) -> dict:
 
                 record_date = parsed_date.date().isoformat()
 
-    # A Health Metrics record must always have a date.
+    # If none of the Health Metrics in our mapping contained
+    # data, there is nothing to import for this file.
+    #
+    # Missing data is valid and should not cause the entire
+    # Health Auto Export file to fail.
     if record_date is None:
-        raise ValueError(
-            "Unable to determine Health Metrics date from export data."
-        )
+        return None
 
     # Add fields that do not come from the mapping.
     payload["date"] = record_date
@@ -98,14 +102,22 @@ def build_health_metrics_payload(export_data: dict) -> dict:
 def import_health_metrics(
     export_data: dict,
     backend_client: BackendClient,
-) -> dict:
+) -> dict | None:
     """
     Import Health Metrics into the Personal Assistant backend.
+
+    If the export contains no Health Metrics data,
+    nothing is imported.
     """
 
     # Convert the Health Auto Export JSON into the format
     # expected by the Personal Assistant backend.
     payload = build_health_metrics_payload(export_data)
+
+    # No Health Metrics data exists in this export.
+    # This is not considered an error.
+    if payload is None:
+        return None
 
     # Send the Health Metrics record to the backend.
     #

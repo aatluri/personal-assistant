@@ -1,14 +1,14 @@
 from datetime import datetime, date
 
 from app.config import settings
-from app.database.sheets_client import get_sheets_client
+from app.database.sheets_client import get_spreadsheet
 from app.modules.health.schemas import HealthMetrics
 
 
 DATE_FORMAT = "%B %d, %Y"
 
 
-class HealthMetricsRepository:
+class HealthMetricsGoogleSheetsRepository:
     """
     Repository responsible for Health Metrics data access.
 
@@ -132,14 +132,10 @@ class HealthMetricsRepository:
 
     def _get_health_metrics_worksheet(self):
         """
-        Return the Health_Metrics worksheet.
+        Return the Health_Metrics worksheet from the shared spreadsheet.
         """
 
-        client = get_sheets_client()
-
-        spreadsheet = client.open_by_key(
-            settings.GOOGLE_SHEETS_SPREADSHEET_ID
-        )
+        spreadsheet = get_spreadsheet()
 
         return spreadsheet.worksheet(
             settings.HEALTH_HEALTH_METRICS_WORKSHEET

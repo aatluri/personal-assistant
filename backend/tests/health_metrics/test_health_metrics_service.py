@@ -1,7 +1,7 @@
 from datetime import date
 from unittest.mock import Mock
 
-from app.modules.health.health_metrics_service import (
+from app.modules.health.health_metrics.health_metrics_service import (
     HealthMetricsService,
 )
 from tests.helpers.test_data import create_health_metric

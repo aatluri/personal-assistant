@@ -10,8 +10,8 @@ Tests the repository's helper methods responsible for:
 
 from datetime import date
 
-from app.modules.health.health_metrics_repository import (
-    HealthMetricsRepository,
+from app.modules.health.health_metrics.health_metrics_google_sheets_repository import (
+    HealthMetricsGoogleSheetsRepository,
 )
 from tests.helpers.test_data import (
     create_health_metric,
@@ -23,7 +23,7 @@ from tests.helpers.test_data import (
 
 def test_health_metric_to_row():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     health_metric = create_health_metric()
 
@@ -59,7 +59,7 @@ def test_health_metric_to_row():
 
 def test_row_to_health_metric():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     row = create_health_metric_row()
 
@@ -95,7 +95,7 @@ def test_row_to_health_metric():
 
 def test_row_to_health_metric_handles_empty_values():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     row = create_health_metric_row(
         **{

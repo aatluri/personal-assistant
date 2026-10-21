@@ -1,7 +1,7 @@
 from datetime import date
 
-from app.modules.health.health_metrics_repository import (
-    HealthMetricsRepository,
+from app.modules.health.health_metrics.health_metrics_google_sheets_repository import (
+    HealthMetricsGoogleSheetsRepository,
 )
 from app.modules.health.schemas import HealthMetrics
 
@@ -31,7 +31,7 @@ class HealthMetricsService:
         As the application grows, dependency injection can be used
         instead of creating the repository directly.
         """
-        self._repository = HealthMetricsRepository()
+        self._repository = HealthMetricsGoogleSheetsRepository()
 
 
     # -------------------------------------------------------------------------

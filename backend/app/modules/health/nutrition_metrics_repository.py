@@ -1,7 +1,7 @@
 from datetime import datetime, date
 
 from app.config import settings
-from app.database.sheets_client import get_sheets_client
+from app.database.sheets_client import get_spreadsheet
 from app.modules.health.schemas import NutritionMetrics
 
 
@@ -132,14 +132,10 @@ class NutritionMetricsRepository:
 
     def _get_nutrition_metrics_worksheet(self):
         """
-        Return the Nutrition_Metrics worksheet.
+        Return the Nutrition_Metrics worksheet from the shared spreadsheet.
         """
 
-        client = get_sheets_client()
-
-        spreadsheet = client.open_by_key(
-            settings.GOOGLE_SHEETS_SPREADSHEET_ID
-        )
+        spreadsheet = get_spreadsheet()
 
         return spreadsheet.worksheet(
             settings.HEALTH_NUTRITION_METRICS_WORKSHEET

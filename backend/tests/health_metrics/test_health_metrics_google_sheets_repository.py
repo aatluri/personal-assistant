@@ -15,8 +15,8 @@ Each test follows the same sequence:
 from datetime import date
 from unittest.mock import Mock
 
-from app.modules.health.health_metrics_repository import (
-    HealthMetricsRepository,
+from app.modules.health.health_metrics.health_metrics_google_sheets_repository import (
+    HealthMetricsGoogleSheetsRepository,
 )
 from tests.helpers.test_data import (
     create_health_metric,
@@ -32,7 +32,7 @@ from tests.helpers.test_data import (
 
 def test_get_health_metrics():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     worksheet = Mock()
 
@@ -63,7 +63,7 @@ def test_get_health_metrics():
 
 def test_get_health_metric_found():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     repository.get_health_metrics = Mock(
         return_value=[
@@ -83,7 +83,7 @@ def test_get_health_metric_found():
 
 def test_get_health_metric_not_found():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     repository.get_health_metrics = Mock(
         return_value=[]
@@ -100,7 +100,7 @@ def test_get_health_metric_not_found():
 
 def test_create_health_metric():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     worksheet = Mock()
 
@@ -126,7 +126,7 @@ def test_create_health_metric():
 
 def test_update_health_metric_found():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     worksheet = Mock()
 
@@ -153,7 +153,7 @@ def test_update_health_metric_found():
 
 def test_update_health_metric_not_found():
 
-    repository = HealthMetricsRepository()
+    repository = HealthMetricsGoogleSheetsRepository()
 
     worksheet = Mock()
 
