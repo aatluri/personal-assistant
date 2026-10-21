@@ -7,15 +7,13 @@ from app.database.sheets_client import get_spreadsheet
 BASE_URL = "http://127.0.0.1:8000"
 
 TEST_DATE = "2099-01-01"
+TEST_SHEET_DATE = "January 01, 2099"
 TEST_SOURCE = "E2E Test"
 
 
-def delete_test_row_from_google_sheets() -> None:
+def delete_test_rows_from_google_sheets() -> None:
     """
-    Delete the E2E test row directly from Google Sheets.
-
-    This is cleanup code only. All application functionality in the
-    actual test is exercised through the backend API.
+    Delete all E2E test rows directly from Google Sheets.
     """
 
     spreadsheet = get_spreadsheet()
@@ -32,17 +30,19 @@ def delete_test_row_from_google_sheets() -> None:
     headers = rows[0]
     date_column_index = headers.index("Date")
 
-    # Google Sheets row numbers start at 1.
-    # Row 1 contains the headers, so data begins at row 2.
+    matching_row_numbers = []
+
     for sheet_row_number, row in enumerate(rows[1:], start=2):
 
         if (
             len(row) > date_column_index
-            and row[date_column_index] == "January 01, 2099"
+            and row[date_column_index] == TEST_SHEET_DATE
         ):
-            worksheet.delete_rows(sheet_row_number)
-            return
+            matching_row_numbers.append(sheet_row_number)
 
+    # Delete bottom-to-top so row numbers do not shift.
+    for sheet_row_number in reversed(matching_row_numbers):
+        worksheet.delete_rows(sheet_row_number)
 
 def test_health_metrics_e2e():
     """
@@ -58,7 +58,7 @@ def test_health_metrics_e2e():
     """
 
     # Remove any test row left behind by a previous interrupted run.
-    delete_test_row_from_google_sheets()
+    delete_test_rows_from_google_sheets()
 
     try:
 
@@ -169,4 +169,4 @@ def test_health_metrics_e2e():
     finally:
 
         # Always remove the test row, even when an assertion fails.
-        delete_test_row_from_google_sheets()
+        delete_test_rows_from_google_sheets()

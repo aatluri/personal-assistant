@@ -18,16 +18,23 @@ from datetime import date, datetime
 from fastapi import HTTPException
 from fastapi import status
 
-from app.modules.health.schemas import (
-    DailyLog,
+from app.modules.health.body_measurements_metrics.body_measurements_schema import (
     BodyMeasurements,
-    WorkoutMetrics,
-    SleepMetrics,
-    HealthMetrics,
-    NutritionMetrics
 )
-from app.modules.health.service import HealthService
-from app.modules.health.lab_schemas import (
+from app.modules.health.workout_metrics.workout_metrics_schema import (
+    WorkoutMetrics,
+)
+from app.modules.health.sleep_metrics.sleep_metrics_schema import (
+    SleepMetrics,
+)
+from app.modules.health.health_metrics.health_metrics_schema import (
+    HealthMetrics,
+)
+from app.modules.health.nutrition_metrics.nutrition_metrics_schema import (
+    NutritionMetrics,
+)
+
+from app.modules.health.labs.lab_schemas import (
     LabReport,
     LabReportCreate,
     LabMarkerDefinition,
@@ -35,28 +42,28 @@ from app.modules.health.lab_schemas import (
     LabMarkerReferenceRange,
     LabResult,
 )
-from app.modules.health.body_measurements_service import (
+from app.modules.health.body_measurements_metrics.body_measurements_service import (
     BodyMeasurementsService,
 )
-from app.modules.health.sleep_metrics_service import (
+from app.modules.health.sleep_metrics.sleep_metrics_service import (
     SleepMetricsService,
 )
 from app.modules.health.health_metrics.health_metrics_service import (
     HealthMetricsService,
 )
-from app.modules.health.nutrition_metrics_service import (
+from app.modules.health.nutrition_metrics.nutrition_metrics_service import (
     NutritionMetricsService,
 )
 
-from app.modules.health.workout_metrics_service import (
+from app.modules.health.workout_metrics.workout_metrics_service import (
     WorkoutMetricsService,
 )
 
-from app.modules.health.lab_save_schemas import (
+from app.modules.health.labs.lab_save_schemas import (
     LabReportSaveRequest,
     LabReportSaveResponse,
 )
-from app.modules.health.lab_repository import (
+from app.modules.health.labs.lab_repository import (
     get_lab_report,
     list_lab_reports,
     update_lab_report,
@@ -77,7 +84,7 @@ from app.modules.health.lab_repository import (
     list_lab_results,
     update_lab_result,
 )
-from app.modules.health.lab_service import (
+from app.modules.health.labs.lab_service import (
     create_lab_report_record,
     save_lab_report,
 )
@@ -86,11 +93,11 @@ from fastapi import UploadFile, File
 import os
 import tempfile
 
-from app.modules.health.lab_extraction_schemas import (
+from app.modules.health.labs.lab_extraction_schemas import (
     LabReportExtraction,
 )
 
-from app.modules.health.lab_extraction_service import (
+from app.modules.health.labs.lab_extraction_service import (
     extract_lab_report,
 )
 
@@ -107,8 +114,6 @@ router = APIRouter(
 #
 # The API layer does not communicate with Google Sheets directly.
 # It calls the service layer, which then calls the repository.
-
-health_service = HealthService()
 
 body_measurements_service = BodyMeasurementsService()
 
@@ -134,85 +139,6 @@ def get_health_status() -> dict[str, str]:
         "module": "health",
     }
 
-
-# -----------------------------------------------------------------------------
-# Daily Log Endpoints
-#
-# Endpoints for creating, retrieving and updating Daily Logs.
-# -----------------------------------------------------------------------------
-
-@router.get("/daily-logs",response_model=list[DailyLog],tags=["Daily Log Metrics"],)
-def get_daily_logs() -> list[DailyLog]:
-    """
-    Return all Health Daily Log records.
-    """
-    return health_service.get_daily_logs()
-
-
-@router.get("/daily-logs/{log_date}",response_model=DailyLog,tags=["Daily Log Metrics"],)
-def get_daily_log(log_date: date) -> DailyLog:
-    """
-    Retrieve the Daily Log for the specified date.
-
-    Returns:
-        - The matching DailyLog if found.
-        - HTTP 404 if no record exists.
-    """
-    daily_log = health_service.get_daily_log(log_date)
-    if daily_log is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Daily Log not found.",
-        )
-    return daily_log
-
-
-@router.get("/latest",response_model=DailyLog,tags=["Daily Log Metrics"],)
-def get_latest_daily_log() -> DailyLog:
-    """
-    Return the most recent Daily Log.
-    """
-
-    latest_log = health_service.get_latest_daily_log()
-
-    if latest_log is None:
-        raise HTTPException(
-            status_code=404,
-            detail="No Daily Logs found.",
-        )
-
-    return latest_log
-
-
-@router.post("/daily-logs",status_code=status.HTTP_201_CREATED,tags=["Daily Log Metrics"],)
-def create_daily_log(daily_log: DailyLog,) -> None:
-    """
-    Create a new Daily Log.
-    """
-
-    health_service.create_daily_log(daily_log)
-
-
-@router.put("/daily-logs/{log_date}", response_model=DailyLog,tags=["Daily Log Metrics"],)
-def update_daily_log(log_date: date,daily_log: DailyLog,) -> DailyLog:
-    """
-    Update an existing Daily Log or create one if it does not exist.
-
-    The date in the URL must match the date contained in the request body.
-    """
-
-    if daily_log.date != log_date:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The URL date must match the Daily Log date.",
-        )
-
-    health_service.upsert_daily_log(
-        log_date,
-        daily_log,
-    )
-
-    return daily_log
 
 
 # -----------------------------------------------------------------------------

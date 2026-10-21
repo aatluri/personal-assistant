@@ -2,7 +2,9 @@ from datetime import datetime, date
 
 from app.config import settings
 from app.database.sheets_client import get_spreadsheet
-from app.modules.health.schemas import HealthMetrics
+from app.modules.health.health_metrics.health_metrics_schema import (
+    HealthMetrics,
+)
 
 
 DATE_FORMAT = "%B %d, %Y"

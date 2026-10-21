@@ -466,6 +466,187 @@ git commit -m "Meaningful commit message"
 git push
 ```
 
+## Lab Module Overview
+
+The Lab module stores bloodwork and other laboratory results and provides the configuration data required to identify and interpret those results.
+
+The module uses five main entities:
+
+| Entity | Purpose | How Data Is Added |
+|---|---|---|
+| `Lab_Reports` | Stores one record for each laboratory report | Created when a user saves a manually entered or PDF-extracted report |
+| `Lab_Results` | Stores the individual marker results belonging to a laboratory report | Created when a user saves a manually entered or PDF-extracted report |
+| `Lab_Marker_Definitions` | Stores the master list of laboratory markers supported by the application | Managed through the Lab administration UI |
+| `Lab_Marker_Reference_Ranges` | Stores reference ranges for markers based on factors such as gender and age | Managed through the Lab administration UI |
+| `Lab_Marker_Interpretations` | Stores interpretation ranges and labels used to interpret marker values | Managed through the Lab administration UI |
+
+### Two Types of Lab Data
+
+The five entities are divided into two broad groups.
+
+#### 1. Lab Configuration / Master Data
+
+The following entities define the laboratory markers understood by the application and how their values should be interpreted:
+
+```text
+Lab_Marker_Definitions
+Lab_Marker_Reference_Ranges
+Lab_Marker_Interpretations
+```
+
+This data is maintained through the Lab administration UI. It is not created when a laboratory report is uploaded or saved.
+
+##### `Lab_Marker_Definitions`
+
+Defines the laboratory markers supported by the application.
+
+Examples include:
+
+```text
+LDL Cholesterol
+HDL Cholesterol
+Fasting Glucose
+Vitamin D
+Vitamin B12
+```
+
+Each definition provides a canonical `Marker_Key` and supporting metadata such as the display name, category, panel, default unit, and active status. The canonical key allows results from different laboratories, which may use different reported names, to refer to the same marker consistently.
+
+`Lab_Marker_Definitions` is also used during PDF extraction. Active marker definitions are supplied to the extraction process so that reported test names can be mapped to existing `Marker_Key` values. The extraction process never invents new marker keys; tests that cannot be mapped confidently are returned as unmapped results.
+
+##### `Lab_Marker_Reference_Ranges`
+
+Defines the expected or normal reference ranges for laboratory markers.
+
+Reference ranges may vary according to factors such as:
+
+- Gender
+- Minimum age
+- Maximum age
+- Unit
+- Laboratory or source
+
+This data allows the application to select an applicable reference range and determine whether a result is below, within, or above that range.
+
+Each reference-range record belongs to a marker definition through its `Marker_Key`.
+
+##### `Lab_Marker_Interpretations`
+
+Defines application-level interpretation bands and labels for marker values.
+
+Examples include:
+
+```text
+Low
+Optimal
+Normal
+Borderline High
+High
+Deficient
+Insufficient
+```
+
+Interpretations can be used to present a more meaningful description of a value than a simple in-range or out-of-range status. Each interpretation record belongs to a marker definition through its `Marker_Key`.
+
+Reference ranges and interpretations serve different purposes:
+
+- A reference range describes the expected range supplied by a laboratory or configured source.
+- An interpretation assigns a descriptive application label to a value or value range.
+
+#### 2. Actual Laboratory Report Data
+
+The following entities contain reports saved by the user and the individual results within those reports:
+
+```text
+Lab_Reports
+Lab_Results
+```
+
+These records are created only when the user saves a report. A report may be entered manually or populated from a PDF extraction for review before saving.
+
+##### `Lab_Reports`
+
+Stores one parent record for each saved laboratory report.
+
+A report record contains report-level information such as:
+
+- Report identifier
+- Report date
+- Collection date
+- Report date and time
+- Report type
+- Laboratory name
+- Source file name
+- Other report-level metadata
+
+`Lab_Reports` does not store the individual test values. Those values are stored in `Lab_Results`.
+
+##### `Lab_Results`
+
+Stores the individual test or marker results that belong to a saved laboratory report.
+
+Each result is linked to:
+
+- One report through its report identifier
+- One supported marker through its `Marker_Key`
+
+A result can store information such as:
+
+- The test name as reported by the laboratory
+- A numerical value
+- A text value for non-numeric results
+- The reported unit
+- Other result-level metadata
+
+Numeric results are stored separately from text results. For example, `95` may be stored as a numerical value, while values such as `Negative`, `Nil`, or `1 to 2` may be stored as text.
+
+### Entity Relationships
+
+The main relationships are:
+
+```text
+Lab_Reports
+    └── Lab_Results
+
+Lab_Marker_Definitions
+    ├── Lab_Results
+    ├── Lab_Marker_Reference_Ranges
+    └── Lab_Marker_Interpretations
+```
+
+In practical terms:
+
+- One `Lab_Reports` record can have many `Lab_Results` records.
+- Each `Lab_Results` record belongs to one `Lab_Reports` record.
+- Each mapped `Lab_Results` record refers to one `Lab_Marker_Definitions` record through `Marker_Key`.
+- One `Lab_Marker_Definitions` record can have many `Lab_Results` records across different reports.
+- One `Lab_Marker_Definitions` record can have multiple `Lab_Marker_Reference_Ranges` records.
+- One `Lab_Marker_Definitions` record can have multiple `Lab_Marker_Interpretations` records.
+
+### Google Sheets Worksheets
+
+The entities are stored in the following Google Sheets worksheets:
+
+| Entity | Worksheet Name |
+|---|---|
+| `Lab_Reports` | `Lab_Reports` |
+| `Lab_Results` | `Lab_Results` |
+| `Lab_Marker_Definitions` | `Lab_Marker_Definitions` |
+| `Lab_Marker_Reference_Ranges` | `Lab_Marker_Reference_Ranges` |
+| `Lab_Marker_Interpretations` | `Lab_Marker_Interpretations` |
+
+### PDF Extraction and Saving Scope
+
+PDF extraction and report saving mainly concern `Lab_Reports` and `Lab_Results`:
+
+- PDF extraction reads report metadata and individual test results from an uploaded file.
+- Extraction returns structured data to the UI but does not save it to Google Sheets.
+- The user can review and edit the extracted data before saving.
+- Saving creates one `Lab_Reports` record and the associated `Lab_Results` records.
+
+`Lab_Marker_Definitions` also participates in extraction, but only as existing master data used to map reported test names to supported `Marker_Key` values. Uploading or saving a report does not create or modify marker definitions, reference ranges, or interpretations.
+
+
 
 
 ## Lab Report PDF Extraction

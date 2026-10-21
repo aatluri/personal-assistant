@@ -3,7 +3,9 @@ from datetime import date
 from app.modules.health.health_metrics.health_metrics_google_sheets_repository import (
     HealthMetricsGoogleSheetsRepository,
 )
-from app.modules.health.schemas import HealthMetrics
+from app.modules.health.health_metrics.health_metrics_schema import (
+    HealthMetrics,
+)
 
 
 class HealthMetricsService:
