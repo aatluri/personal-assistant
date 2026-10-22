@@ -18,16 +18,17 @@ from app.modules.health.nutrition_metrics.nutrition_metrics_schema import (
 
 from datetime import date, datetime, timedelta
 
-
 # ---------------------------------------------------------------------
 # Body Measurements
-# Creates a dictionary that looks exactly like a row returned by Google Sheets. It's used when testing methods that read from the worksheet.
 # ---------------------------------------------------------------------
 
 def create_body_measurement_row(**overrides) -> dict:
     """
     Return a fake Google Sheets Body Measurements row.
-    Creates a dictionary that looks exactly like a row returned by Google Sheets. It's used when testing methods that read from the worksheet.
+
+    Creates a dictionary that looks exactly like a row returned
+    by Google Sheets. It's used when testing methods that read
+    from the worksheet.
     """
 
     row = {
@@ -35,7 +36,6 @@ def create_body_measurement_row(**overrides) -> dict:
 
         "Weight (kg)": 80,
         "Body Mass Index": 26.7,
-
 
         "Body Fat (%)": 18,
         "Muscle Mass (%)": 42,
@@ -60,6 +60,8 @@ def create_body_measurement_row(**overrides) -> dict:
         "Right Calf (cm)": 39,
 
         "Notes": "",
+        "Source": "Manual",
+        "Updated_DateTime": "October 22, 2026 12:00:00",
     }
 
     row.update(overrides)
@@ -70,7 +72,10 @@ def create_body_measurement_row(**overrides) -> dict:
 def create_body_measurement(**overrides) -> BodyMeasurements:
     """
     Return a BodyMeasurements object.
-    Creates a BodyMeasurements object. It's used when testing methods that write to the worksheet or when a repository/service method expects a DailyLog object as input.
+
+    Creates a BodyMeasurements object used when testing methods
+    that write to the worksheet or when a repository/service
+    method expects a BodyMeasurements object as input.
     """
 
     measurement = BodyMeasurements(
@@ -78,7 +83,6 @@ def create_body_measurement(**overrides) -> BodyMeasurements:
 
         weight_kg=80,
         body_mass_index=26.7,
-
 
         body_fat_percent=18,
         muscle_mass_percent=42,
@@ -103,9 +107,12 @@ def create_body_measurement(**overrides) -> BodyMeasurements:
         right_calf_cm=39,
 
         notes=None,
+        source="Manual",
     )
 
-    return measurement.model_copy(update=overrides)
+    return measurement.model_copy(
+        update=overrides
+    )
 
 # ---------------------------------------------------------------------
 # Workout Metrics

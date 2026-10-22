@@ -1,13 +1,14 @@
 from datetime import datetime, date
 
 from app.config import settings
-from app.database.sheets_client import get_sheets_client
+from app.database.sheets_client import get_spreadsheet
 from app.modules.health.body_measurements_metrics.body_measurements_schema import (
     BodyMeasurements,
 )
 
 
 DATE_FORMAT = "%B %d, %Y"
+DATETIME_FORMAT = "%B %d, %Y %H:%M:%S"
 
 class BodyMeasurementsGoogleSheetsRepository:
     """
@@ -135,7 +136,7 @@ class BodyMeasurementsGoogleSheetsRepository:
                 )
                 # This has the columns which are to be considered in the respective google sheet.
                 worksheet.update(
-                    range_name=f"A{row_number}:T{row_number}",
+                    range_name=f"A{row_number}:V{row_number}",
                     values=[updated_row],
                     value_input_option="USER_ENTERED",
                 )
@@ -150,13 +151,7 @@ class BodyMeasurementsGoogleSheetsRepository:
         Return the BodyMeasurements worksheet.
         """
 
-        # Create an authenticated Google Sheets client.
-        client = get_sheets_client()
-
-        # Open the spreadsheet using its ID from the application configuration.
-        spreadsheet = client.open_by_key(
-            settings.GOOGLE_SHEETS_SPREADSHEET_ID
-        )
+        spreadsheet = get_spreadsheet()
 
         return spreadsheet.worksheet(
             settings.HEALTH_BODY_MEASUREMENTS_WORKSHEET
@@ -201,6 +196,9 @@ class BodyMeasurementsGoogleSheetsRepository:
             body_measurement.right_calf_cm,
 
             body_measurement.notes,
+
+            body_measurement.source,
+            datetime.now().strftime(DATETIME_FORMAT),
 
         ]
 
@@ -261,4 +259,6 @@ class BodyMeasurementsGoogleSheetsRepository:
 
 
             notes=row["Notes"] or None,
+
+            source=row["Source"] or None,
         )

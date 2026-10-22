@@ -88,3 +88,28 @@ class BackendClient:
         response.raise_for_status()
 
         return response.json()
+
+
+    def update_workout_metrics(self, payload: dict) -> dict:
+        """
+        Send a Workout Metrics record to the Personal Assistant backend.
+
+        The backend is responsible for persisting the record.
+        The Data Importer does not interact with Google Sheets directly.
+        """
+
+        url = f"{self.base_url}/health/workout-metrics"
+
+        response = httpx.put(
+            url,
+            json=payload,
+            timeout=10.0,
+        )
+
+        if response.status_code != 200:
+            print("Payload sent:", payload)
+            print("Backend response:", response.text)
+
+        response.raise_for_status()
+
+        return response.json()

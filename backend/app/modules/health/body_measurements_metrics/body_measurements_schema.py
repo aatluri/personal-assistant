@@ -37,3 +37,5 @@ class BodyMeasurements(BaseModel):
     right_calf_cm: float | None = None
 
     notes: str | None = None
+
+    source: str | None = None

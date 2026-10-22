@@ -1,3 +1,6 @@
+import time
+from datetime import datetime
+
 import requests
 
 from app.config import settings
@@ -8,6 +11,8 @@ BASE_URL = "http://127.0.0.1:8000"
 
 TEST_DATE = "2099-01-01"
 TEST_SHEET_DATE = "January 01, 2099"
+
+DATETIME_FORMAT = "%B %d, %Y %H:%M:%S"
 
 
 def delete_test_rows_from_google_sheets() -> None:
@@ -31,32 +36,68 @@ def delete_test_rows_from_google_sheets() -> None:
 
     matching_row_numbers = []
 
-    for sheet_row_number, row in enumerate(rows[1:], start=2):
+    for sheet_row_number, row in enumerate(
+        rows[1:],
+        start=2,
+    ):
 
         if (
             len(row) > date_column_index
             and row[date_column_index] == TEST_SHEET_DATE
         ):
-            matching_row_numbers.append(sheet_row_number)
+            matching_row_numbers.append(
+                sheet_row_number
+            )
 
-    # Delete from bottom to top so row numbers don't shift underneath us.
-    for sheet_row_number in reversed(matching_row_numbers):
-        worksheet.delete_rows(sheet_row_number)
+    # Delete from bottom to top so row numbers
+    # don't shift underneath us.
+    for sheet_row_number in reversed(
+        matching_row_numbers
+    ):
+        worksheet.delete_rows(
+            sheet_row_number
+        )
+
+
+def get_test_row_from_google_sheets() -> dict | None:
+    """
+    Return the Body Measurements E2E test row
+    directly from Google Sheets.
+    """
+
+    spreadsheet = get_spreadsheet()
+
+    worksheet = spreadsheet.worksheet(
+        settings.HEALTH_BODY_MEASUREMENTS_WORKSHEET
+    )
+
+    rows = worksheet.get_all_records()
+
+    for row in rows:
+
+        if row["Date"] == TEST_SHEET_DATE:
+            return row
+
+    return None
+
 
 def test_body_measurements_e2e():
     """
-    Test the complete Body Measurements flow against the real backend
-    and real Google Sheet.
+    Test the complete Body Measurements flow against
+    the real backend and real Google Sheet.
 
     Flow:
         POST
         GET
+        Verify Google Sheet metadata
         PUT
         GET
+        Verify Google Sheet metadata
         Cleanup directly in Google Sheets
     """
 
-    # Remove any row left behind by a previous interrupted test.
+    # Remove any row left behind by a previous
+    # interrupted test.
     delete_test_rows_from_google_sheets()
 
     try:
@@ -86,6 +127,7 @@ def test_body_measurements_e2e():
             "left_calf_cm": 38.0,
             "right_calf_cm": 38.5,
             "notes": "E2E Test",
+            "source": "E2E Test",
         }
 
         response = requests.post(
@@ -136,9 +178,33 @@ def test_body_measurements_e2e():
         assert body_measurement["right_calf_cm"] == 38.5
 
         assert body_measurement["notes"] == "E2E Test"
+        assert body_measurement["source"] == "E2E Test"
 
         # ---------------------------------------------------------
-        # 3. UPDATE
+        # 3. VERIFY CREATE METADATA IN GOOGLE SHEETS
+        # ---------------------------------------------------------
+
+        created_sheet_row = (
+            get_test_row_from_google_sheets()
+        )
+
+        assert created_sheet_row is not None
+
+        assert (
+            created_sheet_row["Source"]
+            == "E2E Test"
+        )
+
+        created_updated_datetime = datetime.strptime(
+            created_sheet_row["Updated_DateTime"],
+            DATETIME_FORMAT,
+        )
+
+        # Wait so the PUT must generate a different timestamp.
+        time.sleep(1.1)
+
+        # ---------------------------------------------------------
+        # 4. UPDATE
         # ---------------------------------------------------------
 
         update_payload = create_payload.copy()
@@ -157,7 +223,7 @@ def test_body_measurements_e2e():
         assert response.status_code == 200, response.text
 
         # ---------------------------------------------------------
-        # 4. READ AGAIN AND VERIFY UPDATE
+        # 5. READ AGAIN AND VERIFY UPDATE
         # ---------------------------------------------------------
 
         response = requests.get(
@@ -175,14 +241,43 @@ def test_body_measurements_e2e():
         assert updated_body_measurement["weight_kg"] == 79.5
         assert updated_body_measurement["waist_cm"] == 88.0
         assert updated_body_measurement["body_fat_percent"] == 21.5
-        assert updated_body_measurement["notes"] == "E2E Test Updated"
+        assert (
+            updated_body_measurement["notes"]
+            == "E2E Test Updated"
+        )
 
         # Verify some unchanged fields were preserved.
         assert updated_body_measurement["chest_cm"] == 100.0
         assert updated_body_measurement["right_arm_cm"] == 34.5
         assert updated_body_measurement["right_thigh_cm"] == 56.5
 
+        assert (
+            updated_body_measurement["source"]
+            == "E2E Test"
+        )
+
+        # ---------------------------------------------------------
+        # 6. VERIFY UPDATED_DATETIME CHANGED
+        # ---------------------------------------------------------
+
+        updated_sheet_row = (
+            get_test_row_from_google_sheets()
+        )
+
+        assert updated_sheet_row is not None
+
+        updated_datetime = datetime.strptime(
+            updated_sheet_row["Updated_DateTime"],
+            DATETIME_FORMAT,
+        )
+
+        assert (
+            updated_datetime
+            > created_updated_datetime
+        )
+
     finally:
 
-        # Always remove the test row, even if an assertion fails.
+        # Always remove the test row,
+        # even if an assertion fails.
         delete_test_rows_from_google_sheets()

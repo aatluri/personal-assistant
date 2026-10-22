@@ -76,9 +76,11 @@ class WorkoutMetricsGoogleSheetsRepository:
 
         workout_metrics = self.get_workout_metrics()
 
+        normalized_workout_start_time = (workout_start_time.replace(tzinfo=None))
+
         for workout_metric in workout_metrics:
 
-            if workout_metric.workout_start_time == workout_start_time:
+            if workout_metric.workout_start_time == normalized_workout_start_time:
                 return workout_metric
 
         return None
@@ -120,6 +122,10 @@ class WorkoutMetricsGoogleSheetsRepository:
         worksheet = self._get_workout_metrics_worksheet()
 
         rows = worksheet.get_all_values()
+        # Google Sheets stores the workout start time without
+        # timezone information, so normalize the incoming
+        # datetime before comparing it with worksheet values.
+        normalized_workout_start_time = (workout_start_time.replace(tzinfo=None))
 
         # Row 1 contains the worksheet headers,
         # so workout data starts at row 2.
@@ -134,7 +140,7 @@ class WorkoutMetricsGoogleSheetsRepository:
                 DATETIME_FORMAT,
             )
 
-            if row_workout_start_time == workout_start_time:
+            if row_workout_start_time == normalized_workout_start_time:
 
                 updated_row = self._workout_metric_to_row(
                     workout_metric,

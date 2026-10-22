@@ -1,0 +1,4027 @@
+{
+  "data" : {
+    "workouts" : [
+      {
+        "stepCount" : [
+          {
+            "date" : "2026-07-02 16:35:00 +0530",
+            "qty" : 67.204538921736841,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:36:00 +0530",
+            "units" : "count",
+            "qty" : 122.10827944677324
+          },
+          {
+            "date" : "2026-07-02 16:37:00 +0530",
+            "qty" : 122.10827944677325,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:38:00 +0530",
+            "qty" : 122.10827944677324,
+            "units" : "count"
+          },
+          {
+            "qty" : 122.10827944677324,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:39:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:40:00 +0530",
+            "qty" : 122.10827944677321,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "count"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 122.10827944677322,
+            "units" : "count",
+            "date" : "2026-07-02 16:41:00 +0530"
+          },
+          {
+            "units" : "count",
+            "qty" : 122.10827944677322,
+            "date" : "2026-07-02 16:42:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "date" : "2026-07-02 16:43:00 +0530",
+            "qty" : 122.10827944677324,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "count"
+          },
+          {
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:44:00 +0530",
+            "qty" : 122.10827944677324
+          },
+          {
+            "units" : "count",
+            "qty" : 72.338828655601674,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:45:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:46:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 33.112828848932253,
+            "units" : "count"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 33.112828848932253,
+            "date" : "2026-07-02 16:47:00 +0530",
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 16:48:00 +0530",
+            "units" : "count",
+            "qty" : 33.112828848932246,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:49:00 +0530",
+            "qty" : 33.112828848932246
+          },
+          {
+            "units" : "count",
+            "date" : "2026-07-02 16:50:00 +0530",
+            "qty" : 33.112828848932253,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count",
+            "date" : "2026-07-02 16:51:00 +0530",
+            "qty" : 33.112828848932253
+          },
+          {
+            "qty" : 33.112828848932253,
+            "date" : "2026-07-02 16:52:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:53:00 +0530",
+            "qty" : 33.112828848932246,
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 16:54:00 +0530",
+            "units" : "count",
+            "qty" : 33.112828848932253,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 16:55:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 11.466657761312042,
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 16:56:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count",
+            "qty" : 63.7182715804488
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count",
+            "date" : "2026-07-02 16:57:00 +0530",
+            "qty" : 117.21531313994841
+          },
+          {
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:58:00 +0530",
+            "qty" : 117.21531313994842
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:59:00 +0530",
+            "units" : "count",
+            "qty" : 117.21531313994842
+          },
+          {
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 17:00:00 +0530",
+            "qty" : 117.21531313994842
+          },
+          {
+            "date" : "2026-07-02 17:01:00 +0530",
+            "qty" : 117.21531313994841,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 17:02:00 +0530",
+            "qty" : 117.21531313994841,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 117.21531313994841,
+            "units" : "count",
+            "date" : "2026-07-02 17:03:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 117.21531313994838,
+            "date" : "2026-07-02 17:04:00 +0530",
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 17:05:00 +0530",
+            "qty" : 109.55922329996388,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 17:07:00 +0530",
+            "units" : "count",
+            "qty" : 45.266173743412644,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "qty" : 31.769749995197408,
+            "date" : "2026-07-02 17:08:00 +0530",
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "qty" : 10.964076261389948,
+            "date" : "2026-07-02 17:09:00 +0530",
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "qty" : 6.9833738484349466,
+            "units" : "count",
+            "date" : "2026-07-02 17:10:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 17:11:00 +0530",
+            "units" : "count",
+            "qty" : 41.388414953218934,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "units" : "count",
+            "qty" : 33.278153900298335,
+            "date" : "2026-07-02 17:12:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 17:13:00 +0530",
+            "qty" : 22.350057298047791,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 17:14:00 +0530",
+            "units" : "count",
+            "qty" : 23.513869138811959,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 17:15:00 +0530",
+            "qty" : 37.486130861188045,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count"
+          },
+          {
+            "qty" : 60,
+            "date" : "2026-07-02 17:16:00 +0530",
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          }
+        ],
+        "end" : "2026-07-02 17:17:11 +0530",
+        "basalEnergy" : [
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 16:35:00 +0530",
+            "qty" : 1.5608186861090385
+          },
+          {
+            "date" : "2026-07-02 16:36:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7330592174511845
+          },
+          {
+            "date" : "2026-07-02 16:37:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7330850767263748,
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 16:38:00 +0530",
+            "qty" : 1.7331108093861241,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 1.7331323379497703,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:39:00 +0530"
+          },
+          {
+            "qty" : 1.733147412400365,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:40:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:41:00 +0530",
+            "units" : "kcal",
+            "qty" : 1.7331648797369921
+          },
+          {
+            "date" : "2026-07-02 16:42:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7331815297970543,
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:43:00 +0530",
+            "qty" : 1.7331867581290468,
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 16:44:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7331866165564618
+          },
+          {
+            "qty" : 1.7331890314210774,
+            "date" : "2026-07-02 16:45:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:46:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7331838337776539
+          },
+          {
+            "units" : "kcal",
+            "qty" : 1.7331761553296177,
+            "date" : "2026-07-02 16:47:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 1.7331726420925331,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:48:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.733165152136757,
+            "date" : "2026-07-02 16:49:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 16:50:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 1.7331729376524183
+          },
+          {
+            "date" : "2026-07-02 16:51:00 +0530",
+            "units" : "kcal",
+            "qty" : 1.73317633568253,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:52:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.733176523353674
+          },
+          {
+            "date" : "2026-07-02 16:53:00 +0530",
+            "units" : "kcal",
+            "qty" : 1.7331711155302945,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "date" : "2026-07-02 16:54:00 +0530",
+            "qty" : 1.7331656142673657,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.733162239763852,
+            "date" : "2026-07-02 16:55:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 16:56:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7331651617516215,
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:57:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.733184876486273
+          },
+          {
+            "date" : "2026-07-02 16:58:00 +0530",
+            "qty" : 1.7332029171170118,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7334621393949159,
+            "units" : "kcal",
+            "date" : "2026-07-02 16:59:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7329856246642756,
+            "date" : "2026-07-02 17:00:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 17:01:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7332413582482713,
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.7332522532149888,
+            "date" : "2026-07-02 17:02:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 1.7332515844734062,
+            "date" : "2026-07-02 17:03:00 +0530"
+          },
+          {
+            "qty" : 1.7332437440004298,
+            "date" : "2026-07-02 17:04:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "date" : "2026-07-02 17:05:00 +0530",
+            "qty" : 1.7332335934781982,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 17:06:00 +0530",
+            "qty" : 1.733217459017856,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.7332075366958459,
+            "date" : "2026-07-02 17:07:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:08:00 +0530",
+            "qty" : 1.7332000141719741
+          },
+          {
+            "qty" : 1.7331962435681598,
+            "units" : "kcal",
+            "date" : "2026-07-02 17:09:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.7331946412950494,
+            "units" : "kcal",
+            "date" : "2026-07-02 17:10:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 17:11:00 +0530",
+            "qty" : 1.7331941192775715
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:12:00 +0530",
+            "units" : "kcal",
+            "qty" : 1.7331930811389904
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 17:13:00 +0530",
+            "qty" : 1.7331875902153338,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 1.7331770919395246,
+            "units" : "kcal",
+            "date" : "2026-07-02 17:14:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:15:00 +0530",
+            "units" : "kcal",
+            "qty" : 1.7331703031093837
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:16:00 +0530",
+            "qty" : 1.7331649365535293,
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 17:17:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 1.6556519511902914
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:18:00 +0530",
+            "qty" : 1.6404812517468781,
+            "units" : "kcal"
+          }
+        ],
+        "avgHeartRate" : {
+          "qty" : 137.24997224997225,
+          "units" : "count\/min"
+        },
+        "estimatedEffortScore" : {
+          "qty" : 7,
+          "units" : "appleEffortScore"
+        },
+        "intensity" : {
+          "qty" : 8.4115501296391297,
+          "units" : "kcal\/hr·kg"
+        },
+        "source" : {
+          "name" : "ADARSH’s Apple Watch",
+          "identifier" : "com.apple.health.C37A3925-2306-45FE-B9A4-5F5A542B55E4"
+        },
+        "id" : "B118E344-21CB-49EB-A7D6-F5F5BF084A29",
+        "activeEnergy" : [
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:35:00 +0530",
+            "qty" : 0.59680376009628122,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 16:36:00 +0530",
+            "qty" : 7.069585757704834
+          },
+          {
+            "date" : "2026-07-02 16:37:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 9.260449921968485
+          },
+          {
+            "date" : "2026-07-02 16:38:00 +0530",
+            "qty" : 10.543494089232819,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:39:00 +0530",
+            "units" : "kcal",
+            "qty" : 11.057865594391812
+          },
+          {
+            "qty" : 11.384537735134865,
+            "date" : "2026-07-02 16:40:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 11.789231447155277,
+            "date" : "2026-07-02 16:41:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 16:42:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 11.849421896069403,
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:43:00 +0530",
+            "qty" : 10.392783722534789,
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 9.3387560274312502,
+            "date" : "2026-07-02 16:44:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:45:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 8.233106007359428
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 9.1031168157242224,
+            "date" : "2026-07-02 16:46:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:47:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 9.2256631615348219
+          },
+          {
+            "units" : "kcal",
+            "qty" : 9.5175225685853686,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:48:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 9.1213145717927642,
+            "date" : "2026-07-02 16:49:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:50:00 +0530",
+            "units" : "kcal",
+            "qty" : 8.0488322651121287,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:51:00 +0530",
+            "qty" : 7.5994808776629625
+          },
+          {
+            "qty" : 9.4332064267961506,
+            "date" : "2026-07-02 16:52:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 9.0318843959968156,
+            "units" : "kcal",
+            "date" : "2026-07-02 16:53:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:54:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 9.6569785365221232,
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:55:00 +0530",
+            "qty" : 9.422237443032154
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 8.1440631321299133,
+            "date" : "2026-07-02 16:56:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:57:00 +0530",
+            "units" : "kcal",
+            "qty" : 10.430034628879792
+          },
+          {
+            "qty" : 11.299322686350537,
+            "units" : "kcal",
+            "date" : "2026-07-02 16:58:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 11.702306530800989,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:59:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 17:00:00 +0530",
+            "qty" : 12.056643198677051
+          },
+          {
+            "units" : "kcal",
+            "qty" : 12.249195638630209,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:01:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:02:00 +0530",
+            "qty" : 12.401673185140993,
+            "units" : "kcal"
+          },
+          {
+            "qty" : 10.173229909369804,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:03:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:04:00 +0530",
+            "units" : "kcal",
+            "qty" : 8.7584287489496813
+          },
+          {
+            "date" : "2026-07-02 17:05:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 9.9152427484363219
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:06:00 +0530",
+            "qty" : 9.6810580203419612,
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 17:07:00 +0530",
+            "qty" : 9.9257261582555056,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 9.9530988313694699,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:08:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 17:09:00 +0530",
+            "qty" : 8.6371355947455424,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "kcal",
+            "qty" : 7.6029709008030162,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:10:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 17:11:00 +0530",
+            "qty" : 7.3718518185053208,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "kcal",
+            "qty" : 6.242084363564028,
+            "date" : "2026-07-02 17:12:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 17:13:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 8.6760443522176782
+          },
+          {
+            "date" : "2026-07-02 17:14:00 +0530",
+            "qty" : 8.4224122001360016,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 17:15:00 +0530",
+            "qty" : 8.8236616206002623
+          },
+          {
+            "date" : "2026-07-02 17:16:00 +0530",
+            "units" : "kcal",
+            "qty" : 9.2774277267991678,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 2.1367635652933052,
+            "units" : "kcal",
+            "date" : "2026-07-02 17:17:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "units" : "kcal",
+            "qty" : 0.16835141816469135,
+            "date" : "2026-07-02 17:18:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ],
+        "heartRateRecovery" : [
+          {
+            "Min" : 127,
+            "units" : "count\/min",
+            "Avg" : 127,
+            "date" : "2026-07-02 17:17:13 +0530",
+            "Max" : 127
+          },
+          {
+            "Min" : 127,
+            "date" : "2026-07-02 17:17:14 +0530",
+            "Avg" : 127,
+            "Max" : 127,
+            "units" : "count\/min"
+          },
+          {
+            "date" : "2026-07-02 17:17:22 +0530",
+            "Min" : 117,
+            "Max" : 117,
+            "units" : "count\/min",
+            "Avg" : 117
+          },
+          {
+            "Avg" : 113,
+            "units" : "count\/min",
+            "Min" : 113,
+            "Max" : 113,
+            "date" : "2026-07-02 17:17:27 +0530"
+          },
+          {
+            "Max" : 107,
+            "Min" : 107,
+            "date" : "2026-07-02 17:17:32 +0530",
+            "units" : "count\/min",
+            "Avg" : 107
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 107,
+            "Min" : 107,
+            "date" : "2026-07-02 17:17:34 +0530",
+            "Max" : 107
+          },
+          {
+            "units" : "count\/min",
+            "Max" : 100,
+            "Avg" : 100,
+            "Min" : 100,
+            "date" : "2026-07-02 17:17:42 +0530"
+          },
+          {
+            "date" : "2026-07-02 17:17:48 +0530",
+            "Avg" : 100,
+            "Max" : 100,
+            "units" : "count\/min",
+            "Min" : 100
+          },
+          {
+            "Avg" : 101,
+            "date" : "2026-07-02 17:17:53 +0530",
+            "Min" : 101,
+            "Max" : 101,
+            "units" : "count\/min"
+          },
+          {
+            "date" : "2026-07-02 17:17:54 +0530",
+            "Avg" : 101,
+            "Max" : 101,
+            "units" : "count\/min",
+            "Min" : 101
+          },
+          {
+            "Max" : 103,
+            "date" : "2026-07-02 17:18:03 +0530",
+            "units" : "count\/min",
+            "Min" : 103,
+            "Avg" : 103
+          },
+          {
+            "units" : "count\/min",
+            "Min" : 110,
+            "Max" : 110,
+            "date" : "2026-07-02 17:18:08 +0530",
+            "Avg" : 110
+          },
+          {
+            "Avg" : 114,
+            "Min" : 114,
+            "date" : "2026-07-02 17:18:12 +0530",
+            "Max" : 114,
+            "units" : "count\/min"
+          },
+          {
+            "date" : "2026-07-02 17:18:18 +0530",
+            "Min" : 104,
+            "units" : "count\/min",
+            "Max" : 104,
+            "Avg" : 104
+          },
+          {
+            "date" : "2026-07-02 17:18:23 +0530",
+            "Avg" : 103,
+            "Max" : 103,
+            "units" : "count\/min",
+            "Min" : 103
+          },
+          {
+            "Max" : 103,
+            "date" : "2026-07-02 17:18:26 +0530",
+            "Min" : 103,
+            "units" : "count\/min",
+            "Avg" : 103
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 100,
+            "Min" : 100,
+            "Max" : 100,
+            "date" : "2026-07-02 17:18:30 +0530"
+          },
+          {
+            "date" : "2026-07-02 17:18:38 +0530",
+            "Avg" : 94,
+            "Min" : 94,
+            "Max" : 94,
+            "units" : "count\/min"
+          },
+          {
+            "Min" : 94,
+            "units" : "count\/min",
+            "Avg" : 94,
+            "Max" : 94,
+            "date" : "2026-07-02 17:18:39 +0530"
+          },
+          {
+            "Avg" : 98,
+            "Min" : 98,
+            "Max" : 98,
+            "date" : "2026-07-02 17:18:47 +0530",
+            "units" : "count\/min"
+          },
+          {
+            "Avg" : 99,
+            "units" : "count\/min",
+            "Min" : 99,
+            "date" : "2026-07-02 17:18:50 +0530",
+            "Max" : 99
+          },
+          {
+            "Min" : 100,
+            "Max" : 100,
+            "units" : "count\/min",
+            "date" : "2026-07-02 17:18:54 +0530",
+            "Avg" : 100
+          },
+          {
+            "Max" : 100,
+            "units" : "count\/min",
+            "Avg" : 100,
+            "date" : "2026-07-02 17:19:01 +0530",
+            "Min" : 100
+          },
+          {
+            "date" : "2026-07-02 17:19:05 +0530",
+            "Avg" : 103,
+            "Max" : 103,
+            "units" : "count\/min",
+            "Min" : 103
+          },
+          {
+            "units" : "count\/min",
+            "Min" : 99,
+            "date" : "2026-07-02 17:19:10 +0530",
+            "Avg" : 99,
+            "Max" : 99
+          }
+        ],
+        "totalEnergy" : {
+          "qty" : 470.2428489646669,
+          "units" : "kcal"
+        },
+        "maxHeartRate" : {
+          "qty" : 165,
+          "units" : "count\/min"
+        },
+        "heartRateData" : [
+          {
+            "Min" : 103,
+            "Avg" : 115.58333333333333,
+            "date" : "2026-07-02 16:36:00 +0530",
+            "Max" : 129,
+            "units" : "count\/min"
+          },
+          {
+            "Max" : 143,
+            "units" : "count\/min",
+            "Min" : 129,
+            "Avg" : 135.58333333333334,
+            "date" : "2026-07-02 16:37:00 +0530"
+          },
+          {
+            "Max" : 151,
+            "date" : "2026-07-02 16:38:00 +0530",
+            "units" : "count\/min",
+            "Min" : 145,
+            "Avg" : 147.25
+          },
+          {
+            "Avg" : 151.58333333333334,
+            "units" : "count\/min",
+            "Min" : 150,
+            "date" : "2026-07-02 16:39:00 +0530",
+            "Max" : 154
+          },
+          {
+            "Min" : 154,
+            "units" : "count\/min",
+            "Avg" : 154.66666666666666,
+            "Max" : 155,
+            "date" : "2026-07-02 16:40:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:41:00 +0530",
+            "Avg" : 157.33333333333334,
+            "Max" : 158,
+            "units" : "count\/min",
+            "Min" : 157
+          },
+          {
+            "date" : "2026-07-02 16:42:00 +0530",
+            "Min" : 156,
+            "units" : "count\/min",
+            "Max" : 160,
+            "Avg" : 157.75
+          },
+          {
+            "units" : "count\/min",
+            "Max" : 156,
+            "Avg" : 144,
+            "Min" : 138,
+            "date" : "2026-07-02 16:43:00 +0530"
+          },
+          {
+            "Min" : 130,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:44:00 +0530",
+            "Max" : 137,
+            "Avg" : 134.23076923076923
+          },
+          {
+            "Max" : 134,
+            "Min" : 114,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:45:00 +0530",
+            "Avg" : 124.08333333333333
+          },
+          {
+            "date" : "2026-07-02 16:46:00 +0530",
+            "Min" : 128,
+            "Avg" : 134.45454545454547,
+            "Max" : 140,
+            "units" : "count\/min"
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 133.84615384615384,
+            "Max" : 139,
+            "date" : "2026-07-02 16:47:00 +0530",
+            "Min" : 130
+          },
+          {
+            "Min" : 133,
+            "Max" : 147,
+            "date" : "2026-07-02 16:48:00 +0530",
+            "units" : "count\/min",
+            "Avg" : 138.91666666666666
+          },
+          {
+            "Avg" : 129.54545454545453,
+            "Max" : 137,
+            "date" : "2026-07-02 16:49:00 +0530",
+            "Min" : 120,
+            "units" : "count\/min"
+          },
+          {
+            "Avg" : 122.16666666666667,
+            "Min" : 116,
+            "date" : "2026-07-02 16:50:00 +0530",
+            "Max" : 126,
+            "units" : "count\/min"
+          },
+          {
+            "Avg" : 120.83333333333333,
+            "Min" : 111,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:51:00 +0530",
+            "Max" : 141
+          },
+          {
+            "Min" : 129,
+            "Avg" : 135.76923076923077,
+            "date" : "2026-07-02 16:52:00 +0530",
+            "Max" : 141,
+            "units" : "count\/min"
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:53:00 +0530",
+            "Avg" : 131.91666666666666,
+            "Max" : 136,
+            "Min" : 125
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:54:00 +0530",
+            "Max" : 144,
+            "Avg" : 139.63636363636363,
+            "Min" : 134
+          },
+          {
+            "Max" : 142,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:55:00 +0530",
+            "Min" : 130,
+            "Avg" : 135.08333333333334
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:56:00 +0530",
+            "Min" : 119,
+            "Avg" : 123,
+            "Max" : 131
+          },
+          {
+            "date" : "2026-07-02 16:57:00 +0530",
+            "Max" : 153,
+            "Min" : 136,
+            "units" : "count\/min",
+            "Avg" : 146.16666666666666
+          },
+          {
+            "Avg" : 154.30769230769232,
+            "Min" : 153,
+            "units" : "count\/min",
+            "Max" : 157,
+            "date" : "2026-07-02 16:58:00 +0530"
+          },
+          {
+            "Max" : 159,
+            "units" : "count\/min",
+            "Min" : 156,
+            "date" : "2026-07-02 16:59:00 +0530",
+            "Avg" : 157.72727272727272
+          },
+          {
+            "Min" : 160,
+            "Max" : 162,
+            "date" : "2026-07-02 17:00:00 +0530",
+            "Avg" : 161.08333333333334,
+            "units" : "count\/min"
+          },
+          {
+            "Min" : 161,
+            "Max" : 164,
+            "units" : "count\/min",
+            "Avg" : 162.91666666666666,
+            "date" : "2026-07-02 17:01:00 +0530"
+          },
+          {
+            "Max" : 165,
+            "date" : "2026-07-02 17:02:00 +0530",
+            "units" : "count\/min",
+            "Avg" : 163.91666666666666,
+            "Min" : 160
+          },
+          {
+            "Max" : 160,
+            "units" : "count\/min",
+            "date" : "2026-07-02 17:03:00 +0530",
+            "Avg" : 138.92307692307693,
+            "Min" : 124
+          },
+          {
+            "Avg" : 133.5,
+            "Max" : 150,
+            "units" : "count\/min",
+            "date" : "2026-07-02 17:04:00 +0530",
+            "Min" : 121
+          },
+          {
+            "Min" : 134,
+            "Max" : 144,
+            "units" : "count\/min",
+            "date" : "2026-07-02 17:05:00 +0530",
+            "Avg" : 139.36363636363637
+          },
+          {
+            "date" : "2026-07-02 17:06:00 +0530",
+            "Avg" : 138.61538461538461,
+            "Min" : 133,
+            "Max" : 144,
+            "units" : "count\/min"
+          },
+          {
+            "Avg" : 140.81818181818181,
+            "date" : "2026-07-02 17:07:00 +0530",
+            "Min" : 136,
+            "Max" : 146,
+            "units" : "count\/min"
+          },
+          {
+            "Max" : 153,
+            "date" : "2026-07-02 17:08:00 +0530",
+            "Min" : 132,
+            "units" : "count\/min",
+            "Avg" : 140.58333333333334
+          },
+          {
+            "units" : "count\/min",
+            "Min" : 122,
+            "Max" : 136,
+            "date" : "2026-07-02 17:09:00 +0530",
+            "Avg" : 127.23076923076923
+          },
+          {
+            "Avg" : 118.25,
+            "Min" : 115,
+            "date" : "2026-07-02 17:10:00 +0530",
+            "Max" : 122,
+            "units" : "count\/min"
+          },
+          {
+            "Avg" : 115.5,
+            "Min" : 110,
+            "date" : "2026-07-02 17:11:00 +0530",
+            "units" : "count\/min",
+            "Max" : 122
+          },
+          {
+            "Max" : 119,
+            "date" : "2026-07-02 17:12:00 +0530",
+            "Min" : 99,
+            "units" : "count\/min",
+            "Avg" : 106.66666666666667
+          },
+          {
+            "Min" : 128,
+            "date" : "2026-07-02 17:13:00 +0530",
+            "Avg" : 131.45454545454547,
+            "Max" : 137,
+            "units" : "count\/min"
+          },
+          {
+            "Min" : 119,
+            "units" : "count\/min",
+            "date" : "2026-07-02 17:14:00 +0530",
+            "Avg" : 127.07692307692308,
+            "Max" : 133
+          },
+          {
+            "Min" : 123,
+            "units" : "count\/min",
+            "Max" : 139,
+            "Avg" : 130,
+            "date" : "2026-07-02 17:15:00 +0530"
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 17:16:00 +0530",
+            "Min" : 128,
+            "Avg" : 135.36363636363637,
+            "Max" : 147
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 17:17:00 +0530",
+            "Min" : 132,
+            "Max" : 132,
+            "Avg" : 132
+          }
+        ],
+        "duration" : 2472.9667789936066,
+        "activities" : [
+          {
+            "duration" : 2472.9667789936066,
+            "id" : "B118E344-21CB-49EB-A7D6-F5F5BF084A29",
+            "activeDuration" : 2472.9667789936066,
+            "start" : "2026-07-02 16:35:58 +0530",
+            "end" : "2026-07-02 17:17:11 +0530",
+            "boundaryKind" : "interval",
+            "activityTypeCode" : 63,
+            "configuration" : {
+              "swimmingLocationType" : "unknown"
+            },
+            "metrics" : {
+              "activeEnergy" : {
+                "origin" : "activityStatistics",
+                "qty" : 394.32540458666693,
+                "units" : "kcal"
+              },
+              "heartRateMaximum" : {
+                "units" : "bpm",
+                "qty" : 165,
+                "origin" : "activityStatistics"
+              },
+              "heartRateAverage" : {
+                "units" : "bpm",
+                "origin" : "activityStatistics",
+                "qty" : 137.24997224997225
+              },
+              "heartRateMinimum" : {
+                "origin" : "activityStatistics",
+                "qty" : 99,
+                "units" : "bpm"
+              }
+            },
+            "elapsedDuration" : 2472.9667789936066,
+            "activityType" : "high_intensity_interval_training",
+            "boundaryOrigin" : "recordedActivity",
+            "index" : 1
+          }
+        ],
+        "activeEnergyBurned" : {
+          "qty" : 394.32540458666693,
+          "units" : "kcal"
+        },
+        "heartRate" : {
+          "max" : {
+            "qty" : 165,
+            "units" : "count\/min"
+          },
+          "avg" : {
+            "qty" : 137.24997224997225,
+            "units" : "count\/min"
+          },
+          "min" : {
+            "qty" : 99,
+            "units" : "count\/min"
+          }
+        },
+        "start" : "2026-07-02 16:35:58 +0530",
+        "metadata" : {
+
+        },
+        "stepCadence" : {
+          "qty" : 72.107721589599606,
+          "units" : "count\/min"
+        },
+        "name" : "High Intensity Interval Training"
+      },
+      {
+        "totalEnergy" : {
+          "qty" : 425.43804310931517,
+          "units" : "kcal"
+        },
+        "activities" : [
+          {
+            "boundaryKind" : "interval",
+            "index" : 1,
+            "elapsedDuration" : 2020.0162570476532,
+            "activityType" : "running",
+            "boundaryOrigin" : "recordedActivity",
+            "end" : "2026-07-02 16:14:24 +0530",
+            "duration" : 2020.0162570476532,
+            "activityTypeCode" : 37,
+            "id" : "12A48C1B-43D4-4A29-8D6B-071DF5F2779A",
+            "start" : "2026-07-02 15:40:44 +0530",
+            "metrics" : {
+              "heartRateMinimum" : {
+                "origin" : "activityStatistics",
+                "qty" : 88,
+                "units" : "bpm"
+              },
+              "heartRateMaximum" : {
+                "qty" : 170,
+                "origin" : "activityStatistics",
+                "units" : "bpm"
+              },
+              "speed" : {
+                "units" : "m\/s",
+                "origin" : "activeTimeCalculation",
+                "qty" : 2.4979888699653845
+              },
+              "paceKilometre" : {
+                "units" : "s\/km",
+                "origin" : "activeTimeCalculation",
+                "qty" : 400.32203987116134
+              },
+              "heartRateAverage" : {
+                "origin" : "activityStatistics",
+                "qty" : 153.76680672268907,
+                "units" : "bpm"
+              },
+              "distance" : {
+                "origin" : "activityStatistics",
+                "qty" : 5045.9781272541732,
+                "units" : "m"
+              },
+              "activeEnergy" : {
+                "origin" : "activityStatistics",
+                "units" : "kcal",
+                "qty" : 365.25191389810868
+              },
+              "paceMile" : {
+                "qty" : 644.25587293441424,
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/mi"
+              }
+            },
+            "activeDuration" : 2020.0162570476532,
+            "configuration" : {
+              "locationType" : "outdoor",
+              "swimmingLocationType" : "unknown"
+            }
+          }
+        ],
+        "events" : [
+          {
+            "typeCode" : 7,
+            "index" : 1,
+            "start" : "2026-07-02 15:40:44 +0530",
+            "boundaryKind" : "interval",
+            "boundaryOrigin" : "recordedEvent",
+            "end" : "2026-07-02 15:47:15 +0530",
+            "type" : "segment"
+          },
+          {
+            "index" : 2,
+            "boundaryOrigin" : "recordedEvent",
+            "typeCode" : 7,
+            "end" : "2026-07-02 15:51:16 +0530",
+            "start" : "2026-07-02 15:40:44 +0530",
+            "type" : "segment",
+            "boundaryKind" : "interval"
+          },
+          {
+            "boundaryKind" : "interval",
+            "index" : 3,
+            "end" : "2026-07-02 15:53:46 +0530",
+            "type" : "segment",
+            "start" : "2026-07-02 15:47:15 +0530",
+            "boundaryOrigin" : "recordedEvent",
+            "typeCode" : 7
+          },
+          {
+            "boundaryOrigin" : "recordedEvent",
+            "end" : "2026-07-02 16:01:49 +0530",
+            "index" : 4,
+            "type" : "segment",
+            "start" : "2026-07-02 15:51:16 +0530",
+            "boundaryKind" : "interval",
+            "typeCode" : 7
+          },
+          {
+            "type" : "segment",
+            "index" : 5,
+            "typeCode" : 7,
+            "start" : "2026-07-02 15:53:46 +0530",
+            "boundaryOrigin" : "recordedEvent",
+            "boundaryKind" : "interval",
+            "end" : "2026-07-02 16:00:22 +0530"
+          },
+          {
+            "index" : 6,
+            "typeCode" : 7,
+            "boundaryKind" : "interval",
+            "type" : "segment",
+            "boundaryOrigin" : "recordedEvent",
+            "start" : "2026-07-02 16:00:22 +0530",
+            "end" : "2026-07-02 16:07:03 +0530"
+          },
+          {
+            "boundaryKind" : "interval",
+            "index" : 7,
+            "start" : "2026-07-02 16:01:49 +0530",
+            "end" : "2026-07-02 16:12:39 +0530",
+            "typeCode" : 7,
+            "boundaryOrigin" : "recordedEvent",
+            "type" : "segment"
+          },
+          {
+            "index" : 8,
+            "typeCode" : 7,
+            "boundaryKind" : "interval",
+            "end" : "2026-07-02 16:13:51 +0530",
+            "type" : "segment",
+            "start" : "2026-07-02 16:07:03 +0530",
+            "boundaryOrigin" : "recordedEvent"
+          },
+          {
+            "boundaryOrigin" : "recordedEvent",
+            "typeCode" : 7,
+            "start" : "2026-07-02 16:12:39 +0530",
+            "type" : "segment",
+            "end" : "2026-07-02 16:14:21 +0530",
+            "index" : 9,
+            "boundaryKind" : "interval"
+          },
+          {
+            "end" : "2026-07-02 16:14:21 +0530",
+            "type" : "segment",
+            "typeCode" : 7,
+            "boundaryOrigin" : "recordedEvent",
+            "boundaryKind" : "interval",
+            "start" : "2026-07-02 16:13:51 +0530",
+            "index" : 10
+          }
+        ],
+        "intensity" : {
+          "qty" : 9.607272948953133,
+          "units" : "kcal\/hr·kg"
+        },
+        "heartRate" : {
+          "min" : {
+            "units" : "count\/min",
+            "qty" : 88
+          },
+          "max" : {
+            "units" : "count\/min",
+            "qty" : 170
+          },
+          "avg" : {
+            "qty" : 153.76680672268907,
+            "units" : "count\/min"
+          }
+        },
+        "id" : "12A48C1B-43D4-4A29-8D6B-071DF5F2779A",
+        "distance" : {
+          "qty" : 3.1354254449354353,
+          "units" : "mi"
+        },
+        "duration" : 2020.0162570476532,
+        "isIndoor" : false,
+        "heartRateRecovery" : [
+          {
+            "Avg" : 163,
+            "Max" : 163,
+            "Min" : 163,
+            "date" : "2026-07-02 16:14:26 +0530",
+            "units" : "count\/min"
+          },
+          {
+            "Min" : 162,
+            "date" : "2026-07-02 16:14:29 +0530",
+            "Max" : 162,
+            "units" : "count\/min",
+            "Avg" : 162
+          },
+          {
+            "date" : "2026-07-02 16:14:36 +0530",
+            "Max" : 159,
+            "Avg" : 159,
+            "units" : "count\/min",
+            "Min" : 159
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:14:42 +0530",
+            "Min" : 158,
+            "Avg" : 158,
+            "Max" : 158
+          },
+          {
+            "Avg" : 156,
+            "date" : "2026-07-02 16:14:47 +0530",
+            "Max" : 156,
+            "Min" : 156,
+            "units" : "count\/min"
+          },
+          {
+            "date" : "2026-07-02 16:14:52 +0530",
+            "units" : "count\/min",
+            "Avg" : 153,
+            "Min" : 153,
+            "Max" : 153
+          },
+          {
+            "Min" : 152,
+            "Avg" : 152,
+            "date" : "2026-07-02 16:14:54 +0530",
+            "units" : "count\/min",
+            "Max" : 152
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 151,
+            "Min" : 151,
+            "date" : "2026-07-02 16:14:58 +0530",
+            "Max" : 151
+          },
+          {
+            "units" : "count\/min",
+            "Max" : 150,
+            "Avg" : 150,
+            "date" : "2026-07-02 16:15:04 +0530",
+            "Min" : 150
+          },
+          {
+            "Min" : 146,
+            "Avg" : 146,
+            "date" : "2026-07-02 16:15:11 +0530",
+            "units" : "count\/min",
+            "Max" : 146
+          },
+          {
+            "date" : "2026-07-02 16:15:15 +0530",
+            "units" : "count\/min",
+            "Min" : 146,
+            "Avg" : 146,
+            "Max" : 146
+          },
+          {
+            "date" : "2026-07-02 16:15:22 +0530",
+            "Max" : 143,
+            "Avg" : 143,
+            "Min" : 143,
+            "units" : "count\/min"
+          },
+          {
+            "Min" : 141,
+            "Avg" : 141,
+            "Max" : 141,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:15:26 +0530"
+          },
+          {
+            "Avg" : 141,
+            "Min" : 141,
+            "date" : "2026-07-02 16:15:29 +0530",
+            "units" : "count\/min",
+            "Max" : 141
+          },
+          {
+            "Avg" : 142,
+            "Min" : 142,
+            "Max" : 142,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:15:35 +0530"
+          },
+          {
+            "Avg" : 142,
+            "units" : "count\/min",
+            "Min" : 142,
+            "Max" : 142,
+            "date" : "2026-07-02 16:15:39 +0530"
+          },
+          {
+            "Min" : 143,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:15:43 +0530",
+            "Avg" : 143,
+            "Max" : 143
+          },
+          {
+            "Min" : 145,
+            "date" : "2026-07-02 16:15:50 +0530",
+            "Avg" : 145,
+            "Max" : 145,
+            "units" : "count\/min"
+          },
+          {
+            "date" : "2026-07-02 16:15:56 +0530",
+            "Max" : 147,
+            "Avg" : 147,
+            "Min" : 147,
+            "units" : "count\/min"
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 147,
+            "Min" : 147,
+            "Max" : 147,
+            "date" : "2026-07-02 16:15:58 +0530"
+          },
+          {
+            "Avg" : 148,
+            "date" : "2026-07-02 16:16:07 +0530",
+            "Min" : 148,
+            "Max" : 148,
+            "units" : "count\/min"
+          },
+          {
+            "date" : "2026-07-02 16:16:11 +0530",
+            "Max" : 146,
+            "units" : "count\/min",
+            "Avg" : 146,
+            "Min" : 146
+          },
+          {
+            "units" : "count\/min",
+            "Min" : 146,
+            "date" : "2026-07-02 16:16:13 +0530",
+            "Avg" : 146,
+            "Max" : 146
+          },
+          {
+            "Avg" : 144,
+            "date" : "2026-07-02 16:16:18 +0530",
+            "Min" : 144,
+            "Max" : 144,
+            "units" : "count\/min"
+          }
+        ],
+        "maxHeartRate" : {
+          "units" : "count\/min",
+          "qty" : 170
+        },
+        "metadata" : {
+
+        },
+        "estimatedEffortScore" : {
+          "qty" : 6,
+          "units" : "appleEffortScore"
+        },
+        "end" : "2026-07-02 16:14:24 +0530",
+        "name" : "Outdoor Run",
+        "activeEnergy" : [
+          {
+            "date" : "2026-07-02 15:40:00 +0530",
+            "qty" : 1.9613265930009265,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "date" : "2026-07-02 15:41:00 +0530",
+            "qty" : 11.242122214292682,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 10.55617196391842,
+            "date" : "2026-07-02 15:42:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:43:00 +0530",
+            "qty" : 10.567821787986061
+          },
+          {
+            "units" : "kcal",
+            "qty" : 11.213933299351428,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:44:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 10.257163239846141,
+            "date" : "2026-07-02 15:45:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 15:46:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 10.010968118599369
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 10.346732167596192,
+            "date" : "2026-07-02 15:47:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:48:00 +0530",
+            "units" : "kcal",
+            "qty" : 12.048473068383082
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 10.97183178739289,
+            "date" : "2026-07-02 15:49:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "qty" : 10.410190236592857,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:50:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 9.7907718899103777,
+            "date" : "2026-07-02 15:51:00 +0530"
+          },
+          {
+            "qty" : 10.870736764285228,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 15:52:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 15:53:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 11.00854468796067
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:54:00 +0530",
+            "units" : "kcal",
+            "qty" : 10.674867326475498
+          },
+          {
+            "date" : "2026-07-02 15:55:00 +0530",
+            "qty" : 10.185166142770319,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 15:56:00 +0530",
+            "qty" : 10.055011194176705,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "date" : "2026-07-02 15:57:00 +0530",
+            "qty" : 11.067167517461154,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 12.095235464672246,
+            "date" : "2026-07-02 15:58:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 15:59:00 +0530",
+            "qty" : 10.934070237307147,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:00:00 +0530",
+            "qty" : 10.045229355713493,
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "qty" : 10.642828774680758,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:01:00 +0530"
+          },
+          {
+            "qty" : 10.354880176464215,
+            "units" : "kcal",
+            "date" : "2026-07-02 16:02:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 10.633954650161273,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:03:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 11.329538272620859,
+            "date" : "2026-07-02 16:04:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 11.178610743396636,
+            "date" : "2026-07-02 16:05:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:06:00 +0530",
+            "qty" : 11.251024615262514,
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 11.491273614369934,
+            "date" : "2026-07-02 16:07:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "date" : "2026-07-02 16:08:00 +0530",
+            "qty" : 11.808296566938285,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 16:09:00 +0530",
+            "qty" : 11.740910435020918
+          },
+          {
+            "date" : "2026-07-02 16:10:00 +0530",
+            "units" : "kcal",
+            "qty" : 11.329818757517074,
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:11:00 +0530",
+            "qty" : 11.956640621932532,
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:12:00 +0530",
+            "qty" : 11.755581979394375,
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:13:00 +0530",
+            "qty" : 11.584257876861111
+          },
+          {
+            "qty" : 4.4165425247877117,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 16:14:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:15:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 0.87730533289890911
+          }
+        ],
+        "start" : "2026-07-02 15:40:44 +0530",
+        "stepCount" : [
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:40:00 +0530",
+            "units" : "count",
+            "qty" : 35.321202313223083
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count",
+            "date" : "2026-07-02 15:41:00 +0530",
+            "qty" : 167.2416171345092
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 167.60081678732317,
+            "units" : "count",
+            "date" : "2026-07-02 15:42:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:43:00 +0530",
+            "qty" : 164.92095824581469,
+            "units" : "count"
+          },
+          {
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 166.92093285074043,
+            "date" : "2026-07-02 15:44:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 15:45:00 +0530",
+            "qty" : 165.92134280820892,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 15:46:00 +0530",
+            "units" : "count",
+            "qty" : 164.92228589621561,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 164.92293004350941,
+            "date" : "2026-07-02 15:47:00 +0530",
+            "units" : "count"
+          },
+          {
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:48:00 +0530",
+            "qty" : 163.92345760218976
+          },
+          {
+            "date" : "2026-07-02 15:49:00 +0530",
+            "units" : "count",
+            "qty" : 162.92391578662816,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:50:00 +0530",
+            "units" : "count",
+            "qty" : 165.92500459712852
+          },
+          {
+            "date" : "2026-07-02 15:51:00 +0530",
+            "qty" : 164.92539428720542,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count"
+          },
+          {
+            "qty" : 165.83871784131497,
+            "date" : "2026-07-02 15:52:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 15:53:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count",
+            "qty" : 165.01132497152199
+          },
+          {
+            "date" : "2026-07-02 15:54:00 +0530",
+            "qty" : 164.92451091581563,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "units" : "count",
+            "qty" : 162.92467076621091,
+            "date" : "2026-07-02 15:55:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 15:56:00 +0530",
+            "qty" : 164.50985692274142,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "units" : "count",
+            "date" : "2026-07-02 15:57:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 164.32106022969867
+          },
+          {
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:58:00 +0530",
+            "qty" : 162.94395114879558
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count",
+            "date" : "2026-07-02 15:59:00 +0530",
+            "qty" : 161.92524898546344
+          },
+          {
+            "qty" : 164.9256168025783,
+            "date" : "2026-07-02 16:00:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 16:01:00 +0530",
+            "units" : "count",
+            "qty" : 162.92524378841148,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 16:02:00 +0530",
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 163.92437723853027
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 163.92359553690912,
+            "date" : "2026-07-02 16:03:00 +0530",
+            "units" : "count"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:04:00 +0530",
+            "units" : "count",
+            "qty" : 163.92326616494375
+          },
+          {
+            "qty" : 157.9235235415739,
+            "date" : "2026-07-02 16:05:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count"
+          },
+          {
+            "date" : "2026-07-02 16:06:00 +0530",
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 159.92368057606609
+          },
+          {
+            "units" : "count",
+            "qty" : 159.92366288192139,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:07:00 +0530"
+          },
+          {
+            "qty" : 163.92373282504062,
+            "date" : "2026-07-02 16:08:00 +0530",
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "units" : "count",
+            "qty" : 159.93999881210334,
+            "date" : "2026-07-02 16:09:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "qty" : 159.90887886270656,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:10:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:11:00 +0530",
+            "qty" : 162.92433117194997,
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 16:12:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "count",
+            "qty" : 161.92400878479944
+          },
+          {
+            "qty" : 143.8636295396314,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:13:00 +0530",
+            "units" : "count"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 102.319613997771,
+            "units" : "count",
+            "date" : "2026-07-02 16:14:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:15:00 +0530",
+            "units" : "count",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 106.76343025850316
+          }
+        ],
+        "avgHeartRate" : {
+          "qty" : 153.76680672268907,
+          "units" : "count\/min"
+        },
+        "source" : {
+          "identifier" : "com.apple.health.C37A3925-2306-45FE-B9A4-5F5A542B55E4",
+          "name" : "ADARSH’s Apple Watch"
+        },
+        "splits" : [
+          {
+            "boundaryOrigin" : "distanceInterpolation",
+            "distanceType" : "walkingRunning",
+            "targetDistance" : {
+              "qty" : 1,
+              "units" : "km"
+            },
+            "items" : [
+              {
+                "end" : "2026-07-02 15:47:15 +0530",
+                "elapsedDuration" : 390.39946854114532,
+                "boundaryKind" : "interval",
+                "start" : "2026-07-02 15:40:44 +0530",
+                "isPartial" : false,
+                "metrics" : {
+                  "heartRateMaximum" : {
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "sampleCount" : 78,
+                    "qty" : 149
+                  },
+                  "distance" : {
+                    "coveredDuration" : 387.78523874282837,
+                    "origin" : "sampleOverlapEstimate",
+                    "units" : "m",
+                    "qty" : 1000
+                  },
+                  "heartRateAverage" : {
+                    "qty" : 134.78205128205127,
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "sampleCount" : 78
+                  },
+                  "paceMile" : {
+                    "units" : "s\/mi",
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 628.28704229988102
+                  },
+                  "heartRateMinimum" : {
+                    "qty" : 88,
+                    "sampleCount" : 78,
+                    "units" : "bpm",
+                    "origin" : "sampleSummary"
+                  },
+                  "paceKilometre" : {
+                    "origin" : "activeTimeCalculation",
+                    "units" : "s\/km",
+                    "qty" : 390.39946854114532
+                  },
+                  "activeEnergy" : {
+                    "coveredDuration" : 390.39946854114532,
+                    "units" : "kcal",
+                    "origin" : "sampleOverlapEstimate",
+                    "qty" : 68.147087765756552
+                  },
+                  "speed" : {
+                    "origin" : "activeTimeCalculation",
+                    "units" : "m\/s",
+                    "qty" : 2.5614788968254119
+                  }
+                },
+                "index" : 1,
+                "activeDuration" : 390.39946854114532,
+                "boundaryOrigin" : "distanceInterpolation"
+              },
+              {
+                "elapsedDuration" : 391.48475992679596,
+                "start" : "2026-07-02 15:47:15 +0530",
+                "end" : "2026-07-02 15:53:46 +0530",
+                "activeDuration" : 391.48475992679596,
+                "index" : 2,
+                "metrics" : {
+                  "speed" : {
+                    "qty" : 2.5543778516103433,
+                    "units" : "m\/s",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "activeEnergy" : {
+                    "origin" : "sampleOverlapEstimate",
+                    "coveredDuration" : 391.48475992679596,
+                    "units" : "kcal",
+                    "qty" : 70.494929061118356
+                  },
+                  "heartRateMaximum" : {
+                    "origin" : "sampleSummary",
+                    "units" : "bpm",
+                    "sampleCount" : 78,
+                    "qty" : 158
+                  },
+                  "distance" : {
+                    "origin" : "sampleOverlapEstimate",
+                    "units" : "m",
+                    "qty" : 1000,
+                    "coveredDuration" : 391.48475992679596
+                  },
+                  "paceKilometre" : {
+                    "qty" : 391.48475992679596,
+                    "units" : "s\/km",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "heartRateAverage" : {
+                    "origin" : "sampleSummary",
+                    "units" : "bpm",
+                    "sampleCount" : 78,
+                    "qty" : 152.37179487179486
+                  },
+                  "paceMile" : {
+                    "qty" : 630.03364947962962,
+                    "origin" : "activeTimeCalculation",
+                    "units" : "s\/mi"
+                  },
+                  "heartRateMinimum" : {
+                    "qty" : 146,
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "sampleCount" : 78
+                  }
+                },
+                "boundaryKind" : "interval",
+                "isPartial" : false,
+                "boundaryOrigin" : "distanceInterpolation"
+              },
+              {
+                "boundaryOrigin" : "distanceInterpolation",
+                "metrics" : {
+                  "activeEnergy" : {
+                    "units" : "kcal",
+                    "qty" : 71.28995338287902,
+                    "origin" : "sampleOverlapEstimate",
+                    "coveredDuration" : 395.62858259677887
+                  },
+                  "paceMile" : {
+                    "units" : "s\/mi",
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 636.70248563063046
+                  },
+                  "heartRateMaximum" : {
+                    "origin" : "sampleSummary",
+                    "sampleCount" : 78,
+                    "qty" : 164,
+                    "units" : "bpm"
+                  },
+                  "heartRateAverage" : {
+                    "origin" : "sampleSummary",
+                    "qty" : 156.51282051282053,
+                    "units" : "bpm",
+                    "sampleCount" : 78
+                  },
+                  "heartRateMinimum" : {
+                    "origin" : "sampleSummary",
+                    "units" : "bpm",
+                    "qty" : 149,
+                    "sampleCount" : 78
+                  },
+                  "speed" : {
+                    "qty" : 2.5276232405563861,
+                    "units" : "m\/s",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "distance" : {
+                    "origin" : "sampleOverlapEstimate",
+                    "qty" : 1000,
+                    "units" : "m",
+                    "coveredDuration" : 395.62858259677887
+                  },
+                  "paceKilometre" : {
+                    "qty" : 395.62858259677887,
+                    "units" : "s\/km",
+                    "origin" : "activeTimeCalculation"
+                  }
+                },
+                "boundaryKind" : "interval",
+                "activeDuration" : 395.62858259677887,
+                "index" : 3,
+                "start" : "2026-07-02 15:53:46 +0530",
+                "isPartial" : false,
+                "elapsedDuration" : 395.62858259677887,
+                "end" : "2026-07-02 16:00:22 +0530"
+              },
+              {
+                "metrics" : {
+                  "speed" : {
+                    "origin" : "activeTimeCalculation",
+                    "units" : "m\/s",
+                    "qty" : 2.4899829477530622
+                  },
+                  "heartRateMaximum" : {
+                    "origin" : "sampleSummary",
+                    "qty" : 163,
+                    "units" : "bpm",
+                    "sampleCount" : 82
+                  },
+                  "heartRateAverage" : {
+                    "origin" : "sampleSummary",
+                    "qty" : 159.07317073170731,
+                    "sampleCount" : 82,
+                    "units" : "bpm"
+                  },
+                  "paceKilometre" : {
+                    "units" : "s\/km",
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 401.60917603969574
+                  },
+                  "paceMile" : {
+                    "qty" : 646.32731780442816,
+                    "units" : "s\/mi",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "distance" : {
+                    "origin" : "sampleOverlapEstimate",
+                    "coveredDuration" : 401.60917603969574,
+                    "qty" : 1000,
+                    "units" : "m"
+                  },
+                  "activeEnergy" : {
+                    "coveredDuration" : 401.60917603969574,
+                    "units" : "kcal",
+                    "qty" : 72.360374402848919,
+                    "origin" : "sampleOverlapEstimate"
+                  },
+                  "heartRateMinimum" : {
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "qty" : 153,
+                    "sampleCount" : 82
+                  }
+                },
+                "isPartial" : false,
+                "boundaryKind" : "interval",
+                "index" : 4,
+                "start" : "2026-07-02 16:00:22 +0530",
+                "end" : "2026-07-02 16:07:03 +0530",
+                "elapsedDuration" : 401.60917603969574,
+                "boundaryOrigin" : "distanceInterpolation",
+                "activeDuration" : 401.60917603969574
+              },
+              {
+                "index" : 5,
+                "activeDuration" : 407.65032088756561,
+                "isPartial" : false,
+                "elapsedDuration" : 407.65032088756561,
+                "start" : "2026-07-02 16:07:03 +0530",
+                "end" : "2026-07-02 16:13:51 +0530",
+                "boundaryOrigin" : "distanceInterpolation",
+                "boundaryKind" : "interval",
+                "metrics" : {
+                  "heartRateMinimum" : {
+                    "qty" : 158,
+                    "units" : "bpm",
+                    "sampleCount" : 81,
+                    "origin" : "sampleSummary"
+                  },
+                  "distance" : {
+                    "origin" : "sampleOverlapEstimate",
+                    "coveredDuration" : 407.65032088756561,
+                    "qty" : 1000,
+                    "units" : "m"
+                  },
+                  "heartRateAverage" : {
+                    "sampleCount" : 81,
+                    "qty" : 163.77777777777777,
+                    "units" : "bpm",
+                    "origin" : "sampleSummary"
+                  },
+                  "paceKilometre" : {
+                    "qty" : 407.65032088756561,
+                    "units" : "s\/km",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "speed" : {
+                    "qty" : 2.4530828230987973,
+                    "origin" : "activeTimeCalculation",
+                    "units" : "m\/s"
+                  },
+                  "heartRateMaximum" : {
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "qty" : 170,
+                    "sampleCount" : 81
+                  },
+                  "activeEnergy" : {
+                    "coveredDuration" : 407.65032088756561,
+                    "units" : "kcal",
+                    "qty" : 79.372906586694967,
+                    "origin" : "sampleOverlapEstimate"
+                  },
+                  "paceMile" : {
+                    "origin" : "activeTimeCalculation",
+                    "units" : "s\/mi",
+                    "qty" : 656.04959801847838
+                  }
+                }
+              },
+              {
+                "boundaryKind" : "interval",
+                "start" : "2026-07-02 16:13:51 +0530",
+                "isPartial" : true,
+                "metrics" : {
+                  "heartRateMinimum" : {
+                    "qty" : 164,
+                    "sampleCount" : 6,
+                    "origin" : "sampleSummary",
+                    "units" : "bpm"
+                  },
+                  "heartRateAverage" : {
+                    "sampleCount" : 6,
+                    "origin" : "sampleSummary",
+                    "qty" : 164.5,
+                    "units" : "bpm"
+                  },
+                  "paceMile" : {
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 1163.6174229822495,
+                    "units" : "s\/mi"
+                  },
+                  "heartRateMaximum" : {
+                    "units" : "bpm",
+                    "sampleCount" : 6,
+                    "origin" : "sampleSummary",
+                    "qty" : 165
+                  },
+                  "distance" : {
+                    "units" : "m",
+                    "origin" : "sampleOverlapEstimate",
+                    "coveredDuration" : 29.704658627510071,
+                    "qty" : 45.97812725417316
+                  },
+                  "speed" : {
+                    "qty" : 1.3830525121181088,
+                    "units" : "m\/s",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "paceKilometre" : {
+                    "qty" : 723.03834542661446,
+                    "units" : "s\/km",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "activeEnergy" : {
+                    "units" : "kcal",
+                    "coveredDuration" : 29.704658627510071,
+                    "origin" : "sampleOverlapEstimate",
+                    "qty" : 3.5866626988108123
+                  }
+                },
+                "index" : 6,
+                "elapsedDuration" : 33.243949055671692,
+                "activeDuration" : 33.243949055671692,
+                "boundaryOrigin" : "distanceInterpolation",
+                "end" : "2026-07-02 16:14:24 +0530"
+              }
+            ]
+          },
+          {
+            "items" : [
+              {
+                "boundaryKind" : "interval",
+                "index" : 1,
+                "boundaryOrigin" : "distanceInterpolation",
+                "end" : "2026-07-02 15:51:16 +0530",
+                "elapsedDuration" : 631.69356465339661,
+                "metrics" : {
+                  "heartRateMinimum" : {
+                    "sampleCount" : 126,
+                    "units" : "bpm",
+                    "qty" : 88,
+                    "origin" : "sampleSummary"
+                  },
+                  "paceMile" : {
+                    "units" : "s\/mi",
+                    "qty" : 631.69356465339661,
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "paceKilometre" : {
+                    "qty" : 392.51618339733244,
+                    "units" : "s\/km",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "distance" : {
+                    "qty" : 1609.3440000000001,
+                    "units" : "m",
+                    "coveredDuration" : 629.07933485507965,
+                    "origin" : "sampleOverlapEstimate"
+                  },
+                  "heartRateMaximum" : {
+                    "qty" : 157,
+                    "origin" : "sampleSummary",
+                    "sampleCount" : 126,
+                    "units" : "bpm"
+                  },
+                  "activeEnergy" : {
+                    "qty" : 112.03700848225976,
+                    "units" : "kcal",
+                    "coveredDuration" : 631.69356465339661,
+                    "origin" : "sampleOverlapEstimate"
+                  },
+                  "heartRateAverage" : {
+                    "qty" : 141.22222222222223,
+                    "origin" : "sampleSummary",
+                    "sampleCount" : 126,
+                    "units" : "bpm"
+                  },
+                  "speed" : {
+                    "units" : "m\/s",
+                    "qty" : 2.547665656342454,
+                    "origin" : "activeTimeCalculation"
+                  }
+                },
+                "start" : "2026-07-02 15:40:44 +0530",
+                "isPartial" : false,
+                "activeDuration" : 631.69356465339661
+              },
+              {
+                "end" : "2026-07-02 16:01:49 +0530",
+                "start" : "2026-07-02 15:51:16 +0530",
+                "elapsedDuration" : 633.44834315776825,
+                "metrics" : {
+                  "heartRateMaximum" : {
+                    "origin" : "sampleSummary",
+                    "qty" : 164,
+                    "units" : "bpm",
+                    "sampleCount" : 126
+                  },
+                  "distance" : {
+                    "origin" : "sampleOverlapEstimate",
+                    "qty" : 1609.3440000000001,
+                    "units" : "m",
+                    "coveredDuration" : 633.44834315776825
+                  },
+                  "paceKilometre" : {
+                    "units" : "s\/km",
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 393.60655220870632
+                  },
+                  "paceMile" : {
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 633.44834315776825,
+                    "units" : "s\/mi"
+                  },
+                  "speed" : {
+                    "qty" : 2.5406081133267291,
+                    "units" : "m\/s",
+                    "origin" : "activeTimeCalculation"
+                  },
+                  "activeEnergy" : {
+                    "origin" : "sampleOverlapEstimate",
+                    "qty" : 112.99384717070429,
+                    "units" : "kcal",
+                    "coveredDuration" : 633.44834315776825
+                  },
+                  "heartRateMinimum" : {
+                    "origin" : "sampleSummary",
+                    "units" : "bpm",
+                    "qty" : 146,
+                    "sampleCount" : 126
+                  },
+                  "heartRateAverage" : {
+                    "origin" : "sampleSummary",
+                    "units" : "bpm",
+                    "sampleCount" : 126,
+                    "qty" : 155.68253968253967
+                  }
+                },
+                "index" : 2,
+                "boundaryOrigin" : "distanceInterpolation",
+                "activeDuration" : 633.44834315776825,
+                "boundaryKind" : "interval",
+                "isPartial" : false
+              },
+              {
+                "elapsedDuration" : 649.69983780384064,
+                "boundaryKind" : "interval",
+                "boundaryOrigin" : "distanceInterpolation",
+                "index" : 3,
+                "end" : "2026-07-02 16:12:39 +0530",
+                "activeDuration" : 649.69983780384064,
+                "start" : "2026-07-02 16:01:49 +0530",
+                "isPartial" : false,
+                "metrics" : {
+                  "paceKilometre" : {
+                    "origin" : "activeTimeCalculation",
+                    "units" : "s\/km",
+                    "qty" : 403.70476281257493
+                  },
+                  "speed" : {
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 2.4770577216703846,
+                    "units" : "m\/s"
+                  },
+                  "paceMile" : {
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 649.69983780384064,
+                    "units" : "s\/mi"
+                  },
+                  "heartRateAverage" : {
+                    "sampleCount" : 131,
+                    "units" : "bpm",
+                    "qty" : 162.09160305343511,
+                    "origin" : "sampleSummary"
+                  },
+                  "distance" : {
+                    "qty" : 1609.3440000000001,
+                    "units" : "m",
+                    "coveredDuration" : 649.69983780384064,
+                    "origin" : "sampleOverlapEstimate"
+                  },
+                  "heartRateMinimum" : {
+                    "qty" : 157,
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "sampleCount" : 131
+                  },
+                  "heartRateMaximum" : {
+                    "sampleCount" : 131,
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "qty" : 170
+                  },
+                  "activeEnergy" : {
+                    "units" : "kcal",
+                    "coveredDuration" : 649.69983780384064,
+                    "qty" : 122.5872283049267,
+                    "origin" : "sampleOverlapEstimate"
+                  }
+                }
+              },
+              {
+                "elapsedDuration" : 105.17451143264771,
+                "activeDuration" : 105.17451143264771,
+                "boundaryOrigin" : "distanceInterpolation",
+                "isPartial" : true,
+                "start" : "2026-07-02 16:12:39 +0530",
+                "metrics" : {
+                  "paceKilometre" : {
+                    "qty" : 482.57114158303511,
+                    "origin" : "activeTimeCalculation",
+                    "units" : "s\/km"
+                  },
+                  "heartRateMinimum" : {
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "qty" : 161,
+                    "sampleCount" : 20
+                  },
+                  "heartRateAverage" : {
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "qty" : 162.94999999999999,
+                    "sampleCount" : 20
+                  },
+                  "distance" : {
+                    "units" : "m",
+                    "origin" : "sampleOverlapEstimate",
+                    "coveredDuration" : 101.63522100448608,
+                    "qty" : 217.94612725417301
+                  },
+                  "activeEnergy" : {
+                    "units" : "kcal",
+                    "coveredDuration" : 101.63522100448608,
+                    "origin" : "sampleOverlapEstimate",
+                    "qty" : 17.633829940217879
+                  },
+                  "heartRateMaximum" : {
+                    "units" : "bpm",
+                    "origin" : "sampleSummary",
+                    "qty" : 165,
+                    "sampleCount" : 20
+                  },
+                  "paceMile" : {
+                    "units" : "s\/mi",
+                    "origin" : "activeTimeCalculation",
+                    "qty" : 776.62297127980798
+                  },
+                  "speed" : {
+                    "qty" : 2.0722333223648266,
+                    "origin" : "activeTimeCalculation",
+                    "units" : "m\/s"
+                  }
+                },
+                "index" : 4,
+                "end" : "2026-07-02 16:14:24 +0530",
+                "boundaryKind" : "interval"
+              }
+            ],
+            "boundaryOrigin" : "distanceInterpolation",
+            "targetDistance" : {
+              "units" : "mi",
+              "qty" : 1
+            },
+            "distanceType" : "walkingRunning"
+          }
+        ],
+        "heartRateData" : [
+          {
+            "units" : "count\/min",
+            "Avg" : 92.333333333333329,
+            "Min" : 88,
+            "date" : "2026-07-02 15:40:00 +0530",
+            "Max" : 98
+          },
+          {
+            "Avg" : 119.18181818181819,
+            "units" : "count\/min",
+            "date" : "2026-07-02 15:41:00 +0530",
+            "Max" : 127,
+            "Min" : 106
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 128.91666666666666,
+            "date" : "2026-07-02 15:42:00 +0530",
+            "Min" : 126,
+            "Max" : 134
+          },
+          {
+            "Avg" : 136.58333333333334,
+            "units" : "count\/min",
+            "Max" : 140,
+            "Min" : 133,
+            "date" : "2026-07-02 15:43:00 +0530"
+          },
+          {
+            "Min" : 141,
+            "date" : "2026-07-02 15:44:00 +0530",
+            "units" : "count\/min",
+            "Avg" : 142.5,
+            "Max" : 143
+          },
+          {
+            "Min" : 141,
+            "date" : "2026-07-02 15:45:00 +0530",
+            "Avg" : 143.61538461538461,
+            "units" : "count\/min",
+            "Max" : 147
+          },
+          {
+            "Min" : 142,
+            "Avg" : 143.33333333333334,
+            "units" : "count\/min",
+            "Max" : 145,
+            "date" : "2026-07-02 15:46:00 +0530"
+          },
+          {
+            "Min" : 145,
+            "Avg" : 148.54545454545453,
+            "date" : "2026-07-02 15:47:00 +0530",
+            "Max" : 151,
+            "units" : "count\/min"
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 15:48:00 +0530",
+            "Min" : 151,
+            "Avg" : 153.58333333333334,
+            "Max" : 156
+          },
+          {
+            "units" : "count\/min",
+            "Max" : 157,
+            "Avg" : 155.41666666666666,
+            "date" : "2026-07-02 15:49:00 +0530",
+            "Min" : 154
+          },
+          {
+            "Avg" : 149.58333333333334,
+            "date" : "2026-07-02 15:50:00 +0530",
+            "units" : "count\/min",
+            "Min" : 146,
+            "Max" : 152
+          },
+          {
+            "units" : "count\/min",
+            "Max" : 153,
+            "Min" : 146,
+            "date" : "2026-07-02 15:51:00 +0530",
+            "Avg" : 149
+          },
+          {
+            "date" : "2026-07-02 15:52:00 +0530",
+            "Min" : 153,
+            "Avg" : 154.41666666666666,
+            "Max" : 157,
+            "units" : "count\/min"
+          },
+          {
+            "Min" : 152,
+            "Avg" : 155.25,
+            "Max" : 158,
+            "date" : "2026-07-02 15:53:00 +0530",
+            "units" : "count\/min"
+          },
+          {
+            "Max" : 157,
+            "Avg" : 154.33333333333334,
+            "units" : "count\/min",
+            "date" : "2026-07-02 15:54:00 +0530",
+            "Min" : 152
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 15:55:00 +0530",
+            "Max" : 156,
+            "Min" : 153,
+            "Avg" : 153.91666666666666
+          },
+          {
+            "Avg" : 151.33333333333334,
+            "units" : "count\/min",
+            "date" : "2026-07-02 15:56:00 +0530",
+            "Max" : 153,
+            "Min" : 149
+          },
+          {
+            "Max" : 164,
+            "Min" : 153,
+            "Avg" : 158.23076923076923,
+            "units" : "count\/min",
+            "date" : "2026-07-02 15:57:00 +0530"
+          },
+          {
+            "Max" : 163,
+            "units" : "count\/min",
+            "Min" : 161,
+            "Avg" : 162.09090909090909,
+            "date" : "2026-07-02 15:58:00 +0530"
+          },
+          {
+            "Avg" : 160.16666666666666,
+            "Max" : 163,
+            "date" : "2026-07-02 15:59:00 +0530",
+            "Min" : 157,
+            "units" : "count\/min"
+          },
+          {
+            "Avg" : 154.30769230769232,
+            "Max" : 155,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:00:00 +0530",
+            "Min" : 153
+          },
+          {
+            "Max" : 158,
+            "Avg" : 157.41666666666666,
+            "date" : "2026-07-02 16:01:00 +0530",
+            "Min" : 156,
+            "units" : "count\/min"
+          },
+          {
+            "date" : "2026-07-02 16:02:00 +0530",
+            "units" : "count\/min",
+            "Avg" : 158.18181818181819,
+            "Min" : 157,
+            "Max" : 159
+          },
+          {
+            "Max" : 162,
+            "date" : "2026-07-02 16:03:00 +0530",
+            "units" : "count\/min",
+            "Avg" : 160.41666666666666,
+            "Min" : 158
+          },
+          {
+            "units" : "count\/min",
+            "Max" : 162,
+            "Avg" : 160.46153846153845,
+            "date" : "2026-07-02 16:04:00 +0530",
+            "Min" : 158
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 160.25,
+            "Min" : 159,
+            "date" : "2026-07-02 16:05:00 +0530",
+            "Max" : 162
+          },
+          {
+            "Max" : 163,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:06:00 +0530",
+            "Min" : 159,
+            "Avg" : 160.54545454545453
+          },
+          {
+            "Max" : 168,
+            "units" : "count\/min",
+            "Min" : 163,
+            "Avg" : 164.66666666666666,
+            "date" : "2026-07-02 16:07:00 +0530"
+          },
+          {
+            "Avg" : 168.33333333333334,
+            "Min" : 167,
+            "units" : "count\/min",
+            "Max" : 170,
+            "date" : "2026-07-02 16:08:00 +0530"
+          },
+          {
+            "Min" : 162,
+            "Avg" : 163.91666666666666,
+            "Max" : 167,
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:09:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 16:10:00 +0530",
+            "Min" : 158,
+            "Max" : 162,
+            "units" : "count\/min",
+            "Avg" : 159.91666666666666
+          },
+          {
+            "Max" : 166,
+            "Min" : 163,
+            "date" : "2026-07-02 16:11:00 +0530",
+            "Avg" : 164.41666666666666,
+            "units" : "count\/min"
+          },
+          {
+            "Max" : 164,
+            "date" : "2026-07-02 16:12:00 +0530",
+            "Min" : 161,
+            "units" : "count\/min",
+            "Avg" : 162.58333333333334
+          },
+          {
+            "units" : "count\/min",
+            "date" : "2026-07-02 16:13:00 +0530",
+            "Min" : 161,
+            "Max" : 165,
+            "Avg" : 162.5
+          },
+          {
+            "units" : "count\/min",
+            "Avg" : 164.59999999999999,
+            "Max" : 165,
+            "Min" : 164,
+            "date" : "2026-07-02 16:14:00 +0530"
+          }
+        ],
+        "basalEnergy" : [
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.3670180779109697,
+            "date" : "2026-07-02 15:40:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860472960454809,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:41:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:42:00 +0530",
+            "qty" : 1.6860463130326917
+          },
+          {
+            "qty" : 1.686044144787783,
+            "units" : "kcal",
+            "date" : "2026-07-02 15:43:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "date" : "2026-07-02 15:44:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860438779196412
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:45:00 +0530",
+            "qty" : 1.6860481008057469,
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860577924533451,
+            "date" : "2026-07-02 15:46:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860644280533703,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:47:00 +0530"
+          },
+          {
+            "date" : "2026-07-02 15:48:00 +0530",
+            "qty" : 1.6860698468602398,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860745612375101,
+            "date" : "2026-07-02 15:49:00 +0530",
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860857627097021,
+            "date" : "2026-07-02 15:50:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:51:00 +0530",
+            "qty" : 1.6860897731612119
+          },
+          {
+            "date" : "2026-07-02 15:52:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "qty" : 1.6860872107684122
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 15:53:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860846548136696
+          },
+          {
+            "date" : "2026-07-02 15:54:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860806837055324,
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860823256500403,
+            "date" : "2026-07-02 15:55:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860856080173681,
+            "date" : "2026-07-02 15:56:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 15:57:00 +0530",
+            "units" : "kcal",
+            "qty" : 1.6858895420672886
+          },
+          {
+            "units" : "kcal",
+            "qty" : 1.686280642328692,
+            "date" : "2026-07-02 15:58:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "date" : "2026-07-02 15:59:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860882699880111,
+            "units" : "kcal"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:00:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860920627497062
+          },
+          {
+            "date" : "2026-07-02 16:01:00 +0530",
+            "qty" : 1.6860882220558193,
+            "units" : "kcal",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:02:00 +0530",
+            "units" : "kcal",
+            "qty" : 1.6860793042981428
+          },
+          {
+            "units" : "kcal",
+            "qty" : 1.6860712750794862,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:03:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860678769603441,
+            "units" : "kcal",
+            "date" : "2026-07-02 16:04:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:05:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860705280996322
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860721456229051,
+            "date" : "2026-07-02 16:06:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860719585163955,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:07:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860726818328515,
+            "date" : "2026-07-02 16:08:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860781171890533,
+            "date" : "2026-07-02 16:09:00 +0530",
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6860817675717472,
+            "units" : "kcal",
+            "date" : "2026-07-02 16:10:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 1.686078830607352,
+            "units" : "kcal",
+            "date" : "2026-07-02 16:11:00 +0530",
+            "source" : "ADARSH’s Apple Watch"
+          },
+          {
+            "qty" : 1.6860755217811683,
+            "source" : "ADARSH’s Apple Watch",
+            "date" : "2026-07-02 16:12:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch",
+            "qty" : 1.6860722341747687,
+            "date" : "2026-07-02 16:13:00 +0530",
+            "units" : "kcal"
+          },
+          {
+            "qty" : 1.6133508312311897,
+            "source" : "ADARSH’s Apple Watch",
+            "units" : "kcal",
+            "date" : "2026-07-02 16:14:00 +0530"
+          },
+          {
+            "units" : "kcal",
+            "date" : "2026-07-02 16:15:00 +0530",
+            "qty" : 1.5653369411192097,
+            "source" : "ADARSH’s Apple Watch"
+          }
+        ],
+        "speed" : {
+          "qty" : 5.5878419603735336,
+          "units" : "mi\/hr"
+        },
+        "stepCadence" : {
+          "qty" : 167.13221305876726,
+          "units" : "count\/min"
+        },
+        "segments" : [
+          {
+            "metrics" : {
+              "paceKilometre" : {
+                "qty" : 390.39946859471132,
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/km"
+              },
+              "distance" : {
+                "qty" : 999.99999986279181,
+                "units" : "m",
+                "origin" : "sampleOverlapEstimate",
+                "coveredDuration" : 387.78523874282837
+              },
+              "heartRateMaximum" : {
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "sampleCount" : 78,
+                "qty" : 149
+              },
+              "heartRateMinimum" : {
+                "origin" : "sampleSummary",
+                "sampleCount" : 78,
+                "units" : "bpm",
+                "qty" : 88
+              },
+              "speed" : {
+                "units" : "m\/s",
+                "origin" : "activeTimeCalculation",
+                "qty" : 2.5614788964739561
+              },
+              "activeEnergy" : {
+                "units" : "kcal",
+                "coveredDuration" : 390.39946854114532,
+                "qty" : 68.147087765756552,
+                "origin" : "sampleOverlapEstimate"
+              },
+              "heartRateAverage" : {
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "sampleCount" : 78,
+                "qty" : 134.78205128205127
+              },
+              "paceMile" : {
+                "qty" : 628.28704238608714,
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/mi"
+              }
+            },
+            "start" : "2026-07-02 15:40:44 +0530",
+            "index" : 1,
+            "boundaryKind" : "interval",
+            "elapsedDuration" : 390.39946854114532,
+            "boundaryOrigin" : "recordedEvent",
+            "activeDuration" : 390.39946854114532,
+            "eventIndex" : 1,
+            "end" : "2026-07-02 15:47:15 +0530"
+          },
+          {
+            "activeDuration" : 631.69356465339661,
+            "boundaryKind" : "interval",
+            "index" : 2,
+            "metrics" : {
+              "heartRateMinimum" : {
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "sampleCount" : 126,
+                "qty" : 88
+              },
+              "distance" : {
+                "qty" : 1609.3439999412108,
+                "units" : "m",
+                "origin" : "sampleOverlapEstimate",
+                "coveredDuration" : 629.07933485507965
+              },
+              "heartRateAverage" : {
+                "qty" : 141.22222222222223,
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "sampleCount" : 126
+              },
+              "paceMile" : {
+                "origin" : "activeTimeCalculation",
+                "qty" : 631.69356467647231,
+                "units" : "s\/mi"
+              },
+              "paceKilometre" : {
+                "units" : "s\/km",
+                "origin" : "activeTimeCalculation",
+                "qty" : 392.51618341167102
+              },
+              "speed" : {
+                "units" : "m\/s",
+                "origin" : "activeTimeCalculation",
+                "qty" : 2.547665656249388
+              },
+              "activeEnergy" : {
+                "coveredDuration" : 631.69356465339661,
+                "units" : "kcal",
+                "qty" : 112.03700848225976,
+                "origin" : "sampleOverlapEstimate"
+              },
+              "heartRateMaximum" : {
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "qty" : 157,
+                "sampleCount" : 126
+              }
+            },
+            "elapsedDuration" : 631.69356465339661,
+            "end" : "2026-07-02 15:51:16 +0530",
+            "start" : "2026-07-02 15:40:44 +0530",
+            "boundaryOrigin" : "recordedEvent",
+            "eventIndex" : 2
+          },
+          {
+            "metrics" : {
+              "heartRateAverage" : {
+                "sampleCount" : 78,
+                "origin" : "sampleSummary",
+                "qty" : 152.37179487179486,
+                "units" : "bpm"
+              },
+              "heartRateMinimum" : {
+                "qty" : 146,
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "sampleCount" : 78
+              },
+              "paceKilometre" : {
+                "units" : "s\/km",
+                "origin" : "activeTimeCalculation",
+                "qty" : 391.48475989986792
+              },
+              "distance" : {
+                "units" : "m",
+                "qty" : 1000.0000000687844,
+                "coveredDuration" : 391.48475992679596,
+                "origin" : "sampleOverlapEstimate"
+              },
+              "speed" : {
+                "qty" : 2.5543778517860445,
+                "origin" : "activeTimeCalculation",
+                "units" : "m\/s"
+              },
+              "activeEnergy" : {
+                "units" : "kcal",
+                "origin" : "sampleOverlapEstimate",
+                "coveredDuration" : 391.48475992679596,
+                "qty" : 70.494929061118356
+              },
+              "heartRateMaximum" : {
+                "origin" : "sampleSummary",
+                "qty" : 158,
+                "sampleCount" : 78,
+                "units" : "bpm"
+              },
+              "paceMile" : {
+                "units" : "s\/mi",
+                "origin" : "activeTimeCalculation",
+                "qty" : 630.0336494362931
+              }
+            },
+            "boundaryOrigin" : "recordedEvent",
+            "boundaryKind" : "interval",
+            "index" : 3,
+            "start" : "2026-07-02 15:47:15 +0530",
+            "eventIndex" : 3,
+            "activeDuration" : 391.48475992679596,
+            "elapsedDuration" : 391.48475992679596,
+            "end" : "2026-07-02 15:53:46 +0530"
+          },
+          {
+            "metrics" : {
+              "heartRateMaximum" : {
+                "units" : "bpm",
+                "origin" : "sampleSummary",
+                "qty" : 164,
+                "sampleCount" : 126
+              },
+              "paceKilometre" : {
+                "units" : "s\/km",
+                "origin" : "activeTimeCalculation",
+                "qty" : 393.60655217818015
+              },
+              "activeEnergy" : {
+                "qty" : 112.99384717070429,
+                "coveredDuration" : 633.44834315776825,
+                "origin" : "sampleOverlapEstimate",
+                "units" : "kcal"
+              },
+              "paceMile" : {
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/mi",
+                "qty" : 633.4483431086411
+              },
+              "distance" : {
+                "qty" : 1609.3440001248127,
+                "coveredDuration" : 633.44834315776825,
+                "origin" : "sampleOverlapEstimate",
+                "units" : "m"
+              },
+              "heartRateAverage" : {
+                "origin" : "sampleSummary",
+                "sampleCount" : 126,
+                "units" : "bpm",
+                "qty" : 155.68253968253967
+              },
+              "speed" : {
+                "origin" : "activeTimeCalculation",
+                "units" : "m\/s",
+                "qty" : 2.5406081135237661
+              },
+              "heartRateMinimum" : {
+                "units" : "bpm",
+                "sampleCount" : 126,
+                "origin" : "sampleSummary",
+                "qty" : 146
+              }
+            },
+            "index" : 4,
+            "start" : "2026-07-02 15:51:16 +0530",
+            "activeDuration" : 633.44834315776825,
+            "elapsedDuration" : 633.44834315776825,
+            "eventIndex" : 4,
+            "end" : "2026-07-02 16:01:49 +0530",
+            "boundaryOrigin" : "recordedEvent",
+            "boundaryKind" : "interval"
+          },
+          {
+            "activeDuration" : 395.62858259677887,
+            "start" : "2026-07-02 15:53:46 +0530",
+            "eventIndex" : 5,
+            "boundaryKind" : "interval",
+            "metrics" : {
+              "heartRateAverage" : {
+                "qty" : 156.51282051282053,
+                "units" : "bpm",
+                "sampleCount" : 78,
+                "origin" : "sampleSummary"
+              },
+              "heartRateMinimum" : {
+                "qty" : 149,
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "sampleCount" : 78
+              },
+              "heartRateMaximum" : {
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "qty" : 164,
+                "sampleCount" : 78
+              },
+              "activeEnergy" : {
+                "qty" : 71.28995338287902,
+                "coveredDuration" : 395.62858259677887,
+                "units" : "kcal",
+                "origin" : "sampleOverlapEstimate"
+              },
+              "paceMile" : {
+                "origin" : "activeTimeCalculation",
+                "qty" : 636.70248560400819,
+                "units" : "s\/mi"
+              },
+              "paceKilometre" : {
+                "qty" : 395.62858258023653,
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/km"
+              },
+              "speed" : {
+                "qty" : 2.5276232406620731,
+                "units" : "m\/s",
+                "origin" : "activeTimeCalculation"
+              },
+              "distance" : {
+                "qty" : 1000.0000000418129,
+                "units" : "m",
+                "origin" : "sampleOverlapEstimate",
+                "coveredDuration" : 395.62858259677887
+              }
+            },
+            "end" : "2026-07-02 16:00:22 +0530",
+            "elapsedDuration" : 395.62858259677887,
+            "boundaryOrigin" : "recordedEvent",
+            "index" : 5
+          },
+          {
+            "boundaryOrigin" : "recordedEvent",
+            "start" : "2026-07-02 16:00:22 +0530",
+            "boundaryKind" : "interval",
+            "elapsedDuration" : 401.60917603969574,
+            "eventIndex" : 6,
+            "index" : 6,
+            "end" : "2026-07-02 16:07:03 +0530",
+            "activeDuration" : 401.60917603969574,
+            "metrics" : {
+              "paceKilometre" : {
+                "units" : "s\/km",
+                "origin" : "activeTimeCalculation",
+                "qty" : 401.60917603291665
+              },
+              "speed" : {
+                "qty" : 2.4899829477950925,
+                "origin" : "activeTimeCalculation",
+                "units" : "m\/s"
+              },
+              "heartRateMinimum" : {
+                "qty" : 153,
+                "origin" : "sampleSummary",
+                "sampleCount" : 82,
+                "units" : "bpm"
+              },
+              "distance" : {
+                "coveredDuration" : 401.60917603969574,
+                "origin" : "sampleOverlapEstimate",
+                "qty" : 1000.0000000168798,
+                "units" : "m"
+              },
+              "heartRateMaximum" : {
+                "units" : "bpm",
+                "origin" : "sampleSummary",
+                "qty" : 163,
+                "sampleCount" : 82
+              },
+              "activeEnergy" : {
+                "qty" : 72.360374402848919,
+                "units" : "kcal",
+                "origin" : "sampleOverlapEstimate",
+                "coveredDuration" : 401.60917603969574
+              },
+              "paceMile" : {
+                "qty" : 646.32731779351832,
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/mi"
+              },
+              "heartRateAverage" : {
+                "qty" : 159.07317073170731,
+                "units" : "bpm",
+                "sampleCount" : 82,
+                "origin" : "sampleSummary"
+              }
+            }
+          },
+          {
+            "end" : "2026-07-02 16:12:39 +0530",
+            "index" : 7,
+            "metrics" : {
+              "activeEnergy" : {
+                "units" : "kcal",
+                "coveredDuration" : 649.69983780384064,
+                "origin" : "sampleOverlapEstimate",
+                "qty" : 122.5872283049267
+              },
+              "paceKilometre" : {
+                "units" : "s\/km",
+                "origin" : "activeTimeCalculation",
+                "qty" : 403.70476281466898
+              },
+              "heartRateAverage" : {
+                "origin" : "sampleSummary",
+                "qty" : 162.09160305343511,
+                "sampleCount" : 131,
+                "units" : "bpm"
+              },
+              "heartRateMinimum" : {
+                "qty" : 157,
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "sampleCount" : 131
+              },
+              "distance" : {
+                "origin" : "sampleOverlapEstimate",
+                "qty" : 1609.3439999916523,
+                "coveredDuration" : 649.69983780384064,
+                "units" : "m"
+              },
+              "heartRateMaximum" : {
+                "qty" : 170,
+                "sampleCount" : 131,
+                "origin" : "sampleSummary",
+                "units" : "bpm"
+              },
+              "paceMile" : {
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/mi",
+                "qty" : 649.69983780721066
+              },
+              "speed" : {
+                "qty" : 2.4770577216575362,
+                "units" : "m\/s",
+                "origin" : "activeTimeCalculation"
+              }
+            },
+            "boundaryOrigin" : "recordedEvent",
+            "boundaryKind" : "interval",
+            "elapsedDuration" : 649.69983780384064,
+            "eventIndex" : 7,
+            "start" : "2026-07-02 16:01:49 +0530",
+            "activeDuration" : 649.69983780384064
+          },
+          {
+            "boundaryOrigin" : "recordedEvent",
+            "elapsedDuration" : 407.65032088756561,
+            "eventIndex" : 8,
+            "metrics" : {
+              "paceMile" : {
+                "qty" : 656.04959804980228,
+                "units" : "s\/mi",
+                "origin" : "activeTimeCalculation"
+              },
+              "activeEnergy" : {
+                "coveredDuration" : 407.65032088756561,
+                "origin" : "sampleOverlapEstimate",
+                "units" : "kcal",
+                "qty" : 79.372906586694967
+              },
+              "distance" : {
+                "qty" : 999.9999999522538,
+                "origin" : "sampleOverlapEstimate",
+                "units" : "m",
+                "coveredDuration" : 407.65032088756561
+              },
+              "heartRateAverage" : {
+                "origin" : "sampleSummary",
+                "units" : "bpm",
+                "qty" : 163.77777777777777,
+                "sampleCount" : 81
+              },
+              "heartRateMaximum" : {
+                "qty" : 170,
+                "units" : "bpm",
+                "origin" : "sampleSummary",
+                "sampleCount" : 81
+              },
+              "heartRateMinimum" : {
+                "units" : "bpm",
+                "origin" : "sampleSummary",
+                "qty" : 158,
+                "sampleCount" : 81
+              },
+              "speed" : {
+                "origin" : "activeTimeCalculation",
+                "units" : "m\/s",
+                "qty" : 2.4530828229816719
+              },
+              "paceKilometre" : {
+                "origin" : "activeTimeCalculation",
+                "qty" : 407.65032090702937,
+                "units" : "s\/km"
+              }
+            },
+            "boundaryKind" : "interval",
+            "start" : "2026-07-02 16:07:03 +0530",
+            "index" : 8,
+            "activeDuration" : 407.65032088756561,
+            "end" : "2026-07-02 16:13:51 +0530"
+          },
+          {
+            "index" : 9,
+            "metrics" : {
+              "distance" : {
+                "qty" : 217.9461271964974,
+                "units" : "m",
+                "origin" : "sampleOverlapEstimate",
+                "coveredDuration" : 101.63522100448608
+              },
+              "paceKilometre" : {
+                "qty" : 466.33185141598358,
+                "units" : "s\/km",
+                "origin" : "activeTimeCalculation"
+              },
+              "heartRateAverage" : {
+                "units" : "bpm",
+                "sampleCount" : 20,
+                "qty" : 162.94999999999999,
+                "origin" : "sampleSummary"
+              },
+              "paceMile" : {
+                "origin" : "activeTimeCalculation",
+                "qty" : 750.48836708520469,
+                "units" : "s\/mi"
+              },
+              "activeEnergy" : {
+                "coveredDuration" : 101.63522100448608,
+                "qty" : 17.633829940217879,
+                "origin" : "sampleOverlapEstimate",
+                "units" : "kcal"
+              },
+              "heartRateMaximum" : {
+                "units" : "bpm",
+                "origin" : "sampleSummary",
+                "sampleCount" : 20,
+                "qty" : 165
+              },
+              "heartRateMinimum" : {
+                "sampleCount" : 20,
+                "qty" : 161,
+                "units" : "bpm",
+                "origin" : "sampleSummary"
+              },
+              "speed" : {
+                "units" : "m\/s",
+                "qty" : 2.1443956636536212,
+                "origin" : "activeTimeCalculation"
+              }
+            },
+            "eventIndex" : 9,
+            "activeDuration" : 101.63522100448608,
+            "start" : "2026-07-02 16:12:39 +0530",
+            "boundaryKind" : "interval",
+            "boundaryOrigin" : "recordedEvent",
+            "elapsedDuration" : 101.63522100448608,
+            "end" : "2026-07-02 16:14:21 +0530"
+          },
+          {
+            "boundaryKind" : "interval",
+            "boundaryOrigin" : "recordedEvent",
+            "start" : "2026-07-02 16:13:51 +0530",
+            "eventIndex" : 10,
+            "metrics" : {
+              "distance" : {
+                "coveredDuration" : 29.704658627510071,
+                "qty" : 45.978127311650496,
+                "origin" : "sampleOverlapEstimate",
+                "units" : "m"
+              },
+              "heartRateMinimum" : {
+                "origin" : "sampleSummary",
+                "sampleCount" : 6,
+                "units" : "bpm",
+                "qty" : 164
+              },
+              "paceKilometre" : {
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/km",
+                "qty" : 646.06064588418201
+              },
+              "activeEnergy" : {
+                "qty" : 3.5866626988108123,
+                "origin" : "sampleOverlapEstimate",
+                "coveredDuration" : 29.704658627510071,
+                "units" : "kcal"
+              },
+              "speed" : {
+                "origin" : "activeTimeCalculation",
+                "units" : "m\/s",
+                "qty" : 1.5478423060909794
+              },
+              "paceMile" : {
+                "origin" : "activeTimeCalculation",
+                "units" : "s\/mi",
+                "qty" : 1039.7338240898332
+              },
+              "heartRateAverage" : {
+                "sampleCount" : 6,
+                "qty" : 164.5,
+                "units" : "bpm",
+                "origin" : "sampleSummary"
+              },
+              "heartRateMaximum" : {
+                "units" : "bpm",
+                "sampleCount" : 6,
+                "qty" : 165,
+                "origin" : "sampleSummary"
+              }
+            },
+            "index" : 10,
+            "end" : "2026-07-02 16:14:21 +0530",
+            "activeDuration" : 29.704658627510071,
+            "elapsedDuration" : 29.704658627510071
+          }
+        ],
+        "activeEnergyBurned" : {
+          "units" : "kcal",
+          "qty" : 365.25191389810868
+        },
+        "walkingAndRunningDistance" : [
+          {
+            "qty" : 0.021767066776294287,
+            "date" : "2026-07-02 15:40:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.10010452212505293,
+            "date" : "2026-07-02 15:41:00 +0530",
+            "units" : "mi"
+          },
+          {
+            "units" : "mi",
+            "qty" : 0.09118150754526598,
+            "date" : "2026-07-02 15:42:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "units" : "mi",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.098364488383967469,
+            "date" : "2026-07-02 15:43:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:44:00 +0530",
+            "qty" : 0.099347584139874406,
+            "units" : "mi"
+          },
+          {
+            "qty" : 0.091868313358180367,
+            "units" : "mi",
+            "date" : "2026-07-02 15:45:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 15:46:00 +0530",
+            "qty" : 0.093764715146015989,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi"
+          },
+          {
+            "units" : "mi",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:47:00 +0530",
+            "qty" : 0.097220602586880908
+          },
+          {
+            "date" : "2026-07-02 15:48:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi",
+            "qty" : 0.093245016263733715
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.095038388793367401,
+            "units" : "mi",
+            "date" : "2026-07-02 15:49:00 +0530"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.092975402145758376,
+            "date" : "2026-07-02 15:50:00 +0530",
+            "units" : "mi"
+          },
+          {
+            "date" : "2026-07-02 15:51:00 +0530",
+            "qty" : 0.09425733887773273,
+            "units" : "mi",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 15:52:00 +0530",
+            "units" : "mi",
+            "qty" : 0.097155232647991432,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "qty" : 0.097252422424706664,
+            "date" : "2026-07-02 15:53:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:54:00 +0530",
+            "qty" : 0.094494726723223316,
+            "units" : "mi"
+          },
+          {
+            "date" : "2026-07-02 15:55:00 +0530",
+            "units" : "mi",
+            "qty" : 0.095082457774996562,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "qty" : 0.091348272594286795,
+            "units" : "mi",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:56:00 +0530"
+          },
+          {
+            "units" : "mi",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:57:00 +0530",
+            "qty" : 0.096077175734550421
+          },
+          {
+            "units" : "mi",
+            "date" : "2026-07-02 15:58:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.09168807712269246
+          },
+          {
+            "qty" : 0.096984962421751683,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 15:59:00 +0530",
+            "units" : "mi"
+          },
+          {
+            "date" : "2026-07-02 16:00:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.092721475225556974,
+            "units" : "mi"
+          },
+          {
+            "date" : "2026-07-02 16:01:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.093216594711048303,
+            "units" : "mi"
+          },
+          {
+            "date" : "2026-07-02 16:02:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi",
+            "qty" : 0.093562494099023785
+          },
+          {
+            "units" : "mi",
+            "qty" : 0.093742791040474033,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:03:00 +0530"
+          },
+          {
+            "units" : "mi",
+            "qty" : 0.091001675648836058,
+            "date" : "2026-07-02 16:04:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.09300409581279058,
+            "date" : "2026-07-02 16:05:00 +0530",
+            "units" : "mi"
+          },
+          {
+            "qty" : 0.092217914784039262,
+            "date" : "2026-07-02 16:06:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi",
+            "qty" : 0.090120444514475942,
+            "date" : "2026-07-02 16:07:00 +0530"
+          },
+          {
+            "units" : "mi",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:08:00 +0530",
+            "qty" : 0.09194684340778464
+          },
+          {
+            "qty" : 0.094153010788994712,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:09:00 +0530",
+            "units" : "mi"
+          },
+          {
+            "qty" : 0.090263056852859291,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "date" : "2026-07-02 16:10:00 +0530",
+            "units" : "mi"
+          },
+          {
+            "qty" : 0.094009389726155287,
+            "units" : "mi",
+            "date" : "2026-07-02 16:11:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          },
+          {
+            "date" : "2026-07-02 16:12:00 +0530",
+            "qty" : 0.090183883048486874,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi"
+          },
+          {
+            "qty" : 0.086757107661761784,
+            "date" : "2026-07-02 16:13:00 +0530",
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "units" : "mi"
+          },
+          {
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max",
+            "qty" : 0.051605477677914034,
+            "units" : "mi",
+            "date" : "2026-07-02 16:14:00 +0530"
+          },
+          {
+            "units" : "mi",
+            "date" : "2026-07-02 16:15:00 +0530",
+            "qty" : 0.053073746057933309,
+            "source" : "ADARSH’s Apple Watch|ADARSH’s iPhone 12 pro max"
+          }
+        ],
+        "location" : "Outdoor"
+      }
+    ]
+  }
+}

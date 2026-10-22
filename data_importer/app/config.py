@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     GOOGLE_SERVICE_ACCOUNT_FILE: str
     HEALTH_METRICS_DRIVE_FOLDER_ID: str
     HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID: str
+    WORKOUT_METRICS_DRIVE_FOLDER_ID: str
+    WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID: str
 
     model_config = SettingsConfigDict(
         env_file=".env",
