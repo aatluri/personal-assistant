@@ -118,7 +118,6 @@ def create_body_measurement(**overrides) -> BodyMeasurements:
 # Workout Metrics
 # ---------------------------------------------------------------------
 
-
 def create_workout_metric() -> WorkoutMetrics:
     """
     Create a WorkoutMetrics object used by repository helper tests.
@@ -129,13 +128,14 @@ def create_workout_metric() -> WorkoutMetrics:
         workout_type="Functional Strength Training",
         workout_start_time=datetime(2026, 10, 8, 6, 30, 0),
         workout_end_time=datetime(2026, 10, 8, 7, 30, 0),
-        workout_duration=timedelta(hours=1),
+        workout_duration_min=60,
         total_energy_kcal=500,
         active_energy_kcal=420,
         max_heart_rate_bpm=175,
         avg_heart_rate_bpm=145,
-        distance_mi=3.2,
-        avg_speed_mph=6.4,
+        distance_km=3.2,
+        avg_speed_kmph=6.4,
+        source="Apple Watch",
     )
 
 
@@ -149,15 +149,16 @@ def create_workout_metric_row() -> dict:
         "Workout Type": "Functional Strength Training",
         "Workout Start Time": "October 08, 2026 06:30:00",
         "Workout End Time": "October 08, 2026 07:30:00",
-        "Workout Duration": "01:00:00",
+        "Workout Duration (min)": 60,
         "Total Energy (kcal)": 500,
         "Active Energy (kcal)": 420,
         "Max Heart Rate (bpm)": 175,
         "Avg Heart Rate (bpm)": 145,
-        "Distance (mi)": 3.2,
-        "Avg Speed (mi/hr)": 6.4,
+        "Distance (km)": 3.2,
+        "Avg Speed (km/hr)": 6.4,
+        "Source": "Apple Watch",
+        "Updated_DateTime": "October 22, 2026 14:00:00",
     }
-
 
 # ---------------------------------------------------------------------
 # Sleep Metrics
@@ -214,6 +215,7 @@ def create_sleep_metric_row(**overrides) -> dict:
         "Awake (hr)": 0.5,
 
         "Source": "Apple Watch",
+        "Updated_DateTime": "October 22, 2026 14:00:00",
     }
 
     row.update(overrides)
@@ -289,12 +291,12 @@ def create_nutrition_metric_row(**overrides) -> dict:
         "Cholesterol (mg)": 250,
 
         "Source": "Foodnoms",
+        "Updated_DateTime": "October 22, 2026 14:00:00",
     }
 
     row.update(overrides)
 
     return row
-
 
 # ---------------------------------------------------------------------
 # Health Metrics
@@ -375,6 +377,7 @@ def create_health_metric_row(**overrides) -> dict:
         "Resting Heart Rate (count/min)": 52,
 
         "Source": "Apple Watch",
+        "Updated_DateTime": "October 22, 2026 14:00:00",
     }
 
     row.update(overrides)

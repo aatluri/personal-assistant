@@ -102,10 +102,18 @@ class BodyMeasurementsGoogleSheetsRepository:
             value_input_option="USER_ENTERED",
         )
 
-    def update_body_measurement(self,measurement_date: date,body_measurement: BodyMeasurements,) -> bool:
+    def update_body_measurement(
+        self,
+        measurement_date: date,
+        body_measurement: BodyMeasurements,
+    ) -> bool:
         """
         Update an existing Body Measurements record identified
         by its date.
+
+        Only incoming fields with non-None values overwrite
+        existing values. Existing values are preserved when
+        the incoming value is None.
 
         Returns:
             True if the matching row was found and updated.
@@ -116,10 +124,13 @@ class BodyMeasurementsGoogleSheetsRepository:
 
         rows = worksheet.get_all_values()
 
-        # Search the worksheet for a row with the matching date.
-        # If found, replace the entire row with the updated values.
-        # Row 1 contains the worksheet headers, so data starts at row 2.
-        for row_number, row in enumerate(rows[1:], start=2):
+        # Row 1 contains the worksheet headers.
+        headers = rows[0]
+
+        for row_number, row in enumerate(
+            rows[1:],
+            start=2,
+        ):
 
             if not row or not row[0]:
                 continue
@@ -129,19 +140,56 @@ class BodyMeasurementsGoogleSheetsRepository:
                 DATE_FORMAT,
             ).date()
 
-            if row_date == measurement_date:
+            if row_date != measurement_date:
+                continue
 
-                updated_row = self._body_measurement_to_row(
-                    body_measurement,
+            # Convert the existing worksheet row into the same
+            # dictionary structure used by get_all_records().
+            existing_row_dict = dict(
+                zip(
+                    headers,
+                    row,
                 )
-                # This has the columns which are to be considered in the respective google sheet.
-                worksheet.update(
-                    range_name=f"A{row_number}:V{row_number}",
-                    values=[updated_row],
-                    value_input_option="USER_ENTERED",
-                )
+            )
 
-                return True
+            existing_body_measurement = (
+                self._row_to_body_measurement(
+                    existing_row_dict
+                )
+            )
+
+            # Start with the existing record.
+            merged_data = (
+                existing_body_measurement.model_dump()
+            )
+
+            # Replace only fields for which the incoming
+            # Body Measurements object has a value.
+            incoming_data = body_measurement.model_dump()
+
+            for field, value in incoming_data.items():
+
+                if field == "date":
+                    continue
+
+                if value is not None:
+                    merged_data[field] = value
+
+            merged_body_measurement = BodyMeasurements(
+                **merged_data
+            )
+
+            updated_row = self._body_measurement_to_row(
+                merged_body_measurement
+            )
+
+            worksheet.update(
+                range_name=f"A{row_number}:V{row_number}",
+                values=[updated_row],
+                value_input_option="USER_ENTERED",
+            )
+
+            return True
 
         return False
 

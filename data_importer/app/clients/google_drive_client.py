@@ -3,7 +3,7 @@ from io import BytesIO
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from googleapiclient.http import MediaIoBaseDownload
+from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 
 from app.config import settings
 
@@ -28,8 +28,8 @@ class GoogleDriveClient:
         )
 
     def list_files(
-        self,
-        folder_id: str,
+    self,
+    folder_id: str,
     ) -> list[dict]:
         """
         Return all non-trashed files inside a Google Drive folder.
@@ -40,21 +40,40 @@ class GoogleDriveClient:
             "and trashed = false"
         )
 
-        response = self.service.files().list(
-            q=query,
-            fields=(
-                "files("
-                "id, "
-                "name, "
-                "mimeType, "
-                "createdTime, "
-                "modifiedTime"
-                ")"
-            ),
-            orderBy="modifiedTime",
-        ).execute()
+        files = []
+        page_token = None
 
-        return response.get("files", [])
+        while True:
+
+            response = self.service.files().list(
+                q=query,
+                fields=(
+                    "nextPageToken, "
+                    "files("
+                    "id, "
+                    "name, "
+                    "mimeType, "
+                    "createdTime, "
+                    "modifiedTime"
+                    ")"
+                ),
+                orderBy="modifiedTime",
+                pageSize=100,
+                pageToken=page_token,
+            ).execute()
+
+            files.extend(
+                response.get("files", [])
+            )
+
+            page_token = response.get(
+                "nextPageToken"
+            )
+
+            if page_token is None:
+                break
+
+        return files
 
     def read_json_file(
         self,
@@ -122,4 +141,49 @@ class GoogleDriveClient:
             addParents=destination_folder_id,
             removeParents=source_folder_id,
             fields="id, name, parents",
+        ).execute()
+
+
+    def create_json_file(
+        self,
+        folder_id: str,
+        file_name: str,
+        data: dict,
+    ) -> dict:
+        """
+        Create a JSON file inside a Google Drive folder.
+
+        Primarily useful for integration and E2E tests.
+        """
+
+        file_content = json.dumps(
+            data
+        ).encode("utf-8")
+
+        media = MediaIoBaseUpload(
+            BytesIO(file_content),
+            mimetype="application/json",
+            resumable=False,
+        )
+
+        return self.service.files().create(
+            body={
+                "name": file_name,
+                "parents": [folder_id],
+            },
+            media_body=media,
+            fields="id, name, parents",
+        ).execute()
+
+
+    def delete_file(
+        self,
+        file_id: str,
+    ) -> None:
+        """
+        Permanently delete a Google Drive file.
+        """
+
+        self.service.files().delete(
+            fileId=file_id,
         ).execute()

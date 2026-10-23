@@ -8,6 +8,7 @@ from app.modules.health.health_metrics.health_metrics_schema import (
 
 
 DATE_FORMAT = "%B %d, %Y"
+DATETIME_FORMAT = "%B %d, %Y %H:%M:%S"
 
 
 class HealthMetricsGoogleSheetsRepository:
@@ -96,6 +97,10 @@ class HealthMetricsGoogleSheetsRepository:
         """
         Update an existing Health Metrics record identified by its date.
 
+        Only incoming fields with non-None values overwrite
+        existing values. Existing values are preserved when
+        the incoming value is None.
+
         Returns:
             True if the matching row was found and updated.
             False if no matching row exists.
@@ -105,8 +110,13 @@ class HealthMetricsGoogleSheetsRepository:
 
         rows = worksheet.get_all_values()
 
-        # Row 1 contains headers, so data starts at row 2.
-        for row_number, row in enumerate(rows[1:], start=2):
+        # Row 1 contains the worksheet headers.
+        headers = rows[0]
+
+        for row_number, row in enumerate(
+            rows[1:],
+            start=2,
+        ):
 
             if not row or not row[0]:
                 continue
@@ -116,22 +126,57 @@ class HealthMetricsGoogleSheetsRepository:
                 DATE_FORMAT,
             ).date()
 
-            if row_date == metric_date:
+            if row_date != metric_date:
+                continue
 
-                updated_row = self._health_metric_to_row(
-                    health_metric,
+            # Convert the existing worksheet row into the same
+            # dictionary structure used by get_all_records().
+            existing_row_dict = dict(
+                zip(
+                    headers,
+                    row,
                 )
+            )
 
-                worksheet.update(
-                    range_name=f"A{row_number}:P{row_number}",
-                    values=[updated_row],
-                    value_input_option="USER_ENTERED",
+            existing_health_metric = (
+                self._row_to_health_metrics(
+                    existing_row_dict
                 )
+            )
 
-                return True
+            # Start with the existing record.
+            merged_data = (
+                existing_health_metric.model_dump()
+            )
+
+            # Replace only fields that have an incoming value.
+            incoming_data = health_metric.model_dump()
+
+            for field, value in incoming_data.items():
+
+                if field == "date":
+                    continue
+
+                if value is not None:
+                    merged_data[field] = value
+
+            merged_health_metric = HealthMetrics(
+                **merged_data
+            )
+
+            updated_row = self._health_metric_to_row(
+                merged_health_metric
+            )
+
+            worksheet.update(
+                range_name=f"A{row_number}:Q{row_number}",
+                values=[updated_row],
+                value_input_option="USER_ENTERED",
+            )
+
+            return True
 
         return False
-
     def _get_health_metrics_worksheet(self):
         """
         Return the Health_Metrics worksheet from the shared spreadsheet.
@@ -176,6 +221,10 @@ class HealthMetricsGoogleSheetsRepository:
             health_metric.resting_heart_rate_bpm,
 
             health_metric.source,
+
+            datetime.now().strftime(
+                DATETIME_FORMAT
+            ),
         ]
 
     def _row_to_health_metrics(

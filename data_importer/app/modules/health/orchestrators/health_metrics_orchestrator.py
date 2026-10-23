@@ -1,8 +1,11 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 from app.clients.backend_client import BackendClient
 from app.clients.google_drive_client import GoogleDriveClient
 from app.config import settings
+from app.modules.health.importers.body_measurements_metrics_importer import (
+    import_body_measurements_metrics,
+)
 from app.modules.health.importers.health_metrics_importer import (
     import_health_metrics,
 )
@@ -13,20 +16,30 @@ from app.modules.health.importers.sleep_metrics_importer import (
     import_sleep_metrics,
 )
 
+from app.modules.health.constants import (
+    FAILED_PREFIX,
+    PROCESSED_PREFIX,
+)
 
-FAILED_PREFIX = "FAILED_"
-ARCHIVE_AFTER_DAYS = 30
+
+
 FILE_PREFIX = "HealthMetrics-"
 FILE_SUFFIX = ".json"
 
 
-def process_health_metrics_files() -> list[dict]:
+def process_health_metrics_files(
+    file_name: str | None = None,
+) -> list[dict]:
     """
-    Process all Health Metrics JSON files currently waiting
+    Process Health Metrics JSON files currently waiting
     in the Google Drive incoming folder.
 
+    If file_name is provided, only that specific file
+    will be processed. Otherwise, all unprocessed and
+    failed files in the incoming folder will be processed.
+
     Each file contains Health Metrics, Nutrition Metrics,
-    and Sleep Metrics data.
+    Sleep Metrics, and Body Measurements Metrics data.
     """
 
     drive_client = GoogleDriveClient()
@@ -36,17 +49,50 @@ def process_health_metrics_files() -> list[dict]:
         settings.HEALTH_METRICS_DRIVE_FOLDER_ID
     )
 
+    # Processed files remain in the incoming folder until
+    # the separate archive process moves them.
+    files = [
+        file
+        for file in files
+        if not file["name"].startswith(PROCESSED_PREFIX)
+    ]
+
+    if file_name is not None:
+        files = [
+            file
+            for file in files
+            if file["name"] == file_name
+        ]
+
+    files.sort(
+        key=lambda file: (
+            get_health_metrics_file_date(
+                file["name"].removeprefix(FAILED_PREFIX)
+            )
+            or date.max
+        )
+    )
+
     if not files:
-        print("No Health Metrics files found to process.")
+        if file_name is not None:
+            print(
+                f"Health Metrics file not found "
+                f"or already processed: {file_name}"
+            )
+        else:
+            print(
+                "No Health Metrics files found to process."
+            )
+
         return []
 
     results = []
 
     for file in files:
         file_id = file["id"]
-        file_name = file["name"]
+        current_file_name = file["name"]
 
-        print(f"Processing: {file_name}")
+        print(f"Processing: {current_file_name}")
 
         try:
             # Read the JSON file only once.
@@ -72,139 +118,85 @@ def process_health_metrics_files() -> list[dict]:
                 backend_client,
             )
 
+            # Import Body Measurements Metrics.
+            body_measurements_result = (
+                import_body_measurements_metrics(
+                    export_data,
+                    backend_client,
+                )
+            )
+
             # The file is considered successfully processed
-            # only if all three imports complete successfully.
+            # only if all four imports complete successfully.
             results.append(
                 {
-                    "file_name": file_name,
+                    "file_name": current_file_name,
                     "health_metrics": health_result,
                     "nutrition_metrics": nutrition_result,
                     "sleep_metrics": sleep_result,
+                    "body_measurements_metrics": (
+                        body_measurements_result
+                    ),
                 }
             )
 
-            # If this file failed during a previous run,
-            # restore its original filename after success.
-            if file_name.startswith(FAILED_PREFIX):
-                original_name = file_name.removeprefix(
-                    FAILED_PREFIX
-                )
+            # Remove FAILED_ if this is a successful retry.
+            original_name = current_file_name.removeprefix(
+                FAILED_PREFIX
+            )
 
-                drive_client.rename_file(
-                    file_id=file_id,
-                    new_name=original_name,
-                )
+            # Mark the successfully imported file as processed.
+            processed_name = (
+                f"{PROCESSED_PREFIX}{original_name}"
+            )
 
-                file_name = original_name
+            drive_client.rename_file(
+                file_id=file_id,
+                new_name=processed_name,
+            )
 
             print(
-                f"Successfully imported: {file_name}"
+                f"Successfully imported and marked "
+                f"as processed: {processed_name}"
             )
 
         except Exception as error:
             print(
-                f"Failed to import {file_name}: {error}"
+                f"Failed to import "
+                f"{current_file_name}: {error}"
             )
 
-            # Mark the file as failed so it is immediately
-            # visible in Google Drive.
-            if not file_name.startswith(FAILED_PREFIX):
+            # Mark the file as failed so it can be retried
+            # on a later run.
+            if not current_file_name.startswith(
+                FAILED_PREFIX
+            ):
                 try:
+                    failed_name = (
+                        f"{FAILED_PREFIX}"
+                        f"{current_file_name}"
+                    )
+
                     drive_client.rename_file(
                         file_id=file_id,
-                        new_name=f"{FAILED_PREFIX}{file_name}",
+                        new_name=failed_name,
                     )
 
                     print(
                         f"Marked as failed: "
-                        f"{FAILED_PREFIX}{file_name}"
+                        f"{failed_name}"
                     )
 
                 except Exception as rename_error:
                     print(
                         f"Unable to rename failed file "
-                        f"{file_name}: {rename_error}"
+                        f"{current_file_name}: "
+                        f"{rename_error}"
                     )
 
             continue
 
-    # Perform housekeeping only after all files have
-    # been attempted.
-    archive_old_health_metrics_files(
-        drive_client=drive_client,
-    )
-
     return results
-
-
-def archive_old_health_metrics_files(
-    drive_client: GoogleDriveClient,
-) -> None:
-    """
-    Move Health Metrics files older than 30 days to the
-    processed archive folder.
-
-    The age of the file is determined from the date contained
-    in its filename, not from Google Drive metadata.
-
-    Failed files are never archived.
-    """
-
-    files = drive_client.list_files(
-        settings.HEALTH_METRICS_DRIVE_FOLDER_ID
-    )
-
-    cutoff_date = (
-        date.today()
-        - timedelta(days=ARCHIVE_AFTER_DAYS)
-    )
-
-    for file in files:
-        file_name = file["name"]
-
-        # Failed files remain in the incoming folder
-        # so they can be retried.
-        if file_name.startswith(FAILED_PREFIX):
-            continue
-
-        file_date = get_health_metrics_file_date(
-            file_name
-        )
-
-        # Ignore files whose names do not match the expected
-        # Health Metrics filename format.
-        if file_date is None:
-            print(
-                f"Skipping archive check for "
-                f"unrecognized file: {file_name}"
-            )
-            continue
-
-        # Keep the latest 30 days in the incoming folder.
-        if file_date >= cutoff_date:
-            continue
-
-        try:
-            drive_client.move_file(
-                file_id=file["id"],
-                source_folder_id=(
-                    settings.HEALTH_METRICS_DRIVE_FOLDER_ID
-                ),
-                destination_folder_id=(
-                    settings
-                    .HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID
-                ),
-            )
-
-            print(
-                f"Archived old file: {file_name}"
-            )
-
-        except Exception as error:
-            print(
-                f"Unable to archive "
-                f"{file_name}: {error}"
-            )
 
 
 def get_health_metrics_file_date(

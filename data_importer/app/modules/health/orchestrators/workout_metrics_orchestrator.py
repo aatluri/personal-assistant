@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 from app.clients.backend_client import BackendClient
 from app.clients.google_drive_client import GoogleDriveClient
@@ -6,10 +6,12 @@ from app.config import settings
 from app.modules.health.importers.workout_metrics_importer import (
     import_workout_metrics,
 )
+from app.modules.health.constants import (
+    FAILED_PREFIX,
+    PROCESSED_PREFIX,
+)
 
 
-FAILED_PREFIX = "FAILED_"
-ARCHIVE_AFTER_DAYS = 30
 FILE_PREFIX = "WorkoutMetrics-"
 FILE_SUFFIX = ".json"
 
@@ -31,6 +33,15 @@ def process_workout_metrics_files(
         settings.WORKOUT_METRICS_DRIVE_FOLDER_ID
     )
 
+    # Successfully processed files remain in the incoming
+    # folder until the separate archiver moves them.
+    # They must not be processed again.
+    files = [
+        file
+        for file in files
+        if not file["name"].startswith(PROCESSED_PREFIX)
+    ]
+
     # If a specific filename was requested, process only
     # that file.
     if file_name is not None:
@@ -40,6 +51,16 @@ def process_workout_metrics_files(
             if file["name"] == file_name
         ]
 
+    # Process files oldest to newest.
+    # FAILED_ files remain eligible for retry.
+    files.sort(
+        key=lambda file: (
+            get_workout_metrics_file_date(
+                file["name"].removeprefix(FAILED_PREFIX)
+            )
+            or date.max
+        )
+    )
 
     if not files:
         print("No Workout Metrics files found to process.")
@@ -49,9 +70,9 @@ def process_workout_metrics_files(
 
     for file in files:
         file_id = file["id"]
-        file_name = file["name"]
+        current_file_name = file["name"]
 
-        print(f"Processing: {file_name}")
+        print(f"Processing: {current_file_name}")
 
         try:
             # Read the JSON file only once.
@@ -67,133 +88,67 @@ def process_workout_metrics_files(
 
             results.append(
                 {
-                    "file_name": file_name,
+                    "file_name": current_file_name,
                     "workout_metrics": workout_results,
                 }
             )
 
-            # If this file failed during a previous run,
-            # restore its original filename after success.
-            if file_name.startswith(FAILED_PREFIX):
-                original_name = file_name.removeprefix(
-                    FAILED_PREFIX
-                )
+            # Remove FAILED_ if this is a successful retry,
+            # then mark the file as successfully processed.
+            original_name = current_file_name.removeprefix(
+                FAILED_PREFIX
+            )
 
-                drive_client.rename_file(
-                    file_id=file_id,
-                    new_name=original_name,
-                )
+            processed_name = (
+                f"{PROCESSED_PREFIX}{original_name}"
+            )
 
-                file_name = original_name
+            drive_client.rename_file(
+                file_id=file_id,
+                new_name=processed_name,
+            )
 
             print(
-                f"Successfully imported: {file_name}"
+                f"Successfully imported: "
+                f"{current_file_name}"
             )
 
         except Exception as error:
             print(
-                f"Failed to import {file_name}: {error}"
+                f"Failed to import "
+                f"{current_file_name}: {error}"
             )
 
-            # Mark the file as failed so it is immediately
-            # visible in Google Drive.
-            if not file_name.startswith(FAILED_PREFIX):
+            # Mark the file as failed so it remains visible
+            # and can be retried on a later run.
+            if not current_file_name.startswith(
+                FAILED_PREFIX
+            ):
                 try:
                     drive_client.rename_file(
                         file_id=file_id,
-                        new_name=f"{FAILED_PREFIX}{file_name}",
+                        new_name=(
+                            f"{FAILED_PREFIX}"
+                            f"{current_file_name}"
+                        ),
                     )
 
                     print(
                         f"Marked as failed: "
-                        f"{FAILED_PREFIX}{file_name}"
+                        f"{FAILED_PREFIX}"
+                        f"{current_file_name}"
                     )
 
                 except Exception as rename_error:
                     print(
                         f"Unable to rename failed file "
-                        f"{file_name}: {rename_error}"
+                        f"{current_file_name}: "
+                        f"{rename_error}"
                     )
 
             continue
 
-    # Perform housekeeping only after all files have
-    # been attempted.
-    archive_old_workout_metrics_files(
-        drive_client=drive_client,
-    )
-
     return results
-
-
-def archive_old_workout_metrics_files(
-    drive_client: GoogleDriveClient,
-) -> None:
-    """
-    Move Workout Metrics files older than 30 days to the
-    processed archive folder.
-
-    The age of the file is determined from the date contained
-    in its filename, not from Google Drive metadata.
-
-    Failed files are never archived.
-    """
-
-    files = drive_client.list_files(
-        settings.WORKOUT_METRICS_DRIVE_FOLDER_ID
-    )
-
-    cutoff_date = (
-        date.today()
-        - timedelta(days=ARCHIVE_AFTER_DAYS)
-    )
-
-    for file in files:
-        file_name = file["name"]
-
-        # Failed files remain in the incoming folder
-        # so they can be retried.
-        if file_name.startswith(FAILED_PREFIX):
-            continue
-
-        file_date = get_workout_metrics_file_date(
-            file_name
-        )
-
-        # Ignore files whose names do not match the expected
-        # Workout Metrics filename format.
-        if file_date is None:
-            print(
-                f"Skipping archive check for "
-                f"unrecognized file: {file_name}"
-            )
-            continue
-
-        # Keep the latest 30 days in the incoming folder.
-        if file_date >= cutoff_date:
-            continue
-
-        try:
-            drive_client.move_file(
-                file_id=file["id"],
-                source_folder_id=(
-                    settings.WORKOUT_METRICS_DRIVE_FOLDER_ID
-                ),
-                destination_folder_id=(
-                    settings
-                    .WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID
-                ),
-            )
-
-            print(
-                f"Archived old file: {file_name}"
-            )
-
-        except Exception as error:
-            print(
-                f"Unable to archive "
-                f"{file_name}: {error}"
-            )
 
 
 def get_workout_metrics_file_date(

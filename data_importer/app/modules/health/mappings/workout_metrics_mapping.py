@@ -12,7 +12,7 @@ WORKOUT_METRICS_MAPPING = {
         "source_field": "end",
     },
 
-    "workout_duration": {
+    "workout_duration_min": {
         "source_field": "duration",
     },
 
@@ -38,12 +38,12 @@ WORKOUT_METRICS_MAPPING = {
         "nested_value_field": "qty",
     },
 
-    "distance_mi": {
+    "distance_km": {
         "source_field": "distance",
         "value_field": "qty",
     },
 
-    "avg_speed_mph": {
+    "avg_speed_kmph": {
         "source_field": "activities",
         "value_field": "metrics",
         "nested_value_field": "speed",

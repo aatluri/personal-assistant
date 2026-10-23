@@ -97,6 +97,10 @@ class SleepMetricsGoogleSheetsRepository:
         """
         Update an existing Sleep Metrics record identified by its date.
 
+        Only incoming fields with non-None values overwrite
+        existing values. Existing values are preserved when
+        the incoming value is None.
+
         Returns:
             True if the matching row was found and updated.
             False if no matching row exists.
@@ -106,8 +110,13 @@ class SleepMetricsGoogleSheetsRepository:
 
         rows = worksheet.get_all_values()
 
-        # Row 1 contains headers, so data starts at row 2.
-        for row_number, row in enumerate(rows[1:], start=2):
+        # Row 1 contains the worksheet headers.
+        headers = rows[0]
+
+        for row_number, row in enumerate(
+            rows[1:],
+            start=2,
+        ):
 
             if not row or not row[0]:
                 continue
@@ -117,19 +126,55 @@ class SleepMetricsGoogleSheetsRepository:
                 DATE_FORMAT,
             ).date()
 
-            if row_date == metric_date:
+            if row_date != metric_date:
+                continue
 
-                updated_row = self._sleep_metric_to_row(
-                    sleep_metric,
+            # Convert the existing worksheet row into the same
+            # dictionary structure used by get_all_records().
+            existing_row_dict = dict(
+                zip(
+                    headers,
+                    row,
                 )
+            )
 
-                worksheet.update(
-                    range_name=f"A{row_number}:I{row_number}",
-                    values=[updated_row],
-                    value_input_option="USER_ENTERED",
+            existing_sleep_metric = (
+                self._row_to_sleep_metrics(
+                    existing_row_dict
                 )
+            )
 
-                return True
+            # Start with the existing record.
+            merged_data = (
+                existing_sleep_metric.model_dump()
+            )
+
+            # Replace only fields that have an incoming value.
+            incoming_data = sleep_metric.model_dump()
+
+            for field, value in incoming_data.items():
+
+                if field == "date":
+                    continue
+
+                if value is not None:
+                    merged_data[field] = value
+
+            merged_sleep_metric = SleepMetrics(
+                **merged_data
+            )
+
+            updated_row = self._sleep_metric_to_row(
+                merged_sleep_metric
+            )
+
+            worksheet.update(
+                range_name=f"A{row_number}:J{row_number}",
+                values=[updated_row],
+                value_input_option="USER_ENTERED",
+            )
+
+            return True
 
         return False
 
@@ -174,6 +219,10 @@ class SleepMetricsGoogleSheetsRepository:
             sleep_metric.awake_hr,
 
             sleep_metric.source,
+
+            datetime.now().strftime(
+                DATETIME_FORMAT
+            ),
         ]
 
     def _row_to_sleep_metrics(

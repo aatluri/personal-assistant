@@ -44,7 +44,7 @@ def test_build_workout_metrics_payloads():
     assert hiit["active_energy_kcal"] == 394.33
     assert hiit["max_heart_rate_bpm"] == 165
     assert hiit["avg_heart_rate_bpm"] == 137.25
-    assert hiit["distance_mi"] is None
+    assert hiit["distance_km"] is None
     assert hiit["avg_speed_mph"] is None
 
     # Validate the Outdoor Run.
@@ -57,7 +57,7 @@ def test_build_workout_metrics_payloads():
     assert outdoor_run["active_energy_kcal"] == 365.25
     assert outdoor_run["max_heart_rate_bpm"] == 170
     assert outdoor_run["avg_heart_rate_bpm"] == 153.77
-    assert outdoor_run["distance_mi"] == 3.14
+    assert outdoor_run["distance_km"] == 3.14
     assert outdoor_run["avg_speed_mph"] == 5.59
 
 

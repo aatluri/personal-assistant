@@ -1,16 +1,10 @@
 from datetime import date
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, call, patch
 
 from app.modules.health.orchestrators.workout_metrics_orchestrator import (
-    archive_old_workout_metrics_files,
     get_workout_metrics_file_date,
     process_workout_metrics_files,
 )
-
-
-# ---------------------------------------------------------
-# Filename parsing
-# ---------------------------------------------------------
 
 
 def test_get_workout_metrics_file_date():
@@ -49,15 +43,6 @@ def test_get_workout_metrics_file_date_with_invalid_date():
     assert result is None
 
 
-# ---------------------------------------------------------
-# Successful processing
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.archive_old_workout_metrics_files"
-)
 @patch(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.import_workout_metrics"
@@ -74,7 +59,6 @@ def test_process_workout_metrics_files_success(
     mock_drive_client_class,
     mock_backend_client_class,
     mock_import_workout_metrics,
-    mock_archive,
 ):
 
     drive_client = Mock()
@@ -123,7 +107,10 @@ def test_process_workout_metrics_files_success(
         backend_client,
     )
 
-    drive_client.rename_file.assert_not_called()
+    drive_client.rename_file.assert_called_once_with(
+        file_id="file-123",
+        new_name="PROCESSED_WorkoutMetrics-2026-07-02.json",
+    )
 
     assert results == [
         {
@@ -132,20 +119,7 @@ def test_process_workout_metrics_files_success(
         }
     ]
 
-    mock_archive.assert_called_once_with(
-        drive_client=drive_client,
-    )
 
-
-# ---------------------------------------------------------
-# Multiple files
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.archive_old_workout_metrics_files"
-)
 @patch(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.import_workout_metrics"
@@ -162,7 +136,6 @@ def test_process_workout_metrics_files_multiple_files(
     mock_drive_client_class,
     mock_backend_client_class,
     mock_import_workout_metrics,
-    mock_archive,
 ):
 
     drive_client = Mock()
@@ -223,27 +196,33 @@ def test_process_workout_metrics_files_multiple_files(
         "WorkoutMetrics-2026-07-02.json"
     )
 
-    mock_archive.assert_called_once_with(
-        drive_client=drive_client,
-    )
+    assert drive_client.rename_file.call_args_list == [
+        call(
+            file_id="file-1",
+            new_name=(
+                "PROCESSED_WorkoutMetrics-2026-07-01.json"
+            ),
+        ),
+        call(
+            file_id="file-2",
+            new_name=(
+                "PROCESSED_WorkoutMetrics-2026-07-02.json"
+            ),
+        ),
+    ]
 
 
-# ---------------------------------------------------------
-# No files
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.GoogleDriveClient"
-)
 @patch(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.BackendClient"
 )
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
 def test_process_workout_metrics_files_with_no_files(
-    mock_backend_client_class,
     mock_drive_client_class,
+    mock_backend_client_class,
 ):
 
     drive_client = Mock()
@@ -257,17 +236,9 @@ def test_process_workout_metrics_files_with_no_files(
     assert results == []
 
     drive_client.read_json_file.assert_not_called()
+    drive_client.rename_file.assert_not_called()
 
 
-# ---------------------------------------------------------
-# Failed import
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.archive_old_workout_metrics_files"
-)
 @patch(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.import_workout_metrics"
@@ -284,7 +255,6 @@ def test_process_workout_metrics_files_marks_failed_file(
     mock_drive_client_class,
     mock_backend_client_class,
     mock_import_workout_metrics,
-    mock_archive,
 ):
 
     drive_client = Mock()
@@ -316,25 +286,17 @@ def test_process_workout_metrics_files_marks_failed_file(
 
     assert results == []
 
+    mock_import_workout_metrics.assert_called_once_with(
+        export_data,
+        backend_client,
+    )
+
     drive_client.rename_file.assert_called_once_with(
         file_id="file-123",
         new_name="FAILED_WorkoutMetrics-2026-07-02.json",
     )
 
-    mock_archive.assert_called_once_with(
-        drive_client=drive_client,
-    )
 
-
-# ---------------------------------------------------------
-# Already failed file
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.archive_old_workout_metrics_files"
-)
 @patch(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.import_workout_metrics"
@@ -351,7 +313,6 @@ def test_process_workout_metrics_files_does_not_double_prefix_failed_file(
     mock_drive_client_class,
     mock_backend_client_class,
     mock_import_workout_metrics,
-    mock_archive,
 ):
 
     drive_client = Mock()
@@ -385,20 +346,7 @@ def test_process_workout_metrics_files_does_not_double_prefix_failed_file(
 
     drive_client.rename_file.assert_not_called()
 
-    mock_archive.assert_called_once_with(
-        drive_client=drive_client,
-    )
 
-
-# ---------------------------------------------------------
-# Successful retry
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.archive_old_workout_metrics_files"
-)
 @patch(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.import_workout_metrics"
@@ -411,11 +359,10 @@ def test_process_workout_metrics_files_does_not_double_prefix_failed_file(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.GoogleDriveClient"
 )
-def test_process_workout_metrics_files_restores_failed_filename_after_success(
+def test_process_workout_metrics_files_marks_failed_file_as_processed_after_success(
     mock_drive_client_class,
     mock_backend_client_class,
     mock_import_workout_metrics,
-    mock_archive,
 ):
 
     drive_client = Mock()
@@ -455,25 +402,14 @@ def test_process_workout_metrics_files_restores_failed_filename_after_success(
 
     drive_client.rename_file.assert_called_once_with(
         file_id="file-123",
-        new_name="WorkoutMetrics-2026-07-02.json",
+        new_name=(
+            "PROCESSED_WorkoutMetrics-2026-07-02.json"
+        ),
     )
 
     assert len(results) == 1
 
-    mock_archive.assert_called_once_with(
-        drive_client=drive_client,
-    )
 
-
-# ---------------------------------------------------------
-# Rename failure
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.archive_old_workout_metrics_files"
-)
 @patch(
     "app.modules.health.orchestrators."
     "workout_metrics_orchestrator.import_workout_metrics"
@@ -490,7 +426,6 @@ def test_process_workout_metrics_files_continues_if_failed_rename_fails(
     mock_drive_client_class,
     mock_backend_client_class,
     mock_import_workout_metrics,
-    mock_archive,
 ):
 
     drive_client = Mock()
@@ -526,207 +461,157 @@ def test_process_workout_metrics_files_continues_if_failed_rename_fails(
 
     drive_client.rename_file.assert_called_once()
 
-    mock_archive.assert_called_once_with(
-        drive_client=drive_client,
-    )
-
-
-# ---------------------------------------------------------
-# Archive old files
-# ---------------------------------------------------------
-
 
 @patch(
     "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.date"
+    "workout_metrics_orchestrator.BackendClient"
 )
-def test_archive_old_workout_metrics_files(
-    mock_date,
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_skips_processed_files(
+    mock_drive_client_class,
+    mock_backend_client_class,
 ):
-
-    mock_date.today.return_value = date(
-        2026,
-        10,
-        22,
-    )
 
     drive_client = Mock()
 
+    mock_drive_client_class.return_value = drive_client
+
     drive_client.list_files.return_value = [
         {
-            "id": "old-file",
-            "name": "WorkoutMetrics-2026-09-01.json",
-        },
-        {
-            "id": "recent-file",
-            "name": "WorkoutMetrics-2026-10-20.json",
-        },
-        {
-            "id": "failed-file",
+            "id": "file-123",
             "name": (
-                "FAILED_WorkoutMetrics-2026-09-01.json"
-            ),
-        },
-        {
-            "id": "unknown-file",
-            "name": "SomethingElse.json",
-        },
-    ]
-
-    archive_old_workout_metrics_files(
-        drive_client=drive_client,
-    )
-
-    drive_client.move_file.assert_called_once()
-
-    call = drive_client.move_file.call_args
-
-    assert call.kwargs["file_id"] == "old-file"
-
-
-# ---------------------------------------------------------
-# Recent file not archived
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.date"
-)
-def test_archive_recent_workout_metrics_file_is_not_moved(
-    mock_date,
-):
-
-    mock_date.today.return_value = date(
-        2026,
-        10,
-        22,
-    )
-
-    drive_client = Mock()
-
-    drive_client.list_files.return_value = [
-        {
-            "id": "recent-file",
-            "name": "WorkoutMetrics-2026-10-20.json",
-        }
-    ]
-
-    archive_old_workout_metrics_files(
-        drive_client=drive_client,
-    )
-
-    drive_client.move_file.assert_not_called()
-
-
-# ---------------------------------------------------------
-# Failed file not archived
-# ---------------------------------------------------------
-
-
-@patch(
-    "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.date"
-)
-def test_archive_failed_workout_metrics_file_is_not_moved(
-    mock_date,
-):
-
-    mock_date.today.return_value = date(
-        2026,
-        10,
-        22,
-    )
-
-    drive_client = Mock()
-
-    drive_client.list_files.return_value = [
-        {
-            "id": "failed-file",
-            "name": (
-                "FAILED_WorkoutMetrics-2026-01-01.json"
+                "PROCESSED_WorkoutMetrics-2026-07-02.json"
             ),
         }
     ]
 
-    archive_old_workout_metrics_files(
-        drive_client=drive_client,
-    )
+    results = process_workout_metrics_files()
 
-    drive_client.move_file.assert_not_called()
+    assert results == []
 
-
-# ---------------------------------------------------------
-# Invalid filename not archived
-# ---------------------------------------------------------
+    drive_client.read_json_file.assert_not_called()
+    drive_client.rename_file.assert_not_called()
 
 
 @patch(
     "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.date"
+    "workout_metrics_orchestrator.import_workout_metrics"
 )
-def test_archive_invalid_workout_metrics_filename_is_not_moved(
-    mock_date,
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_with_specific_file_name(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_workout_metrics,
 ):
 
-    mock_date.today.return_value = date(
-        2026,
-        10,
-        22,
-    )
-
     drive_client = Mock()
+    backend_client = Mock()
+
+    mock_drive_client_class.return_value = drive_client
+    mock_backend_client_class.return_value = backend_client
 
     drive_client.list_files.return_value = [
         {
-            "id": "unknown-file",
-            "name": "RandomFile.json",
+            "id": "file-1",
+            "name": "WorkoutMetrics-2026-07-01.json",
+        },
+        {
+            "id": "file-2",
+            "name": "WorkoutMetrics-2026-07-02.json",
+        },
+    ]
+
+    export_data = {
+        "data": {
+            "workouts": [
+                {
+                    "name": "Outdoor Run",
+                }
+            ]
+        }
+    }
+
+    drive_client.read_json_file.return_value = export_data
+
+    workout_results = [
+        {
+            "workout_type": "Outdoor Run",
         }
     ]
 
-    archive_old_workout_metrics_files(
-        drive_client=drive_client,
+    mock_import_workout_metrics.return_value = workout_results
+
+    results = process_workout_metrics_files(
+        file_name="WorkoutMetrics-2026-07-02.json"
     )
 
-    drive_client.move_file.assert_not_called()
+    drive_client.read_json_file.assert_called_once_with(
+        "file-2"
+    )
 
+    mock_import_workout_metrics.assert_called_once_with(
+        export_data,
+        backend_client,
+    )
 
-# ---------------------------------------------------------
-# Archive move failure
-# ---------------------------------------------------------
+    drive_client.rename_file.assert_called_once_with(
+        file_id="file-2",
+        new_name=(
+            "PROCESSED_WorkoutMetrics-2026-07-02.json"
+        ),
+    )
+
+    assert results == [
+        {
+            "file_name": "WorkoutMetrics-2026-07-02.json",
+            "workout_metrics": workout_results,
+        }
+    ]
 
 
 @patch(
     "app.modules.health.orchestrators."
-    "workout_metrics_orchestrator.date"
+    "workout_metrics_orchestrator.BackendClient"
 )
-def test_archive_old_workout_metrics_file_move_failure_does_not_crash(
-    mock_date,
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_with_specific_file_name_not_found(
+    mock_drive_client_class,
+    mock_backend_client_class,
 ):
-
-    mock_date.today.return_value = date(
-        2026,
-        10,
-        22,
-    )
 
     drive_client = Mock()
 
+    mock_drive_client_class.return_value = drive_client
+
     drive_client.list_files.return_value = [
         {
-            "id": "old-file",
-            "name": "WorkoutMetrics-2026-01-01.json",
-        }
+            "id": "file-1",
+            "name": "WorkoutMetrics-2026-07-01.json",
+        },
+        {
+            "id": "file-2",
+            "name": "WorkoutMetrics-2026-07-02.json",
+        },
     ]
 
-    drive_client.move_file.side_effect = Exception(
-        "Google Drive move failed"
+    results = process_workout_metrics_files(
+        file_name="WorkoutMetrics-2026-07-03.json"
     )
 
-    # The archive function should catch the Drive error
-    # instead of allowing it to crash the orchestrator.
-    archive_old_workout_metrics_files(
-        drive_client=drive_client,
-    )
+    assert results == []
 
-    drive_client.move_file.assert_called_once()
+    drive_client.read_json_file.assert_not_called()
+    drive_client.rename_file.assert_not_called()

@@ -207,12 +207,18 @@ def test_body_measurements_e2e():
         # 4. UPDATE
         # ---------------------------------------------------------
 
-        update_payload = create_payload.copy()
-
-        update_payload["weight_kg"] = 79.5
-        update_payload["waist_cm"] = 88.0
-        update_payload["body_fat_percent"] = 21.5
-        update_payload["notes"] = "E2E Test Updated"
+        # Send only the fields we want to change.
+        # All other optional fields will be None in the
+        # BodyMeasurements model and should preserve their
+        # existing values.
+        update_payload = {
+            "date": TEST_DATE,
+            "weight_kg": 79.5,
+            "waist_cm": 88.0,
+            "body_fat_percent": 21.5,
+            "notes": "E2E Test Updated",
+            "source": "E2E Test",
+        }
 
         response = requests.put(
             f"{BASE_URL}/health/body-measurements",
@@ -237,7 +243,7 @@ def test_body_measurements_e2e():
 
         assert updated_body_measurement["date"] == TEST_DATE
 
-        # Verify fields that were changed.
+        # Verify fields supplied by the PUT were updated.
         assert updated_body_measurement["weight_kg"] == 79.5
         assert updated_body_measurement["waist_cm"] == 88.0
         assert updated_body_measurement["body_fat_percent"] == 21.5
@@ -246,15 +252,30 @@ def test_body_measurements_e2e():
             == "E2E Test Updated"
         )
 
-        # Verify some unchanged fields were preserved.
+        # Verify fields NOT supplied by the PUT retained
+        # their existing values instead of becoming None.
+        assert updated_body_measurement["body_mass_index"] == 26.9
+        assert updated_body_measurement["muscle_mass_percent"] == 40.5
+        assert updated_body_measurement["visceral_fat"] == 10.0
+
+        assert updated_body_measurement["neck_cm"] == 38.0
         assert updated_body_measurement["chest_cm"] == 100.0
+        assert updated_body_measurement["stomach_cm"] == 94.0
+        assert updated_body_measurement["hips_cm"] == 98.0
+
+        assert updated_body_measurement["left_arm_cm"] == 34.0
         assert updated_body_measurement["right_arm_cm"] == 34.5
+
+        assert updated_body_measurement["left_forearm_cm"] == 28.0
+        assert updated_body_measurement["right_forearm_cm"] == 28.5
+
+        assert updated_body_measurement["left_thigh_cm"] == 56.0
         assert updated_body_measurement["right_thigh_cm"] == 56.5
 
-        assert (
-            updated_body_measurement["source"]
-            == "E2E Test"
-        )
+        assert updated_body_measurement["left_calf_cm"] == 38.0
+        assert updated_body_measurement["right_calf_cm"] == 38.5
+
+        assert updated_body_measurement["source"] == "E2E Test"
 
         # ---------------------------------------------------------
         # 6. VERIFY UPDATED_DATETIME CHANGED

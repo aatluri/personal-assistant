@@ -129,18 +129,29 @@ def test_update_body_measurement_found():
 
     worksheet = Mock()
 
+    existing_row = create_body_measurement_row()
+
+    headers = list(existing_row.keys())
+    values = list(existing_row.values())
+
     worksheet.get_all_values.return_value = [
-        ["Date"],
-        ["August 26, 2026"],
+        headers,
+        values,
     ]
 
     repository._get_body_measurements_worksheet = Mock(
         return_value=worksheet
     )
 
+    updated_measurement = create_body_measurement()
+    updated_measurement.weight_kg = 79
+    updated_measurement.body_mass_index = None
+    updated_measurement.waist_cm = None
+    updated_measurement.source = "Health Auto Export"
+
     updated = repository.update_body_measurement(
         date(2026, 8, 26),
-        create_body_measurement(),
+        updated_measurement,
     )
 
     assert updated is True
@@ -156,8 +167,15 @@ def test_update_body_measurement_found():
         worksheet.update.call_args.kwargs["values"][0]
     )
 
-    assert updated_row[0] == "August 26, 2026"
-    assert updated_row[20] == "Manual"
+    # Incoming non-None value should replace existing value.
+    assert updated_row[1] == 79
+
+    # Incoming None values should preserve existing values.
+    assert updated_row[2] == 26.7
+    assert updated_row[8] == existing_row["Waist (cm)"]
+
+    # Incoming Source should replace existing Source.
+    assert updated_row[20] == "Health Auto Export"
 
     # Updated_DateTime should be regenerated during an update.
     datetime.strptime(

@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from app.clients.backend_client import BackendClient
 from app.modules.health.mappings.workout_metrics_mapping import (
@@ -69,26 +69,30 @@ def build_workout_metrics_payloads(
 
                 value = parsed_datetime.isoformat()
 
-            # Workout duration is provided in seconds.
-            # Convert it to HH:MM:SS for the backend.
+            # Health Auto Export provides workout duration in seconds.
+            # Convert it to whole minutes.
             if (
-                backend_field == "workout_duration"
+                backend_field == "workout_duration_min"
                 and value is not None
             ):
-                total_seconds = int(round(value))
+                value = int(round(value / 60))
 
-                value = str(
-                    timedelta(seconds=total_seconds)
-                )
-
+            # Health Auto Export provides distance in miles
+            # Convert it to km because the current backend
+            # Distance field is in km
+            if (
+                backend_field == "distance_km"
+                and value is not None
+            ):
+                value = value * 1.609344
             # Health Auto Export provides average speed in metres per second.
-            # Convert it to miles per hour because the current backend
-            # Workout Metrics field is avg_speed_mph.
+            # Convert it to km per hour because the current backend
+            # Workout Metrics field is avg_speed_kmph.
             if (
-                backend_field == "avg_speed_mph"
+                backend_field == "avg_speed_kmph"
                 and value is not None
             ):
-                value = value * 2.236936
+                value = value * 3.6
 
             # Round numeric workout values to 2 decimal places.
             if (
@@ -110,6 +114,7 @@ def build_workout_metrics_payloads(
         )
 
         payload["date"] = parsed_start_time.date().isoformat()
+        payload["source"] = "Health Auto Export"
 
         payloads.append(payload)
 

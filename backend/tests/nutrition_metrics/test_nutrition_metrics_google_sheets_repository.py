@@ -1,18 +1,4 @@
-"""
-Nutrition Metrics Repository Tests
-
-Each test follows the same sequence:
-
-1. Create a Nutrition Metrics instance.
-2. Create a mock worksheet (instead of connecting to Google Sheets).
-3. Configure the mock worksheet to return predefined data.
-4. Replace the repository's worksheet with the mock.
-5. Call the repository method being tested.
-6. Verify that the repository returns the expected result
-   or calls the worksheet with the expected arguments.
-"""
-
-from datetime import date
+from datetime import date, datetime
 from unittest.mock import Mock
 
 from app.modules.health.nutrition_metrics.nutrition_metrics_google_sheets_repository import (
@@ -29,7 +15,6 @@ from tests.helpers.test_data import (
 # ============================================================================
 
 # Verify that all Nutrition Metrics are retrieved and converted correctly.
-
 def test_get_nutrition_metrics():
 
     repository = NutritionMetricsGoogleSheetsRepository()
@@ -56,11 +41,12 @@ def test_get_nutrition_metrics():
     assert nutrition_metric.protein_g == 110
     assert nutrition_metric.carbohydrates_g == 180
 
+    assert nutrition_metric.source == "Foodnoms"
+
     worksheet.get_all_records.assert_called_once()
 
 
 # Verify that Nutrition Metrics are returned when the requested date exists.
-
 def test_get_nutrition_metric_found():
 
     repository = NutritionMetricsGoogleSheetsRepository()
@@ -80,7 +66,6 @@ def test_get_nutrition_metric_found():
 
 
 # Verify that None is returned when the requested Nutrition Metrics do not exist.
-
 def test_get_nutrition_metric_not_found():
 
     repository = NutritionMetricsGoogleSheetsRepository()
@@ -97,7 +82,6 @@ def test_get_nutrition_metric_not_found():
 
 
 # Verify that a new Nutrition Metrics record is appended to the worksheet.
-
 def test_create_nutrition_metric():
 
     repository = NutritionMetricsGoogleSheetsRepository()
@@ -114,43 +98,101 @@ def test_create_nutrition_metric():
         nutrition_metric
     )
 
-    worksheet.append_row.assert_called_once_with(
-        repository._nutrition_metric_to_row(
-            nutrition_metric
-        ),
-        value_input_option="USER_ENTERED",
+    worksheet.append_row.assert_called_once()
+
+    appended_row = worksheet.append_row.call_args.args[0]
+
+    assert appended_row[0] == "October 08, 2026"
+
+    assert appended_row[12] == "Foodnoms"
+
+    assert len(appended_row) == 14
+
+    datetime.strptime(
+        appended_row[13],
+        "%B %d, %Y %H:%M:%S",
+    )
+
+    assert (
+        worksheet.append_row.call_args.kwargs["value_input_option"]
+        == "USER_ENTERED"
     )
 
 
 # Verify that an existing Nutrition Metrics record is updated when the date is found.
-
 def test_update_nutrition_metric_found():
-
     repository = NutritionMetricsGoogleSheetsRepository()
 
     worksheet = Mock()
 
+    existing_row = create_nutrition_metric_row()
+
+    headers = list(existing_row.keys())
+    values = list(existing_row.values())
+
     worksheet.get_all_values.return_value = [
-        ["Date"],
-        ["October 08, 2026"],
+        headers,
+        values,
     ]
 
     repository._get_nutrition_metrics_worksheet = Mock(
         return_value=worksheet
     )
 
+    updated_nutrition_metric = create_nutrition_metric()
+
+    # These fields should be updated.
+    updated_nutrition_metric.dietary_energy_kcal = 2000
+    updated_nutrition_metric.protein_g = 130
+    updated_nutrition_metric.source = "Health Auto Export"
+
+    # These fields should retain their existing values.
+    updated_nutrition_metric.carbohydrates_g = None
+    updated_nutrition_metric.fiber_g = None
+
     updated = repository.update_nutrition_metric(
         date(2026, 10, 8),
-        create_nutrition_metric(),
+        updated_nutrition_metric,
     )
 
     assert updated is True
 
     worksheet.update.assert_called_once()
 
+    assert (
+        worksheet.update.call_args.kwargs["range_name"]
+        == "A2:N2"
+    )
+
+    updated_row = (
+        worksheet.update.call_args.kwargs["values"][0]
+    )
+
+    # Supplied values should be updated.
+    assert updated_row[1] == 2000
+    assert updated_row[2] == 130
+    assert updated_row[12] == "Health Auto Export"
+
+    # None values should preserve the existing values.
+    assert updated_row[3] == 180
+    assert updated_row[4] == 30
+
+    assert len(updated_row) == 14
+
+    datetime.strptime(
+        updated_row[13],
+        "%B %d, %Y %H:%M:%S",
+    )
+
+    assert (
+        worksheet.update.call_args.kwargs[
+            "value_input_option"
+        ]
+        == "USER_ENTERED"
+    )
+
 
 # Verify that no update occurs when the Nutrition Metrics date is not found.
-
 def test_update_nutrition_metric_not_found():
 
     repository = NutritionMetricsGoogleSheetsRepository()
@@ -180,9 +222,7 @@ def test_update_nutrition_metric_not_found():
 # Nutrition Metrics Repository Helper Tests
 # ============================================================================
 
-
 # Verify that a NutritionMetrics object is converted into a worksheet row.
-
 def test_nutrition_metric_to_row():
 
     repository = NutritionMetricsGoogleSheetsRepository()
@@ -210,9 +250,15 @@ def test_nutrition_metric_to_row():
 
     assert row[12] == "Foodnoms"
 
+    assert len(row) == 14
+
+    datetime.strptime(
+        row[13],
+        "%B %d, %Y %H:%M:%S",
+    )
+
 
 # Verify that a worksheet row is converted into a NutritionMetrics object.
-
 def test_row_to_nutrition_metric():
 
     repository = NutritionMetricsGoogleSheetsRepository()
@@ -242,7 +288,6 @@ def test_row_to_nutrition_metric():
 
 
 # Verify that empty worksheet values are converted into None.
-
 def test_row_to_nutrition_metric_handles_empty_values():
 
     repository = NutritionMetricsGoogleSheetsRepository()

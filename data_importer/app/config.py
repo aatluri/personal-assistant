@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID: str
     WORKOUT_METRICS_DRIVE_FOLDER_ID: str
     WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID: str
+    DATA_IMPORTER_ARCHIVE_AFTER_DAYS: int = 30
 
     model_config = SettingsConfigDict(
         env_file=".env",

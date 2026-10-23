@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 from app.config import settings
 from app.database.sheets_client import get_spreadsheet
 from app.modules.health.workout_metrics.workout_metrics_schema import (
@@ -114,6 +114,10 @@ class WorkoutMetricsGoogleSheetsRepository:
         Update an existing Workout Metrics record identified
         by its Workout Start Time.
 
+        Only incoming fields with non-None values overwrite
+        existing values. Existing values are preserved when
+        the incoming value is None.
+
         Returns:
             True if the matching row was found and updated.
             False if no matching row exists.
@@ -122,14 +126,18 @@ class WorkoutMetricsGoogleSheetsRepository:
         worksheet = self._get_workout_metrics_worksheet()
 
         rows = worksheet.get_all_values()
-        # Google Sheets stores the workout start time without
-        # timezone information, so normalize the incoming
-        # datetime before comparing it with worksheet values.
-        normalized_workout_start_time = (workout_start_time.replace(tzinfo=None))
+        headers = rows[0]
 
-        # Row 1 contains the worksheet headers,
-        # so workout data starts at row 2.
-        for row_number, row in enumerate(rows[1:], start=2):
+        # Google Sheets stores the workout start time without
+        # timezone information.
+        normalized_workout_start_time = (
+            workout_start_time.replace(tzinfo=None)
+        )
+
+        for row_number, row in enumerate(
+            rows[1:],
+            start=2,
+        ):
 
             # Workout Start Time is column C.
             if len(row) < 3 or not row[2]:
@@ -140,20 +148,53 @@ class WorkoutMetricsGoogleSheetsRepository:
                 DATETIME_FORMAT,
             )
 
-            if row_workout_start_time == normalized_workout_start_time:
+            if row_workout_start_time != normalized_workout_start_time:
+                continue
 
-                updated_row = self._workout_metric_to_row(
-                    workout_metric,
+            existing_row_dict = dict(
+                zip(
+                    headers,
+                    row,
                 )
+            )
 
-                # Workout_Metrics contains columns A:K.
-                worksheet.update(
-                    range_name=f"A{row_number}:K{row_number}",
-                    values=[updated_row],
-                    value_input_option="USER_ENTERED",
+            existing_workout_metric = (
+                self._row_to_workout_metrics(
+                    existing_row_dict
                 )
+            )
 
-                return True
+            merged_data = (
+                existing_workout_metric.model_dump()
+            )
+
+            incoming_data = workout_metric.model_dump()
+
+            for field, value in incoming_data.items():
+
+                # Workout Start Time is the unique key and
+                # should never be changed by the update.
+                if field == "workout_start_time":
+                    continue
+
+                if value is not None:
+                    merged_data[field] = value
+
+            merged_workout_metric = WorkoutMetrics(
+                **merged_data
+            )
+
+            updated_row = self._workout_metric_to_row(
+                merged_workout_metric
+            )
+
+            worksheet.update(
+                range_name=f"A{row_number}:M{row_number}",
+                values=[updated_row],
+                value_input_option="USER_ENTERED",
+            )
+
+            return True
 
         return False
 
@@ -190,9 +231,7 @@ class WorkoutMetricsGoogleSheetsRepository:
                 DATETIME_FORMAT
             ),
 
-            self._timedelta_to_duration(
-                workout_metric.workout_duration
-            ),
+            workout_metric.workout_duration_min,
 
             workout_metric.total_energy_kcal,
             workout_metric.active_energy_kcal,
@@ -200,8 +239,14 @@ class WorkoutMetricsGoogleSheetsRepository:
             workout_metric.max_heart_rate_bpm,
             workout_metric.avg_heart_rate_bpm,
 
-            workout_metric.distance_mi,
-            workout_metric.avg_speed_mph,
+            workout_metric.distance_km,
+            workout_metric.avg_speed_kmph,
+
+            workout_metric.source,
+
+            datetime.now().strftime(
+                DATETIME_FORMAT
+            ),
         ]
 
     def _row_to_workout_metrics(
@@ -232,8 +277,10 @@ class WorkoutMetricsGoogleSheetsRepository:
                 DATETIME_FORMAT,
             ),
 
-            workout_duration=self._duration_to_timedelta(
-                row["Workout Duration"]
+            workout_duration_min=(
+                int(row["Workout Duration (min)"])
+                if row["Workout Duration (min)"] != ""
+                else None
             ),
 
             total_energy_kcal=self._empty_to_none(
@@ -252,60 +299,13 @@ class WorkoutMetricsGoogleSheetsRepository:
                 row["Avg Heart Rate (bpm)"]
             ),
 
-            distance_mi=self._empty_to_none(
-                row["Distance (mi)"]
+            distance_km=self._empty_to_none(
+                row["Distance (km)"]
             ),
 
-            avg_speed_mph=self._empty_to_none(
-                row["Avg Speed (mi/hr)"]
+            avg_speed_kmph=self._empty_to_none(
+                row["Avg Speed (km/hr)"]
             ),
+
+            source=row["Source"] or None,
         )
-
-    def _duration_to_timedelta(
-        self,
-        value: str,
-    ) -> timedelta:
-        """
-        Convert an HH:MM:SS duration string into timedelta.
-
-        Example:
-            "01:30:00" -> timedelta(hours=1, minutes=30)
-        """
-
-        hours, minutes, seconds = map(
-            int,
-            value.split(":"),
-        )
-
-        return timedelta(
-            hours=hours,
-            minutes=minutes,
-            seconds=seconds,
-        )
-
-    def _timedelta_to_duration(
-        self,
-        value: timedelta,
-    ) -> str:
-        """
-        Convert timedelta into an HH:MM:SS duration string.
-
-        Example:
-            timedelta(hours=1, minutes=30) -> "01:30:00"
-        """
-
-        total_seconds = int(
-            value.total_seconds()
-        )
-
-        hours, remainder = divmod(
-            total_seconds,
-            3600,
-        )
-
-        minutes, seconds = divmod(
-            remainder,
-            60,
-        )
-
-        return f"{hours:02}:{minutes:02}:{seconds:02}"
