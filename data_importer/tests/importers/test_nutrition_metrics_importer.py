@@ -45,7 +45,7 @@ def test_build_nutrition_metrics_payload():
     assert payload["saturated_fat_g"] == 32
     assert payload["polyunsaturated_fat_g"] == 17
     assert payload["monounsaturated_fat_g"] == 32
-    assert payload["water_fl_oz_us"] == 120
+    assert payload["water_ml"] == 3535
     assert payload["cholesterol_mg"] == 700
 
 def test_build_nutrition_metrics_payload_with_no_nutrition_data():

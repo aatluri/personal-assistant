@@ -24,7 +24,7 @@ class NutritionMetrics(BaseModel):
     polyunsaturated_fat_g: float | None = None
     monounsaturated_fat_g: float | None = None
 
-    water_fl_oz_us: float | None = None
+    water_ml: float | None = None
     cholesterol_mg: float | None = None
 
     source: str | None = None

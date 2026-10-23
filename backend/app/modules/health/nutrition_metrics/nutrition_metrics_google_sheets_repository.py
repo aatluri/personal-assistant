@@ -212,7 +212,7 @@ class NutritionMetricsGoogleSheetsRepository:
             nutrition_metric.polyunsaturated_fat_g,
             nutrition_metric.monounsaturated_fat_g,
 
-            nutrition_metric.water_fl_oz_us,
+            nutrition_metric.water_ml,
             nutrition_metric.cholesterol_mg,
 
             nutrition_metric.source,
@@ -272,8 +272,8 @@ class NutritionMetricsGoogleSheetsRepository:
                 row["Monounsaturated Fat (g)"]
             ),
 
-            water_fl_oz_us=self._empty_to_none(
-                row["Water (fl_oz_us)"]
+            water_ml=self._empty_to_none(
+                row["Water (ml)"]
             ),
 
             cholesterol_mg=self._empty_to_none(

@@ -106,7 +106,7 @@ def test_nutrition_metrics_e2e():
             "saturated_fat_g": 20,
             "polyunsaturated_fat_g": 15,
             "monounsaturated_fat_g": 25,
-            "water_fl_oz_us": 100,
+            "water_ml": 100,
             "cholesterol_mg": 250,
             "source": TEST_SOURCE,
         }
@@ -146,7 +146,7 @@ def test_nutrition_metrics_e2e():
         assert nutrition_metric["polyunsaturated_fat_g"] == 15
         assert nutrition_metric["monounsaturated_fat_g"] == 25
 
-        assert nutrition_metric["water_fl_oz_us"] == 100
+        assert nutrition_metric["water_ml"] == 100
         assert nutrition_metric["cholesterol_mg"] == 250
 
         assert nutrition_metric["source"] == TEST_SOURCE
@@ -180,7 +180,7 @@ def test_nutrition_metrics_e2e():
             "date": TEST_DATE,
             "dietary_energy_kcal": 2200,
             "protein_g": 135,
-            "water_fl_oz_us": 110,
+            "water_ml": 110,
             "source": TEST_SOURCE,
         }
 
@@ -210,7 +210,7 @@ def test_nutrition_metrics_e2e():
         # Verify supplied fields were updated.
         assert updated_nutrition_metric["dietary_energy_kcal"] == 2200
         assert updated_nutrition_metric["protein_g"] == 135
-        assert updated_nutrition_metric["water_fl_oz_us"] == 110
+        assert updated_nutrition_metric["water_ml"] == 110
 
         # Verify fields not supplied by the PUT were preserved.
         assert updated_nutrition_metric["carbohydrates_g"] == 220

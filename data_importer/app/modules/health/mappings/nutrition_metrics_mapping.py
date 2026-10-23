@@ -44,10 +44,11 @@ NUTRITION_METRICS_MAPPING = {
         "value_field": "qty",
         "value_type": "int",
     },
-    "water_fl_oz_us": {
+    "water_ml": {
         "source_name": "dietary_water",
         "value_field": "qty",
         "value_type": "int",
+        "conversion": "fl_oz_us_to_ml",
     },
     "cholesterol_mg": {
         "source_name": "cholesterol",

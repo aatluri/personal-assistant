@@ -253,7 +253,7 @@ def create_nutrition_metric(**overrides) -> NutritionMetrics:
         polyunsaturated_fat_g=12,
         monounsaturated_fat_g=25,
 
-        water_fl_oz_us=100,
+        water_ml=100,
         cholesterol_mg=250,
 
         source="Foodnoms",
@@ -287,7 +287,7 @@ def create_nutrition_metric_row(**overrides) -> dict:
         "Polyunsaturated Fat (g)": 12,
         "Monounsaturated Fat (g)": 25,
 
-        "Water (fl_oz_us)": 100,
+        "Water (ml)": 100,
         "Cholesterol (mg)": 250,
 
         "Source": "Foodnoms",

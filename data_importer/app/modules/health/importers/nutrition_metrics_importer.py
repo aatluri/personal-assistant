@@ -58,6 +58,12 @@ def build_nutrition_metrics_payload(
         # Extract the value using the field defined in the mapping.
         value = data_record.get(value_field)
 
+       # Apply any unit conversion defined in the mapping.
+        conversion = mapping.get("conversion")
+
+        if value is not None and conversion == "fl_oz_us_to_ml":
+            value = value * 29.5735
+
         # Apply any type conversion defined in the mapping.
         value_type = mapping.get("value_type")
 

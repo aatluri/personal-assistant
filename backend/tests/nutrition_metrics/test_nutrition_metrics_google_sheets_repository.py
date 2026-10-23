@@ -281,7 +281,7 @@ def test_row_to_nutrition_metric():
     assert nutrition_metric.polyunsaturated_fat_g == 12
     assert nutrition_metric.monounsaturated_fat_g == 25
 
-    assert nutrition_metric.water_fl_oz_us == 100
+    assert nutrition_metric.water_ml == 100
     assert nutrition_metric.cholesterol_mg == 250
 
     assert nutrition_metric.source == "Foodnoms"
@@ -303,7 +303,7 @@ def test_row_to_nutrition_metric_handles_empty_values():
             "Saturated Fat (g)": "",
             "Polyunsaturated Fat (g)": "",
             "Monounsaturated Fat (g)": "",
-            "Water (fl_oz_us)": "",
+            "Water (ml)": "",
             "Cholesterol (mg)": "",
             "Source": "",
         }
@@ -323,7 +323,7 @@ def test_row_to_nutrition_metric_handles_empty_values():
     assert nutrition_metric.polyunsaturated_fat_g is None
     assert nutrition_metric.monounsaturated_fat_g is None
 
-    assert nutrition_metric.water_fl_oz_us is None
+    assert nutrition_metric.water_ml is None
     assert nutrition_metric.cholesterol_mg is None
 
     assert nutrition_metric.source is None

@@ -39,26 +39,26 @@ def test_build_workout_metrics_payloads():
     assert hiit["workout_type"] == "High Intensity Interval Training"
     assert hiit["workout_start_time"] == "2026-07-02T16:35:58+05:30"
     assert hiit["workout_end_time"] == "2026-07-02T17:17:11+05:30"
-    assert hiit["workout_duration"] == "0:41:13"
+    assert hiit["workout_duration_min"] == 41
     assert hiit["total_energy_kcal"] == 470.24
     assert hiit["active_energy_kcal"] == 394.33
     assert hiit["max_heart_rate_bpm"] == 165
     assert hiit["avg_heart_rate_bpm"] == 137.25
     assert hiit["distance_km"] is None
-    assert hiit["avg_speed_mph"] is None
+    assert hiit["avg_speed_kmph"] is None
 
     # Validate the Outdoor Run.
     assert outdoor_run["date"] == "2026-07-02"
     assert outdoor_run["workout_type"] == "Outdoor Run"
     assert outdoor_run["workout_start_time"] == "2026-07-02T15:40:44+05:30"
     assert outdoor_run["workout_end_time"] == "2026-07-02T16:14:24+05:30"
-    assert outdoor_run["workout_duration"] == "0:33:40"
+    assert outdoor_run["workout_duration_min"] == 34
     assert outdoor_run["total_energy_kcal"] == 425.44
     assert outdoor_run["active_energy_kcal"] == 365.25
     assert outdoor_run["max_heart_rate_bpm"] == 170
     assert outdoor_run["avg_heart_rate_bpm"] == 153.77
-    assert outdoor_run["distance_km"] == 3.14
-    assert outdoor_run["avg_speed_mph"] == 5.59
+    assert outdoor_run["distance_km"] == 5.05
+    assert outdoor_run["avg_speed_kmph"] == 8.99
 
 
 def test_build_workout_metrics_payloads_with_no_workouts():
@@ -114,8 +114,8 @@ def test_import_workout_metrics():
 
     assert second_payload["workout_type"] == "Outdoor Run"
     assert second_payload["workout_start_time"] == "2026-07-02T15:40:44+05:30"
-    assert second_payload["distance_mi"] == 3.14
-    assert second_payload["avg_speed_mph"] == 5.59
+    assert second_payload["distance_km"] == 5.05
+    assert second_payload["avg_speed_kmph"] == 8.99
 
     # Verify that the importer returns the backend responses.
     assert results == [
