@@ -13,8 +13,8 @@ from app.modules.health.orchestrators.health_metrics_orchestrator import (
 FILE_PREFIX = "HealthMetrics-"
 FILE_SUFFIX = ".json"
 TEST_PREFIX = "TEST_"
-MAX_FILES = 1
-BATCH_SIZE = 5
+MAX_FILES = 500
+BATCH_SIZE = 15
 BATCH_DELAY_SECONDS = 60
 
 
