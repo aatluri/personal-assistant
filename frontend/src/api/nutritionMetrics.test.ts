@@ -91,7 +91,7 @@ describe("Nutrition Metrics API", () => {
                 polyunsaturated_fat_g: 15,
                 monounsaturated_fat_g: 25,
 
-                water_fl_oz_us: 100,
+                water_ml: 100,
 
                 cholesterol_mg: 250,
 
@@ -125,7 +125,7 @@ describe("Nutrition Metrics API", () => {
             polyunsaturatedFatG: 15,
             monounsaturatedFatG: 25,
 
-            waterFlOzUs: 100,
+            waterMl: 100,
 
             cholesterolMg: 250,
 
@@ -227,7 +227,7 @@ describe("Nutrition Metrics API", () => {
         nutritionMetrics.polyunsaturatedFatG = 15;
         nutritionMetrics.monounsaturatedFatG = 25;
 
-        nutritionMetrics.waterFlOzUs = 100;
+        nutritionMetrics.waterMl = 100;
 
         nutritionMetrics.cholesterolMg = 250;
 
@@ -268,7 +268,7 @@ describe("Nutrition Metrics API", () => {
                     polyunsaturated_fat_g: 15,
                     monounsaturated_fat_g: 25,
 
-                    water_fl_oz_us: 100,
+                    water_ml: 100,
 
                     cholesterol_mg: 250,
 
@@ -348,7 +348,7 @@ describe("Nutrition Metrics API", () => {
         ).toBeNull();
 
         expect(
-            requestBody.water_fl_oz_us
+            requestBody.water_ml
         ).toBeNull();
 
         expect(

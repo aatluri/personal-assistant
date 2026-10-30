@@ -32,7 +32,7 @@ describe("createEmptyNutritionMetrics", () => {
         ).toBe("");
 
         expect(
-            nutritionMetrics.waterFlOzUs
+            nutritionMetrics.waterMl
         ).toBe("");
 
         expect(

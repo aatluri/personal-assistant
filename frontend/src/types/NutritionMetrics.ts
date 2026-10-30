@@ -42,7 +42,7 @@ export interface NutritionMetrics {
     /* Other Nutrition                */
     /* ------------------------------ */
 
-    waterFlOzUs: number | "";
+    waterMl: number | "";
     cholesterolMg: number | "";
 
     /* ------------------------------ */

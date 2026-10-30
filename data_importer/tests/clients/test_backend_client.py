@@ -62,7 +62,7 @@ def test_update_nutrition_metrics(mock_put):
         "saturated_fat_g": 18.4,
         "polyunsaturated_fat_g": 10.2,
         "monounsaturated_fat_g": 22.6,
-        "water_fl_oz_us": 101.4,
+        "water_ml": 3000.0,
         "cholesterol_mg": 210.0,
         "source": "Health Auto Export",
     }
@@ -80,7 +80,7 @@ def test_update_nutrition_metrics(mock_put):
         "saturated_fat_g": 18.4,
         "polyunsaturated_fat_g": 10.2,
         "monounsaturated_fat_g": 22.6,
-        "water_fl_oz_us": 101.4,
+        "water_ml": 3000.0,
         "cholesterol_mg": 210.0,
         "source": "Health Auto Export",
     }

@@ -122,7 +122,7 @@ describe("NutritionMetricsSection", () => {
 
         expect(
             screen.getByLabelText(
-                "Water (fl oz)"
+                "Water (ml)"
             )
         ).toBeInTheDocument();
 
@@ -169,7 +169,7 @@ describe("NutritionMetricsSection", () => {
 
         nutritionMetrics.monounsaturatedFatG = 20.6;
 
-        nutritionMetrics.waterFlOzUs = 100.5;
+        nutritionMetrics.waterMl = 100.5;
 
         nutritionMetrics.cholesterolMg = 220.5;
 
@@ -240,7 +240,7 @@ describe("NutritionMetricsSection", () => {
 
         expect(
             screen.getByLabelText(
-                "Water (fl oz)"
+                "Water (ml)"
             )
         ).toHaveValue(100.5);
 
@@ -427,8 +427,8 @@ describe("NutritionMetricsSection", () => {
 
     testNumericField(
         "updates water",
-        "Water (fl oz)",
-        "waterFlOzUs",
+        "Water (ml)",
+        "waterMl",
         "100.5",
         100.5
     );

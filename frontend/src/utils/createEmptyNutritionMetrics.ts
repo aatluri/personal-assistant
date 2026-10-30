@@ -26,7 +26,7 @@ export function createEmptyNutritionMetrics(): NutritionMetrics {
         polyunsaturatedFatG: "",
         monounsaturatedFatG: "",
 
-        waterFlOzUs: "",
+        waterMl: "",
         cholesterolMg: "",
 
         source: "",

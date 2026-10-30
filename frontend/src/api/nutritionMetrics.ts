@@ -92,8 +92,8 @@ export async function getNutritionMetric(
         monounsaturatedFatG:
             apiResponse.monounsaturated_fat_g ?? "",
 
-        waterFlOzUs:
-            apiResponse.water_fl_oz_us ?? "",
+        waterMl:
+            apiResponse.water_ml ?? "",
 
         cholesterolMg:
             apiResponse.cholesterol_mg ?? "",
@@ -172,9 +172,9 @@ export async function saveNutritionMetric(
                 nutritionMetrics.monounsaturatedFatG
             ),
 
-        water_fl_oz_us:
+        water_ml:
             buildNumber(
-                nutritionMetrics.waterFlOzUs
+                nutritionMetrics.waterMl
             ),
 
         cholesterol_mg:

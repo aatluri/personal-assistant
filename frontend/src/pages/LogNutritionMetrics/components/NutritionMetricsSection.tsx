@@ -249,16 +249,16 @@ function NutritionMetricsSection({
 
                 {/* Water */}
                 <TextInput
-                    label="Water (fl oz)"
-                    id="waterFlOzUs"
-                    name="waterFlOzUs"
+                    label="Water (ml)"
+                    id="waterMl"
+                    name="waterMl"
                     type="number"
                     min={0}
                     step={0.1}
-                    value={nutritionMetrics.waterFlOzUs}
+                    value={nutritionMetrics.waterMl}
                     onChange={(event) =>
                         updateNutritionMetric(
-                            "waterFlOzUs",
+                            "waterMl",
                             event.target.value === ""
                                 ? ""
                                 : Number(event.target.value)
