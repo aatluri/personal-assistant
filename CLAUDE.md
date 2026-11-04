@@ -93,8 +93,11 @@ npm run lint
   - Add high-level comments where they explain important flows, business rules, architectural
     decisions, or non-obvious reasoning.
   - Do not add comments or docstrings that merely restate obvious code.
-- Documentation: when behaviour intentionally changes, update the relevant README/docs in the same
-  change. Do not fix unrelated stale docs — mention them instead.
+- Documentation consistency: After making code, architecture, API, configuration, setup, workflow,
+  or behavior changes, check whether any README or other project documentation affected by the
+  change is now inaccurate or incomplete. Update relevant documentation as part of the same change.
+  Do not modify documentation when the change has no impact on it. Do not fix unrelated stale
+  docs — mention them instead.
 
 ## Scope
 
