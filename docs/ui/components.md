@@ -50,7 +50,6 @@ Primary navigation.
 ### Navigation Items
 
 - Dashboard
-- Log Today
 - Body Measurements
 - Blood Work
 - Workouts (Future)
@@ -235,7 +234,7 @@ Primary call-to-action.
 Example
 
 ```
-Save Daily Log
+Save Nutrition Metrics
 ```
 
 ---
@@ -259,7 +258,7 @@ Edit
 Example
 
 ```
-✓ Daily Log Saved
+✓ Nutrition Metrics Saved
 ```
 
 ---
@@ -444,7 +443,7 @@ AppShell
 ├── Sidebar
 ├── Header
 │
-└── LogToday
+└── Page
      │
      ├── AchievementBanner
      ├── MetricCard × 6
@@ -471,34 +470,34 @@ The goal is to maintain a consistent user experience and minimize duplicate comp
 
 ---
 
-| Component | Dashboard | Log Today | Body Measurements | Blood Work | Workouts | Nutrition | Email | Settings |
-|-----------|:---------:|:---------:|:-----------------:|:----------:|:--------:|:---------:|:-----:|:--------:|
-| AppShell | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Sidebar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Header | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| AchievementBanner | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| MetricCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| StatisticTile | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| ProgressBar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| StatusChip | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| SectionCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| TextInput | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| NumberInput | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| Dropdown | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| DatePicker | ❌ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
-| TimePicker | ❌ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| ToggleSwitch | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| PrimaryButton | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| SecondaryButton | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| SuccessToast | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| ConfirmationDialog | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| EmptyState | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| LoadingSpinner | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| AIInsightCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| AIRecommendationCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
-| LineChart | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| BarChart | ✅ | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
-| CalendarHeatmap | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| Component | Dashboard | Body Measurements | Blood Work | Workouts | Nutrition | Email | Settings |
+|-----------|:---------:|:-----------------:|:----------:|:--------:|:---------:|:-----:|:--------:|
+| AppShell | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Sidebar | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Header | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| AchievementBanner | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| MetricCard | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| StatisticTile | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| ProgressBar | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| StatusChip | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| SectionCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| TextInput | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| NumberInput | ❌ | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Dropdown | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| DatePicker | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| TimePicker | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| ToggleSwitch | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| PrimaryButton | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| SecondaryButton | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| SuccessToast | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| ConfirmationDialog | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| EmptyState | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| LoadingSpinner | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| AIInsightCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| AIRecommendationCard | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| LineChart | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| BarChart | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| CalendarHeatmap | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
 
 ---
 

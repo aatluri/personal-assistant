@@ -26,8 +26,8 @@ import SaveButton from "../../components/SaveButton";
 import PageContainer from "../../components/PageContainer";
 import CollapsibleCard from "../../components/CollapsibleCard";
 
-import LogTodayHeader from "../LogToday/components/LogTodayHeader";
-import DateSection from "../LogToday/components/DateSection";
+import PageHeader from "../../components/PageHeader";
+import DateSection from "../../components/DateSection";
 import SleepMetricsSection from "./components/SleepMetricsSection";
 
 import { createEmptySleepMetrics } from "../../utils/createEmptySleepMetrics";
@@ -191,7 +191,8 @@ function LogSleepMetrics() {
 
             <div className="space-y-8">
 
-                <LogTodayHeader
+                <PageHeader
+                    title="Sleep Metrics"
                     isDirty={isDirty}
                 />
 

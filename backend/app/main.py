@@ -17,10 +17,6 @@ from app.modules.health.api import router as health_router
 
 tags_metadata = [
     {
-        "name": "Daily Log Metrics",
-        "description": "Daily health summary records.",
-    },
-    {
         "name": "BodyMeasurement Metrics",
         "description": "Body weight and measurement records.",
     },

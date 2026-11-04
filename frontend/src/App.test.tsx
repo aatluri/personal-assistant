@@ -96,23 +96,6 @@ describe("App", () => {
     });
 
 
-    test("renders Log Today route", () => {
-
-        window.history.pushState(
-            {},
-            "",
-            "/log-today"
-        );
-
-        render(<App />);
-
-        expect(
-            screen.getByText("Log Today")
-        ).toBeInTheDocument();
-
-    });
-
-
     test("renders Body Measurements route", () => {
 
         window.history.pushState(

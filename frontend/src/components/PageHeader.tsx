@@ -1,8 +1,10 @@
 /*
-    LogTodayHeader
+    PageHeader
 
     Displays the page heading together
     with the current save status.
+
+    Shared by the metric logging pages.
 
     Responsibilities:
     - Display the page title.
@@ -11,18 +13,23 @@
 */
 
 /*
+    title
+        Page heading, e.g. "Nutrition Metrics".
+
     isDirty
         Indicates whether the page
         contains unsaved changes.
 */
 
-interface LogTodayHeaderProps {
+interface PageHeaderProps {
+    title: string;
     isDirty: boolean;
 }
 
-function LogTodayHeader({
+function PageHeader({
+    title,
     isDirty,
-}: LogTodayHeaderProps) {
+}: PageHeaderProps) {
 
 
     return (
@@ -43,7 +50,7 @@ function LogTodayHeader({
                     text-slate-900
                 "
             >
-                Log Today
+                {title}
             </h1>
 
             <div
@@ -81,4 +88,4 @@ function LogTodayHeader({
 
 }
 
-export default LogTodayHeader;
+export default PageHeader;

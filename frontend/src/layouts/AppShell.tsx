@@ -128,8 +128,8 @@ function AppShell() {
                 current URL.
 
                 Examples:
-                    /log-today
                     /body-measurements
+                    /nutrition-metrics
                     /settings
             */}
             <main

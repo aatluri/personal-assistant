@@ -121,12 +121,18 @@ describe("LogSleepMetrics", () => {
 
 
         expect(
-            await screen.findByText("Log Today")
+            await screen.findByRole("heading", {
+                level: 1,
+                name: "Sleep Metrics",
+            })
         ).toBeInTheDocument();
 
 
         expect(
-            screen.getByText("Sleep Metrics")
+            screen.getByRole("heading", {
+                level: 2,
+                name: "Sleep Metrics",
+            })
         ).toBeInTheDocument();
 
 
@@ -231,9 +237,10 @@ describe("LogSleepMetrics", () => {
         );
 
 
-        await screen.findByText(
-            "Sleep Metrics"
-        );
+        await screen.findByRole("heading", {
+            level: 1,
+            name: "Sleep Metrics",
+        });
 
 
         expect(
@@ -556,9 +563,10 @@ describe("LogSleepMetrics", () => {
         );
 
 
-        await screen.findByText(
-            "Sleep Metrics"
-        );
+        await screen.findByRole("heading", {
+            level: 1,
+            name: "Sleep Metrics",
+        });
 
 
         /*

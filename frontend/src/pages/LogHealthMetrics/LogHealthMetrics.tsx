@@ -26,8 +26,8 @@ import SaveButton from "../../components/SaveButton";
 import PageContainer from "../../components/PageContainer";
 import CollapsibleCard from "../../components/CollapsibleCard";
 
-import LogTodayHeader from "../LogToday/components/LogTodayHeader";
-import DateSection from "../LogToday/components/DateSection";
+import PageHeader from "../../components/PageHeader";
+import DateSection from "../../components/DateSection";
 import HealthMetricsSection from "./components/HealthMetricsSection";
 
 import { createEmptyHealthMetrics } from "../../utils/createEmptyHealthMetrics";
@@ -166,7 +166,8 @@ function LogHealthMetrics() {
 
             <div className="space-y-8">
 
-                <LogTodayHeader
+                <PageHeader
+                    title="Health Metrics"
                     isDirty={isDirty}
                 />
 

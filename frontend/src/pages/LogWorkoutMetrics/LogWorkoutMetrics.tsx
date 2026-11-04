@@ -242,8 +242,8 @@ import type { WorkoutMetrics } from "../../types/WorkoutMetrics";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import PageContainer from "../../components/PageContainer";
 
-import LogTodayHeader from "../LogToday/components/LogTodayHeader";
-import DateSection from "../LogToday/components/DateSection";
+import PageHeader from "../../components/PageHeader";
+import DateSection from "../../components/DateSection";
 
 import WorkoutMetricsSection from "./components/WorkoutMetricsSection";
 
@@ -566,7 +566,8 @@ export default function LogWorkoutMetrics() {
     return (
         <PageContainer>
 
-            <LogTodayHeader
+            <PageHeader
+                title="Workout Metrics"
                 isDirty={isDirty}
             />
 

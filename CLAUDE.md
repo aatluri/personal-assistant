@@ -105,12 +105,7 @@ npm run lint
 
 ## Known state — do not "fix" unasked
 
-- **Log Today** (`frontend/src/pages/LogToday`, `frontend/src/api/health.ts`) calls
-  `/health/daily-logs`, which no longer exists in the backend. Do not retire it or restore the
-  daily-log backend. *(current — retirement planned later)*
-  - Its API test `sends correct Daily Log request` currently fails (expects `:00` seconds that
-    `buildDateTime` does not add).
-- `npm run lint` reports pre-existing errors in `src/api/health.ts`, `src/api/workoutMetrics.ts`,
-  and `src/components/Button.tsx`.
+- `npm run lint` reports pre-existing errors in `src/api/workoutMetrics.ts` and
+  `src/components/Button.tsx`.
 - **Labs frontend** is not built yet (backend endpoints exist). Do not start it until asked.
 - Dashboard, History, and Settings pages are placeholders.
