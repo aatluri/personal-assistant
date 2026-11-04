@@ -1,370 +1,199 @@
 # Personal Assistant Backend
 
-## Overview
+The backend is a FastAPI REST API, served under `/health`. It is the **only** part of the system
+that reads or writes the Google Sheet, and it uses OpenAI (`gpt-5-mini`) to extract results from lab
+report PDFs.
 
-This backend powers the **Personal Assistant** application.
-
-### Technology Stack
-
-- Python
-- FastAPI
-- Google Sheets
-- Pydantic Settings
+Its clients are the frontend (http://localhost:5173, allowed through CORS) and the data importer.
 
 ---
+
+## How a Request Flows
+
+Example: `GET /health/nutrition-metrics/2026-10-08`
+
+```text
+Client (frontend or data importer)
+   │
+   ▼
+app/modules/health/api.py
+  get_nutrition_metric()                      ── validates the request and the response model
+   │
+   ▼
+NutritionMetricsService
+  (nutrition_metrics/nutrition_metrics_service.py)        ── business logic
+   │
+   ▼
+NutritionMetricsGoogleSheetsRepository
+  (nutrition_metrics/nutrition_metrics_google_sheets_repository.py)   ── Sheet reads and writes
+   │
+   ▼
+app/database/sheets_client.py                 ── authenticated, cached spreadsheet client
+   │
+   ▼
+Google Sheet: Nutrition_Metrics worksheet
+   │
+   ▼  (row converted into a NutritionMetrics model, from nutrition_metrics_schema.py)
+   │
+JSON response
+```
+
+What each layer does:
+
+- **API (`api.py`):** defines the endpoints, validates requests and responses with Pydantic models,
+  and returns the right HTTP status codes (for example `404` when a record does not exist).
+- **Service (`*_service.py`):** business logic, such as the upsert: update the record if it exists,
+  otherwise create it. It does not know how data is stored.
+- **Repository (`*_google_sheets_repository.py`):** the only code that knows about Google Sheets. It
+  converts worksheet rows into models and models into rows.
+- **Schema (`*_schema.py`):** the Pydantic model shared by all layers.
+
+---
+
+## Code Map
+
+```text
+backend/
+├── app/
+│   ├── main.py                  FastAPI app, CORS, root endpoint, includes the health router
+│   ├── config.py                Settings loaded from .env (the `settings` object)
+│   ├── database/
+│   │   └── sheets_client.py     Authenticated, cached Google Sheets client
+│   ├── ai/
+│   │   └── openai_client.py     OpenAI client used for lab PDF extraction
+│   └── modules/health/
+│       ├── api.py               Every /health endpoint (metrics and labs)
+│       ├── body_measurements_metrics/  ┐
+│       ├── health_metrics/             │  One folder per metric module, each with:
+│       ├── nutrition_metrics/          │    *_schema.py
+│       ├── sleep_metrics/              │    *_service.py
+│       ├── workout_metrics/            ┘    *_google_sheets_repository.py
+│       └── labs/                Lab reports, results and marker configuration
+│                                (different pattern, see "Labs Module" below)
+├── tools/                       Live connectivity checks (Google Sheets, OpenAI)
+├── tests/                       One folder per module, plus helpers/test_data.py
+├── requirements.txt
+└── .env                         Local settings (not committed)
+```
+
+The **labs** module is organised differently: it uses module-level functions instead of service and
+repository classes, and some endpoints in `api.py` call `lab_repository.py` directly.
+
+---
+
+## Modules and Endpoints
+
+All endpoints are prefixed with `/health`. Swagger UI at http://127.0.0.1:8000/docs lists them all.
+
+| Module | Endpoints | Worksheet setting | Records |
+|---|---|---|---|
+| Body Measurements | `GET /body-measurements`, `GET /body-measurements/{measurement_date}`, `POST`, `PUT` | `HEALTH_BODY_MEASUREMENTS_WORKSHEET` | One per date |
+| Health Metrics | `GET /health-metrics`, `GET /health-metrics/{metric_date}`, `POST`, `PUT` | `HEALTH_HEALTH_METRICS_WORKSHEET` | One per date |
+| Nutrition Metrics | `GET /nutrition-metrics`, `GET /nutrition-metrics/{metric_date}`, `POST`, `PUT` | `HEALTH_NUTRITION_METRICS_WORKSHEET` | One per date |
+| Sleep Metrics | `GET /sleep-metrics`, `GET /sleep-metrics/{metric_date}`, `POST`, `PUT` | `HEALTH_SLEEP_METRICS_WORKSHEET` | One per date |
+| Workout Metrics | `GET /workout-metrics?workout_date=`, `GET /workout-metric?workout_start_time=`, `POST`, `PUT` | `HEALTH_WORKOUT_METRICS_WORKSHEET` | One per workout, matched by start time |
+| Labs | Lab reports, lab results, marker definitions, reference ranges, interpretations, `POST /lab-reports/extract`, `POST /lab-reports/save` | `LAB_*_WORKSHEET` settings | See [Labs Module](#labs-module) |
+
+Also: `GET /` (API is running) and `GET /health/status` (health module status).
+
+For the metric modules, `POST` creates a record and `PUT` creates or updates one (an upsert). The
+frontend and the data importer both use `PUT`.
+
+---
+
+## Rules Shared by the Metric Modules
+
+These apply to all five metric repositories:
+
+- **`PUT` is a partial update.** When a record already exists, only fields with a value overwrite it.
+  A field sent as `null` keeps its existing value, so a field cannot be cleared through the API.
+- **`POST` appends a new row without checking for duplicates.** Use `PUT` unless you are sure the
+  record does not exist.
+- **Dates are stored in the Sheet as `"%B %d, %Y"`** (for example `"October 08, 2026"`).
+- **The last column is `Updated_DateTime`,** set to the time of each write.
+- **Reads use header names; writes use column positions.** Each repository writes a whole row with a
+  hardcoded range (for example `A:N` for Nutrition Metrics). Adding, removing or reordering
+  worksheet columns therefore requires a matching code change.
+- **Only repositories touch the Sheet.** Google Sheets access lives only in the
+  `*_google_sheets_repository.py` files, `labs/lab_repository.py` and `database/sheets_client.py`.
+
+---
+
+## Setup
 
 ### Prerequisites
 
 - Python 3.10+
 - pip
 
----
+### First Time Setup
 
-## First Time Setup
-
-### Clone the Git Repository
-
-Clone the project to your local machine.
+From the repository root:
 
 ```bash
-git clone <repository-url>
-```
-
-### Navigate to the Backend Folder
-
-Move into the backend folder before installing dependencies or running the application.
-
-```bash
-cd personal-assistant/backend
-```
-
-### Create a Virtual Environment
-
-```bash
+cd backend
 python3 -m venv .venv
-```
-
-### Activate the Virtual Environment
-
-#### macOS / Linux
-
-```bash
-source .venv/bin/activate
-```
-
-#### Windows
-
-```powershell
-.venv\Scripts\activate
-```
-
-### Install Dependencies
-
-```bash
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Configure Environment Variables
+When you install a new package, update `requirements.txt`:
 
-Create a `.env` file from `.env.example` and populate the required values.
-
-Example:
-
-```env
-GOOGLE_SERVICE_ACCOUNT_FILE=credentials/service_account.json (Download this from the google dev account)
-GOOGLE_SHEETS_SPREADSHEET_ID=YOUR_SPREADSHEET_ID (Its alphanumeric and You will find it in the google sheet url)
+```bash
+pip freeze > requirements.txt
 ```
 
----
+### Configuration
 
-### Start the FastAPI Development Server
+Settings are loaded from `backend/.env` by `app/config.py` and are available throughout the backend
+as `settings`. All of the following are required:
+
+| Variable | Purpose |
+|---|---|
+| `GOOGLE_SERVICE_ACCOUNT_FILE` | Path to the Google service account JSON, e.g. `credentials/service_account.json` |
+| `GOOGLE_SHEETS_SPREADSHEET_ID` | The spreadsheet ID, found in the Google Sheet's URL |
+| `HEALTH_BODY_MEASUREMENTS_WORKSHEET` | Worksheet name for Body Measurements |
+| `HEALTH_HEALTH_METRICS_WORKSHEET` | Worksheet name for Health Metrics |
+| `HEALTH_NUTRITION_METRICS_WORKSHEET` | Worksheet name for Nutrition Metrics |
+| `HEALTH_SLEEP_METRICS_WORKSHEET` | Worksheet name for Sleep Metrics |
+| `HEALTH_WORKOUT_METRICS_WORKSHEET` | Worksheet name for Workout Metrics |
+| `LAB_REPORTS_WORKSHEET` | Worksheet name for lab reports |
+| `LAB_RESULTS_WORKSHEET` | Worksheet name for lab results |
+| `LAB_MARKER_DEFINITIONS_WORKSHEET` | Worksheet name for lab marker definitions |
+| `LAB_MARKER_REFERENCE_RANGES_WORKSHEET` | Worksheet name for lab marker reference ranges |
+| `LAB_MARKER_INTERPRETATIONS_WORKSHEET` | Worksheet name for lab marker interpretations |
+| `OPENAI_API_KEY` | OpenAI API key, used for lab PDF extraction |
+
+Create `.env` using the variable names in the table above. If one is missing, the backend fails at
+startup with an error naming it. `.env` and the credentials file are ignored by git.
+
+### Run the Backend
 
 ```bash
 fastapi dev app/main.py
 ```
 
----
+Then check:
 
-### Test the Google Sheets Connection
-
-From the `backend` directory:
-
-```bash
-python -m tools.test_google_sheets
-```
-
----
-
-### Verify the Backend
-
-Once the server is running, verify the following URLs:
-
-| URL | Expected Result |
-|------|-----------------|
+| URL | Expected result |
+|---|---|
 | http://127.0.0.1:8000 | Personal Assistant API is running |
 | http://127.0.0.1:8000/health/status | Health module status |
-| http://127.0.0.1:8000/health/nutrition-metrics | Returns all Nutrition Metrics |
-| http://127.0.0.1:8000/docs | Swagger API documentation |
-and so on
+| http://127.0.0.1:8000/health/nutrition-metrics | All Nutrition Metrics records |
+| http://127.0.0.1:8000/docs | Swagger UI with every endpoint |
 
----
+### Connectivity Tools
 
-# Project Structure
+The scripts in `tools/` check the live connections. They use the real Google Sheet and the real
+OpenAI API, so only run them when you mean to:
 
-```text
-backend/
-│
-├── app/
-│   ├── main.py
-│   ├── config.py
-│   ├── database/
-│   │   └── sheets_client.py
-│   ├── modules/
-│   │   └── health/
-│   │       ├── api.py
-│   │       ├── service.py
-│   │       ├── repository.py
-│   │       ├── schemas.py
-│   │       └── __init__.py
-│   └── utils/
-│
-├── credentials/
-├── tools/
-├── tests/
-├── requirements.txt
-├── .env
-├── .env.example
-└── README.md
+```bash
+python -m tools.test_google_sheets      # Google Sheets connection
+python -m tools.test_openai_config      # OpenAI configuration
+python -m tools.test_openai_client      # OpenAI API call
 ```
 
 ---
-
-# Architecture
-
-The backend follows a layered architecture.
-
-```text
-Client
-   │
-   ▼
-FastAPI API (api.py)
-   │
-   ▼
-HealthService(service.py)
-   │
-   ▼
-HealthRepository(repository.py)
-   │
-   ▼
-Google Sheets Client
-   │
-   ▼
-Google Sheets
-```
-
-## Request Flow
-
-Example request:
-
-```http
-GET /health/nutrition-metrics/2026-08-21
-```
-
-The request follows the flow below:
-
-```text
-Client
-   │
-   ▼
-FastAPI
-   │
-   ▼
-api.py
-(get_nutrition_metric)
-   │
-   ├────► schemas.py
-   │       (Response Model)
-   │
-   ▼
-service.py
-(get_nutrition_metric)
-   │
-   ▼
-repository.py
-(get_nutrition_metric)
-   │
-   ▼
-Google Sheets Client
-   │
-   ▼
-Nutrition_Metrics Worksheet
-   │
-   ▼
-repository.py
-(_row_to_nutrition_metrics)
-   │
-   ├────► schemas.py
-   │       (Creates NutritionMetrics object)
-   │
-   ▼
-service.py
-   │
-   ▼
-api.py
-   │
-   ▼
-FastAPI
-(Response Validation & Serialization)
-   │
-   ▼
-JSON Response
-```
-
-## Layer Responsibilities
-
-- `FastAPI`
-  - Receives the HTTP request.
-  - Routes the request to the correct API endpoint.
-  - Validates and serializes the response using the Pydantic schema.
-
-- `api.py`
-  - Receives the HTTP request.
-  - Validates the request and response.
-  - Calls the Service layer.
-
-- `service.py`
-  - Implements the business logic.
-  - Coordinates the Repository layer.
-
-- `repository.py`
-  - Reads and writes data to Google Sheets.
-  - Converts worksheet rows into Pydantic models.
-
-- `schemas.py`
-  - Defines the Pydantic models used throughout the application.
-  - Used by the Repository when creating domain objects.
-  - Used by FastAPI to validate and serialize API responses.
-
-- `sheets_client.py`
-  - Creates the authenticated Google Sheets client used by the Repository.
-
-
-| Layer | Responsibility |
-|--------|----------------|
-| `schemas.py` | Defines domain models independent of the data source |
-| `api.py` | Defines REST API endpoints |
-| `service.py` | Contains business logic |
-| `repository.py` | Reads and writes application data |
-| `database/sheets_client.py` | Creates authenticated Google Sheets client |
-| `config.py` | Loads application configuration from `.env` |
-
----
-
-# Configuration
-
-Application configuration is managed through the `.env` file.
-
-The `.env` file contains environment-specific settings such as:
-
-- Google Sheets connection details
-- Google service account credentials
-- Worksheet names
-- Other application configuration
-
-The application loads these values through `app/config.py`, making them available throughout the backend via the `settings` object.
-
----
-
-## Adding a New Field to the backend data store
-
-When a new field is added to an existing data store, update the following components:
-
-1. **Data Store**
-   - Add the new column to the datastore.
-
-2. **schemas.py**
-   - Add the new field to the corresponding Pydantic model.
-
-3. **repository.py**
-   - Update `_row_to_<entity>()` to read the new column.
-   - Update `_<entity>_to_row()` to write the new column.
-   - If the repository uses a hardcoded worksheet update range (for example `A:R`), update the range to include the new columns.
-
-4. **API**
-   - No code changes required if the existing endpoints already use and return the updated Pydantic schema.
-   - Verify the new fields appear correctly in Swagger/API responses.
-
-5. **Service**
-   - No changes required unless business logic for the new field is needed.
-
-6. **Configuration**
-   - No changes required unless the new field requires additional configuration.
-
-7. **Testing**
-   - Update the test-data helpers so fake datastore rows include the new fields.
-   - Update the test-data model factory so generated model objects include the new fields.
-   - Update repository helper tests:
-     - Verify `_row_to_<entity>()` reads the new fields correctly.
-     - Verify `_<entity>_to_row()` writes the new fields in the correct positions.
-   - Update repository tests to verify the new fields are returned correctly.
-   - Run the tests for the affected entity first.
-   - Run the complete backend test suite to ensure the changes have not affected existing functionality.
-   - Verify the GET endpoint returns the new fields.
-   - Verify the POST/PUT endpoint correctly persists the new fields.
-
-
-
-## Renaming a Column in the Backend datastore
-
-When a worksheet column is renamed, update the following components:
-
-1. **Google Sheet**
-   - Rename the column.
-
-2. **repository.py**
-   - Update the column name in `_row_to_<entity>()`.
-
-3. **Testing**
-   - Verify the GET endpoint still returns the correct data.
-   - Verify the POST/PUT endpoint continues to read and write the correct column.
-
-
-
-## Adding a New Worksheet / Entity
-
-When a new worksheet (for example, `BodyMeasurements`) is added to the Google Spreadsheet, the following backend changes are required:
-
-1. **Google Sheet**
-   - Create the new worksheet.
-
-2. **Configuration**
-   - Add a new worksheet setting to `.env`.
-   - Add the corresponding setting in `app/config.py`.
-
-3. **schemas.py**
-   - Create a new Pydantic model for the new entity.
-
-4. **repository.py**
-   - Add a method to retrieve the worksheet.
-   - Add methods to read records.
-   - Add methods to retrieve a single record.
-   - Add methods to create and update records.
-   - Add methods to convert worksheet rows to Pydantic models and vice versa.
-
-5. **service.py**
-   - Add methods that expose the Repository functionality.
-
-6. **api.py**
-   - Add the required CRUD endpoints.
-   - Expose the new Pydantic model through the API.
-
-7. **Testing**
-   - Verify all GET, POST and PUT endpoints.
-   - Verify data is correctly read from and written to the new worksheet.
-
----
-
-
 
 ## Testing
 
@@ -402,52 +231,114 @@ Example:
 - `GET /health/nutrition-metrics` returns a list of Nutrition Metrics.
 - `POST /health/nutrition-metrics` creates a new Nutrition Metrics record and returns the correct status code.
 
-### Running Tests
+### Running Tests Safely
 
-Run all backend tests:
+> **Warning:** plain `pytest` is **not** safe. It also runs the end-to-end tests (`*_e2e.py`), which
+> read and write the real Google Sheet, and `tests/labs/test_lab_extraction_service.py`, which reads
+> the live Sheet and calls OpenAI.
 
-```bash
-pytest
-```
-
-Run a specific test file:
-
-```bash
-pytest tests/nutrition_metrics/test_nutrition_metrics_google_sheets_repository.py
-```
-
-Run a specific test method:
+Run the mocked tests from `backend/`. The fake credentials make any call that is not mocked fail
+instead of reaching a real service:
 
 ```bash
-pytest tests/nutrition_metrics/test_nutrition_metrics_google_sheets_repository.py::test_get_nutrition_metrics
+GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json OPENAI_API_KEY=offline-invalid-key \
+  .venv/bin/python -m pytest -q -p no:cacheprovider \
+  --ignore-glob='*_e2e.py' --ignore=tests/labs/test_lab_extraction_service.py
 ```
 
-Run all tests with detailed output:
+Run a single file or test with the same environment variables:
 
 ```bash
-pytest -v
+GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json OPENAI_API_KEY=offline-invalid-key \
+  .venv/bin/python -m pytest -q -p no:cacheprovider \
+  tests/nutrition_metrics/test_nutrition_metrics_google_sheets_repository.py::test_get_nutrition_metrics
 ```
+
+Add `-v` for detailed output.
 
 ---
 
-## Notes
+## Adding a New Field to an Existing Metric
 
-Always activate the virtual environment before running the backend.
+Example: adding a column to Nutrition Metrics.
 
-Whenever new Python packages are installed:
+1. **Google Sheet**
+   - Add the new column to the worksheet.
 
-```bash
-pip freeze > requirements.txt
-```
+2. **Schema** (`nutrition_metrics/nutrition_metrics_schema.py`)
+   - Add the new field to the Pydantic model.
 
-Typical Git workflow:
+3. **Repository** (`nutrition_metrics/nutrition_metrics_google_sheets_repository.py`)
+   - Update `_row_to_nutrition_metrics()` to read the new column by its header name.
+   - Update `_nutrition_metric_to_row()` to write the new column in the correct position.
+   - Update the hardcoded update range (for example `A:N`) to include the new column.
 
-```bash
-git status
-git add .
-git commit -m "Meaningful commit message"
-git push
-```
+4. **API and Service**
+   - No changes are needed if the endpoints already use the updated schema.
+   - Verify the new field appears in Swagger and in API responses.
+
+5. **Configuration**
+   - No changes unless the field needs new configuration.
+
+6. **Testing**
+   - Update `tests/helpers/test_data.py` so fake worksheet rows and generated models include the
+     new field.
+   - Update the repository helper tests:
+     - `_row_to_nutrition_metrics()` reads the new field correctly.
+     - `_nutrition_metric_to_row()` writes the new field in the correct position.
+   - Update the repository tests to check the new field is returned.
+   - Run the module's tests first, then the full safe test suite.
+
+7. **Other parts and docs**
+   - Update the frontend and the data importer if they use the field.
+   - Update any README that describes the affected fields.
+
+## Renaming a Column in a Worksheet
+
+1. **Google Sheet**
+   - Rename the column.
+
+2. **Repository**
+   - Update the header name used in `_row_to_<entity>()`. Writes use column positions, so they do
+     not need to change unless the column also moves.
+
+3. **Testing**
+   - Update the header name in `tests/helpers/test_data.py`.
+   - Verify GET still returns the correct data, and PUT still writes to the correct column.
+
+## Adding a New Metric Module (New Worksheet)
+
+1. **Google Sheet**
+   - Create the new worksheet, with `Date` first and `Updated_DateTime` last, like the other
+     metric worksheets.
+
+2. **Configuration**
+   - Add a worksheet setting to `.env` and the matching field in `app/config.py`.
+
+3. **Module folder** (`app/modules/health/<name>/`), following an existing metric module:
+   - `<name>_schema.py`: the Pydantic model.
+   - `<name>_google_sheets_repository.py`: get the worksheet; read all records and one record;
+     create and update records; convert rows to models and back.
+   - `<name>_service.py`: get, create and upsert, delegating to the repository.
+
+4. **API** (`app/modules/health/api.py`)
+   - Add `GET`, `POST` and `PUT` endpoints, plus a tag in `tags_metadata` in `app/main.py`.
+
+5. **Testing**
+   - Add `tests/<name>/` with repository, service and API tests, using `tests/helpers/test_data.py`.
+   - End-to-end tests (`*_e2e.py`) use the real Sheet: add them only deliberately, and keep them out
+     of the safe test run.
+
+6. **Docs**
+   - Add the module to the [Modules and Endpoints](#modules-and-endpoints) table above.
+
+---
+
+# Labs Module
+
+The Labs module follows a different code pattern from the metric modules: module-level functions in
+`lab_service.py`, `lab_extraction_service.py` and `lab_repository.py` instead of service and
+repository classes, and some endpoints in `api.py` call `lab_repository.py` directly.
 
 ## Lab Module Overview
 

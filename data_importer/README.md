@@ -167,7 +167,9 @@ The same real-data warning applies.
 
 ## Configuration
 
-Settings are loaded from `data_importer/.env` by `app/config.py`. There is no `.env.example` yet.
+Settings are loaded from `data_importer/.env` by `app/config.py`. Create `.env` using the variable
+names in the table below; if a required one is missing, the importer fails at startup with an error
+naming it.
 
 | Variable | Purpose |
 |---|---|
