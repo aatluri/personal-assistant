@@ -1,0 +1,322 @@
+{
+  "data": {
+    "metrics": [
+      {
+        "name": "step_count",
+        "units": "count",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 8000
+          }
+        ]
+      },
+      {
+        "name": "active_energy",
+        "units": "kcal",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 450.4
+          }
+        ]
+      },
+      {
+        "name": "basal_energy_burned",
+        "units": "kcal",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 1800.6
+          }
+        ]
+      },
+      {
+        "name": "atrial_fibrillation_burden",
+        "units": "%",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 1.2
+          }
+        ]
+      },
+      {
+        "name": "blood_oxygen_saturation",
+        "units": "%",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 96.4
+          }
+        ]
+      },
+      {
+        "name": "breathing_disturbances",
+        "units": "count",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 3
+          }
+        ]
+      },
+      {
+        "name": "cardio_recovery",
+        "units": "count/min",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 25.6
+          }
+        ]
+      },
+      {
+        "name": "flights_climbed",
+        "units": "count",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 12
+          }
+        ]
+      },
+      {
+        "name": "heart_rate",
+        "units": "count/min",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "Min": 45,
+            "Max": 150,
+            "Avg": 70.2
+          }
+        ]
+      },
+      {
+        "name": "heart_rate_variability",
+        "units": "ms",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 60.7
+          }
+        ]
+      },
+      {
+        "name": "physical_effort",
+        "units": "kcal/hr·kg",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 2.4
+          }
+        ]
+      },
+      {
+        "name": "respiratory_rate",
+        "units": "count/min",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 15.2
+          }
+        ]
+      },
+      {
+        "name": "resting_heart_rate",
+        "units": "count/min",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 50
+          }
+        ]
+      },
+      {
+        "name": "dietary_energy",
+        "units": "kcal",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 2100.4
+          }
+        ]
+      },
+      {
+        "name": "protein",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 120.6
+          }
+        ]
+      },
+      {
+        "name": "carbohydrates",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 200.2
+          }
+        ]
+      },
+      {
+        "name": "fiber",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 30.4
+          }
+        ]
+      },
+      {
+        "name": "dietary_sugar",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 40.6
+          }
+        ]
+      },
+      {
+        "name": "total_fat",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 70.2
+          }
+        ]
+      },
+      {
+        "name": "saturated_fat",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 20.4
+          }
+        ]
+      },
+      {
+        "name": "polyunsaturated_fat",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 15.6
+          }
+        ]
+      },
+      {
+        "name": "monounsaturated_fat",
+        "units": "g",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 25.2
+          }
+        ]
+      },
+      {
+        "name": "dietary_water",
+        "units": "fl_oz_us",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 100
+          }
+        ]
+      },
+      {
+        "name": "cholesterol",
+        "units": "mg",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 250.4
+          }
+        ]
+      },
+      {
+        "name": "sleep_analysis",
+        "units": "hr",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "sleepStart": "2099-01-31 23:30:00 +0530",
+            "sleepEnd": "2099-02-01 07:00:00 +0530",
+            "totalSleep": 7.123,
+            "core": 4.111,
+            "rem": 2.004,
+            "deep": 0.999,
+            "awake": 0.256
+          }
+        ]
+      },
+      {
+        "name": "weight_body_mass",
+        "units": "lb",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 176.0
+          }
+        ]
+      },
+      {
+        "name": "body_mass_index",
+        "units": "count",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 25.3
+          }
+        ]
+      },
+      {
+        "name": "body_fat_percentage",
+        "units": "%",
+        "data": [
+          {
+            "date": "2099-02-01 00:00:00 +0530",
+            "source": "E2E Fixture",
+            "qty": 22.5
+          }
+        ]
+      }
+    ]
+  }
+}

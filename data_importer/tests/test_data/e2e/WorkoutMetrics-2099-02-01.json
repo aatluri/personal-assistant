@@ -1,0 +1,69 @@
+{
+  "data": {
+    "workouts": [
+      {
+        "name": "Outdoor Run",
+        "start": "2099-02-01 07:00:00 +0530",
+        "end": "2099-02-01 07:30:00 +0530",
+        "duration": 1800.4,
+        "totalEnergy": {
+          "qty": 350.456,
+          "units": "kcal"
+        },
+        "activeEnergyBurned": {
+          "qty": 300.123,
+          "units": "kcal"
+        },
+        "heartRate": {
+          "max": {
+            "qty": 170,
+            "units": "count/min"
+          },
+          "avg": {
+            "qty": 150.4,
+            "units": "count/min"
+          }
+        },
+        "distance": {
+          "qty": 3.0,
+          "units": "mi"
+        },
+        "activities": [
+          {
+            "metrics": {
+              "speed": {
+                "qty": 2.5,
+                "units": "m/s"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "High Intensity Interval Training",
+        "start": "2099-02-01 18:00:00 +0530",
+        "end": "2099-02-01 18:45:00 +0530",
+        "duration": 2700.0,
+        "totalEnergy": {
+          "qty": 500.0,
+          "units": "kcal"
+        },
+        "activeEnergyBurned": {
+          "qty": 420.0,
+          "units": "kcal"
+        },
+        "heartRate": {
+          "max": {
+            "qty": 165,
+            "units": "count/min"
+          },
+          "avg": {
+            "qty": 140.0,
+            "units": "count/min"
+          }
+        },
+        "activities": []
+      }
+    ]
+  }
+}

@@ -1,315 +1,207 @@
-from datetime import date, datetime
+import json
+from pathlib import Path
 
-import pytest
 import requests
 
 from app.clients.google_drive_client import GoogleDriveClient
 from app.config import settings
-from app.modules.health.importers.workout_metrics_importer import (
-    build_workout_metrics_payloads,
+from app.modules.health.constants import PROCESSED_PREFIX
+from tests.e2e.e2e_helpers import (
+    SharedFixture,
+    assert_record_matches,
+    delete_test_rows_from_google_sheets,
 )
+
+
+"""
+Workout Metrics Importer E2E Test
+
+Imports a synthetic Health Auto Export workout file through the real
+importer, backend and Google Sheet, and checks the stored values against
+values written out by hand. Because the expected values do not come from
+the importer's own code, mapping and unit-conversion bugs make it fail.
+
+It does not check whether Health Auto Export's real file format has
+changed; test_export_format_e2e.py does that.
+
+It reuses the archiver test's permanent fixture file
+(TEST_WorkoutMetrics-2099-01-01.json in the incoming folder), because
+service accounts cannot create files in a personal Drive. Each run
+overwrites its content with the committed fixture, renames it so the
+importer recognises it, imports it, then restores its TEST_ name.
+
+Requires the backend (port 8000) and the importer (port 8001) to be
+running, and GOOGLE_SHEETS_SPREADSHEET_ID in data_importer/.env for
+cleanup. All test rows use the date 2099-02-01 and are removed afterwards.
+"""
+
 
 DATA_IMPORTER_BASE_URL = "http://127.0.0.1:8001"
 BACKEND_BASE_URL = "http://127.0.0.1:8000"
 
-FAILED_PREFIX = "FAILED_"
-PROCESSED_PREFIX = "PROCESSED_"
-FILE_PREFIX = "WorkoutMetrics-"
-FILE_SUFFIX = ".json"
+# The committed fixture, and the name the shared Drive file is given
+# while it is imported (the importer only accepts recognised names).
+FIXTURE_NAME = "WorkoutMetrics-2099-02-01.json"
+
+# The shared Drive file's name between runs (skipped by the importer).
+PERMANENT_NAME = "TEST_WorkoutMetrics-2099-01-01.json"
+TEST_PREFIX = "TEST_WorkoutMetrics-"
+FIXTURE_PATH = (
+    Path(__file__).parent.parent / "test_data" / "e2e" / FIXTURE_NAME
+)
+
+TEST_DATE = "2099-02-01"
+TEST_SHEET_DATE = "February 01, 2099"
+SOURCE = "Health Auto Export"
 
 
-def get_workout_metrics_file_date(
-    file_name: str,
-) -> date | None:
-    """
-    Extract the workout date from a valid unprocessed
-    Workout Metrics filename.
+# Values the backend should store for the two fixture workouts, keyed by
+# workout type. Worked out by hand from the fixture, applying the
+# importer's rules: duration seconds → whole minutes, distance miles → km,
+# speed m/s → km/h, numbers rounded to 2 decimals, timestamps stored
+# without timezone.
+EXPECTED_WORKOUTS = {
+    "Outdoor Run": {
+        "date": TEST_DATE,
+        "workout_type": "Outdoor Run",
+        "workout_start_time": "2099-02-01T07:00:00",
+        "workout_end_time": "2099-02-01T07:30:00",
+        "workout_duration_min": 30,     # 1800.4 s
+        "total_energy_kcal": 350.46,
+        "active_energy_kcal": 300.12,
+        "max_heart_rate_bpm": 170,
+        "avg_heart_rate_bpm": 150.4,
+        "distance_km": 4.83,            # 3.0 mi × 1.609344
+        "avg_speed_kmph": 9.0,          # 2.5 m/s × 3.6
+        "source": SOURCE,
+    },
+    "High Intensity Interval Training": {
+        "date": TEST_DATE,
+        "workout_type": "High Intensity Interval Training",
+        "workout_start_time": "2099-02-01T18:00:00",
+        "workout_end_time": "2099-02-01T18:45:00",
+        "workout_duration_min": 45,     # 2700 s
+        "total_energy_kcal": 500.0,
+        "active_energy_kcal": 420.0,
+        "max_heart_rate_bpm": 165,
+        "avg_heart_rate_bpm": 140.0,
+        "distance_km": None,            # indoor workout: no distance
+        "avg_speed_kmph": None,         # no activity speed recorded
+        "source": SOURCE,
+    },
+}
 
-    Failed and processed files are ignored.
-    """
 
-    if (
-        file_name.startswith(FAILED_PREFIX)
-        or file_name.startswith(PROCESSED_PREFIX)
-    ):
-        return None
-
-    if not (
-        file_name.startswith(FILE_PREFIX)
-        and file_name.endswith(FILE_SUFFIX)
-    ):
-        return None
-
-    date_text = file_name[
-        len(FILE_PREFIX):-len(FILE_SUFFIX)
-    ]
-
-    try:
-        return datetime.strptime(
-            date_text,
-            "%Y-%m-%d",
-        ).date()
-
-    except ValueError:
-        return None
-
-
-def get_latest_workout_metrics_file(
+def get_shared_fixture(
     drive_client: GoogleDriveClient,
-) -> dict:
+) -> SharedFixture:
     """
-    Return the latest valid unprocessed Workout Metrics
-    file from the incoming Google Drive folder.
-    """
-
-    files = drive_client.list_files(
-        settings.WORKOUT_METRICS_DRIVE_FOLDER_ID
-    )
-
-    valid_files = []
-
-    for file in files:
-
-        file_date = get_workout_metrics_file_date(
-            file["name"]
-        )
-
-        if file_date is not None:
-            valid_files.append(
-                (
-                    file_date,
-                    file,
-                )
-            )
-
-    assert valid_files, (
-        "No valid unprocessed Workout Metrics files found "
-        "in incoming Google Drive folder."
-    )
-
-    valid_files.sort(
-        key=lambda item: item[0],
-        reverse=True,
-    )
-
-    return valid_files[0][1]
-
-
-def normalize_datetime(
-    value: str | None,
-) -> str | None:
-    """
-    Remove timezone information from an ISO datetime.
-
-    Google Sheets stores Workout Metrics timestamps
-    without timezone information.
+    Find the shared Workout Metrics fixture file in Drive.
     """
 
-    if value is None:
-        return None
-
-    return (
-        datetime.fromisoformat(value)
-        .replace(tzinfo=None)
-        .isoformat()
+    return SharedFixture(
+        drive_client=drive_client,
+        incoming_folder_id=settings.WORKOUT_METRICS_DRIVE_FOLDER_ID,
+        processed_folder_id=(
+            settings.WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID
+        ),
+        permanent_name=PERMANENT_NAME,
+        test_prefix=TEST_PREFIX,
+        import_name=FIXTURE_NAME,
     )
 
 
-def assert_payload_matches_record(
-    expected: dict,
-    actual: dict,
+def clean_up(
+    fixture: SharedFixture,
 ) -> None:
     """
-    Verify that every expected payload field matches
-    the value returned by the backend.
+    Restore the shared fixture's TEST_ name and remove the test rows.
     """
 
-    for field, expected_value in expected.items():
+    fixture.restore()
 
-        assert field in actual, (
-            f"Field '{field}' missing from backend response."
-        )
-
-        actual_value = actual[field]
-
-        if isinstance(expected_value, float):
-            assert actual_value == pytest.approx(
-                expected_value,
-                abs=0.01,
-            ), (
-                f"Mismatch for '{field}': "
-                f"expected {expected_value!r}, "
-                f"got {actual_value!r}"
-            )
-        else:
-            assert actual_value == expected_value, (
-                f"Mismatch for '{field}': "
-                f"expected {expected_value!r}, "
-                f"got {actual_value!r}"
-            )
+    delete_test_rows_from_google_sheets(TEST_SHEET_DATE)
 
 
 def test_workout_metrics_importer_e2e():
 
-    drive_client = GoogleDriveClient()
+    fixture = get_shared_fixture(GoogleDriveClient())
 
-    # ---------------------------------------------------------
-    # 1. FIND THE LATEST REAL HEALTH AUTO EXPORT FILE
-    # ---------------------------------------------------------
+    # Repair anything left behind by a previous interrupted run.
+    clean_up(fixture)
 
-    file = get_latest_workout_metrics_file(
-        drive_client
-    )
+    try:
 
-    file_id = file["id"]
-    file_name = file["name"]
+        # ---------------------------------------------------------
+        # 1. LOAD THE COMMITTED FIXTURE INTO THE SHARED DRIVE FILE
+        # ---------------------------------------------------------
 
-    print(
-        f"Testing Workout Metrics import with: "
-        f"{file_name}"
-    )
+        with FIXTURE_PATH.open(encoding="utf-8") as file:
+            fixture_data = json.load(file)
 
-    # ---------------------------------------------------------
-    # 2. READ THE REAL JSON FILE
-    # ---------------------------------------------------------
+        fixture.overwrite_content(fixture_data)
+        fixture.rename_for_import()
 
-    export_data = drive_client.read_json_file(
-        file_id
-    )
+        # ---------------------------------------------------------
+        # 2. IMPORT ONLY THE FIXTURE
+        # ---------------------------------------------------------
 
-    assert export_data is not None
-
-    assert "data" in export_data
-    assert "workouts" in export_data["data"]
-
-    # ---------------------------------------------------------
-    # 3. BUILD THE EXPECTED BACKEND PAYLOADS
-    # ---------------------------------------------------------
-
-    expected_workouts = build_workout_metrics_payloads(
-        export_data
-    )
-
-    assert expected_workouts, (
-        f"{file_name} contains no Workout Metrics data."
-    )
-
-    # ---------------------------------------------------------
-    # 4. RUN THE DATA IMPORTER
-    # ---------------------------------------------------------
-
-    response = requests.put(
-        f"{DATA_IMPORTER_BASE_URL}"
-        f"/health/import/workout-metrics",
-        params={
-            "file_name": file_name,
-        },
-        timeout=30,
-    )
-
-    assert response.status_code == 200, response.text
-
-    import_result = response.json()
-
-    assert import_result["status"] == "success"
-
-    assert import_result["files_processed"] == 1
-
-    assert len(import_result["results"]) == 1
-
-    file_result = import_result["results"][0]
-
-    assert file_result["file_name"] == file_name
-
-    # ---------------------------------------------------------
-    # 5. VERIFY IMPORTER RESULT
-    # ---------------------------------------------------------
-
-    workout_results = file_result["workout_metrics"]
-
-    assert workout_results is not None
-
-    assert len(workout_results) == len(
-        expected_workouts
-    )
-
-    # ---------------------------------------------------------
-    # 6. VERIFY EACH WORKOUT THROUGH THE BACKEND
-    # ---------------------------------------------------------
-
-    for expected_workout in expected_workouts:
-
-        workout_start_time = (
-            expected_workout["workout_start_time"]
+        response = requests.put(
+            f"{DATA_IMPORTER_BASE_URL}/health/import/workout-metrics",
+            params={"file_name": FIXTURE_NAME},
+            timeout=60,
         )
 
+        assert response.status_code == 200, response.text
+
+        import_result = response.json()
+
+        assert import_result["status"] == "success"
+        assert import_result["files_processed"] == 1
+
+        file_result = import_result["results"][0]
+
+        assert file_result["file_name"] == FIXTURE_NAME
+        assert len(file_result["workout_metrics"]) == 2
+
+        # ---------------------------------------------------------
+        # 3. VERIFY THE STORED WORKOUTS THROUGH THE BACKEND
+        # ---------------------------------------------------------
+
         response = requests.get(
-            f"{BACKEND_BASE_URL}/health/workout-metric",
-            params={
-                "workout_start_time": workout_start_time,
-            },
+            f"{BACKEND_BASE_URL}/health/workout-metrics",
+            params={"workout_date": TEST_DATE},
             timeout=10,
         )
 
         assert response.status_code == 200, response.text
 
-        actual_workout = response.json()
+        stored_workouts = {
+            workout["workout_type"]: workout
+            for workout in response.json()
+        }
 
-        assert actual_workout["source"] == (
-            "Health Auto Export"
+        assert set(stored_workouts) == set(EXPECTED_WORKOUTS), (
+            f"Expected workouts {sorted(EXPECTED_WORKOUTS)}, "
+            f"got {sorted(stored_workouts)}"
         )
 
-        # Google Sheets stores workout timestamps without
-        # timezone information.
-        expected_record = expected_workout.copy()
-
-        expected_record["workout_start_time"] = (
-            normalize_datetime(
-                expected_record["workout_start_time"]
+        for workout_type, expected in EXPECTED_WORKOUTS.items():
+            assert_record_matches(
+                expected,
+                stored_workouts[workout_type],
             )
+
+        # ---------------------------------------------------------
+        # 4. VERIFY THE FILE WAS MARKED AS PROCESSED
+        # ---------------------------------------------------------
+
+        assert fixture.current_name() == f"{PROCESSED_PREFIX}{FIXTURE_NAME}", (
+            f"Expected {PROCESSED_PREFIX}{FIXTURE_NAME} after the import."
         )
 
-        expected_record["workout_end_time"] = (
-            normalize_datetime(
-                expected_record["workout_end_time"]
-            )
-        )
+    finally:
 
-        assert_payload_matches_record(
-            expected_record,
-            actual_workout,
-        )
-
-    # ---------------------------------------------------------
-    # 7. VERIFY FILE WAS MARKED AS PROCESSED
-    # ---------------------------------------------------------
-
-    files_after_import = drive_client.list_files(
-        settings.WORKOUT_METRICS_DRIVE_FOLDER_ID
-    )
-
-    processed_file = next(
-        (
-            file
-            for file in files_after_import
-            if file["id"] == file_id
-        ),
-        None,
-    )
-
-    assert processed_file is not None, (
-        f"Workout Metrics file {file_id} was not found "
-        "in the incoming folder after import."
-    )
-
-    expected_processed_name = (
-        f"{PROCESSED_PREFIX}{file_name}"
-    )
-
-    assert processed_file["name"] == (
-        expected_processed_name
-    ), (
-        "Workout Metrics file was not marked as processed. "
-        f"Expected {expected_processed_name!r}, "
-        f"got {processed_file['name']!r}."
-    )
+        # Always restore the fixture and remove the rows, even if a
+        # check fails.
+        clean_up(fixture)

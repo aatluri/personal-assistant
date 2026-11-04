@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID: str
     DATA_IMPORTER_ARCHIVE_AFTER_DAYS: int = 30
 
+    # Used only by the E2E tests, to delete the test rows they create in
+    # the Google Sheet. The importer itself never accesses the Sheet.
+    GOOGLE_SHEETS_SPREADSHEET_ID: str | None = None
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

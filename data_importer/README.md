@@ -182,6 +182,7 @@ naming it.
 | `WORKOUT_METRICS_DRIVE_FOLDER_ID` | Drive folder where Workout Metrics files arrive |
 | `WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID` | Drive folder where archived Workout Metrics files are moved |
 | `DATA_IMPORTER_ARCHIVE_AFTER_DAYS` | Age in days before a processed file is archived (default `30`) |
+| `GOOGLE_SHEETS_SPREADSHEET_ID` | **E2E tests only, optional.** The backend's spreadsheet ID, used by the importer E2E tests to delete the test rows they create. The importer itself never accesses the Sheet. |
 
 `.env` and `credentials/` are ignored by git.
 
@@ -205,9 +206,42 @@ These cover the importers, orchestrators (including skipping unrecognised filena
 backend client, the API endpoints in `app/main.py` (`tests/api/`) and the historical import script
 (`tests/scripts/`), using the sample exports in `tests/test_data/`.
 
-> **Warning:** the live tests in `tests/e2e/` read real Drive files, create and delete `TEST_*`
-> files in Drive, and write to the real Sheet through the backend. Run them only deliberately, with
-> the backend and importer running: `.venv/bin/python -m pytest -m e2e`.
+### Live (E2E) Tests
+
+The live tests in `tests/e2e/` use the real Google Drive and, through the backend, the real Google
+Sheet. There are three kinds:
+
+| Test | What it checks | What it touches |
+|---|---|---|
+| `test_export_format_e2e.py` | Health Auto Export's real file format still matches the mappings: metric names, value fields, date formats and **units** (e.g. water in `fl_oz_us`, weight in `lb`), over the latest 7 exports | **Read-only:** reads recent exports from Drive; never imports, renames or writes anything |
+| `test_health_metrics_importer_e2e.py`, `test_workout_metrics_importer_e2e.py` | The whole pipeline (importer → backend → Sheet), using synthetic fixtures in `tests/test_data/e2e/` and hand-written expected values, including every unit conversion | Reuses the permanent `TEST_*-2099-01-01.json` file in the incoming folder: overwrites its content with the committed fixture, renames it so the importer recognises it, imports it, then restores its `TEST_` name and deletes the 2099-02-01 rows |
+| `test_*_file_archiver_e2e.py` | The archiver, using the same permanent `TEST_*` fixture files | Renames and moves those fixtures, then restores them |
+
+The two kinds of test share one permanent fixture per incoming folder (`TEST_HealthMetrics-2099-01-01.json`
+and `TEST_WorkoutMetrics-2099-01-01.json`), uploaded once by hand. Service accounts cannot create
+files in a personal Google Drive (they have no storage quota), so the tests rename and reuse these
+files instead of creating new ones. If a run is interrupted and leaves a fixture under a temporary
+name, the next run of either test restores it.
+
+The format check is the one that tells you Health Auto Export has changed its format. Run it after an
+app update, before importing a backlog, or regularly:
+
+```bash
+.venv/bin/python -m pytest -m e2e tests/e2e/test_export_format_e2e.py
+```
+
+If a mapped metric appears with a unit not yet listed in its `EXPECTED_UNITS`, the test shows a
+warning so the unit can be added. If a known unit changes, it fails, and the mappings and conversions
+must be updated before importing again.
+
+Running the pipeline tests needs:
+
+- the backend (port 8000) and the importer (port 8001) running
+- `GOOGLE_SHEETS_SPREADSHEET_ID` in `data_importer/.env`
+- **edit access to the Google Sheet** for the importer's service account, so the tests can delete
+  their test rows
+
+> **Warning:** run live tests only deliberately: `.venv/bin/python -m pytest -m e2e`.
 
 ---
 

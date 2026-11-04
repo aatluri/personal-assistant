@@ -1,413 +1,251 @@
-from datetime import date, datetime
-import pytest
+import json
+from pathlib import Path
+
 import requests
 
 from app.clients.google_drive_client import GoogleDriveClient
 from app.config import settings
-from app.modules.health.importers.body_measurements_metrics_importer import (
-    build_body_measurements_metrics_payload,
+from app.modules.health.constants import PROCESSED_PREFIX
+from tests.e2e.e2e_helpers import (
+    SharedFixture,
+    assert_record_matches,
+    delete_test_rows_from_google_sheets,
 )
-from app.modules.health.importers.health_metrics_importer import (
-    build_health_metrics_payload,
-)
-from app.modules.health.importers.nutrition_metrics_importer import (
-    build_nutrition_metrics_payload,
-)
-from app.modules.health.importers.sleep_metrics_importer import (
-    build_sleep_metrics_payload,
-)
+
+
+"""
+Health Metrics Importer E2E Test
+
+Imports a synthetic Health Auto Export file through the real importer,
+backend and Google Sheet, and checks the stored values against values
+written out by hand. Because the expected values do not come from the
+importer's own code, mapping and unit-conversion bugs make it fail.
+
+It does not check whether Health Auto Export's real file format has
+changed; test_export_format_e2e.py does that.
+
+It reuses the archiver test's permanent fixture file
+(TEST_HealthMetrics-2099-01-01.json in the incoming folder), because
+service accounts cannot create files in a personal Drive. Each run
+overwrites its content with the committed fixture, renames it so the
+importer recognises it, imports it, then restores its TEST_ name.
+
+Requires the backend (port 8000) and the importer (port 8001) to be
+running, and GOOGLE_SHEETS_SPREADSHEET_ID in data_importer/.env for
+cleanup. All test rows use the date 2099-02-01 and are removed afterwards.
+"""
 
 
 DATA_IMPORTER_BASE_URL = "http://127.0.0.1:8001"
 BACKEND_BASE_URL = "http://127.0.0.1:8000"
 
-FAILED_PREFIX = "FAILED_"
-PROCESSED_PREFIX = "PROCESSED_"
-FILE_PREFIX = "HealthMetrics-"
-FILE_SUFFIX = ".json"
+# The committed fixture, and the name the shared Drive file is given
+# while it is imported (the importer only accepts recognised names).
+FIXTURE_NAME = "HealthMetrics-2099-02-01.json"
+
+# The shared Drive file's name between runs (skipped by the importer).
+PERMANENT_NAME = "TEST_HealthMetrics-2099-01-01.json"
+TEST_PREFIX = "TEST_HealthMetrics-"
+FIXTURE_PATH = (
+    Path(__file__).parent.parent / "test_data" / "e2e" / FIXTURE_NAME
+)
+
+TEST_DATE = "2099-02-01"
+TEST_SHEET_DATE = "February 01, 2099"
+SOURCE = "Health Auto Export"
 
 
-def get_health_metrics_file_date(
-    file_name: str,
-) -> date | None:
-    """
-    Extract the date from an unprocessed Health Metrics filename.
-    """
+# Values the backend should store for the fixture. Worked out by hand
+# from the fixture, applying the importer's rules: health and nutrition
+# values rounded to whole numbers, water fl oz → ml, weight lb → kg,
+# sleep rounded to 2 decimals, timestamps stored without timezone.
 
-    if (
-        file_name.startswith(FAILED_PREFIX)
-        or file_name.startswith(PROCESSED_PREFIX)
-    ):
-        return None
+EXPECTED_HEALTH_METRICS = {
+    "date": TEST_DATE,
+    "step_count": 8000,
+    "active_energy_kcal": 450,
+    "resting_energy_kcal": 1801,
+    "atrial_fibrillation_burden_percent": 1,
+    "blood_oxygen_saturation_percent": 96,
+    "breathing_disturbances_count": 3,
+    "cardio_recovery_bpm": 26,
+    "flights_climbed": 12,
+    "heart_rate_min_bpm": 45,
+    "heart_rate_max_bpm": 150,
+    "heart_rate_variability_ms": 61,
+    "physical_effort_kcal_hr_kg": 2,
+    "respiratory_rate_bpm": 15,
+    "resting_heart_rate_bpm": 50,
+    "source": SOURCE,
+}
 
-    if not (
-        file_name.startswith(FILE_PREFIX)
-        and file_name.endswith(FILE_SUFFIX)
-    ):
-        return None
+EXPECTED_NUTRITION_METRICS = {
+    "date": TEST_DATE,
+    "dietary_energy_kcal": 2100,
+    "protein_g": 121,
+    "carbohydrates_g": 200,
+    "fiber_g": 30,
+    "sugar_g": 41,
+    "total_fat_g": 70,
+    "saturated_fat_g": 20,
+    "polyunsaturated_fat_g": 16,
+    "monounsaturated_fat_g": 25,
+    "water_ml": 2957,           # 100 US fl oz × 29.5735
+    "cholesterol_mg": 250,
+    "source": SOURCE,
+}
 
-    date_text = file_name[
-        len(FILE_PREFIX):-len(FILE_SUFFIX)
-    ]
+EXPECTED_SLEEP_METRICS = {
+    "date": TEST_DATE,
+    "sleep_start_time": "2099-01-31T23:30:00",
+    "sleep_end_time": "2099-02-01T07:00:00",
+    "total_sleep_duration_hr": 7.12,
+    "core_sleep_hr": 4.11,
+    "rem_sleep_hr": 2.0,
+    "deep_sleep_hr": 1.0,
+    "awake_hr": 0.26,
+    "source": SOURCE,
+}
 
-    try:
-        return datetime.strptime(
-            date_text,
-            "%Y-%m-%d",
-        ).date()
+EXPECTED_BODY_MEASUREMENTS = {
+    "date": TEST_DATE,
+    "weight_kg": 79.83,         # 176 lb × 0.45359237
+    "body_mass_index": 25.3,
+    "body_fat_percent": 22.5,
+    "source": SOURCE,
+}
 
-    except ValueError:
-        return None
 
-
-def get_latest_health_metrics_file(
+def get_shared_fixture(
     drive_client: GoogleDriveClient,
-) -> dict:
+) -> SharedFixture:
     """
-    Return the newest unprocessed Health Metrics file
-    from the configured incoming Google Drive folder.
+    Find the shared Health Metrics fixture file in Drive.
     """
 
-    files = drive_client.list_files(
-        settings.HEALTH_METRICS_DRIVE_FOLDER_ID
+    return SharedFixture(
+        drive_client=drive_client,
+        incoming_folder_id=settings.HEALTH_METRICS_DRIVE_FOLDER_ID,
+        processed_folder_id=(
+            settings.HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID
+        ),
+        permanent_name=PERMANENT_NAME,
+        test_prefix=TEST_PREFIX,
+        import_name=FIXTURE_NAME,
     )
 
-    valid_files = []
 
-    for file in files:
-        print(file["name"])
-        file_date = get_health_metrics_file_date(
-            file["name"]
-        )
-
-        if file_date is not None:
-            valid_files.append(
-                (
-                    file_date,
-                    file,
-                )
-            )
-
-    assert valid_files, (
-        "No unprocessed Health Metrics files found "
-        "in the incoming Google Drive folder."
-    )
-
-    valid_files.sort(
-        key=lambda item: item[0],
-        reverse=True,
-    )
-
-    return valid_files[0][1]
-
-
-def assert_payload_matches_record(
-    expected: dict,
-    actual: dict,
+def clean_up(
+    fixture: SharedFixture,
 ) -> None:
     """
-    Verify that every expected payload field matches
-    the value returned by the backend.
+    Restore the shared fixture's TEST_ name and remove the test rows.
     """
 
-    for field, expected_value in expected.items():
+    fixture.restore()
 
-        assert field in actual, (
-            f"Field '{field}' missing from backend response."
-        )
+    delete_test_rows_from_google_sheets(TEST_SHEET_DATE)
 
-        actual_value = actual[field]
 
-        if isinstance(expected_value, float):
-            assert actual_value == pytest.approx(
-                expected_value,
-                abs=0.01,
-            ), (
-                f"Mismatch for '{field}': "
-                f"expected {expected_value!r}, "
-                f"got {actual_value!r}"
-            )
-        else:
-            assert actual_value == expected_value, (
-                f"Mismatch for '{field}': "
-                f"expected {expected_value!r}, "
-                f"got {actual_value!r}"
-            )
+def get_backend_record(
+    path: str,
+) -> dict:
+    """
+    Fetch one record from the backend and fail clearly if it is missing.
+    """
+
+    response = requests.get(
+        f"{BACKEND_BASE_URL}{path}",
+        timeout=10,
+    )
+
+    assert response.status_code == 200, (
+        f"GET {path} returned {response.status_code}: {response.text}"
+    )
+
+    return response.json()
 
 
 def test_health_metrics_importer_e2e():
 
-    drive_client = GoogleDriveClient()
+    fixture = get_shared_fixture(GoogleDriveClient())
 
-    # ---------------------------------------------------------
-    # 1. FIND THE LATEST UNPROCESSED HEALTH AUTO EXPORT FILE
-    # ---------------------------------------------------------
+    # Repair anything left behind by a previous interrupted run.
+    clean_up(fixture)
 
-    file = get_latest_health_metrics_file(
-        drive_client
-    )
+    try:
 
-    file_id = file["id"]
-    file_name = file["name"]
+        # ---------------------------------------------------------
+        # 1. LOAD THE COMMITTED FIXTURE INTO THE SHARED DRIVE FILE
+        # ---------------------------------------------------------
 
-    print(
-        f"Testing Health Metrics import with: "
-        f"{file_name}"
-    )
+        with FIXTURE_PATH.open(encoding="utf-8") as file:
+            fixture_data = json.load(file)
 
-    # ---------------------------------------------------------
-    # 2. READ THE REAL JSON FILE
-    # ---------------------------------------------------------
+        fixture.overwrite_content(fixture_data)
+        fixture.rename_for_import()
 
-    export_data = drive_client.read_json_file(
-        file_id
-    )
+        # ---------------------------------------------------------
+        # 2. IMPORT ONLY THE FIXTURE
+        # ---------------------------------------------------------
 
-    assert export_data is not None
-
-    assert "data" in export_data
-    assert "metrics" in export_data["data"]
-
-    # ---------------------------------------------------------
-    # 3. BUILD THE EXPECTED BACKEND PAYLOADS
-    # ---------------------------------------------------------
-
-    expected_health = build_health_metrics_payload(
-        export_data
-    )
-
-    expected_nutrition = build_nutrition_metrics_payload(
-        export_data
-    )
-
-    expected_sleep = build_sleep_metrics_payload(
-        export_data
-    )
-
-    expected_body_measurements = (
-        build_body_measurements_metrics_payload(
-            export_data
-        )
-    )
-
-    assert expected_health is not None, (
-        f"{file_name} contains no Health Metrics data."
-    )
-
-    # ---------------------------------------------------------
-    # 4. RUN THE DATA IMPORTER
-    # ---------------------------------------------------------
-
-    response = requests.put(
-        f"{DATA_IMPORTER_BASE_URL}"
-        f"/health/import/health-metrics",
-        params={
-            "file_name": file_name,
-        },
-        timeout=30,
-    )
-
-    assert response.status_code == 200, response.text
-
-    import_result = response.json()
-
-    assert import_result["status"] == "success"
-
-    assert import_result["files_processed"] == 1
-
-    assert len(import_result["results"]) == 1
-
-    file_result = import_result["results"][0]
-
-    assert file_result["file_name"] == file_name
-
-    # ---------------------------------------------------------
-    # 5. VERIFY IMPORTER RESULT
-    # ---------------------------------------------------------
-
-    assert (
-        file_result["health_metrics"]
-        is not None
-    )
-
-    if expected_nutrition is None:
-
-        assert (
-            file_result["nutrition_metrics"]
-            is None
-        )
-
-    else:
-
-        assert (
-            file_result["nutrition_metrics"]
-            is not None
-        )
-
-    if expected_sleep is None:
-
-        assert (
-            file_result["sleep_metrics"]
-            is None
-        )
-
-    else:
-
-        assert (
-            file_result["sleep_metrics"]
-            is not None
-        )
-
-    if expected_body_measurements is None:
-
-        assert (
-            file_result["body_measurements_metrics"]
-            is None
-        )
-
-    else:
-
-        assert (
-            file_result["body_measurements_metrics"]
-            is not None
-        )
-
-    # ---------------------------------------------------------
-    # 6. VERIFY HEALTH METRICS THROUGH BACKEND
-    # ---------------------------------------------------------
-
-    health_date = expected_health["date"]
-
-    response = requests.get(
-        f"{BACKEND_BASE_URL}"
-        f"/health/health-metrics/{health_date}",
-        timeout=10,
-    )
-
-    assert response.status_code == 200, response.text
-
-    actual_health = response.json()
-
-    assert_payload_matches_record(
-        expected_health,
-        actual_health,
-    )
-
-    # ---------------------------------------------------------
-    # 7. VERIFY NUTRITION METRICS THROUGH BACKEND
-    # ---------------------------------------------------------
-
-    if expected_nutrition is not None:
-
-        nutrition_date = expected_nutrition["date"]
-
-        response = requests.get(
-            f"{BACKEND_BASE_URL}"
-            f"/health/nutrition-metrics/{nutrition_date}",
-            timeout=10,
+        response = requests.put(
+            f"{DATA_IMPORTER_BASE_URL}/health/import/health-metrics",
+            params={"file_name": FIXTURE_NAME},
+            timeout=60,
         )
 
         assert response.status_code == 200, response.text
 
-        actual_nutrition = response.json()
+        import_result = response.json()
 
-        assert_payload_matches_record(
-            expected_nutrition,
-            actual_nutrition,
+        assert import_result["status"] == "success"
+        assert import_result["files_processed"] == 1
+
+        file_result = import_result["results"][0]
+
+        assert file_result["file_name"] == FIXTURE_NAME
+
+        # The fixture contains all four kinds of data.
+        assert file_result["health_metrics"] is not None
+        assert file_result["nutrition_metrics"] is not None
+        assert file_result["sleep_metrics"] is not None
+        assert file_result["body_measurements_metrics"] is not None
+
+        # ---------------------------------------------------------
+        # 3. VERIFY THE STORED VALUES THROUGH THE BACKEND
+        # ---------------------------------------------------------
+
+        assert_record_matches(
+            EXPECTED_HEALTH_METRICS,
+            get_backend_record(f"/health/health-metrics/{TEST_DATE}"),
         )
 
-    # ---------------------------------------------------------
-    # 8. VERIFY SLEEP METRICS THROUGH BACKEND
-    # ---------------------------------------------------------
-
-    if expected_sleep is not None:
-
-        sleep_date = expected_sleep["date"]
-
-        response = requests.get(
-            f"{BACKEND_BASE_URL}"
-            f"/health/sleep-metrics/{sleep_date}",
-            timeout=10,
+        assert_record_matches(
+            EXPECTED_NUTRITION_METRICS,
+            get_backend_record(f"/health/nutrition-metrics/{TEST_DATE}"),
         )
 
-        assert response.status_code == 200, response.text
-
-        actual_sleep = response.json()
-
-        # Google Sheets stores Sleep timestamps without
-        # timezone information.
-        expected_sleep["sleep_start_time"] = (
-            datetime.fromisoformat(
-                expected_sleep["sleep_start_time"]
-            )
-            .replace(tzinfo=None)
-            .isoformat()
+        assert_record_matches(
+            EXPECTED_SLEEP_METRICS,
+            get_backend_record(f"/health/sleep-metrics/{TEST_DATE}"),
         )
 
-        expected_sleep["sleep_end_time"] = (
-            datetime.fromisoformat(
-                expected_sleep["sleep_end_time"]
-            )
-            .replace(tzinfo=None)
-            .isoformat()
+        assert_record_matches(
+            EXPECTED_BODY_MEASUREMENTS,
+            get_backend_record(f"/health/body-measurements/{TEST_DATE}"),
         )
 
-        assert_payload_matches_record(
-            expected_sleep,
-            actual_sleep,
+        # ---------------------------------------------------------
+        # 4. VERIFY THE FILE WAS MARKED AS PROCESSED
+        # ---------------------------------------------------------
+
+        assert fixture.current_name() == f"{PROCESSED_PREFIX}{FIXTURE_NAME}", (
+            f"Expected {PROCESSED_PREFIX}{FIXTURE_NAME} after the import."
         )
 
-    # ---------------------------------------------------------
-    # 9. VERIFY BODY MEASUREMENTS THROUGH BACKEND
-    # ---------------------------------------------------------
+    finally:
 
-    if expected_body_measurements is not None:
-
-        body_measurements_date = (
-            expected_body_measurements["date"]
-        )
-
-        response = requests.get(
-            f"{BACKEND_BASE_URL}"
-            f"/health/body-measurements/"
-            f"{body_measurements_date}",
-            timeout=10,
-        )
-
-        assert response.status_code == 200, response.text
-
-        actual_body_measurements = response.json()
-
-        assert_payload_matches_record(
-            expected_body_measurements,
-            actual_body_measurements,
-        )
-
-    # ---------------------------------------------------------
-    # 10. VERIFY FILE WAS MARKED AS PROCESSED
-    # ---------------------------------------------------------
-
-    files = drive_client.list_files(
-        settings.HEALTH_METRICS_DRIVE_FOLDER_ID
-    )
-
-    processed_file_name = (
-        f"{PROCESSED_PREFIX}{file_name}"
-    )
-
-    processed_file = next(
-        (
-            file
-            for file in files
-            if (
-                file["id"] == file_id
-                and file["name"] == processed_file_name
-            )
-        ),
-        None,
-    )
-
-    assert processed_file is not None, (
-        f"Expected file '{processed_file_name}' "
-        f"was not found after processing."
-    )
+        # Always restore the fixture and remove the rows, even if a
+        # check fails.
+        clean_up(fixture)
