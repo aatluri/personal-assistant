@@ -78,8 +78,8 @@ export async function getWorkoutMetricsByDate(
                     ? workout.workout_end_time.substring(11, 19)
                     : "",
 
-            workoutDuration:
-                workout.workout_duration ?? "",
+            workoutDurationMin:
+                workout.workout_duration_min ?? "",
 
             totalEnergyKcal:
                 workout.total_energy_kcal ?? "",
@@ -93,11 +93,11 @@ export async function getWorkoutMetricsByDate(
             avgHeartRateBpm:
                 workout.avg_heart_rate_bpm ?? "",
 
-            distanceMi:
-                workout.distance_mi ?? "",
+            distanceKm:
+                workout.distance_km ?? "",
 
-            avgSpeedMph:
-                workout.avg_speed_mph ?? "",
+            avgSpeedKmph:
+                workout.avg_speed_kmph ?? "",
 
         })
     );
@@ -141,8 +141,14 @@ export async function saveWorkoutMetric(
         workout_end_time:
             workoutEndDateTime,
 
-        workout_duration:
-            workoutMetric.workoutDuration,
+        /*
+        Sent as null when empty; the backend then calculates
+        it from the start and end times.
+        */
+        workout_duration_min:
+            buildNumber(
+                workoutMetric.workoutDurationMin
+            ),
 
         total_energy_kcal:
             buildNumber(
@@ -164,14 +170,14 @@ export async function saveWorkoutMetric(
                 workoutMetric.avgHeartRateBpm
             ),
 
-        distance_mi:
+        distance_km:
             buildNumber(
-                workoutMetric.distanceMi
+                workoutMetric.distanceKm
             ),
 
-        avg_speed_mph:
+        avg_speed_kmph:
             buildNumber(
-                workoutMetric.avgSpeedMph
+                workoutMetric.avgSpeedKmph
             ),
     };
 

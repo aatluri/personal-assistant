@@ -17,7 +17,7 @@ describe("createEmptyWorkoutMetrics", () => {
 
         expect(workoutMetrics.workoutStartTime).toBe("");
         expect(workoutMetrics.workoutEndTime).toBe("");
-        expect(workoutMetrics.workoutDuration).toBe("");
+        expect(workoutMetrics.workoutDurationMin).toBe("");
 
         expect(workoutMetrics.totalEnergyKcal).toBe("");
         expect(workoutMetrics.activeEnergyKcal).toBe("");
@@ -25,8 +25,8 @@ describe("createEmptyWorkoutMetrics", () => {
         expect(workoutMetrics.maxHeartRateBpm).toBe("");
         expect(workoutMetrics.avgHeartRateBpm).toBe("");
 
-        expect(workoutMetrics.distanceMi).toBe("");
-        expect(workoutMetrics.avgSpeedMph).toBe("");
+        expect(workoutMetrics.distanceKm).toBe("");
+        expect(workoutMetrics.avgSpeedKmph).toBe("");
 
     });
 

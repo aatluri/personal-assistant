@@ -150,6 +150,31 @@ function LogSleepMetrics() {
 
             console.error(error);
             setSaveStatus("failed");
+            return;
+
+        }
+
+        /*
+        Reload the saved record, so a total sleep duration the
+        backend calculated from the start and end times is shown
+        straight away. The save has already succeeded, so a
+        failed reload is only logged.
+        */
+        try {
+
+            const savedSleepMetrics =
+                await getSleepMetric(selectedDate);
+
+            if (savedSleepMetrics) {
+                setSleepMetrics(savedSleepMetrics);
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Failed to reload Sleep Metrics after saving:",
+                error
+            );
 
         }
 

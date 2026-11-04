@@ -127,6 +127,22 @@ These apply to all five metric repositories:
 - **Only repositories touch the Sheet.** Google Sheets access lives only in the
   `*_google_sheets_repository.py` files, `labs/lab_repository.py` and `database/sheets_client.py`.
 
+### Missing Sleep and Workout Durations
+
+Health Auto Export sometimes reports a sleep total or workout duration of `0` even though the start
+and end times are known. When a sleep record's `total_sleep_duration_hr` or a workout's
+`workout_duration_min` is sent as `0` or empty, the service (`SleepMetricsService`,
+`WorkoutMetricsService`) applies this rule before saving:
+
+1. **A real stored value (> 0) is kept.** The incoming `0` or empty value never overwrites it.
+2. **Otherwise the duration is calculated** from the start and end times (sent, or else stored) when
+   the span is plausible: 1 to 16 hours for sleep (in hours, 2 decimals), 1 minute to 24 hours for
+   a workout (in whole minutes). A calculated sleep total is the time between start and end, so it
+   includes any time awake.
+3. **Otherwise the value is saved exactly as sent**, so an implausible span keeps its `0`.
+
+A real incoming value is always saved as sent. Existing rows saved before this rule are not changed.
+
 ---
 
 ## Setup

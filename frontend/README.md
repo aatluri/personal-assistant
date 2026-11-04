@@ -80,6 +80,11 @@ src/
 
 The Labs pages have not been built yet (the backend endpoints exist).
 
+**Calculated durations:** on the Sleep and Workout pages, the total sleep duration (hours) and the
+workout duration (minutes) can be left blank. When the start and end times are set, the backend
+calculates the duration on save (see the backend README's "Missing Sleep and Workout Durations").
+Both pages reload after saving, so the calculated value is shown straight away.
+
 **Navigation:**
 
 - The **desktop sidebar** lists the items in `desktopNavigationItems` (`src/navigation/navigation.ts`).

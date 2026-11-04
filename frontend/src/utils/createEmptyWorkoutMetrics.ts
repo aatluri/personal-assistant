@@ -21,7 +21,7 @@ export function createEmptyWorkoutMetrics(): WorkoutMetrics {
 
         workoutStartTime: "",
         workoutEndTime: "",
-        workoutDuration: "",
+        workoutDurationMin: "",
 
         totalEnergyKcal: "",
         activeEnergyKcal: "",
@@ -29,8 +29,8 @@ export function createEmptyWorkoutMetrics(): WorkoutMetrics {
         maxHeartRateBpm: "",
         avgHeartRateBpm: "",
 
-        distanceMi: "",
-        avgSpeedMph: "",
+        distanceKm: "",
+        avgSpeedKmph: "",
 
     };
 

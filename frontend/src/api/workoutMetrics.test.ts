@@ -87,7 +87,7 @@ describe("Workout Metrics API", () => {
                     workout_end_time:
                         "2026-08-27T08:15:00",
 
-                    workout_duration: "45 min",
+                    workout_duration_min: 45,
 
                     total_energy_kcal: 500,
                     active_energy_kcal: 420,
@@ -95,8 +95,8 @@ describe("Workout Metrics API", () => {
                     max_heart_rate_bpm: 175,
                     avg_heart_rate_bpm: 150,
 
-                    distance_mi: 3.1,
-                    avg_speed_mph: 6.5,
+                    distance_km: 3.1,
+                    avg_speed_kmph: 6.5,
                 },
 
             ]),
@@ -120,7 +120,7 @@ describe("Workout Metrics API", () => {
                 workoutStartTime: "07:30:00",
                 workoutEndTime: "08:15:00",
 
-                workoutDuration: "45 min",
+                workoutDurationMin: 45,
 
                 totalEnergyKcal: 500,
                 activeEnergyKcal: 420,
@@ -128,8 +128,8 @@ describe("Workout Metrics API", () => {
                 maxHeartRateBpm: 175,
                 avgHeartRateBpm: 150,
 
-                distanceMi: 3.1,
-                avgSpeedMph: 6.5,
+                distanceKm: 3.1,
+                avgSpeedKmph: 6.5,
             },
 
         ]);
@@ -229,7 +229,7 @@ describe("Workout Metrics API", () => {
         workout.workoutStartTime = "07:30:00";
         workout.workoutEndTime = "08:15:00";
 
-        workout.workoutDuration = "45 min";
+        workout.workoutDurationMin = 45;
 
         workout.totalEnergyKcal = 500;
         workout.activeEnergyKcal = 420;
@@ -237,8 +237,8 @@ describe("Workout Metrics API", () => {
         workout.maxHeartRateBpm = 175;
         workout.avgHeartRateBpm = 150;
 
-        workout.distanceMi = 3.1;
-        workout.avgSpeedMph = 6.5;
+        workout.distanceKm = 3.1;
+        workout.avgSpeedKmph = 6.5;
 
 
         await saveWorkoutMetric(workout);
@@ -267,7 +267,7 @@ describe("Workout Metrics API", () => {
                     workout_end_time:
                         "2026-08-27T08:15:00",
 
-                    workout_duration: "45 min",
+                    workout_duration_min: 45,
 
                     total_energy_kcal: 500,
                     active_energy_kcal: 420,
@@ -275,8 +275,8 @@ describe("Workout Metrics API", () => {
                     max_heart_rate_bpm: 175,
                     avg_heart_rate_bpm: 150,
 
-                    distance_mi: 3.1,
-                    avg_speed_mph: 6.5,
+                    distance_km: 3.1,
+                    avg_speed_kmph: 6.5,
 
                 }),
             }
@@ -323,6 +323,14 @@ describe("Workout Metrics API", () => {
         ).toBeNull();
 
 
+        /*
+        Sent as null, so the backend calculates it
+        from the start and end times.
+        */
+        expect(
+            requestBody.workout_duration_min
+        ).toBeNull();
+
         expect(
             requestBody.total_energy_kcal
         ).toBeNull();
@@ -340,11 +348,11 @@ describe("Workout Metrics API", () => {
         ).toBeNull();
 
         expect(
-            requestBody.distance_mi
+            requestBody.distance_km
         ).toBeNull();
 
         expect(
-            requestBody.avg_speed_mph
+            requestBody.avg_speed_kmph
         ).toBeNull();
 
     });
@@ -402,7 +410,7 @@ describe("Workout Metrics API", () => {
                     workout_type: "Running",
                     workout_start_time: "2026-08-27T07:00:00",
                     workout_end_time: "2026-08-27T08:00:00",
-                    workout_duration: "60 min",
+                    workout_duration_min: 60,
                 },
 
                 {
@@ -410,7 +418,7 @@ describe("Workout Metrics API", () => {
                     workout_type: "Strength Training",
                     workout_start_time: "2026-08-27T18:00:00",
                     workout_end_time: "2026-08-27T19:00:00",
-                    workout_duration: "60 min",
+                    workout_duration_min: 60,
                 },
 
             ]),

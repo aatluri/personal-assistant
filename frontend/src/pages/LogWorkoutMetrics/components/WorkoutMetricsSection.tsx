@@ -87,7 +87,6 @@ These include fields such as:
     workoutType
     workoutStartTime
     workoutEndTime
-    workoutDuration
 
 updateText receives:
 
@@ -104,12 +103,13 @@ Numeric fields use updateNumber.
 
 These include:
 
+    workoutDurationMin
     totalEnergyKcal
     activeEnergyKcal
     maxHeartRateBpm
     avgHeartRateBpm
-    distanceMi
-    avgSpeedMph
+    distanceKm
+    avgSpeedKmph
 
 The WorkoutMetrics type allows these values to be:
 
@@ -280,15 +280,24 @@ export default function WorkoutMetricsSection({
                 }
             />
 
+            {/*
+                Optional: when left blank, the backend
+                calculates it from the start and end times.
+            */}
             <TextInput
-                label="Workout Duration"
-                id="workoutDuration"
-                name="workoutDuration"
-                value={workoutMetrics.workoutDuration}
+                label="Duration (min)"
+                id="workoutDurationMin"
+                name="workoutDurationMin"
+                type="number"
+                min={0}
+                placeholder="Calculated from start and end if blank"
+                value={workoutMetrics.workoutDurationMin}
                 onChange={(e) =>
-                    updateText(
-                        "workoutDuration",
-                        e.target.value,
+                    updateNumber(
+                        "workoutDurationMin",
+                        e.target.value === ""
+                            ? ""
+                            : Number(e.target.value),
                     )
                 }
             />
@@ -354,13 +363,13 @@ export default function WorkoutMetricsSection({
             />
 
             <TextInput
-                label="Distance (mi)"
-                id="distanceMi"
-                name="distanceMi"
-                value={workoutMetrics.distanceMi}
+                label="Distance (km)"
+                id="distanceKm"
+                name="distanceKm"
+                value={workoutMetrics.distanceKm}
                 onChange={(e) =>
                     updateNumber(
-                        "distanceMi",
+                        "distanceKm",
                         e.target.value === ""
                             ? ""
                             : Number(e.target.value),
@@ -369,13 +378,13 @@ export default function WorkoutMetricsSection({
             />
 
             <TextInput
-                label="Average Speed (mi/hr)"
-                id="avgSpeedMph"
-                name="avgSpeedMph"
-                value={workoutMetrics.avgSpeedMph}
+                label="Average Speed (km/h)"
+                id="avgSpeedKmph"
+                name="avgSpeedKmph"
+                value={workoutMetrics.avgSpeedKmph}
                 onChange={(e) =>
                     updateNumber(
-                        "avgSpeedMph",
+                        "avgSpeedKmph",
                         e.target.value === ""
                             ? ""
                             : Number(e.target.value),

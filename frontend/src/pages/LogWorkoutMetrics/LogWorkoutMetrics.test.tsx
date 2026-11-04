@@ -131,7 +131,7 @@ describe("LogWorkoutMetrics", () => {
         workout.workoutType = "Running";
         workout.workoutStartTime = "07:00";
         workout.workoutEndTime = "08:00";
-        workout.workoutDuration = "1:00:00";
+        workout.workoutDurationMin = 60;
         workout.totalEnergyKcal = 650;
 
         vi.mocked(
@@ -180,7 +180,7 @@ describe("LogWorkoutMetrics", () => {
         morningWorkout.workoutType = "Running";
         morningWorkout.workoutStartTime = "07:00";
         morningWorkout.workoutEndTime = "08:00";
-        morningWorkout.workoutDuration = "1:00:00";
+        morningWorkout.workoutDurationMin = 60;
 
 
         const eveningWorkout =
@@ -196,8 +196,8 @@ describe("LogWorkoutMetrics", () => {
         eveningWorkout.workoutEndTime =
             "19:00";
 
-        eveningWorkout.workoutDuration =
-            "1:00:00";
+        eveningWorkout.workoutDurationMin =
+            60;
 
 
         vi.mocked(
@@ -234,7 +234,7 @@ describe("LogWorkoutMetrics", () => {
         morningWorkout.workoutType = "Running";
         morningWorkout.workoutStartTime = "07:00";
         morningWorkout.workoutEndTime = "08:00";
-        morningWorkout.workoutDuration = "1:00:00";
+        morningWorkout.workoutDurationMin = 60;
 
 
         const eveningWorkout =
@@ -249,8 +249,8 @@ describe("LogWorkoutMetrics", () => {
         eveningWorkout.workoutEndTime =
             "19:00";
 
-        eveningWorkout.workoutDuration =
-            "1:00:00";
+        eveningWorkout.workoutDurationMin =
+            60;
 
 
         vi.mocked(
@@ -356,7 +356,7 @@ describe("LogWorkoutMetrics", () => {
         workout.workoutType = "Running";
         workout.workoutStartTime = "07:00";
         workout.workoutEndTime = "08:00";
-        workout.workoutDuration = "1:00:00";
+        workout.workoutDurationMin = 60;
 
         vi.mocked(
             workoutMetricsApi.getWorkoutMetricsByDate
@@ -494,7 +494,7 @@ describe("LogWorkoutMetrics", () => {
     });
 
 
-    test("requires Workout Duration before saving", async () => {
+    test("saves without a Workout Duration so the backend can calculate it", async () => {
 
         const alertMock =
             vi.spyOn(
@@ -546,14 +546,20 @@ describe("LogWorkoutMetrics", () => {
             )
         );
 
-        expect(
-            alertMock
-        ).toHaveBeenCalledWith(
-            "Please enter a Workout Duration."
-        );
+        await waitFor(() => {
+            expect(
+                workoutMetricsApi.saveWorkoutMetric
+            ).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    workoutStartTime: "07:00",
+                    workoutEndTime: "08:00",
+                    workoutDurationMin: "",
+                })
+            );
+        });
 
         expect(
-            workoutMetricsApi.saveWorkoutMetric
+            alertMock
         ).not.toHaveBeenCalled();
 
     });
@@ -574,7 +580,7 @@ describe("LogWorkoutMetrics", () => {
         savedWorkout.workoutType = "Running";
         savedWorkout.workoutStartTime = "07:00";
         savedWorkout.workoutEndTime = "08:00";
-        savedWorkout.workoutDuration = "1:00:00";
+        savedWorkout.workoutDurationMin = 60;
 
 
         vi.mocked(
@@ -639,11 +645,11 @@ describe("LogWorkoutMetrics", () => {
 
         fireEvent.change(
             screen.getByLabelText(
-                "Workout Duration"
+                "Duration (min)"
             ),
             {
                 target: {
-                    value: "1:00:00",
+                    value: "60",
                 },
             }
         );
@@ -687,7 +693,7 @@ describe("LogWorkoutMetrics", () => {
                 workoutType: "Running",
                 workoutStartTime: "07:00",
                 workoutEndTime: "08:00",
-                workoutDuration: "1:00:00",
+                workoutDurationMin: 60,
             })
         );
 
@@ -750,7 +756,7 @@ describe("LogWorkoutMetrics", () => {
         workout.workoutType = "Running";
         workout.workoutStartTime = "07:00";
         workout.workoutEndTime = "08:00";
-        workout.workoutDuration = "1:00:00";
+        workout.workoutDurationMin = 60;
 
 
         vi.mocked(

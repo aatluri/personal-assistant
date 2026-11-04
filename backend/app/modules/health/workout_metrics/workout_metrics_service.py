@@ -8,6 +8,13 @@ from app.modules.health.workout_metrics.workout_metrics_schema import (
 )
 
 
+# A missing workout duration is only calculated from the start and end
+# times when the span is plausible for one workout. Shorter or longer
+# spans are treated as bad data, and the duration is saved as sent.
+MIN_WORKOUT_MINUTES = 1
+MAX_WORKOUT_MINUTES = 24 * 60
+
+
 class WorkoutMetricsService:
     """
     Service layer for Workout Metrics.
@@ -73,10 +80,14 @@ class WorkoutMetricsService:
         workout_metric: WorkoutMetrics,
     ) -> None:
         """
-        Create a new Workout Metrics record.
+        Create a new Workout Metrics record, calculating a missing
+        duration from the start and end times when possible.
         """
         self._repository.create_workout_metric(
-            workout_metric
+            self._with_missing_duration_calculated(
+                workout_metric.workout_start_time,
+                workout_metric,
+            )
         )
 
 
@@ -89,7 +100,14 @@ class WorkoutMetricsService:
         Update the Workout Metrics record if it already exists.
 
         If no matching record is found, create a new one instead.
+        A missing duration is calculated from the start and end times
+        when possible.
         """
+
+        workout_metric = self._with_missing_duration_calculated(
+            workout_start_time,
+            workout_metric,
+        )
 
         updated = self._repository.update_workout_metric(
             workout_start_time,
@@ -100,3 +118,52 @@ class WorkoutMetricsService:
             self._repository.create_workout_metric(
                 workout_metric
             )
+
+
+    def _with_missing_duration_calculated(
+        self,
+        workout_start_time: datetime,
+        workout_metric: WorkoutMetrics,
+    ) -> WorkoutMetrics:
+        """
+        Return the record to save, with a missing workout duration filled
+        in where possible.
+
+        When the incoming workout_duration_min is 0 or empty:
+
+        1. If a real duration (> 0) is already stored for this workout,
+           keep it. The incoming value is dropped, so the update leaves
+           it alone.
+        2. Otherwise, calculate the duration in whole minutes from the
+           start and end times when the span is between
+           MIN_WORKOUT_MINUTES and MAX_WORKOUT_MINUTES.
+        3. Otherwise, save the duration exactly as sent (a 0 stays 0).
+
+        A real incoming duration is always saved as sent.
+        """
+
+        if workout_metric.workout_duration_min:
+            return workout_metric
+
+        existing = self._repository.get_workout_metric(
+            workout_start_time
+        )
+
+        if existing is not None and existing.workout_duration_min:
+            return workout_metric.model_copy(
+                update={"workout_duration_min": None}
+            )
+
+        # Stored times have no timezone; incoming ones may. Compare both
+        # as local times.
+        span_minutes = (
+            workout_metric.workout_end_time.replace(tzinfo=None)
+            - workout_metric.workout_start_time.replace(tzinfo=None)
+        ).total_seconds() / 60
+
+        if not MIN_WORKOUT_MINUTES <= span_minutes <= MAX_WORKOUT_MINUTES:
+            return workout_metric
+
+        return workout_metric.model_copy(
+            update={"workout_duration_min": round(span_minutes)}
+        )

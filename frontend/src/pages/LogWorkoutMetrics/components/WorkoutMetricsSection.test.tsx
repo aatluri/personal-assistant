@@ -87,7 +87,6 @@ These include fields such as:
     workoutType
     workoutStartTime
     workoutEndTime
-    workoutDuration
 
 updateText receives:
 
@@ -104,12 +103,13 @@ Numeric fields use updateNumber.
 
 These include:
 
+    workoutDurationMin
     totalEnergyKcal
     activeEnergyKcal
     maxHeartRateBpm
     avgHeartRateBpm
-    distanceMi
-    avgSpeedMph
+    distanceKm
+    avgSpeedKmph
 
 The WorkoutMetrics type allows these values to be:
 
@@ -258,7 +258,7 @@ describe("WorkoutMetricsSection", () => {
         ).toBeInTheDocument();
 
         expect(
-            screen.getByLabelText("Workout Duration")
+            screen.getByLabelText("Duration (min)")
         ).toBeInTheDocument();
 
         expect(
@@ -278,11 +278,11 @@ describe("WorkoutMetricsSection", () => {
         ).toBeInTheDocument();
 
         expect(
-            screen.getByLabelText("Distance (mi)")
+            screen.getByLabelText("Distance (km)")
         ).toBeInTheDocument();
 
         expect(
-            screen.getByLabelText("Average Speed (mi/hr)")
+            screen.getByLabelText("Average Speed (km/h)")
         ).toBeInTheDocument();
 
     });
@@ -301,7 +301,7 @@ describe("WorkoutMetricsSection", () => {
         workoutMetrics.workoutType = "Running";
         workoutMetrics.workoutStartTime = "07:00";
         workoutMetrics.workoutEndTime = "08:00";
-        workoutMetrics.workoutDuration = "1:00:00";
+        workoutMetrics.workoutDurationMin = 60;
 
         workoutMetrics.totalEnergyKcal = 650;
         workoutMetrics.activeEnergyKcal = 550;
@@ -309,8 +309,8 @@ describe("WorkoutMetricsSection", () => {
         workoutMetrics.maxHeartRateBpm = 175;
         workoutMetrics.avgHeartRateBpm = 145;
 
-        workoutMetrics.distanceMi = 5.2;
-        workoutMetrics.avgSpeedMph = 6.5;
+        workoutMetrics.distanceKm = 5.2;
+        workoutMetrics.avgSpeedKmph = 6.5;
 
 
         render(
@@ -334,8 +334,8 @@ describe("WorkoutMetricsSection", () => {
         ).toHaveValue("08:00");
 
         expect(
-            screen.getByLabelText("Workout Duration")
-        ).toHaveValue("1:00:00");
+            screen.getByLabelText("Duration (min)")
+        ).toHaveValue(60);
 
         expect(
             screen.getByLabelText("Total Energy (kcal)")
@@ -354,11 +354,11 @@ describe("WorkoutMetricsSection", () => {
         ).toHaveValue("145");
 
         expect(
-            screen.getByLabelText("Distance (mi)")
+            screen.getByLabelText("Distance (km)")
         ).toHaveValue("5.2");
 
         expect(
-            screen.getByLabelText("Average Speed (mi/hr)")
+            screen.getByLabelText("Average Speed (km/h)")
         ).toHaveValue("6.5");
 
     });
@@ -457,14 +457,6 @@ describe("WorkoutMetricsSection", () => {
     );
 
 
-    testTextField(
-        "updates workout duration",
-        "Workout Duration",
-        "workoutDuration",
-        "1:00:00"
-    );
-
-
     /*
     Helper for testing numeric fields.
 
@@ -536,6 +528,15 @@ describe("WorkoutMetricsSection", () => {
 
 
     testNumericField(
+        "updates workout duration",
+        "Duration (min)",
+        "workoutDurationMin",
+        "45",
+        45
+    );
+
+
+    testNumericField(
         "updates total energy",
         "Total Energy (kcal)",
         "totalEnergyKcal",
@@ -573,8 +574,8 @@ describe("WorkoutMetricsSection", () => {
 
     testNumericField(
         "updates distance",
-        "Distance (mi)",
-        "distanceMi",
+        "Distance (km)",
+        "distanceKm",
         "5.2",
         5.2
     );
@@ -582,8 +583,8 @@ describe("WorkoutMetricsSection", () => {
 
     testNumericField(
         "updates average speed",
-        "Average Speed (mi/hr)",
-        "avgSpeedMph",
+        "Average Speed (km/h)",
+        "avgSpeedKmph",
         "6.5",
         6.5
     );

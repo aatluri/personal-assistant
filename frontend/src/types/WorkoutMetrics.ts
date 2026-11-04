@@ -39,12 +39,12 @@ export interface WorkoutMetrics {
     workoutEndTime: string;
 
     /*
-    Workout duration in HH:MM:SS format.
+    Workout duration in whole minutes.
 
-    Example:
-    01:00:00
+    Optional: when left empty, the backend calculates it
+    from the start and end times.
     */
-    workoutDuration: string;
+    workoutDurationMin: number | "";
 
     /* ------------------------------ */
     /* Energy                         */
@@ -64,7 +64,7 @@ export interface WorkoutMetrics {
     /* Distance / Speed               */
     /* ------------------------------ */
 
-    distanceMi: number | "";
-    avgSpeedMph: number | "";
+    distanceKm: number | "";
+    avgSpeedKmph: number | "";
 
 }

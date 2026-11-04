@@ -149,7 +149,9 @@ handleSaveWorkout() first validates the required fields:
 
     workoutStartTime
     workoutEndTime
-    workoutDuration
+
+The duration is optional: when it is left blank, the
+backend calculates it from the start and end times.
 
 Workout Start Time is particularly important because it is
 used as the unique key for a workout.
@@ -472,20 +474,6 @@ export default function LogWorkoutMetrics() {
         }
 
 
-        /*
-        Workout Duration is required by the
-        backend WorkoutMetrics model.
-        */
-        if (!selectedWorkout.workoutDuration) {
-
-            alert(
-                "Please enter a Workout Duration."
-            );
-
-            return;
-        }
-
-
         setSaveStatus("saving");
 
 
@@ -715,7 +703,9 @@ export default function LogWorkoutMetrics() {
                                                         text-slate-400
                                                     "
                                                 >
-                                                    {workout.workoutDuration}
+                                                    {workout.workoutDurationMin !== ""
+                                                        ? `${workout.workoutDurationMin} min`
+                                                        : ""}
                                                 </div>
 
                                             </div>

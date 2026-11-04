@@ -423,6 +423,77 @@ describe("LogSleepMetrics", () => {
 
 
     /*
+    Verify that the record is reloaded after saving,
+    so a total sleep duration the backend calculated
+    from the start and end times is shown.
+    */
+    test("shows the total calculated by the backend after saving", async () => {
+
+        const savedSleepMetrics =
+            createEmptySleepMetrics();
+
+        savedSleepMetrics.totalSleepDurationHr = 7.5;
+
+        vi.mocked(
+            sleepMetricsApi.getSleepMetric
+        )
+            .mockResolvedValueOnce(
+                createEmptySleepMetrics()
+            )
+            .mockResolvedValueOnce(
+                savedSleepMetrics
+            );
+
+
+        render(
+            <LogSleepMetrics />
+        );
+
+
+        /*
+        Change a different field, leaving the total blank.
+        */
+        fireEvent.change(
+            await screen.findByLabelText(
+                "Core Sleep (hr)"
+            ),
+            {
+                target: {
+                    value: "4",
+                },
+            }
+        );
+
+
+        fireEvent.click(
+            screen.getByRole(
+                "button",
+                {
+                    name: "Save Changes",
+                }
+            )
+        );
+
+
+        await waitFor(() => {
+
+            expect(
+                screen.getByLabelText(
+                    "Total Sleep Duration (hr)"
+                )
+            ).toHaveValue(7.5);
+
+        });
+
+
+        expect(
+            sleepMetricsApi.getSleepMetric
+        ).toHaveBeenCalledTimes(2);
+
+    });
+
+
+    /*
     Verify that saveSleepMetric receives
     the selected date and the updated
     SleepMetrics object.
