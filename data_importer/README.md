@@ -187,20 +187,24 @@ naming it.
 
 ## Testing
 
-Safe, mocked tests (from `data_importer/`). The fake values make any unmocked call fail instead of
-reaching Google Drive or the backend:
+**Live tests are opt-in.** Tests in files ending in `_e2e.py` (everything in `tests/e2e/`) are
+marked `e2e` by `tests/conftest.py` and skipped by default (`pytest.ini` sets
+`addopts = -m "not e2e"`), so plain `pytest` runs only the mocked tests.
+
+Safe, mocked tests (from `data_importer/`). The fake values are an extra safety net: any unmocked
+call fails instead of reaching Google Drive or the backend.
 
 ```bash
 GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json PERSONAL_ASSISTANT_API_URL=http://127.0.0.1:9 \
-  .venv/bin/python -m pytest tests -q -p no:cacheprovider --ignore=tests/e2e
+  .venv/bin/python -m pytest -q -p no:cacheprovider
 ```
 
 These cover the importers, orchestrators, archiver and backend client, using the sample exports in
 `tests/test_data/`.
 
-> **Warning:** `tests/e2e/` uses live services. These tests read real Drive files, create and delete
-> `TEST_*` files in Drive, and write to the real Sheet through the backend. Run them only
-> deliberately.
+> **Warning:** the live tests in `tests/e2e/` read real Drive files, create and delete `TEST_*`
+> files in Drive, and write to the real Sheet through the backend. Run them only deliberately, with
+> the backend and importer running: `.venv/bin/python -m pytest -m e2e`.
 
 ---
 

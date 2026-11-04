@@ -100,11 +100,16 @@ should point at `http://127.0.0.1:8000`.
 
 ## Testing Safely
 
-Some tests and scripts write to the real Google Sheet, touch Google Drive or call OpenAI. In
-particular, **plain `pytest` and the `*_e2e.py` tests hit live services.**
+Some tests and scripts write to the real Google Sheet, touch Google Drive or call OpenAI.
 
-Use the safe, mocked test commands listed in [`CLAUDE.md`](CLAUDE.md#safe-test-commands-mockedlocal-only).
-They set fake credentials, so any call that is not mocked fails instead of reaching a real service.
+- **Live tests are opt-in.** In the backend and the data importer, tests in files ending in
+  `_e2e.py` are skipped by default, so plain `pytest` runs only mocked tests. Live tests run only
+  with `pytest -m e2e`.
+- **Scripts are not covered by this.** The backend `tools/` scripts and the data importer's
+  endpoints and historical script use live services whenever they run.
+
+The safe test commands in [`CLAUDE.md`](CLAUDE.md#safe-test-commands-mockedlocal-only) also set fake
+credentials, so any call that is not mocked fails instead of reaching a real service.
 
 ---
 

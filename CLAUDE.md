@@ -11,8 +11,8 @@ Rules marked *(current)* reflect decisions for the current phase and are expecte
 - The Google Sheet configured in `backend/.env` is **real data**, unless the user explicitly says otherwise.
 - **Ask first** before running anything that writes to the Sheet, touches Google Drive, or calls OpenAI
   or any other paid/external API. This includes:
-  - any `*_e2e.py` test (backend and `data_importer/tests/e2e/`)
-  - `backend/tests/labs/test_lab_extraction_service.py` (reads the live Sheet and calls OpenAI)
+  - any `*_e2e.py` test, i.e. anything run with `pytest -m e2e` (backend and `data_importer/tests/e2e/`;
+    includes `backend/tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet and calls OpenAI)
   - `backend/tools/*` scripts
   - data importer endpoints and `data_importer/scripts/import_historical_health_metrics.py`
   - starting the backend to exercise write paths manually or through the UI
@@ -31,22 +31,23 @@ variables are a safety net: any call that is not mocked fails instead of reachin
 ```bash
 # backend/
 GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json OPENAI_API_KEY=offline-invalid-key \
-  .venv/bin/python -m pytest -q -p no:cacheprovider \
-  --ignore-glob='*_e2e.py' --ignore=tests/labs/test_lab_extraction_service.py
+  .venv/bin/python -m pytest -q -p no:cacheprovider
 
 # data_importer/
 GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json PERSONAL_ASSISTANT_API_URL=http://127.0.0.1:9 \
-  .venv/bin/python -m pytest tests -q -p no:cacheprovider --ignore=tests/e2e
+  .venv/bin/python -m pytest -q -p no:cacheprovider
 
 # frontend/
 npm run test:run
 npm run lint
 ```
 
-- Plain `pytest` is **not** safe: E2E tests are not yet opt-in and will hit live services.
-  *(current — making them opt-in is a planned change)*
+- Live tests are opt-in: tests in files ending in `_e2e.py` are marked `e2e` by `tests/conftest.py`
+  and deselected by `pytest.ini` (`addopts = -m "not e2e"`). They run only with `pytest -m e2e`,
+  which needs approval first (see Safety above).
 - Do not run `npm run test:coverage` unless asked; it rewrites the committed `frontend/coverage/` files.
-- New tests that touch real external services must not be added to the default safe run.
+- New tests that touch real external services must go in a file ending in `_e2e.py`, so they stay
+  out of the default run.
 
 ## Test execution workflow *(current)*
 

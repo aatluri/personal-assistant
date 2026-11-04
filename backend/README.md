@@ -249,17 +249,17 @@ Example:
 
 ### Running Tests Safely
 
-> **Warning:** plain `pytest` is **not** safe. It also runs the end-to-end tests (`*_e2e.py`), which
-> read and write the real Google Sheet, and `tests/labs/test_lab_extraction_service.py`, which reads
-> the live Sheet and calls OpenAI.
+**Live tests are opt-in.** Tests in files ending in `_e2e.py` are marked `e2e` by
+`tests/conftest.py` and skipped by default (`pytest.ini` sets `addopts = -m "not e2e"`). These are
+the end-to-end tests, which read and write the real Google Sheet through a running backend, and
+`tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet and calls OpenAI.
 
-Run the mocked tests from `backend/`. The fake credentials make any call that is not mocked fail
-instead of reaching a real service:
+Run the mocked tests from `backend/`. The fake credentials are an extra safety net: any call that is
+not mocked fails instead of reaching a real service.
 
 ```bash
 GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json OPENAI_API_KEY=offline-invalid-key \
-  .venv/bin/python -m pytest -q -p no:cacheprovider \
-  --ignore-glob='*_e2e.py' --ignore=tests/labs/test_lab_extraction_service.py
+  .venv/bin/python -m pytest -q -p no:cacheprovider
 ```
 
 Run a single file or test with the same environment variables:
@@ -271,6 +271,15 @@ GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json OPENAI_API_KEY=offline-inv
 ```
 
 Add `-v` for detailed output.
+
+To run live tests deliberately (with the backend running, and the real `.env` credentials):
+
+```bash
+.venv/bin/python -m pytest -m e2e                                   # all live tests
+.venv/bin/python -m pytest -m e2e tests/nutrition_metrics/          # live tests in one folder
+```
+
+Passing an `_e2e.py` file path without `-m e2e` runs nothing, because its tests are deselected.
 
 ---
 
@@ -342,8 +351,8 @@ Example: adding a column to Nutrition Metrics.
 
 5. **Testing**
    - Add `tests/<name>/` with repository, service and API tests, using `tests/helpers/test_data.py`.
-   - End-to-end tests (`*_e2e.py`) use the real Sheet: add them only deliberately, and keep them out
-     of the safe test run.
+   - End-to-end tests use the real Sheet: add them only deliberately, in a file ending in
+     `_e2e.py`, so they are skipped by default.
 
 6. **Docs**
    - Add the module to the [Modules and Endpoints](#modules-and-endpoints) table above.
