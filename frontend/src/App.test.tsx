@@ -19,6 +19,7 @@ import * as workoutMetricsApi from "./api/workoutMetrics";
 import * as sleepMetricsApi from "./api/sleepMetrics";
 import * as nutritionMetricsApi from "./api/nutritionMetrics";
 import * as healthMetricsApi from "./api/healthMetrics";
+import * as bodyMeasurementsApi from "./api/bodyMeasurements";
 
 
 vi.mock("./api/workoutMetrics", () => ({
@@ -39,6 +40,11 @@ vi.mock("./api/nutritionMetrics", () => ({
 vi.mock("./api/healthMetrics", () => ({
     getHealthMetric: vi.fn(),
     saveHealthMetric: vi.fn(),
+}));
+
+vi.mock("./api/bodyMeasurements", () => ({
+    getBodyMeasurement: vi.fn(),
+    saveBodyMeasurement: vi.fn(),
 }));
 
 
@@ -69,7 +75,19 @@ beforeEach(() => {
         healthMetricsApi.getHealthMetric
     ).mockResolvedValue(null);
 
+    vi.mocked(
+        bodyMeasurementsApi.getBodyMeasurement
+    ).mockResolvedValue(null);
+
 });
+
+
+/*
+    Route tests look for each page's own main heading (h1), not just its
+    name as text. The sidebar is rendered on every page and contains the
+    same names ("Sleep Metrics", "Settings", ...) as links, so a plain
+    text search would pass even if a route showed the wrong page.
+*/
 
 
 describe("App", () => {
@@ -96,7 +114,7 @@ describe("App", () => {
     });
 
 
-    test("renders Body Measurements route", () => {
+    test("renders Body Measurements route", async () => {
 
         window.history.pushState(
             {},
@@ -107,7 +125,13 @@ describe("App", () => {
         render(<App />);
 
         expect(
-            screen.getByText("Body Measurements")
+            await screen.findByRole(
+                "heading",
+                {
+                    level: 1,
+                    name: "Body Measurements",
+                }
+            )
         ).toBeInTheDocument();
 
     });
@@ -141,7 +165,13 @@ describe("App", () => {
         render(<App />);
 
         expect(
-            await screen.findByText("Sleep Metrics")
+            await screen.findByRole(
+                "heading",
+                {
+                    level: 1,
+                    name: "Sleep Metrics",
+                }
+            )
         ).toBeInTheDocument();
 
     });
@@ -158,7 +188,13 @@ describe("App", () => {
         render(<App />);
 
         expect(
-            await screen.findByText("Nutrition Metrics")
+            await screen.findByRole(
+                "heading",
+                {
+                    level: 1,
+                    name: "Nutrition Metrics",
+                }
+            )
         ).toBeInTheDocument();
 
     });
@@ -175,7 +211,13 @@ describe("App", () => {
         render(<App />);
 
         expect(
-            await screen.findByText("Health Metrics")
+            await screen.findByRole(
+                "heading",
+                {
+                    level: 1,
+                    name: "Health Metrics",
+                }
+            )
         ).toBeInTheDocument();
 
     });
@@ -214,7 +256,13 @@ describe("App", () => {
         render(<App />);
 
         expect(
-            screen.getByText("Settings")
+            screen.getByRole(
+                "heading",
+                {
+                    level: 1,
+                    name: /Settings/,
+                }
+            )
         ).toBeInTheDocument();
 
     });
