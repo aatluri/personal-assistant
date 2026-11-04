@@ -37,7 +37,7 @@ frontend (React :5173) ──────► backend (FastAPI :8000) ──► G
 | [`frontend/`](frontend/README.md) | User interface for viewing and logging data | React, TypeScript, Vite | http://localhost:5173 |
 | [`backend/`](backend/README.md) | REST API, business logic and all Google Sheets access | Python, FastAPI, Pydantic | http://127.0.0.1:8000 (Swagger UI at `/docs`) |
 | [`data_importer/`](data_importer/README.md) | Imports exported health and workout files from Google Drive into the backend | Python, FastAPI | http://127.0.0.1:8001 |
-| [`docs/`](docs/README.md) | Architecture decision records and UI design notes | Markdown | — |
+| [`docs/`](docs/ui/) | UI design notes | Markdown | — |
 
 The data importer exposes two import endpoints:
 
@@ -115,6 +115,5 @@ They set fake credentials, so any call that is not mocked fails instead of reach
 | [`frontend/README.md`](frontend/README.md) | Frontend setup, page load and save flow, styling, adding fields and pages, testing |
 | [`backend/README.md`](backend/README.md) | Backend setup, architecture, request flow, adding fields and worksheets, testing, Labs module |
 | [`data_importer/README.md`](data_importer/README.md) | Import flow, file lifecycle, unit conversions, running imports, configuration, testing |
-| [`docs/README.md`](docs/README.md) | Architecture decision records (ADRs) |
 | [`docs/ui/`](docs/ui/) | UI design principles, components and styling guidelines |
 | [`CLAUDE.md`](CLAUDE.md) | Working rules for this repository, including safe test commands |

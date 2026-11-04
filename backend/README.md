@@ -48,6 +48,16 @@ What each layer does:
   converts worksheet rows into models and models into rows.
 - **Schema (`*_schema.py`):** the Pydantic model shared by all layers.
 
+Why the code is organised this way:
+
+- **By feature, not by layer.** Each metric module has its own folder containing its schema, service
+  and repository, so everything for one feature is in one place and new modules can be added without
+  touching existing ones.
+- **Separate layers.** Keeping API, business logic and data access apart makes each layer easy to
+  test on its own.
+- **Google Sheets is isolated in the repositories.** Moving to a real database later would mean
+  replacing the repository layer, not rewriting the services or the API.
+
 ---
 
 ## Code Map
@@ -166,6 +176,12 @@ as `settings`. All of the following are required:
 
 Create `.env` using the variable names in the table above. If one is missing, the backend fails at
 startup with an error naming it. `.env` and the credentials file are ignored by git.
+
+**Why the spreadsheet is opened by ID:** `database/sheets_client.py` uses
+`open_by_key(GOOGLE_SHEETS_SPREADSHEET_ID)` rather than opening the spreadsheet by name. Opening by
+name searches Google Drive, which needs the Drive API and wider permissions. Opening by ID needs only
+the Google Sheets permission (the `spreadsheets` scope), keeps working if the spreadsheet is renamed,
+and skips the Drive search. Do not switch it back to `client.open("<name>")`.
 
 ### Run the Backend
 
