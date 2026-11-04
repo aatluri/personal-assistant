@@ -5,43 +5,16 @@ from app.config import settings
 from app.modules.health.archivers.file_archiver import (
     archive_processed_files,
 )
+from tests.e2e.e2e_helpers import (
+    HEALTH_FIXTURE_TEST_PREFIX,
+    health_metrics_fixture,
+)
 
-BASE_FILE_NAME = "TEST_HealthMetrics-2099-01-01.json"
-
-TEST_FILE_PREFIX = "TEST_HealthMetrics-"
+TEST_FILE_PREFIX = HEALTH_FIXTURE_TEST_PREFIX
 FILE_SUFFIX = ".json"
 
 FAILED_PREFIX = "FAILED_"
 PROCESSED_PREFIX = "PROCESSED_"
-
-
-def get_test_file(
-    drive_client: GoogleDriveClient,
-) -> dict:
-    """
-    Find the permanent Health Metrics test fixture
-    in the incoming folder.
-    """
-
-    files = drive_client.list_files(
-        settings.HEALTH_METRICS_DRIVE_FOLDER_ID
-    )
-
-    test_file = next(
-        (
-            file
-            for file in files
-            if file["name"] == BASE_FILE_NAME
-        ),
-        None,
-    )
-
-    assert test_file is not None, (
-        f"Test fixture {BASE_FILE_NAME!r} was not found "
-        "in the Health Metrics incoming folder."
-    )
-
-    return test_file
 
 
 def run_archiver(
@@ -73,11 +46,14 @@ def test_health_metrics_file_archiver_e2e():
 
     drive_client = GoogleDriveClient()
 
-    test_file = get_test_file(
-        drive_client
-    )
+    # The permanent fixture shared with the importer E2E tests. Restoring
+    # it first repairs anything an interrupted run left behind (a
+    # temporary name, or the file left in the processed folder).
+    fixture = health_metrics_fixture(drive_client)
 
-    file_id = test_file["id"]
+    fixture.restore()
+
+    file_id = fixture.file_id
 
     archive_after_days = (
         settings.DATA_IMPORTER_ARCHIVE_AFTER_DAYS
@@ -226,32 +202,6 @@ def test_health_metrics_file_archiver_e2e():
         # 4. RESTORE PERMANENT TEST FIXTURE
         # -----------------------------------------------------
 
-        incoming_files = drive_client.list_files(
-            settings.HEALTH_METRICS_DRIVE_FOLDER_ID
-        )
-
-        incoming_ids = {
-            file["id"]
-            for file in incoming_files
-        }
-
-        # If the test file was archived, move it back.
-        if file_id not in incoming_ids:
-
-            drive_client.move_file(
-                file_id=file_id,
-                source_folder_id=(
-                    settings
-                    .HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID
-                ),
-                destination_folder_id=(
-                    settings
-                    .HEALTH_METRICS_DRIVE_FOLDER_ID
-                ),
-            )
-
-        # Restore the permanent safe filename.
-        drive_client.rename_file(
-            file_id=file_id,
-            new_name=BASE_FILE_NAME,
-        )
+        # Move it back from the processed folder if it was archived,
+        # and restore its permanent TEST_ name.
+        fixture.restore()

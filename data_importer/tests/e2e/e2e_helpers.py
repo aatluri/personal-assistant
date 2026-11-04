@@ -291,3 +291,53 @@ def delete_test_rows_from_google_sheets(
             spreadsheetId=spreadsheet_id,
             body={"requests": delete_requests},
         ).execute()
+
+
+# The permanent fixture files shared by the archiver and importer E2E
+# tests, one per incoming folder. Between runs each has its TEST_ name;
+# the importer tests temporarily rename it to the import name.
+HEALTH_FIXTURE_PERMANENT_NAME = "TEST_HealthMetrics-2099-01-01.json"
+HEALTH_FIXTURE_TEST_PREFIX = "TEST_HealthMetrics-"
+HEALTH_FIXTURE_IMPORT_NAME = "HealthMetrics-2099-02-01.json"
+
+WORKOUT_FIXTURE_PERMANENT_NAME = "TEST_WorkoutMetrics-2099-01-01.json"
+WORKOUT_FIXTURE_TEST_PREFIX = "TEST_WorkoutMetrics-"
+WORKOUT_FIXTURE_IMPORT_NAME = "WorkoutMetrics-2099-02-01.json"
+
+
+def health_metrics_fixture(
+    drive_client: GoogleDriveClient,
+) -> SharedFixture:
+    """
+    Find the shared Health Metrics fixture file in Drive.
+    """
+
+    return SharedFixture(
+        drive_client=drive_client,
+        incoming_folder_id=settings.HEALTH_METRICS_DRIVE_FOLDER_ID,
+        processed_folder_id=(
+            settings.HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID
+        ),
+        permanent_name=HEALTH_FIXTURE_PERMANENT_NAME,
+        test_prefix=HEALTH_FIXTURE_TEST_PREFIX,
+        import_name=HEALTH_FIXTURE_IMPORT_NAME,
+    )
+
+
+def workout_metrics_fixture(
+    drive_client: GoogleDriveClient,
+) -> SharedFixture:
+    """
+    Find the shared Workout Metrics fixture file in Drive.
+    """
+
+    return SharedFixture(
+        drive_client=drive_client,
+        incoming_folder_id=settings.WORKOUT_METRICS_DRIVE_FOLDER_ID,
+        processed_folder_id=(
+            settings.WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID
+        ),
+        permanent_name=WORKOUT_FIXTURE_PERMANENT_NAME,
+        test_prefix=WORKOUT_FIXTURE_TEST_PREFIX,
+        import_name=WORKOUT_FIXTURE_IMPORT_NAME,
+    )

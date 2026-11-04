@@ -7,9 +7,11 @@ from app.clients.google_drive_client import GoogleDriveClient
 from app.config import settings
 from app.modules.health.constants import PROCESSED_PREFIX
 from tests.e2e.e2e_helpers import (
+    HEALTH_FIXTURE_IMPORT_NAME,
     SharedFixture,
     assert_record_matches,
     delete_test_rows_from_google_sheets,
+    health_metrics_fixture,
 )
 
 
@@ -41,11 +43,7 @@ BACKEND_BASE_URL = "http://127.0.0.1:8000"
 
 # The committed fixture, and the name the shared Drive file is given
 # while it is imported (the importer only accepts recognised names).
-FIXTURE_NAME = "HealthMetrics-2099-02-01.json"
-
-# The shared Drive file's name between runs (skipped by the importer).
-PERMANENT_NAME = "TEST_HealthMetrics-2099-01-01.json"
-TEST_PREFIX = "TEST_HealthMetrics-"
+FIXTURE_NAME = HEALTH_FIXTURE_IMPORT_NAME
 FIXTURE_PATH = (
     Path(__file__).parent.parent / "test_data" / "e2e" / FIXTURE_NAME
 )
@@ -116,25 +114,6 @@ EXPECTED_BODY_MEASUREMENTS = {
 }
 
 
-def get_shared_fixture(
-    drive_client: GoogleDriveClient,
-) -> SharedFixture:
-    """
-    Find the shared Health Metrics fixture file in Drive.
-    """
-
-    return SharedFixture(
-        drive_client=drive_client,
-        incoming_folder_id=settings.HEALTH_METRICS_DRIVE_FOLDER_ID,
-        processed_folder_id=(
-            settings.HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID
-        ),
-        permanent_name=PERMANENT_NAME,
-        test_prefix=TEST_PREFIX,
-        import_name=FIXTURE_NAME,
-    )
-
-
 def clean_up(
     fixture: SharedFixture,
 ) -> None:
@@ -168,7 +147,7 @@ def get_backend_record(
 
 def test_health_metrics_importer_e2e():
 
-    fixture = get_shared_fixture(GoogleDriveClient())
+    fixture = health_metrics_fixture(GoogleDriveClient())
 
     # Repair anything left behind by a previous interrupted run.
     clean_up(fixture)
