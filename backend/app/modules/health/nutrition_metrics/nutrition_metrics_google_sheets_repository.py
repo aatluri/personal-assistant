@@ -27,7 +27,13 @@ class NutritionMetricsGoogleSheetsRepository:
     - Analytics
     - Validation beyond simple parsing
 
-    Those belong in the Service layer.
+    Those belong in the Service layer. The one exception today is the
+    partial-update merge in update_nutrition_metric().
+
+    How this class depends on the worksheet layout:
+    - Reads look up values by header name, so the header text must match.
+    - Writes depend on column order (see _nutrition_metric_to_row()), so
+      adding, removing or reordering columns requires a code change.
     """
 
     def _empty_to_none(self, value):
@@ -58,9 +64,7 @@ class NutritionMetricsGoogleSheetsRepository:
         metric_date: date,
     ) -> NutritionMetrics | None:
         """
-        Return Nutrition Metrics for the specified date.
-
-        If no matching record exists, return None.
+        Return the record for the given date, or None if there is none.
         """
 
         nutrition_metrics = self.get_nutrition_metrics()
@@ -77,11 +81,17 @@ class NutritionMetricsGoogleSheetsRepository:
         nutrition_metric: NutritionMetrics,
     ) -> None:
         """
-        Create a new Nutrition Metrics record.
+        Append a new row without checking whether the date already exists.
+
+        Use NutritionMetricsService.upsert_nutrition_metric() to avoid
+        creating duplicate rows for the same date.
         """
 
         worksheet = self._get_nutrition_metrics_worksheet()
 
+        # USER_ENTERED makes Sheets parse values as if typed by a user,
+        # so dates and numbers are stored as real dates and numbers
+        # rather than plain text.
         worksheet.append_row(
             self._nutrition_metric_to_row(
                 nutrition_metric,
@@ -97,9 +107,9 @@ class NutritionMetricsGoogleSheetsRepository:
         """
         Update an existing Nutrition Metrics record identified by its date.
 
-        Only incoming fields with non-None values overwrite
-        existing values. Existing values are preserved when
-        the incoming value is None.
+        This is a partial update: an incoming None means "not provided",
+        not "clear this field". Only non-None incoming values overwrite
+        the existing row, so a field cannot be blanked through this method.
 
         Returns:
             True if the matching row was found and updated.
@@ -113,11 +123,14 @@ class NutritionMetricsGoogleSheetsRepository:
         # Row 1 contains the worksheet headers.
         headers = rows[0]
 
+        # start=2 gives the real Sheet row number (Sheet rows are
+        # 1-based and row 1 is the header), used in the update range.
         for row_number, row in enumerate(
             rows[1:],
             start=2,
         ):
 
+            # Skip blank rows, which get_all_values() can return.
             if not row or not row[0]:
                 continue
 
@@ -144,12 +157,10 @@ class NutritionMetricsGoogleSheetsRepository:
                 )
             )
 
-            # Start with the existing record.
             merged_data = (
                 existing_nutrition_metric.model_dump()
             )
 
-            # Replace only fields that have an incoming value.
             incoming_data = nutrition_metric.model_dump()
 
             for field, value in incoming_data.items():
@@ -168,6 +179,9 @@ class NutritionMetricsGoogleSheetsRepository:
                 merged_nutrition_metric
             )
 
+            # Columns A-N are the 14 worksheet columns, Date through
+            # Updated_DateTime. Change this together with the Sheet
+            # and _nutrition_metric_to_row().
             worksheet.update(
                 range_name=f"A{row_number}:N{row_number}",
                 values=[updated_row],
@@ -195,6 +209,9 @@ class NutritionMetricsGoogleSheetsRepository:
     ) -> list:
         """
         Convert a NutritionMetrics object into a worksheet row.
+
+        The list order must match the worksheet's column order (A-N).
+        The last value is Updated_DateTime, set to the time of this write.
         """
 
         return [
@@ -228,6 +245,9 @@ class NutritionMetricsGoogleSheetsRepository:
     ) -> NutritionMetrics:
         """
         Convert a single Google Sheets row into a NutritionMetrics object.
+
+        The row is a header-keyed dict (as returned by get_all_records()),
+        so column order does not matter here, but header text does.
         """
 
         return NutritionMetrics(
