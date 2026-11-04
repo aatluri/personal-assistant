@@ -1,176 +1,114 @@
 # Frontend
 
-## Overview
+The frontend is a React + TypeScript single-page app, built with Vite, styled with Tailwind CSS and
+routed with React Router. Each page views and logs one metric for one date at a time, loading and
+saving through the backend REST API.
 
-This is the React + TypeScript frontend for the Personal Assistant application.
-
-The frontend provides the user interface for logging, viewing and managing health, nutrition and fitness data. It communicates with the FastAPI backend through REST APIs.
-
----
-
-## Technology Stack
-
-- React
-- TypeScript
-- Vite
-- React Router
-- ESLint
+The backend address (`http://localhost:8000`) is written directly in each `src/api/*.ts` file. There
+is no environment setting for it.
 
 ---
 
-## Frontend Setup
+## How a Page Works
 
-### Prerequisites
+Every metric page follows the same pattern. Using Nutrition Metrics as the example:
 
-- Node.js (v20 or later recommended)
-- npm
+```text
+LogNutritionMetrics.tsx  (src/pages/LogNutritionMetrics/)
+  owns the page state: selectedDate, nutritionMetrics, isLoading, isDirty, saveStatus
+  │
+  ├── PageHeader             shared: page title and save status
+  ├── DateSection            shared: choose the date (changing it reloads the page's data)
+  ├── NutritionMetricsSection (pages/LogNutritionMetrics/components/)
+  │                          edits its fields through the setNutritionMetrics callback
+  └── SaveButton             shared: calls the page's save handler
+  │
+  │ load / save
+  ▼
+src/api/nutritionMetrics.ts
+  the only code that calls fetch; converts snake_case ↔ camelCase and "" ↔ null
+  │
+  ▼
+backend  GET /health/nutrition-metrics/{date}   PUT /health/nutrition-metrics
+```
+
+- **Pages own state.** Section components only update their part of it, through the callback the
+  page passes in.
+- **Only `src/api/*` calls `fetch`.** Pages and components never talk to the backend directly.
+- **Each page has a model and an empty model.** `src/types/NutritionMetrics.ts` defines the shape,
+  and `src/utils/createEmptyNutritionMetrics.ts` creates an empty one for dates with no data.
+- **Empty fields are sent as `null`, and the backend keeps the existing value.** Clearing a field in
+  the UI therefore does not clear it in the Google Sheet.
 
 ---
 
-### First Time Setup
+## Code Map
 
-#### 1. Navigate to the Frontend Directory
+```text
+src/
+├── main.tsx            Entry point: renders <App /> into the page
+├── App.tsx             Routes: which page is shown for each URL
+├── index.css           Tailwind import and global styles
+├── layouts/
+│   └── AppShell.tsx    Desktop sidebar, mobile bottom navigation, main content area
+├── navigation/
+│   └── navigation.ts   Desktop sidebar items and mobile bottom-bar items
+├── pages/              One folder per page; page-specific sections live in its components/ folder
+├── components/         Shared UI: PageHeader, DateSection, TextInput, CollapsibleCard, SaveButton,
+│                       Button, PageContainer, LoadingSpinner, NavigationItem, MoreMenu, ...
+├── api/                Backend calls and model conversion, one file per metric
+├── types/              TypeScript models, one per metric
+├── utils/              createEmpty*() helpers and calculateSleepDuration()
+├── test/setup.ts       Vitest setup (jest-dom matchers, cleanup after each test)
+└── assets/             Static images
+```
 
-From the project root:
+---
+
+## Pages
+
+| Route | Page | API file | Backend endpoints |
+|---|---|---|---|
+| `/nutrition-metrics` | `LogNutritionMetrics` | `nutritionMetrics.ts` | `GET /health/nutrition-metrics/{date}`, `PUT /health/nutrition-metrics` |
+| `/sleep-metrics` | `LogSleepMetrics` | `sleepMetrics.ts` | `GET /health/sleep-metrics/{date}`, `PUT /health/sleep-metrics` |
+| `/health-metrics` | `LogHealthMetrics` | `healthMetrics.ts` | `GET /health/health-metrics/{date}`, `PUT /health/health-metrics` |
+| `/body-measurements` | `LogBodyMeasurements` | `bodyMeasurements.ts` | `GET /health/body-measurements/{date}`, `PUT /health/body-measurements` |
+| `/workout-metrics` | `LogWorkoutMetrics` | `workoutMetrics.ts` | `GET /health/workout-metrics?workout_date=`, `PUT /health/workout-metrics` (several workouts per date) |
+| `/` | `Dashboard` | — | Placeholder |
+| `/history` | `History` | — | Placeholder |
+| `/settings` | `Settings` | — | Placeholder |
+
+The Labs pages have not been built yet (the backend endpoints exist).
+
+**Navigation:**
+
+- The **desktop sidebar** lists the items in `desktopNavigationItems` (`src/navigation/navigation.ts`).
+- The **mobile bottom bar** shows Dashboard, History and More (`mobileNavigationItems`).
+- **More** opens `src/components/MoreMenu.tsx`, which keeps its **own hardcoded list** of pages. A new
+  page must be added there as well as in `navigation.ts`.
+
+---
+
+## Setup and Run
+
+Prerequisites: Node.js 20 or later, and npm.
 
 ```bash
 cd frontend
+npm install        # first time, or after package.json changes
+npm run dev        # starts Vite at http://localhost:5173
 ```
+
+The backend must also be running on http://127.0.0.1:8000 for pages to load and save data. See the
+[backend README](../backend/README.md).
 
 ---
 
-#### 2. Install Dependencies
+## Example Walkthroughs
 
-```bash
-npm install
-```
+The two walkthroughs below follow the Nutrition Metrics page through loading and saving. The other
+metric pages work the same way.
 
-This installs all packages listed in `package.json`.
-
----
-
-#### 3. Start the Development Server
-
-```bash
-npm run dev
-```
-
-Vite will start the development server.
-
-Example output:
-
-```text
-VITE v8.x.x ready in xxx ms
-
-➜  Local:   http://localhost:5173/
-```
-
----
-
-#### 4. Verify the Frontend
-
-Open your browser and navigate to:
-
-```
-http://localhost:5173
-```
-
-The application should load successfully.
-
----
-
-#### 5. Frontend–Backend Communication
-
-The frontend communicates with the FastAPI backend.
-
-Before using the application, ensure the backend server is also running.
-
-From the `backend` directory:
-
-```bash
-fastapi dev app/main.py
-```
-
-The backend should be available at:
-
-```
-http://127.0.0.1:8000
-```
-
-The frontend uses this API to load and save data.
-
-
-
-## Project Structure
-
-```text
-frontend/
-│
-├── src/
-│   ├── api/           # Functions responsible for communicating with the backend APIs.
-│   ├── components/    # Reusable UI components shared across multiple pages.
-│   ├── layouts/       # Shared application layouts (e.g. AppShell).
-│   ├── navigation/    # Navigation configuration used by the application.
-│   ├── pages/         # Individual application pages and their page-specific components.
-│   ├── types/         # Shared TypeScript interfaces and type definitions.
-│   ├── utils/         # Helper functions used throughout the application.
-│   ├── App.tsx        # Configures routing and loads the application layout.
-│   └── main.tsx       # Application entry point that bootstraps React.
-│
-├── public/            # Static assets served directly by Vite.
-├── package.json       # Project dependencies and npm scripts.
-├── tsconfig.json      # TypeScript compiler configuration.
-├── vite.config.ts     # Vite build and development server configuration.
-└── README.md          # Frontend documentation.
-```
----
-
-## Front End Flow
-
-The following sequence describes what happens from the moment the user opens a metric page until its data is saved. The Nutrition Metrics page is used as the example; the other metric pages follow the same pattern.
-
-```text
-User opens:
-http://localhost:5173/nutrition-metrics
-        │
-        ▼
-main.tsx
-(Bootstraps React)
-        │
-        ▼
-App.tsx
-(Configures Routes)
-        │
-        ▼
-AppShell.tsx
-(Shared Layout & Navigation)
-        │
-        ▼
-LogNutritionMetrics.tsx
-(Page State & Business Logic)
-        │
-        ▼
-api/nutritionMetrics.ts
-(Calls Backend APIs)
-        │
-        ▼
-Backend
-        │
-        ▼
-LogNutritionMetrics.tsx
-(Updates React State)
-        │
-        ▼
-Shared Components
-(PageHeader, DateSection, TextInput, Cards...)
-        │
-        ▼
-Tailwind CSS
-(index.css + component classes)
-        │
-        ▼
-Browser UI
-```
 #### Example Workflow - Loading the Nutrition Metrics Page
 
 Assume the user opens:
@@ -301,190 +239,29 @@ The following sequence describes what happens inside the frontend until the data
 
 ---
 
-## Frontend Styling
+## Styling
 
-The frontend primarily uses **Tailwind CSS classes directly inside React components**.
+The frontend uses **Tailwind CSS classes directly inside React components**. To change how something
+looks, change the classes in the component that renders it. Changing a shared component affects
+every page that uses it.
 
-This means most visual changes are made in the component that renders that part of the UI rather than in a separate CSS file.
+| File | Controls |
+|---|---|
+| `src/index.css` | Tailwind import and global defaults (base HTML/body styling). Avoid component styles here. |
+| `src/components/PageContainer.tsx` | Page background, maximum content width, horizontal and vertical page padding |
+| `src/layouts/AppShell.tsx` | Desktop sidebar, mobile bottom navigation, main content area, navigation borders and backgrounds |
+| `src/components/NavigationItem.tsx` | Individual navigation links |
+| `src/components/CollapsibleCard.tsx` | The cards around each page section: border, background, radius, shadow, header spacing, divider, icon, expand/collapse animation |
+| `src/components/TextInput.tsx` | Every text and number input: height, border, focus style, font size, padding |
+| `src/components/Button.tsx` | Base button style: colour, hover and disabled states, height, rounded corners, press animation |
+| `src/components/SaveButton.tsx` | The sticky Save bar at the bottom of logging pages: positioning, background, top border, shadow, spacing. The button itself uses `Button.tsx`. |
+| `src/components/MoreMenu.tsx` | The mobile bottom sheet opened by **More** |
+| `src/pages/*/components/*Section.tsx` | Page-specific layout, for example `NutritionMetricsSection.tsx` |
 
-#### Global Styling
-
-**File:**
-
-```text
-src/index.css
-```
-
-Use this file for styles that apply to the application globally, such as:
-
-- Tailwind setup/imports
-- Global page defaults
-- Base HTML/body styling
-
-Most component-specific styling should not be added here.
-
----
-
-#### Page Layout
-
-**File:**
-
-```text
-src/components/PageContainer.tsx
-```
-
-Controls the overall page appearance, including:
-
-- Page background
-- Maximum content width
-- Horizontal padding
-- Vertical page padding
-
-If the whole application feels too wide, narrow, or needs a different page background, start here.
+If a change should affect only one section, change that section's classes rather than a shared
+component.
 
 ---
-
-#### Application Navigation / Shell
-
-**File:**
-
-```text
-src/layouts/AppShell.tsx
-```
-
-Controls:
-
-- Desktop sidebar
-- Mobile bottom navigation
-- Main content area
-- Navigation borders/backgrounds
-- Overall application shell layout
-
-For styling individual navigation links, see:
-
-```text
-src/components/NavigationItem.tsx
-```
-
----
-
-#### Cards and Collapsible Sections
-
-**File:**
-
-```text
-src/components/CollapsibleCard.tsx
-```
-
-Controls the styling shared by sections such as:
-
-- Workout
-- Body
-- Nutrition
-- Sleep
-- Body Measurements
-
-This includes:
-
-- Card border
-- Background
-- Border radius
-- Shadow
-- Header spacing
-- Divider
-- Icons
-- Expand/collapse animation
-
----
-
-#### Text Inputs
-
-**File:**
-
-```text
-src/components/TextInput.tsx
-```
-
-Controls styling for standard input fields throughout the application.
-
-Examples:
-
-- Weight
-- Protein
-- Water
-- Body measurements
-- Numeric fields
-
-Changing the input height, border, focus style, font size, or padding here affects all `TextInput` fields.
-
----
-
-#### Buttons
-
-**File:**
-
-```text
-src/components/Button.tsx
-```
-
-Controls the base styling used by reusable buttons, including:
-
-- Primary blue color
-- Hover state
-- Disabled state
-- Button height
-- Rounded corners
-- Press animation
-
----
-
-#### Save Action Bar
-
-**File:**
-
-```text
-src/components/SaveButton.tsx
-```
-
-Controls the fixed Save area shown at the bottom of logging pages.
-
-This includes:
-
-- Sticky positioning
-- Background
-- Top border
-- Shadow
-- Spacing around the Save button
-
-The actual button appearance comes from `Button.tsx`.
-
----
-
-#### Mobile More Menu
-
-**File:**
-
-```text
-src/components/MoreMenu.tsx
-```
-
-Controls the styling of the mobile bottom sheet shown when the user selects **More**.
-
----
-
-#### Page-Specific Styling
-
-Some styling belongs only to a particular page or section and therefore lives directly in that component.
-
-Examples:
-
-```text
-src/pages/LogNutritionMetrics/components/NutritionMetricsSection.tsx
-src/pages/LogBodyMeasurements/components/BodyMeasurementsSection.tsx
-```
-
-If a visual change should affect only one section, change the Tailwind classes in that specific component rather than modifying a shared component.
-
 
 ## Adding a New Field to the Frontend
 
@@ -634,11 +411,12 @@ The following frontend changes are required:
      ```
    - Add the page to `desktopNavigationItems`.
 
-   - **Mobile More Menu (if applicable):**
+   - **Mobile More Menu:**
      ```text
      src/components/MoreMenu.tsx
      ```
-   - Add secondary pages to the mobile More menu.
+   - `MoreMenu` keeps its own hardcoded list, so add the page here too, or it will not be reachable
+     on mobile.
 
 8. **Test the page**
    - Verify the page loads correctly.
@@ -647,6 +425,10 @@ The following frontend changes are required:
    - Verify data is saved successfully.
    - Reload the page and confirm the saved values are displayed.
 
+9. **Update the docs**
+   - Add the page to the [Pages](#pages) table at the top of this README.
+
+---
 
 ## Testing
 
@@ -730,32 +512,24 @@ Example:
 - `getNutritionMetric()` retrieves Nutrition Metrics and converts them into a `NutritionMetrics` object.
 - `saveBodyMeasurement()` sends the correct request payload to the backend.
 
-#### Running Tests
+### Running Tests and Checks
 
-Run all frontend tests:
+Tests run in Vitest with a simulated browser (jsdom), using the setup in `src/test/setup.ts`. They
+mock `fetch`, so they never call the backend.
 
-```bash
-npm test -- --run
-```
-
-Run a specific test file:
+From `frontend/`:
 
 ```bash
-npx vitest src/components/TextInput.test.tsx -- --run
+npm run test:run                                       # all tests, once
+npx vitest run src/components/TextInput.test.tsx       # one file
+npx vitest run -t "saves successfully"                 # tests whose name matches
+npx vitest run LogBodyMeasurements                     # test files whose path matches
+npm run lint                                           # ESLint
+npx tsc -b                                             # type-check (no output files)
 ```
 
-Run all tests with code coverage:
+`npm run lint` currently reports pre-existing errors in `src/api/workoutMetrics.ts` and
+`src/components/Button.tsx`, plus warnings from the generated `coverage/` files.
 
-```bash
-npm run test:coverage
-```
-
-Run a single test by name
-```bash
-npx vitest --run -t "saves successfully"
-```
-
-Run all tests matching a pattern
-```bash
-npx vitest --run LogBodyMeasurements
-```
+> **Warning:** `npm run test:coverage` rewrites the committed `frontend/coverage/` files. Only run it
+> when you intend to update them.
