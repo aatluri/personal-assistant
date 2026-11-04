@@ -5,6 +5,11 @@ from app.config import settings
 from app.modules.health.archivers.file_archiver import (
     archive_processed_files,
 )
+from app.modules.health.constants import (
+    FILE_SUFFIX,
+    HEALTH_METRICS_FILE_PREFIX,
+    WORKOUT_METRICS_FILE_PREFIX,
+)
 from app.modules.health.orchestrators.health_metrics_orchestrator import (
     process_health_metrics_files,
 )
@@ -102,8 +107,8 @@ def archive_health_files():
         destination_folder_id=(
             settings.HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID
         ),
-        file_prefix="HealthMetrics-",
-        file_suffix=".json",
+        file_prefix=HEALTH_METRICS_FILE_PREFIX,
+        file_suffix=FILE_SUFFIX,
         archive_after_days=(
             settings.DATA_IMPORTER_ARCHIVE_AFTER_DAYS
         ),
@@ -117,8 +122,8 @@ def archive_health_files():
         destination_folder_id=(
             settings.WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID
         ),
-        file_prefix="WorkoutMetrics-",
-        file_suffix=".json",
+        file_prefix=WORKOUT_METRICS_FILE_PREFIX,
+        file_suffix=FILE_SUFFIX,
         archive_after_days=(
             settings.DATA_IMPORTER_ARCHIVE_AFTER_DAYS
         ),

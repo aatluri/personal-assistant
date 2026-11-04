@@ -4,15 +4,13 @@ from app.clients.google_drive_client import GoogleDriveClient
 from app.config import settings
 from app.modules.health.constants import (
     FAILED_PREFIX,
-    PROCESSED_PREFIX,
+    FILE_SUFFIX,
+    HEALTH_METRICS_FILE_PREFIX,
 )
 from app.modules.health.orchestrators.health_metrics_orchestrator import (
     process_health_metrics_files,
 )
 
-FILE_PREFIX = "HealthMetrics-"
-FILE_SUFFIX = ".json"
-TEST_PREFIX = "TEST_"
 MAX_FILES = 500
 BATCH_SIZE = 15
 BATCH_DELAY_SECONDS = 60
@@ -24,28 +22,23 @@ def get_health_metrics_file_date(
     """
     Extract the date from a valid Health Metrics filename.
 
-    FAILED_ files are eligible for retry.
-    PROCESSED_ and TEST_ files are ignored.
+    FAILED_ files are eligible for retry. Any other name that does not
+    match HealthMetrics-YYYY-MM-DD.json, including PROCESSED_ and TEST_
+    files, is ignored.
     """
-
-    if file_name.startswith(PROCESSED_PREFIX):
-        return None
-
-    if file_name.startswith(TEST_PREFIX):
-        return None
 
     original_name = file_name.removeprefix(
         FAILED_PREFIX
     )
 
     if not (
-        original_name.startswith(FILE_PREFIX)
+        original_name.startswith(HEALTH_METRICS_FILE_PREFIX)
         and original_name.endswith(FILE_SUFFIX)
     ):
         return None
 
     date_text = original_name[
-        len(FILE_PREFIX):-len(FILE_SUFFIX)
+        len(HEALTH_METRICS_FILE_PREFIX):-len(FILE_SUFFIX)
     ]
 
     try:

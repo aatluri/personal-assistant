@@ -43,7 +43,7 @@ POST /health/archive  (called manually)
 | `app/modules/health/importers/` | One importer per metric. Turns the export JSON into a backend payload and sends it. |
 | `app/modules/health/mappings/` | For each backend field: the source metric name, which value to read, and any type or unit conversion. |
 | `app/modules/health/archivers/file_archiver.py` | Moves old `PROCESSED_` files into the processed folder. |
-| `app/modules/health/constants.py` | The `PROCESSED_` and `FAILED_` file prefixes. |
+| `app/modules/health/constants.py` | Filename rules: the `PROCESSED_` and `FAILED_` prefixes, and the `HealthMetrics-` / `WorkoutMetrics-` / `.json` pattern. |
 | `app/clients/google_drive_client.py` | Lists, reads, renames and moves files in Google Drive. |
 | `app/clients/backend_client.py` | Sends payloads to the backend API. |
 | `app/config.py` | Settings loaded from `.env`. |
@@ -68,8 +68,12 @@ not treated as failed.
 
 ## File Lifecycle
 
-- **Filenames:** only `HealthMetrics-YYYY-MM-DD.json` and `WorkoutMetrics-YYYY-MM-DD.json` are
-  recognised. Files are processed **oldest first**, using the date in the filename.
+- **Filenames:** only `HealthMetrics-YYYY-MM-DD.json` and `WorkoutMetrics-YYYY-MM-DD.json`
+  (optionally with a `FAILED_` prefix) are imported. Any other file in the folder, such as a
+  `TEST_` fixture or a Drive duplicate like `HealthMetrics-2026-10-12 (1).json`, is skipped with a
+  message and never imported. This also applies to a file requested with `?file_name=`. Files are
+  processed **oldest first**, using the date in the filename. The filename prefixes and suffix are
+  defined in `app/modules/health/constants.py`.
 - **`PROCESSED_` files** are skipped. Imported files stay in the incoming folder with this prefix
   until they are archived.
 - **`FAILED_` files** are retried on every run. On success the `FAILED_` prefix is replaced with
@@ -80,8 +84,6 @@ not treated as failed.
 - **Archiving** only happens when `POST /health/archive` is called. A file is moved when the date in
   its filename is older than `DATA_IMPORTER_ARCHIVE_AFTER_DAYS` (default 30), regardless of when it
   was processed.
-- **`TEST_` files** are skipped by the historical import script only. The regular import endpoints
-  do not skip them.
 
 ---
 
@@ -199,8 +201,9 @@ GOOGLE_SERVICE_ACCOUNT_FILE=/nonexistent/offline.json PERSONAL_ASSISTANT_API_URL
   .venv/bin/python -m pytest -q -p no:cacheprovider
 ```
 
-These cover the importers, orchestrators, archiver and backend client, using the sample exports in
-`tests/test_data/`.
+These cover the importers, orchestrators (including skipping unrecognised filenames), archiver,
+backend client, the API endpoints in `app/main.py` (`tests/api/`) and the historical import script
+(`tests/scripts/`), using the sample exports in `tests/test_data/`.
 
 > **Warning:** the live tests in `tests/e2e/` read real Drive files, create and delete `TEST_*`
 > files in Drive, and write to the real Sheet through the backend. Run them only deliberately, with

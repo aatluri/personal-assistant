@@ -1,9 +1,7 @@
 from datetime import date, datetime, timedelta
 
 from app.clients.google_drive_client import GoogleDriveClient
-
-
-PROCESSED_PREFIX = "PROCESSED_"
+from app.modules.health.constants import PROCESSED_PREFIX
 
 
 def archive_processed_files(

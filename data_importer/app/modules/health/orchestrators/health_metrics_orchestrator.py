@@ -18,13 +18,10 @@ from app.modules.health.importers.sleep_metrics_importer import (
 
 from app.modules.health.constants import (
     FAILED_PREFIX,
+    FILE_SUFFIX,
+    HEALTH_METRICS_FILE_PREFIX,
     PROCESSED_PREFIX,
 )
-
-
-
-FILE_PREFIX = "HealthMetrics-"
-FILE_SUFFIX = ".json"
 
 
 def process_health_metrics_files(
@@ -37,6 +34,10 @@ def process_health_metrics_files(
     If file_name is provided, only that specific file
     will be processed. Otherwise, all unprocessed and
     failed files in the incoming folder will be processed.
+
+    Only files named HealthMetrics-YYYY-MM-DD.json (optionally
+    with a FAILED_ prefix) are imported. Any other file in the
+    folder, such as a TEST_ fixture, is skipped.
 
     Each file contains Health Metrics, Nutrition Metrics,
     Sleep Metrics, and Body Measurements Metrics data.
@@ -64,20 +65,34 @@ def process_health_metrics_files(
             if file["name"] == file_name
         ]
 
+    # Only import files whose name matches the Health Auto Export
+    # pattern. Anything else in the folder (TEST_ fixtures, Drive
+    # duplicates, stray files) must never reach the backend.
+    recognised_files = []
+
+    for file in files:
+        if get_health_metrics_file_date(
+            file["name"].removeprefix(FAILED_PREFIX)
+        ) is None:
+            print(f"Skipping unrecognised file: {file['name']}")
+            continue
+
+        recognised_files.append(file)
+
+    files = recognised_files
+
+    # Process files oldest to newest.
     files.sort(
-        key=lambda file: (
-            get_health_metrics_file_date(
-                file["name"].removeprefix(FAILED_PREFIX)
-            )
-            or date.max
+        key=lambda file: get_health_metrics_file_date(
+            file["name"].removeprefix(FAILED_PREFIX)
         )
     )
 
     if not files:
         if file_name is not None:
             print(
-                f"Health Metrics file not found "
-                f"or already processed: {file_name}"
+                f"Health Metrics file not found, already processed "
+                f"or not a recognised file name: {file_name}"
             )
         else:
             print(
@@ -213,13 +228,13 @@ def get_health_metrics_file_date(
     """
 
     if not (
-        file_name.startswith(FILE_PREFIX)
+        file_name.startswith(HEALTH_METRICS_FILE_PREFIX)
         and file_name.endswith(FILE_SUFFIX)
     ):
         return None
 
     date_text = file_name[
-        len(FILE_PREFIX):-len(FILE_SUFFIX)
+        len(HEALTH_METRICS_FILE_PREFIX):-len(FILE_SUFFIX)
     ]
 
     try:

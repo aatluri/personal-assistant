@@ -615,3 +615,121 @@ def test_process_workout_metrics_files_with_specific_file_name_not_found(
 
     drive_client.read_json_file.assert_not_called()
     drive_client.rename_file.assert_not_called()
+
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.import_workout_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_skips_unrecognised_files(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_workout_metrics,
+):
+
+    drive_client = Mock()
+    backend_client = Mock()
+
+    mock_drive_client_class.return_value = drive_client
+    mock_backend_client_class.return_value = backend_client
+
+    # Only file-4 matches WorkoutMetrics-YYYY-MM-DD.json. The others
+    # (a TEST_ fixture, a Drive duplicate and a stray file) must be
+    # skipped and never imported.
+    drive_client.list_files.return_value = [
+        {
+            "id": "file-1",
+            "name": "TEST_WorkoutMetrics-2099-01-01.json",
+        },
+        {
+            "id": "file-2",
+            "name": "WorkoutMetrics-2026-07-02 (1).json",
+        },
+        {
+            "id": "file-3",
+            "name": "notes.txt",
+        },
+        {
+            "id": "file-4",
+            "name": "WorkoutMetrics-2026-07-02.json",
+        },
+    ]
+
+    export_data = {
+        "data": {
+            "workouts": []
+        }
+    }
+
+    drive_client.read_json_file.return_value = export_data
+
+    mock_import_workout_metrics.return_value = []
+
+    results = process_workout_metrics_files()
+
+    # Only the recognised file is read, imported and renamed.
+    drive_client.read_json_file.assert_called_once_with(
+        "file-4"
+    )
+
+    mock_import_workout_metrics.assert_called_once_with(
+        export_data,
+        backend_client,
+    )
+
+    drive_client.rename_file.assert_called_once_with(
+        file_id="file-4",
+        new_name="PROCESSED_WorkoutMetrics-2026-07-02.json",
+    )
+
+    assert [result["file_name"] for result in results] == [
+        "WorkoutMetrics-2026-07-02.json",
+    ]
+
+
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.import_workout_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_does_not_import_requested_unrecognised_file(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_workout_metrics,
+):
+
+    drive_client = Mock()
+
+    mock_drive_client_class.return_value = drive_client
+
+    drive_client.list_files.return_value = [
+        {
+            "id": "file-1",
+            "name": "TEST_WorkoutMetrics-2099-01-01.json",
+        },
+    ]
+
+    # Requesting an unrecognised file by name must not import it either.
+    results = process_workout_metrics_files(
+        file_name="TEST_WorkoutMetrics-2099-01-01.json"
+    )
+
+    assert results == []
+
+    drive_client.read_json_file.assert_not_called()
+    drive_client.rename_file.assert_not_called()
+    mock_import_workout_metrics.assert_not_called()

@@ -8,12 +8,10 @@ from app.modules.health.importers.workout_metrics_importer import (
 )
 from app.modules.health.constants import (
     FAILED_PREFIX,
+    FILE_SUFFIX,
     PROCESSED_PREFIX,
+    WORKOUT_METRICS_FILE_PREFIX,
 )
-
-
-FILE_PREFIX = "WorkoutMetrics-"
-FILE_SUFFIX = ".json"
 
 
 def process_workout_metrics_files(
@@ -22,6 +20,10 @@ def process_workout_metrics_files(
     """
     Process all Workout Metrics JSON files currently waiting
     in the Google Drive incoming folder.
+
+    Only files named WorkoutMetrics-YYYY-MM-DD.json (optionally
+    with a FAILED_ prefix) are imported. Any other file in the
+    folder, such as a TEST_ fixture, is skipped.
 
     Each file may contain multiple workouts.
     """
@@ -51,14 +53,27 @@ def process_workout_metrics_files(
             if file["name"] == file_name
         ]
 
+    # Only import files whose name matches the Health Auto Export
+    # pattern. Anything else in the folder (TEST_ fixtures, Drive
+    # duplicates, stray files) must never reach the backend.
+    recognised_files = []
+
+    for file in files:
+        if get_workout_metrics_file_date(
+            file["name"].removeprefix(FAILED_PREFIX)
+        ) is None:
+            print(f"Skipping unrecognised file: {file['name']}")
+            continue
+
+        recognised_files.append(file)
+
+    files = recognised_files
+
     # Process files oldest to newest.
     # FAILED_ files remain eligible for retry.
     files.sort(
-        key=lambda file: (
-            get_workout_metrics_file_date(
-                file["name"].removeprefix(FAILED_PREFIX)
-            )
-            or date.max
+        key=lambda file: get_workout_metrics_file_date(
+            file["name"].removeprefix(FAILED_PREFIX)
         )
     )
 
@@ -165,13 +180,13 @@ def get_workout_metrics_file_date(
     """
 
     if not (
-        file_name.startswith(FILE_PREFIX)
+        file_name.startswith(WORKOUT_METRICS_FILE_PREFIX)
         and file_name.endswith(FILE_SUFFIX)
     ):
         return None
 
     date_text = file_name[
-        len(FILE_PREFIX):-len(FILE_SUFFIX)
+        len(WORKOUT_METRICS_FILE_PREFIX):-len(FILE_SUFFIX)
     ]
 
     try:
