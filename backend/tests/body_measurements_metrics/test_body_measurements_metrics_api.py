@@ -21,6 +21,10 @@ These tests verify the HTTP API layer for Body Measurements.
 The real BodyMeasurementsService is replaced with a mock so that
 the API can be tested independently of the service and
 repository layers.
+
+Each test swaps in its mock with pytest's monkeypatch fixture, which
+puts the real service back when the test ends, so no test leaks its
+mock into another.
 """
 
 
@@ -31,14 +35,14 @@ repository layers.
 
 # Verify that all Body Measurements are returned successfully.
 
-def test_get_body_measurements():
+def test_get_body_measurements(monkeypatch):
     service = Mock()
 
     service.get_body_measurements.return_value = [
         create_body_measurement()
     ]
 
-    api.body_measurements_service = service
+    monkeypatch.setattr(api, "body_measurements_service", service)
 
     response = client.get(
         "/health/body-measurements"
@@ -55,14 +59,14 @@ def test_get_body_measurements():
 
 # Verify that Body Measurements are returned when the requested date exists.
 
-def test_get_body_measurement_found():
+def test_get_body_measurement_found(monkeypatch):
     service = Mock()
 
     service.get_body_measurement.return_value = (
         create_body_measurement()
     )
 
-    api.body_measurements_service = service
+    monkeypatch.setattr(api, "body_measurements_service", service)
 
     response = client.get(
         "/health/body-measurements/2026-08-26"
@@ -77,12 +81,12 @@ def test_get_body_measurement_found():
 
 # Verify that a 404 response is returned when Body Measurements do not exist.
 
-def test_get_body_measurement_not_found():
+def test_get_body_measurement_not_found(monkeypatch):
     service = Mock()
 
     service.get_body_measurement.return_value = None
 
-    api.body_measurements_service = service
+    monkeypatch.setattr(api, "body_measurements_service", service)
 
     response = client.get(
         "/health/body-measurements/2026-08-26"
@@ -97,10 +101,10 @@ def test_get_body_measurement_not_found():
 
 # Verify that a new Body Measurements record can be created.
 
-def test_create_body_measurement():
+def test_create_body_measurement(monkeypatch):
     service = Mock()
 
-    api.body_measurements_service = service
+    monkeypatch.setattr(api, "body_measurements_service", service)
 
     body_measurement = create_body_measurement()
 
@@ -120,10 +124,10 @@ def test_create_body_measurement():
 
 # Verify that a Body Measurements record can be updated or created.
 
-def test_update_body_measurement():
+def test_update_body_measurement(monkeypatch):
     service = Mock()
 
-    api.body_measurements_service = service
+    monkeypatch.setattr(api, "body_measurements_service", service)
 
     body_measurement = create_body_measurement()
 

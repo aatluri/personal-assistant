@@ -21,6 +21,10 @@ These tests verify the HTTP API layer for Sleep Metrics.
 The real SleepMetricsService is replaced with a mock so that
 the API can be tested independently of the service and
 repository layers.
+
+Each test swaps in its mock with pytest's monkeypatch fixture, which
+puts the real service back when the test ends, so no test leaks its
+mock into another.
 """
 
 
@@ -31,14 +35,14 @@ repository layers.
 
 # Verify that all Sleep Metrics records are returned successfully.
 
-def test_get_sleep_metrics():
+def test_get_sleep_metrics(monkeypatch):
     service = Mock()
 
     service.get_sleep_metrics.return_value = [
         create_sleep_metric()
     ]
 
-    api.sleep_metrics_service = service
+    monkeypatch.setattr(api, "sleep_metrics_service", service)
 
     response = client.get(
         "/health/sleep-metrics"
@@ -55,14 +59,14 @@ def test_get_sleep_metrics():
 
 # Verify that Sleep Metrics are returned when the requested date exists.
 
-def test_get_sleep_metric_found():
+def test_get_sleep_metric_found(monkeypatch):
     service = Mock()
 
     service.get_sleep_metric.return_value = (
         create_sleep_metric()
     )
 
-    api.sleep_metrics_service = service
+    monkeypatch.setattr(api, "sleep_metrics_service", service)
 
     response = client.get(
         "/health/sleep-metrics/2026-10-08"
@@ -77,12 +81,12 @@ def test_get_sleep_metric_found():
 
 # Verify that a 404 response is returned when Sleep Metrics do not exist.
 
-def test_get_sleep_metric_not_found():
+def test_get_sleep_metric_not_found(monkeypatch):
     service = Mock()
 
     service.get_sleep_metric.return_value = None
 
-    api.sleep_metrics_service = service
+    monkeypatch.setattr(api, "sleep_metrics_service", service)
 
     response = client.get(
         "/health/sleep-metrics/2026-10-08"
@@ -97,10 +101,10 @@ def test_get_sleep_metric_not_found():
 
 # Verify that a new Sleep Metrics record can be created.
 
-def test_create_sleep_metric():
+def test_create_sleep_metric(monkeypatch):
     service = Mock()
 
-    api.sleep_metrics_service = service
+    monkeypatch.setattr(api, "sleep_metrics_service", service)
 
     sleep_metric = create_sleep_metric()
 
@@ -120,10 +124,10 @@ def test_create_sleep_metric():
 
 # Verify that a Sleep Metrics record can be updated or created.
 
-def test_update_sleep_metric():
+def test_update_sleep_metric(monkeypatch):
     service = Mock()
 
-    api.sleep_metrics_service = service
+    monkeypatch.setattr(api, "sleep_metrics_service", service)
 
     sleep_metric = create_sleep_metric()
 

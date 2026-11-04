@@ -21,6 +21,10 @@ These tests verify the HTTP API layer for Nutrition Metrics.
 The real NutritionMetricsService is replaced with a mock so that
 the API can be tested independently of the service and
 repository layers.
+
+Each test swaps in its mock with pytest's monkeypatch fixture, which
+puts the real service back when the test ends, so no test leaks its
+mock into another.
 """
 
 
@@ -31,14 +35,14 @@ repository layers.
 
 # Verify that all Nutrition Metrics records are returned successfully.
 
-def test_get_nutrition_metrics():
+def test_get_nutrition_metrics(monkeypatch):
     service = Mock()
 
     service.get_nutrition_metrics.return_value = [
         create_nutrition_metric()
     ]
 
-    api.nutrition_metrics_service = service
+    monkeypatch.setattr(api, "nutrition_metrics_service", service)
 
     response = client.get(
         "/health/nutrition-metrics"
@@ -55,14 +59,14 @@ def test_get_nutrition_metrics():
 
 # Verify that Nutrition Metrics are returned when the requested date exists.
 
-def test_get_nutrition_metric_found():
+def test_get_nutrition_metric_found(monkeypatch):
     service = Mock()
 
     service.get_nutrition_metric.return_value = (
         create_nutrition_metric()
     )
 
-    api.nutrition_metrics_service = service
+    monkeypatch.setattr(api, "nutrition_metrics_service", service)
 
     response = client.get(
         "/health/nutrition-metrics/2026-10-08"
@@ -77,12 +81,12 @@ def test_get_nutrition_metric_found():
 
 # Verify that a 404 response is returned when Nutrition Metrics do not exist.
 
-def test_get_nutrition_metric_not_found():
+def test_get_nutrition_metric_not_found(monkeypatch):
     service = Mock()
 
     service.get_nutrition_metric.return_value = None
 
-    api.nutrition_metrics_service = service
+    monkeypatch.setattr(api, "nutrition_metrics_service", service)
 
     response = client.get(
         "/health/nutrition-metrics/2026-10-08"
@@ -97,10 +101,10 @@ def test_get_nutrition_metric_not_found():
 
 # Verify that a new Nutrition Metrics record can be created.
 
-def test_create_nutrition_metric():
+def test_create_nutrition_metric(monkeypatch):
     service = Mock()
 
-    api.nutrition_metrics_service = service
+    monkeypatch.setattr(api, "nutrition_metrics_service", service)
 
     nutrition_metric = create_nutrition_metric()
 
@@ -120,10 +124,10 @@ def test_create_nutrition_metric():
 
 # Verify that a Nutrition Metrics record can be updated or created.
 
-def test_update_nutrition_metric():
+def test_update_nutrition_metric(monkeypatch):
     service = Mock()
 
-    api.nutrition_metrics_service = service
+    monkeypatch.setattr(api, "nutrition_metrics_service", service)
 
     nutrition_metric = create_nutrition_metric()
 

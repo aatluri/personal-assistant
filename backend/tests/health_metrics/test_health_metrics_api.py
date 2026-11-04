@@ -21,6 +21,10 @@ These tests verify the HTTP API layer for Health Metrics.
 The real HealthMetricsService is replaced with a mock so that
 the API can be tested independently of the service and
 repository layers.
+
+Each test swaps in its mock with pytest's monkeypatch fixture, which
+puts the real service back when the test ends, so no test leaks its
+mock into another.
 """
 
 
@@ -31,14 +35,14 @@ repository layers.
 
 # Verify that all Health Metrics records are returned successfully.
 
-def test_get_health_metrics():
+def test_get_health_metrics(monkeypatch):
     service = Mock()
 
     service.get_health_metrics.return_value = [
         create_health_metric()
     ]
 
-    api.health_metrics_service = service
+    monkeypatch.setattr(api, "health_metrics_service", service)
 
     response = client.get(
         "/health/health-metrics"
@@ -55,14 +59,14 @@ def test_get_health_metrics():
 
 # Verify that Health Metrics are returned when the requested date exists.
 
-def test_get_health_metric_found():
+def test_get_health_metric_found(monkeypatch):
     service = Mock()
 
     service.get_health_metric.return_value = (
         create_health_metric()
     )
 
-    api.health_metrics_service = service
+    monkeypatch.setattr(api, "health_metrics_service", service)
 
     response = client.get(
         "/health/health-metrics/2026-10-08"
@@ -77,12 +81,12 @@ def test_get_health_metric_found():
 
 # Verify that a 404 response is returned when Health Metrics do not exist.
 
-def test_get_health_metric_not_found():
+def test_get_health_metric_not_found(monkeypatch):
     service = Mock()
 
     service.get_health_metric.return_value = None
 
-    api.health_metrics_service = service
+    monkeypatch.setattr(api, "health_metrics_service", service)
 
     response = client.get(
         "/health/health-metrics/2026-10-08"
@@ -97,10 +101,10 @@ def test_get_health_metric_not_found():
 
 # Verify that a new Health Metrics record can be created.
 
-def test_create_health_metric():
+def test_create_health_metric(monkeypatch):
     service = Mock()
 
-    api.health_metrics_service = service
+    monkeypatch.setattr(api, "health_metrics_service", service)
 
     health_metric = create_health_metric()
 
@@ -120,10 +124,10 @@ def test_create_health_metric():
 
 # Verify that a Health Metrics record can be updated or created.
 
-def test_update_health_metric():
+def test_update_health_metric(monkeypatch):
     service = Mock()
 
-    api.health_metrics_service = service
+    monkeypatch.setattr(api, "health_metrics_service", service)
 
     health_metric = create_health_metric()
 
