@@ -5,6 +5,9 @@ import requests
 
 from app.config import settings
 from app.database.sheets_client import get_spreadsheet
+from tests.helpers.e2e_guards import (
+    require_test_date,
+)
 
 
 BASE_URL = "http://127.0.0.1:8000"
@@ -21,6 +24,9 @@ def delete_test_rows_from_google_sheets() -> None:
     """
     Delete all E2E test workout rows directly from Google Sheets.
     """
+
+    # Never delete anything that is not clearly test data.
+    require_test_date(TEST_SHEET_WORKOUT_START_TIME)
 
     spreadsheet = get_spreadsheet()
 

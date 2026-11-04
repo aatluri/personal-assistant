@@ -2,6 +2,9 @@ import requests
 
 from app.config import settings
 from app.database.sheets_client import get_spreadsheet
+from tests.helpers.e2e_guards import (
+    require_test_file_name,
+)
 from app.modules.health.labs.lab_service import generate_report_key
 
 
@@ -17,6 +20,9 @@ TEST_REPORT_KEY = generate_report_key(
 
 
 def delete_test_rows_from_google_sheets() -> None:
+    # Never delete anything that is not clearly test data.
+    require_test_file_name(TEST_FILE_NAME)
+
     spreadsheet = get_spreadsheet()
 
     worksheet = spreadsheet.worksheet(

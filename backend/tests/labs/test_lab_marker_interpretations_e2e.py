@@ -2,6 +2,9 @@ import requests
 
 from app.config import settings
 from app.database.sheets_client import get_spreadsheet
+from tests.helpers.e2e_guards import (
+    require_test_key,
+)
 
 
 BASE_URL = "http://127.0.0.1:8000/health/lab-marker-interpretations"
@@ -14,6 +17,10 @@ OPTIONAL_TEST_LABEL = "Detected"
 
 
 def delete_test_rows_from_google_sheets() -> None:
+    # Never delete anything that is not clearly test data.
+    require_test_key(TEST_MARKER_KEY)
+    require_test_key(OPTIONAL_TEST_MARKER_KEY)
+
     spreadsheet = get_spreadsheet()
 
     worksheet = spreadsheet.worksheet(

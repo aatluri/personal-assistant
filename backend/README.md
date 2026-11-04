@@ -254,6 +254,12 @@ Example:
 the end-to-end tests, which read and write the real Google Sheet through a running backend, and
 `tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet and calls OpenAI.
 
+The end-to-end tests create rows with clearly fake values (the year 2099, keys starting with
+`TEST_`, file names starting with `api_test_`) and delete them afterwards. Before deleting
+anything, each cleanup calls a guard from `tests/helpers/e2e_guards.py`, which stops the test if
+the value it would match on is not one of these test values, so a mistake in a test can never
+delete real rows.
+
 Run the mocked tests from `backend/`. The fake credentials are an extra safety net: any call that is
 not mocked fails instead of reaching a real service.
 
@@ -352,7 +358,8 @@ Example: adding a column to Nutrition Metrics.
 5. **Testing**
    - Add `tests/<name>/` with repository, service and API tests, using `tests/helpers/test_data.py`.
    - End-to-end tests use the real Sheet: add them only deliberately, in a file ending in
-     `_e2e.py`, so they are skipped by default.
+     `_e2e.py`, so they are skipped by default. Use 2099 dates or `TEST_` keys for test data, and
+     call the matching guard from `tests/helpers/e2e_guards.py` at the start of the cleanup.
 
 6. **Docs**
    - Add the module to the [Modules and Endpoints](#modules-and-endpoints) table above.
