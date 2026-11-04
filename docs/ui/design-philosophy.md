@@ -23,7 +23,6 @@ Every screen should have a single, obvious focal point.
 
 Examples:
 
-- **Log Today** → Workout Achievement Card
 - **Dashboard** → Today's Progress
 - **Blood Work** → Latest Health Score
 
@@ -284,7 +283,7 @@ Every interaction should feel:
 - Predictable
 - Polished
 
-A user should be able to complete their daily log in under **2 minutes**.
+A user should be able to complete a day's logging in under **2 minutes**.
 
 ---
 

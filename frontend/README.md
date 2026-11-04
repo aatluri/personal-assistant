@@ -127,11 +127,11 @@ frontend/
 
 ## Front End Flow
 
-The following sequence describes what happens from the moment the user opens the application until a Daily Log is saved.
+The following sequence describes what happens from the moment the user opens a metric page until its data is saved. The Nutrition Metrics page is used as the example; the other metric pages follow the same pattern.
 
 ```text
 User opens:
-http://localhost:5173/log-today
+http://localhost:5173/nutrition-metrics
         │
         ▼
 main.tsx
@@ -146,23 +146,23 @@ AppShell.tsx
 (Shared Layout & Navigation)
         │
         ▼
-LogToday.tsx
+LogNutritionMetrics.tsx
 (Page State & Business Logic)
         │
         ▼
-api/health.ts
+api/nutritionMetrics.ts
 (Calls Backend APIs)
         │
         ▼
 Backend
         │
         ▼
-LogToday.tsx
+LogNutritionMetrics.tsx
 (Updates React State)
         │
         ▼
 Shared Components
-(TextInput, Cards, Buttons...)
+(PageHeader, DateSection, TextInput, Cards...)
         │
         ▼
 Tailwind CSS
@@ -171,12 +171,12 @@ Tailwind CSS
         ▼
 Browser UI
 ```
-#### Example Workflow - Loading the Log Today Page
+#### Example Workflow - Loading the Nutrition Metrics Page
 
 Assume the user opens:
 
 ```text
-http://localhost:5173/log-today
+http://localhost:5173/nutrition-metrics
 ```
 
 The following sequence describes what happens inside the frontend before the page is displayed.
@@ -187,91 +187,87 @@ The following sequence describes what happens inside the frontend before the pag
 
 2. **Application routing is configured**
    - **File:** `src/App.tsx`
-   - React Router examines the requested URL (`/log-today`) and determines which page should be loaded.
+   - React Router examines the requested URL (`/nutrition-metrics`) and determines which page should be loaded.
 
 3. **The shared application layout is loaded**
    - **File:** `src/layouts/AppShell.tsx`
    - The shared layout is rendered, including the desktop sidebar, mobile navigation, and the main content area where pages are displayed.
 
-4. **The Log Today page is loaded**
-   - **File:** `src/pages/LogToday/LogToday.tsx`
-   - React Router loads the `LogToday` component because the URL matches `/log-today`.
+4. **The Nutrition Metrics page is loaded**
+   - **File:** `src/pages/LogNutritionMetrics/LogNutritionMetrics.tsx`
+   - React Router loads the `LogNutritionMetrics` component because the URL matches `/nutrition-metrics`.
 
 5. **The page state is initialized**
-   - **File:** `LogToday.tsx`
+   - **File:** `LogNutritionMetrics.tsx`
    - The page creates its React state using `useState()`.
-   - This includes `selectedDate`, `dailyLog`, `isLoading`, `isDirty`, and `saveStatus`.
+   - This includes `selectedDate`, `nutritionMetrics`, `isLoading`, `isDirty`, `saveStatus`, and `loadError`.
 
-6. **The Daily Log is requested**
-   - **File:** `LogToday.tsx`
-   - The `useEffect()` hook runs automatically when the page loads.
+6. **The Nutrition Metrics are requested**
+   - **File:** `LogNutritionMetrics.tsx`
+   - The `useEffect()` hook runs automatically when the page loads, and again whenever `selectedDate` changes.
    - Since `selectedDate` is initialized to today's date, it calls:
      ```text
-     getDailyLog(selectedDate)
+     getNutritionMetric(selectedDate)
      ```
 
 7. **The frontend calls the backend**
-   - **File:** `src/api/health.ts`
-   - The `getDailyLog()` function sends:
+   - **File:** `src/api/nutritionMetrics.ts`
+   - The `getNutritionMetric()` function sends:
      ```text
-     GET /health/daily-logs/{selectedDate}
+     GET /health/nutrition-metrics/{selectedDate}
      ```
-   - to the backend.
+   - to the backend, then converts the backend's `snake_case` fields into the frontend's `camelCase` model.
 
-8. **The backend returns the Daily Log**
-   - The backend retrieves the record from Google Sheets and returns it as a JSON response.
+8. **The backend returns the Nutrition Metrics**
+   - The backend retrieves the record from Google Sheets and returns it as a JSON response, or `404` if no record exists for that date.
 
 9. **The page state is updated**
-   - **File:** `LogToday.tsx`
-   - If a Daily Log exists:
-     - `setDailyLog()` stores the returned data in the page state.
+   - **File:** `LogNutritionMetrics.tsx`
+   - If a record exists:
+     - `setNutritionMetrics()` stores the returned data in the page state.
    - Otherwise:
-     - `createEmptyDailyLog()` creates an empty Daily Log for the selected date.
+     - `createEmptyNutritionMetrics()` creates an empty record for the selected date.
 
 10. **React re-renders the page**
-    - Since the `dailyLog` state has changed, React automatically re-renders the page.
+    - Since the `nutritionMetrics` state has changed, React automatically re-renders the page.
 
-11. **The page passes data to each section**
-    - **File:** `LogToday.tsx`
-    - The `dailyLog` state is passed to each page section, for example:
-      - `BodySection`
-      - `WorkoutSection`
-      - `NutritionSection`
-      - `HydrationSection`
-      - `SleepSection`
-      - `NotesSection`
+11. **The page renders its shared and page-specific components**
+    - **File:** `LogNutritionMetrics.tsx`
+    - `PageHeader` shows the page title and save status.
+    - `DateSection` lets the user change `selectedDate`.
+    - The `nutritionMetrics` state is passed to `NutritionMetricsSection`.
 
-12. **Each section renders its portion of the UI**
-    - **Files:** `src/pages/LogToday/components/*`
-    - Each section displays only the fields it is responsible for.
-    - When the user edits a value, the section updates the shared `dailyLog` state using `setDailyLog()`.
+12. **The section renders its portion of the UI**
+    - **File:** `src/pages/LogNutritionMetrics/components/NutritionMetricsSection.tsx`
+    - The section displays the nutrition fields.
+    - When the user edits a value, the section updates the page's `nutritionMetrics` state using `setNutritionMetrics()`.
 
 13. **Shared UI components are rendered**
     - **Files:** `src/components/*`
-    - Reusable components such as `TextInput`, `Select`, `Button`, `CollapsibleCard`, `PageContainer`, and `SaveButton` render the application's user interface.
+    - Reusable components such as `PageHeader`, `DateSection`, `TextInput`, `CollapsibleCard`, `PageContainer`, and `SaveButton` render the application's user interface.
 
 14. **Tailwind CSS styles the page**
     - **Files:** `src/index.css` and the Tailwind `className` values defined throughout the components.
     - Tailwind applies the styling that determines the final appearance of the page.
 
 15. **The completed page is displayed**
-    - The fully rendered **Log Today** page is now visible to the user and ready for interaction.
+    - The fully rendered **Nutrition Metrics** page is now visible to the user and ready for interaction.
 
-#### Example Workflow - Saving the Daily Log
+#### Example Workflow - Saving Nutrition Metrics
 
 Assume the user updates a few fields and clicks **Save**.
 
 The following sequence describes what happens inside the frontend until the data is persisted.
 
 1. **The user updates a value**
-   - **Files:** `src/pages/LogToday/components/*`
-   - For example, the user changes the Workout Duration.
-   - The component's `onChange()` handler is triggered.
+   - **File:** `src/pages/LogNutritionMetrics/components/NutritionMetricsSection.tsx`
+   - For example, the user changes Protein.
+   - The input's `onChange()` handler is triggered.
 
 2. **The shared page state is updated**
-   - **File:** `src/pages/LogToday/LogToday.tsx`
-   - The component calls `updateDailyLog()`.
-   - `updateDailyLog()` updates the `dailyLog` state.
+   - **File:** `src/pages/LogNutritionMetrics/LogNutritionMetrics.tsx`
+   - The section calls the `setNutritionMetrics` prop, which is the page's `updateNutritionMetrics()` function.
+   - `updateNutritionMetrics()` updates the `nutritionMetrics` state.
    - The page is marked as dirty (`isDirty = true`) indicating there are unsaved changes.
 
 3. **React re-renders the page**
@@ -281,23 +277,24 @@ The following sequence describes what happens inside the frontend until the data
 4. **The user clicks Save**
    - **Files:**
      - `src/components/SaveButton.tsx`
-     - `src/pages/LogToday/LogToday.tsx`
-   - `SaveButton` executes the `onClick` callback provided by `LogToday`.
-   - `handleSaveDailyLog()` is executed.
+     - `src/pages/LogNutritionMetrics/LogNutritionMetrics.tsx`
+   - `SaveButton` executes the `onClick` callback provided by `LogNutritionMetrics`.
+   - `handleSaveNutritionMetrics()` is executed.
 
 5. **The frontend calls the backend**
-   - **File:** `src/api/health.ts`
-   - `saveDailyLog(selectedDate, dailyLog)` sends:
+   - **File:** `src/api/nutritionMetrics.ts`
+   - `saveNutritionMetric(selectedDate, nutritionMetrics)` sends:
      ```text
-     PUT /health/daily-logs/{selectedDate}
+     PUT /health/nutrition-metrics
      ```
-   - The current `dailyLog` object is sent in the request body.
+   - The current `nutritionMetrics` object, converted to the backend's field names, is sent in the request body. Empty fields are sent as `null`.
 
-6. **The backend saves the Daily Log**
+6. **The backend saves the Nutrition Metrics**
    - The backend updates the existing record or creates a new one if it does not already exist.
+   - When updating, fields sent as `null` keep their existing values in the Sheet.
 
 7. **The save completes**
-   - **File:** `src/pages/LogToday/LogToday.tsx`
+   - **File:** `src/pages/LogNutritionMetrics/LogNutritionMetrics.tsx`
    - The save status is updated to `"saved"`.
    - `isDirty` is reset to `false`.
    - The Save button changes to **"✓ All Changes Saved"**.
@@ -422,34 +419,6 @@ Changing the input height, border, focus style, font size, or padding here affec
 
 ---
 
-#### Text Areas
-
-**File:**
-
-```text
-src/components/TextArea.tsx
-```
-
-Controls styling for larger text-entry fields such as:
-
-- Workout Summary
-- Meals
-- Notes
-
----
-
-#### Select / Dropdown Fields
-
-**File:**
-
-```text
-src/components/Select.tsx
-```
-
-Controls the styling of dropdowns such as Workout Type.
-
----
-
 #### Buttons
 
 **File:**
@@ -510,8 +479,7 @@ Some styling belongs only to a particular page or section and therefore lives di
 Examples:
 
 ```text
-src/pages/LogToday/components/DateSection.tsx
-src/pages/LogToday/components/WorkoutSection.tsx
+src/pages/LogNutritionMetrics/components/NutritionMetricsSection.tsx
 src/pages/LogBodyMeasurements/components/BodyMeasurementsSection.tsx
 ```
 
@@ -520,50 +488,51 @@ If a visual change should affect only one section, change the Tailwind classes i
 
 ## Adding a New Field to the Frontend
 
-Assume a new field called **Resting Heart Rate** has already been exposed by the backend APIs.
+Assume a new Nutrition field called **Sodium (mg)** has already been exposed by the backend APIs.
 
 The following frontend changes are required:
 
 1. **Update the TypeScript model**
-   - **File:** `src/types/DailyLog.ts`
-   - Add the new field to the `DailyLog` interface.
+   - **File:** `src/types/NutritionMetrics.ts`
+   - Add the new field to the `NutritionMetrics` interface.
 
 2. **Update the empty model**
-   - **File:** `src/utils/createEmptyDailyLog.ts`
+   - **File:** `src/utils/createEmptyNutritionMetrics.ts`
    - Add a default value for the new field.
 
-3. **Update the API layer (if required)**
-   - **File:** `src/api/health.ts`
-   - If the frontend and backend field names differ, update the mapping.
-   - If the field names are identical, no changes are required.
+3. **Update the API layer**
+   - **File:** `src/api/nutritionMetrics.ts`
+   - Map the backend field (for example `sodium_mg`) to the frontend field (for example `sodiumMg`) in both directions: when loading and when saving.
+   - The frontend uses `camelCase` and the backend uses `snake_case`, so this mapping is always required.
 
 4. **Add the field to the UI**
    - **File:** The appropriate page section.
    - Example:
      ```text
-     src/pages/LogToday/components/BodySection.tsx
+     src/pages/LogNutritionMetrics/components/NutritionMetricsSection.tsx
      ```
-   - Add the corresponding `TextInput`, `Select`, or other UI component.
+   - Add the corresponding `TextInput` or other UI component.
 
 5. **Bind the field to the page state**
    - **File:** The page that owns the state.
    - Example:
      ```text
-     src/pages/LogToday/LogToday.tsx
+     src/pages/LogNutritionMetrics/LogNutritionMetrics.tsx
      ```
 
    - The page typically owns the complete model as state:
      ```tsx
-     const [dailyLog, setDailyLog] = useState<DailyLog>(
-         createEmptyDailyLog()
-     );
+     const [nutritionMetrics, setNutritionMetrics] =
+         useState<NutritionMetrics>(
+             createEmptyNutritionMetrics()
+         );
      ```
 
    - If the page already passes the complete model and state updater to the appropriate section:
      ```tsx
-     <WorkoutSection
-         dailyLog={dailyLog}
-         setDailyLog={updateDailyLog}
+     <NutritionMetricsSection
+         nutritionMetrics={nutritionMetrics}
+         setNutritionMetrics={updateNutritionMetrics}
      />
      ```
      then **no change to the page-level component is normally required** when adding another field to that existing section.
@@ -580,11 +549,11 @@ The following frontend changes are required:
      - the field must be passed individually to the section rather than as part of the complete model, or
      - an entirely new section/card is being added to the page.
 
-   - For example, if `LogToday.tsx` already passes the complete `dailyLog` object to `WorkoutSection`, adding a new field such as `Resting Heart Rate` inside that section does not require a change to `LogToday.tsx`.
+   - For example, `LogNutritionMetrics.tsx` already passes the complete `nutritionMetrics` object to `NutritionMetricsSection`, so adding a new field such as `Sodium (mg)` inside that section does not require a change to `LogNutritionMetrics.tsx`.
 
    - This is the case for LogBodyMeasurments.tsx. When we added weight and body mass index, we didnt have to touch LogBodyMeasurements.tsx.
 
-   - However, if a completely new `Health Metrics` section is introduced, `LogToday.tsx` must be updated to render the new section and pass it the required state.
+   - However, if a completely new section/card is introduced, the page component must be updated to render the new section and pass it the required state.
 
 6. **Test the page**
    - Update the component tests to verify the new field is rendered.
@@ -689,7 +658,7 @@ Utility tests verify small helper functions and calculations.
 
 Example:
 - `calculateSleepDuration()` returns the correct sleep duration.
-- `createEmptyDailyLog()` returns a correctly initialised object.
+- `createEmptyNutritionMetrics()` returns a correctly initialised object.
 
 ### Reusable Component Tests
 
@@ -715,13 +684,13 @@ For Section Component Tests, we still render the component into a virtual DOM, b
 - Render the section with some initial page state.
 - Verify the fields display the supplied values.
 - Simulate user interactions (typing, selecting, etc.).
-- Verify that the section requests the correct state update by checking the setDailyLog/setBodyMeasurements callback and ensuring only the intended field changes while the rest of the state is preserved.
+- Verify that the section requests the correct state update by checking the setNutritionMetrics/setBodyMeasurements callback and ensuring only the intended field changes while the rest of the state is preserved.
 
 So, reusable component tests answer "Does this component work?", while section component tests answer "Does this section correctly update the page state?"
 
 Example:
-- `WorkoutSection` updates the workout duration when the user changes the input field.
-- `NutritionSection` updates only the nutrition fields without affecting the rest of the `DailyLog`.
+- `NutritionMetricsSection` updates the water value when the user changes the input field.
+- `NutritionMetricsSection` updates only the changed field without affecting the rest of the `NutritionMetrics` state.
 
 ### Page Tests
 
@@ -733,7 +702,7 @@ Page tests verify that complete pages render correctly and that all sections, pa
 - verify that the page renders correctly and updates its state and calls the backend with the correct data.
 
 Example:
-- `LogToday` loads data from the backend and displays all sections correctly.
+- `LogSleepMetrics` loads data from the backend and displays the page correctly.
 - `LogBodyMeasurements` updates the page state when measurements change and saves the updated data to the backend.
 
 ### Routing Tests
@@ -742,14 +711,14 @@ Routing tests verify that the application's routing is configured correctly and 
 This is the testing for the src\App.tsx
 
 Example:
-- Navigating to `/log-today` displays the `LogToday` page.
+- Navigating to `/nutrition-metrics` displays the `LogNutritionMetrics` page.
 - Navigating to `/body-measurements` displays the `LogBodyMeasurements` page.
 
 
 ### API Layer Tests
 
 API layer tests verify that the frontend communicates with the backend correctly.
-This is the testing for the src\api\health.ts
+This is the testing for the files in src\api\ (for example src\api\nutritionMetrics.ts)
 
 We:
 - Mock the browser's `fetch()` function.
@@ -758,7 +727,7 @@ We:
 - Verify errors are handled correctly.
 
 Example:
-- `getDailyLog()` retrieves a Daily Log and converts it into a `DailyLog` object.
+- `getNutritionMetric()` retrieves Nutrition Metrics and converts them into a `NutritionMetrics` object.
 - `saveBodyMeasurement()` sends the correct request payload to the backend.
 
 #### Running Tests

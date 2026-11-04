@@ -15,7 +15,6 @@ import {
     Apple,
     BarChart3,
     CalendarDays,
-    ClipboardPen,
     Dumbbell,
     Ellipsis,
     HeartPulse,
@@ -37,12 +36,6 @@ export const desktopNavigationItems = [
         label: "Dashboard",
         shortLabel: "Dashboard",
         icon: BarChart3,
-    },
-    {
-        to: "/log-today",
-        label: "Log Today",
-        shortLabel: "Log",
-        icon: ClipboardPen,
     },
     {
         to: "/body-measurements",
@@ -104,12 +97,6 @@ export const mobileNavigationItems = [
         label: "Dashboard",
         shortLabel: "Dashboard",
         icon: BarChart3,
-    },
-    {
-        to: "/log-today",
-        label: "Log",
-        shortLabel: "Log",
-        icon: ClipboardPen,
     },
     {
         to: "/history",

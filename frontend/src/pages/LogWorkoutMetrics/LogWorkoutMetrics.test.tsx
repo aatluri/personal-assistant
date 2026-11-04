@@ -79,7 +79,10 @@ describe("LogWorkoutMetrics", () => {
         );
 
         expect(
-            await screen.findByText("Log Today")
+            await screen.findByRole("heading", {
+                level: 1,
+                name: "Workout Metrics",
+            })
         ).toBeInTheDocument();
 
         expect(

@@ -26,8 +26,8 @@ import SaveButton from "../../components/SaveButton";
 import PageContainer from "../../components/PageContainer";
 import CollapsibleCard from "../../components/CollapsibleCard";
 
-import LogTodayHeader from "../LogToday/components/LogTodayHeader";
-import DateSection from "../LogToday/components/DateSection";
+import PageHeader from "../../components/PageHeader";
+import DateSection from "../../components/DateSection";
 import BodyMeasurementsSection from "./components/BodyMeasurementsSection";
 
 import { createEmptyBodyMeasurements } from "../../utils/createEmptyBodyMeasurements";
@@ -210,7 +210,7 @@ function LogBodyMeasurements() {
     PageContainer
         Provides the standard page layout.
 
-    LogTodayHeader
+    PageHeader
         Displays the page heading and
         save status.
 
@@ -230,7 +230,8 @@ function LogBodyMeasurements() {
 
             <div className="space-y-8">
 
-                <LogTodayHeader
+                <PageHeader
+                    title="Body Measurements"
                     isDirty={isDirty}
                 />
 

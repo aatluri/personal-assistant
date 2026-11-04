@@ -93,22 +93,6 @@ From the `backend` directory:
 python -m tools.test_google_sheets
 ```
 
-### Test the Health Repository
-
-From the `backend` directory:
-
-```bash
-python -m tools.test_health_repository
-```
-
-### Test the Health Service
-
-From the `backend` directory:
-
-```bash
-python -m tools.test_health_service
-```
-
 ---
 
 ### Verify the Backend
@@ -119,8 +103,7 @@ Once the server is running, verify the following URLs:
 |------|-----------------|
 | http://127.0.0.1:8000 | Personal Assistant API is running |
 | http://127.0.0.1:8000/health/status | Health module status |
-| http://127.0.0.1:8000/health/daily-logs | Returns all Daily Logs |
-| http://127.0.0.1:8000/health/latest | Returns the latest Daily Log |
+| http://127.0.0.1:8000/health/nutrition-metrics | Returns all Nutrition Metrics |
 | http://127.0.0.1:8000/docs | Swagger API documentation |
 and so on
 
@@ -184,7 +167,7 @@ Google Sheets
 Example request:
 
 ```http
-GET /health/daily-logs/2026-08-21
+GET /health/nutrition-metrics/2026-08-21
 ```
 
 The request follows the flow below:
@@ -197,31 +180,31 @@ FastAPI
    │
    ▼
 api.py
-(get_daily_log)
+(get_nutrition_metric)
    │
    ├────► schemas.py
    │       (Response Model)
    │
    ▼
 service.py
-(get_daily_log)
+(get_nutrition_metric)
    │
    ▼
 repository.py
-(get_daily_log)
+(get_nutrition_metric)
    │
    ▼
 Google Sheets Client
    │
    ▼
-Daily_Log Worksheet
+Nutrition_Metrics Worksheet
    │
    ▼
 repository.py
-(_row_to_daily_log)
+(_row_to_nutrition_metrics)
    │
    ├────► schemas.py
-   │       (Creates DailyLog object)
+   │       (Creates NutritionMetrics object)
    │
    ▼
 service.py
@@ -392,7 +375,7 @@ The backend is tested at multiple levels. Each level focuses on a different part
 Repository tests verify that the repository correctly reads from and writes to the data source.
 
 Example:
-- `get_daily_logs()` returns all Daily Log records.
+- `get_nutrition_metrics()` returns all Nutrition Metrics records.
 - `update_body_measurement()` updates the correct worksheet row.
 
 #### Repository Helper Tests
@@ -400,24 +383,24 @@ Example:
 Repository helper tests verify the internal helper methods used to convert data between Google Sheets and the application's models.
 
 Example:
-- `_row_to_daily_log()` converts a worksheet row into a `DailyLog` object.
-- `_daily_log_to_row()` converts a `DailyLog` object into a worksheet row.
+- `_row_to_nutrition_metrics()` converts a worksheet row into a `NutritionMetrics` object.
+- `_nutrition_metric_to_row()` converts a `NutritionMetrics` object into a worksheet row.
 
 #### Service Tests
 
 Service tests verify the application's business logic and ensure that the Service layer correctly interacts with the Repository layer.
 
 Example:
-- `HealthService.get_daily_logs()` returns all Daily Logs from the repository.
-- `HealthService.create_daily_log()` delegates the save operation to the repository.
+- `NutritionMetricsService.get_nutrition_metrics()` returns all Nutrition Metrics from the repository.
+- `NutritionMetricsService.upsert_nutrition_metric()` updates the existing record, or creates one if none exists.
 
 #### API Tests
 
 API tests verify the FastAPI endpoints by sending HTTP requests and validating the responses.
 
 Example:
-- `GET /health/daily-logs` returns a list of Daily Logs.
-- `POST /health/daily-logs` creates a new Daily Log and returns the correct status code.
+- `GET /health/nutrition-metrics` returns a list of Nutrition Metrics.
+- `POST /health/nutrition-metrics` creates a new Nutrition Metrics record and returns the correct status code.
 
 ### Running Tests
 
@@ -430,13 +413,13 @@ pytest
 Run a specific test file:
 
 ```bash
-pytest tests/repository/test_health_repository.py
+pytest tests/nutrition_metrics/test_nutrition_metrics_google_sheets_repository.py
 ```
 
 Run a specific test method:
 
 ```bash
-pytest tests/repository/test_health_repository.py::test_get_daily_logs
+pytest tests/nutrition_metrics/test_nutrition_metrics_google_sheets_repository.py::test_get_nutrition_metrics
 ```
 
 Run all tests with detailed output:

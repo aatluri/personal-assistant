@@ -11,7 +11,7 @@ import {
     test,
 } from "vitest";
 
-import LogTodayHeader from "./LogTodayHeader";
+import PageHeader from "./PageHeader";
 
 /*
     Clean up the rendered components after each test.
@@ -24,33 +24,36 @@ afterEach(() => {
 });
 
 /*
-    LogTodayHeader Tests
+    PageHeader Tests
 
     Each test follows the same sequence:
 
-    1. Render the LogTodayHeader component.
+    1. Render the PageHeader component.
     2. Provide the required props.
     3. Verify that the component behaves as expected.
 
     The tests verify:
-    - The page heading is displayed.
+    - The supplied page title is displayed.
     - The correct save status text is displayed.
     - The correct colour is applied based on the save status.
 */
 
-describe("LogTodayHeader", () => {
+describe("PageHeader", () => {
 
-    // Verify that the page heading is displayed.
-    test("renders heading", () => {
+    // Verify that the supplied page title is displayed.
+    test("renders title", () => {
 
         render(
-            <LogTodayHeader
+            <PageHeader
+                title="Nutrition Metrics"
                 isDirty={false}
             />
         );
 
         expect(
-            screen.getByText("Log Today")
+            screen.getByRole("heading", {
+                name: "Nutrition Metrics",
+            })
         ).toBeInTheDocument();
 
     });
@@ -60,7 +63,8 @@ describe("LogTodayHeader", () => {
     test("renders saved status", () => {
 
         render(
-            <LogTodayHeader
+            <PageHeader
+                title="Nutrition Metrics"
                 isDirty={false}
             />
         );
@@ -77,7 +81,8 @@ describe("LogTodayHeader", () => {
     test("renders unsaved status", () => {
 
         render(
-            <LogTodayHeader
+            <PageHeader
+                title="Nutrition Metrics"
                 isDirty
             />
         );

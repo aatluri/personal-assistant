@@ -1,8 +1,8 @@
 /*
     DateSection
 
-    Displays and updates the date for
-    the current Daily Log.
+    Displays and updates the selected date
+    on the metric logging pages.
 
     Responsibilities:
     - Display the selected date.
@@ -10,7 +10,7 @@
       or next day.
     - Allow the user to select a date directly.
 
-    The selected date is owned by LogToday.
+    The selected date is owned by the page.
 */
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -52,8 +52,8 @@ function DateSection({
         Move to the previous day.
 
         Updating the selected date causes
-        LogToday to automatically reload
-        the Daily Log for that date.
+        the page to automatically reload
+        its data for that date.
     */
     function goToPreviousDay() {
 
@@ -70,8 +70,8 @@ function DateSection({
         Move to the next day.
 
         Updating the selected date causes
-        LogToday to automatically reload
-        the Daily Log for that date.
+        the page to automatically reload
+        its data for that date.
     */
     function goToNextDay() {
 
@@ -181,7 +181,7 @@ function DateSection({
 
                     Changing the selected date
                     automatically reloads the
-                    corresponding Daily Log.
+                    page's data for that date.
                 */}
                 <input
                     type="date"
