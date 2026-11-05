@@ -18,6 +18,7 @@ from app.modules.health.importers.sleep_metrics_importer import (
 
 from app.modules.health.constants import (
     FAILED_PREFIX,
+    FILENAME_DATE_FORMAT,
     FILE_SUFFIX,
     HEALTH_METRICS_FILE_PREFIX,
     PROCESSED_PREFIX,
@@ -240,7 +241,7 @@ def get_health_metrics_file_date(
     try:
         return datetime.strptime(
             date_text,
-            "%Y-%m-%d",
+            FILENAME_DATE_FORMAT,
         ).date()
 
     except ValueError:

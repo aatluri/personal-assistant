@@ -8,3 +8,20 @@ HEALTH_METRICS_FILE_PREFIX = "HealthMetrics-"
 WORKOUT_METRICS_FILE_PREFIX = "WorkoutMetrics-"
 HEART_RATE_NOTIFICATIONS_FILE_PREFIX = "HeartRateNotifications-"
 FILE_SUFFIX = ".json"
+
+# Date formats used by Health Auto Export.
+# Timestamps inside the exports, e.g. "2026-10-29 08:00:08 +0530".
+HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S %z"
+# The date in a file name, e.g. the "2026-10-29" in HealthMetrics-2026-10-29.json.
+FILENAME_DATE_FORMAT = "%Y-%m-%d"
+
+# The source recorded with every imported record.
+SOURCE = "Health Auto Export"
+
+# Unit conversions. Health Auto Export uses US units; the backend stores
+# metric units, and the conversions happen here in the importer.
+FL_OZ_US_TO_ML = 29.5735
+LB_TO_KG = 0.45359237
+MILES_TO_KM = 1.609344
+MPS_TO_KMPH = 3.6  # metres per second to kilometres per hour
+SECONDS_PER_MINUTE = 60

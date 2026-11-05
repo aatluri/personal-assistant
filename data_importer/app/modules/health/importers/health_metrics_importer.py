@@ -4,6 +4,10 @@ from app.clients.backend_client import BackendClient
 from app.modules.health.mappings.health_metrics_mapping import (
     HEALTH_METRICS_MAPPING,
 )
+from app.modules.health.constants import (
+    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
+    SOURCE,
+)
 
 
 def build_health_metrics_payload(
@@ -79,7 +83,7 @@ def build_health_metrics_payload(
             if source_date:
                 parsed_date = datetime.strptime(
                     source_date,
-                    "%Y-%m-%d %H:%M:%S %z",
+                    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
                 )
 
                 record_date = parsed_date.date().isoformat()
@@ -94,7 +98,7 @@ def build_health_metrics_payload(
 
     # Add fields that do not come from the mapping.
     payload["date"] = record_date
-    payload["source"] = "Health Auto Export"
+    payload["source"] = SOURCE
 
     return payload
 

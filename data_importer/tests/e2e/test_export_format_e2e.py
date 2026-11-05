@@ -7,6 +7,7 @@ from app.clients.google_drive_client import GoogleDriveClient
 from app.config import settings
 from app.modules.health.constants import (
     FAILED_PREFIX,
+    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
     PROCESSED_PREFIX,
 )
 from app.modules.health.mappings.body_measurements_metrics_mapping import (
@@ -54,7 +55,7 @@ mappings and conversions first, then the expectations below.
 
 RECENT_FILE_COUNT = 7
 
-TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S %z"
+TIMESTAMP_FORMAT = HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT
 
 HEALTH_MAPPINGS = [
     HEALTH_METRICS_MAPPING,

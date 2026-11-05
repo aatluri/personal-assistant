@@ -4,6 +4,11 @@ from app.clients.backend_client import BackendClient
 from app.modules.health.mappings.body_measurements_metrics_mapping import (
     BODY_MEASUREMENTS_METRICS_MAPPING,
 )
+from app.modules.health.constants import (
+    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
+    LB_TO_KG,
+    SOURCE,
+)
 
 
 def build_body_measurements_metrics_payload(
@@ -62,7 +67,7 @@ def build_body_measurements_metrics_payload(
         conversion = mapping.get("conversion")
 
         if value is not None and conversion == "lb_to_kg":
-            value = value * 0.45359237
+            value = value * LB_TO_KG
 
         # Apply any type conversion defined in the mapping.
         value_type = mapping.get("value_type")
@@ -84,7 +89,7 @@ def build_body_measurements_metrics_payload(
             if source_date:
                 parsed_date = datetime.strptime(
                     source_date,
-                    "%Y-%m-%d %H:%M:%S %z",
+                    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
                 )
 
                 record_date = parsed_date.date().isoformat()
@@ -99,7 +104,7 @@ def build_body_measurements_metrics_payload(
 
     # Add fields that do not come from the mapping.
     payload["date"] = record_date
-    payload["source"] = "Health Auto Export"
+    payload["source"] = SOURCE
 
     return payload
 

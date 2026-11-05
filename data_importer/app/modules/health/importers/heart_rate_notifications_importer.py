@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from app.clients.backend_client import BackendClient
+from app.modules.health.constants import (
+    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
+    SOURCE,
+)
 
-
-# Health Auto Export timestamps, e.g. "2026-10-29 08:00:08 +0530".
-TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S %z"
 
 # Readable labels stored in the Sheet for each Health Auto Export
 # notification type. A type not listed here is stored as its raw text.
@@ -52,8 +53,8 @@ def build_heart_rate_notification_payloads(
         if not start or not end:
             continue
 
-        start_time = datetime.strptime(start, TIMESTAMP_FORMAT)
-        end_time = datetime.strptime(end, TIMESTAMP_FORMAT)
+        start_time = datetime.strptime(start, HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT)
+        end_time = datetime.strptime(end, HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT)
 
         # Readings in time order. Health Auto Export does not guarantee
         # the order of heartRateData.
@@ -98,7 +99,7 @@ def build_heart_rate_notification_payloads(
                     ", ".join(format_reading(value) for value in values)
                     or None
                 ),
-                "source": "Health Auto Export",
+                "source": SOURCE,
             }
         )
 

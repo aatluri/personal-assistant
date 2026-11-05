@@ -4,6 +4,13 @@ from app.clients.backend_client import BackendClient
 from app.modules.health.mappings.workout_metrics_mapping import (
     WORKOUT_METRICS_MAPPING,
 )
+from app.modules.health.constants import (
+    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
+    MILES_TO_KM,
+    MPS_TO_KMPH,
+    SECONDS_PER_MINUTE,
+    SOURCE,
+)
 
 
 def build_workout_metrics_payloads(
@@ -64,7 +71,7 @@ def build_workout_metrics_payloads(
 
                 parsed_datetime = datetime.strptime(
                     value,
-                    "%Y-%m-%d %H:%M:%S %z",
+                    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
                 )
 
                 value = parsed_datetime.isoformat()
@@ -75,7 +82,7 @@ def build_workout_metrics_payloads(
                 backend_field == "workout_duration_min"
                 and value is not None
             ):
-                value = int(round(value / 60))
+                value = int(round(value / SECONDS_PER_MINUTE))
 
             # Health Auto Export provides distance in miles
             # Convert it to km because the current backend
@@ -84,7 +91,7 @@ def build_workout_metrics_payloads(
                 backend_field == "distance_km"
                 and value is not None
             ):
-                value = value * 1.609344
+                value = value * MILES_TO_KM
             # Health Auto Export provides average speed in metres per second.
             # Convert it to km per hour because the current backend
             # Workout Metrics field is avg_speed_kmph.
@@ -92,7 +99,7 @@ def build_workout_metrics_payloads(
                 backend_field == "avg_speed_kmph"
                 and value is not None
             ):
-                value = value * 3.6
+                value = value * MPS_TO_KMPH
 
             # Round numeric workout values to 2 decimal places.
             if (
@@ -110,11 +117,11 @@ def build_workout_metrics_payloads(
 
         parsed_start_time = datetime.strptime(
             start_time,
-            "%Y-%m-%d %H:%M:%S %z",
+            HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
         )
 
         payload["date"] = parsed_start_time.date().isoformat()
-        payload["source"] = "Health Auto Export"
+        payload["source"] = SOURCE
 
         payloads.append(payload)
 

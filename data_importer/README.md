@@ -44,7 +44,7 @@ POST /health/archive  (called manually)
 | `app/modules/health/importers/` | One importer per metric. Turns the export JSON into a backend payload and sends it. |
 | `app/modules/health/mappings/` | For each backend field: the source metric name, which value to read, and any type or unit conversion. |
 | `app/modules/health/archivers/file_archiver.py` | Moves old `PROCESSED_` files into the processed folder. |
-| `app/modules/health/constants.py` | Filename rules: the `PROCESSED_` and `FAILED_` prefixes, and the `HealthMetrics-` / `WorkoutMetrics-` / `.json` pattern. |
+| `app/modules/health/constants.py` | Shared values: the `PROCESSED_` and `FAILED_` prefixes, the filename prefixes and `.json` suffix, Health Auto Export's timestamp and filename date formats, the `SOURCE` label, and the unit-conversion factors. |
 | `app/clients/google_drive_client.py` | Lists, reads, renames and moves files in Google Drive. |
 | `app/clients/backend_client.py` | Sends payloads to the backend API. |
 | `app/config.py` | Settings loaded from `.env`. |
@@ -92,14 +92,15 @@ not treated as failed.
 ## Unit and Type Conversions
 
 Everything is stored in metric units, and conversions happen here, not in the backend.
+The conversion factors are named constants in `app/modules/health/constants.py`.
 
 | Backend field | Conversion | Defined in |
 |---|---|---|
-| `water_ml` | US fl oz → ml | nutrition mapping (`fl_oz_us_to_ml`) |
-| `weight_kg` | lb → kg | body measurements mapping (`lb_to_kg`) |
-| `workout_duration_min` | seconds → whole minutes | workout importer code |
-| `distance_km` | miles → km | workout importer code |
-| `avg_speed_kmph` | m/s → km/h | workout importer code |
+| `water_ml` | US fl oz → ml | nutrition mapping (`fl_oz_us_to_ml`); factor `FL_OZ_US_TO_ML` |
+| `weight_kg` | lb → kg | body measurements mapping (`lb_to_kg`); factor `LB_TO_KG` |
+| `workout_duration_min` | seconds → whole minutes | workout importer; `SECONDS_PER_MINUTE` |
+| `distance_km` | miles → km | workout importer; factor `MILES_TO_KM` |
+| `avg_speed_kmph` | m/s → km/h | workout importer; factor `MPS_TO_KMPH` |
 
 Rounding:
 

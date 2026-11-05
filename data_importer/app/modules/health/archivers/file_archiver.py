@@ -1,7 +1,10 @@
 from datetime import date, datetime, timedelta
 
 from app.clients.google_drive_client import GoogleDriveClient
-from app.modules.health.constants import PROCESSED_PREFIX
+from app.modules.health.constants import (
+    FILENAME_DATE_FORMAT,
+    PROCESSED_PREFIX,
+)
 
 
 def archive_processed_files(
@@ -119,7 +122,7 @@ def get_file_date(
     try:
         return datetime.strptime(
             date_text,
-            "%Y-%m-%d",
+            FILENAME_DATE_FORMAT,
         ).date()
 
     except ValueError:

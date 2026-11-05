@@ -8,9 +8,10 @@ from app.modules.health.importers.heart_rate_notifications_importer import (
 )
 from app.modules.health.constants import (
     FAILED_PREFIX,
+    FILENAME_DATE_FORMAT,
     FILE_SUFFIX,
-    PROCESSED_PREFIX,
     HEART_RATE_NOTIFICATIONS_FILE_PREFIX,
+    PROCESSED_PREFIX,
 )
 
 
@@ -192,7 +193,7 @@ def get_heart_rate_notifications_file_date(
     try:
         return datetime.strptime(
             date_text,
-            "%Y-%m-%d",
+            FILENAME_DATE_FORMAT,
         ).date()
 
     except ValueError:

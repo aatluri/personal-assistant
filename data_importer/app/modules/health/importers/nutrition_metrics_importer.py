@@ -4,6 +4,11 @@ from app.clients.backend_client import BackendClient
 from app.modules.health.mappings.nutrition_metrics_mapping import (
     NUTRITION_METRICS_MAPPING,
 )
+from app.modules.health.constants import (
+    FL_OZ_US_TO_ML,
+    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
+    SOURCE,
+)
 
 
 def build_nutrition_metrics_payload(
@@ -62,7 +67,7 @@ def build_nutrition_metrics_payload(
         conversion = mapping.get("conversion")
 
         if value is not None and conversion == "fl_oz_us_to_ml":
-            value = value * 29.5735
+            value = value * FL_OZ_US_TO_ML
 
         # Apply any type conversion defined in the mapping.
         value_type = mapping.get("value_type")
@@ -81,7 +86,7 @@ def build_nutrition_metrics_payload(
             if source_date:
                 parsed_date = datetime.strptime(
                     source_date,
-                    "%Y-%m-%d %H:%M:%S %z",
+                    HEALTH_AUTO_EXPORT_TIMESTAMP_FORMAT,
                 )
 
                 record_date = parsed_date.date().isoformat()
@@ -96,7 +101,7 @@ def build_nutrition_metrics_payload(
 
     # Add fields that do not come from the mapping.
     payload["date"] = record_date
-    payload["source"] = "Health Auto Export"
+    payload["source"] = SOURCE
 
     return payload
 
