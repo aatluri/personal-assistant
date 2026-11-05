@@ -1,13 +1,10 @@
 from datetime import date, datetime
 from app.config import settings
+from app.database.sheet_formats import DATE_FORMAT, DATETIME_FORMAT
 from app.database.sheets_client import get_spreadsheet
 from app.modules.health.workout_metrics.workout_metrics_schema import (
     WorkoutMetrics,
 )
-
-
-DATE_FORMAT = "%B %d, %Y"
-DATETIME_FORMAT = "%B %d, %Y %H:%M:%S"
 
 
 class WorkoutMetricsGoogleSheetsRepository:

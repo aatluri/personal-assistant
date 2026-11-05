@@ -68,6 +68,7 @@ backend/
 │   ├── main.py                  FastAPI app, CORS, root endpoint, includes the health router
 │   ├── config.py                Settings loaded from .env (the `settings` object)
 │   ├── database/
+│   │   ├── sheet_formats.py     Date and date-time formats used in the Sheet (DATE_FORMAT, DATETIME_FORMAT)
 │   │   └── sheets_client.py     Authenticated, cached Google Sheets client (retries when rate-limited)
 │   ├── ai/
 │   │   └── openai_client.py     OpenAI client used for lab PDF extraction
@@ -121,7 +122,8 @@ These apply to all six metric repositories (including Heart Rate Notifications):
   A field sent as `null` keeps its existing value, so a field cannot be cleared through the API.
 - **`POST` appends a new row without checking for duplicates.** Use `PUT` unless you are sure the
   record does not exist.
-- **Dates are stored in the Sheet as `"%B %d, %Y"`** (for example `"October 08, 2026"`).
+- **Dates are stored in the Sheet as `"%B %d, %Y"`** (for example `"October 08, 2026"`), and date-times as
+  `"%B %d, %Y %H:%M:%S"`. Both formats are defined once, in `app/database/sheet_formats.py`.
 - **The last column is `Updated_DateTime`,** set to the time of each write.
 - **Reads use header names; writes use column positions.** Each repository writes a whole row with a
   hardcoded range (for example `A:N` for Nutrition Metrics). Adding, removing or reordering
