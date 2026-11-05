@@ -1,10 +1,11 @@
 # Personal Assistant Backend
 
 The backend is a FastAPI REST API, served under `/health`. It is the **only** part of the system
-that reads or writes the Google Sheet, and it uses OpenAI (`gpt-5-mini`) to extract results from lab
-report PDFs.
+that reads or writes the Google Sheet, and it uses OpenAI (`gpt-5-mini`, set by
+`LAB_EXTRACTION_MODEL` in `labs/lab_extraction_service.py`) to extract results from lab report PDFs.
 
-Its clients are the frontend (http://localhost:5173, allowed through CORS) and the data importer.
+Its clients are the frontend (http://localhost:5173, allowed through CORS; see
+`CORS_ALLOWED_ORIGINS`) and the data importer.
 
 ---
 
@@ -182,7 +183,7 @@ pip freeze > requirements.txt
 ### Configuration
 
 Settings are loaded from `backend/.env` by `app/config.py` and are available throughout the backend
-as `settings`. All of the following are required:
+as `settings`. All of the following are required, except `CORS_ALLOWED_ORIGINS`:
 
 | Variable | Purpose |
 |---|---|
@@ -200,6 +201,7 @@ as `settings`. All of the following are required:
 | `LAB_MARKER_REFERENCE_RANGES_WORKSHEET` | Worksheet name for lab marker reference ranges |
 | `LAB_MARKER_INTERPRETATIONS_WORKSHEET` | Worksheet name for lab marker interpretations |
 | `OPENAI_API_KEY` | OpenAI API key, used for lab PDF extraction |
+| `CORS_ALLOWED_ORIGINS` | **Optional.** Browser origins allowed to call the API (the frontend's address). Defaults to `["http://localhost:5173"]`; set a JSON list to change it, e.g. `["http://localhost:5173","http://127.0.0.1:5173"]` |
 
 Create `.env` using the variable names in the table above. If one is missing, the backend fails at
 startup with an error naming it. `.env` and the credentials file are ignored by git.

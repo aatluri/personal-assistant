@@ -10,6 +10,12 @@ from app.modules.health.labs.lab_extraction_schemas import (
 )
 
 
+# The OpenAI model used to extract lab results from PDFs. Kept in code
+# rather than .env on purpose: changing it affects cost and extraction
+# quality, so a switch should be a deliberate, reviewed code change.
+LAB_EXTRACTION_MODEL = "gpt-5-mini"
+
+
 def get_marker_definitions_for_extraction() -> list[dict]:
     """
     Get active lab marker definitions and convert them
@@ -134,7 +140,7 @@ RULES:
 """
 
     response = client.responses.parse(
-        model="gpt-5-mini",
+        model=LAB_EXTRACTION_MODEL,
         input=[
             {
                 "role": "user",

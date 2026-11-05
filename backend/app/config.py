@@ -51,6 +51,11 @@ settings
 
     OPENAI_API_KEY: str
 
+    # Browser origins allowed to call the API (CORS): the frontend's
+    # address. Optional; to change it, set a JSON list in .env, e.g.
+    # CORS_ALLOWED_ORIGINS=["http://localhost:5173","http://127.0.0.1:5173"]
+    CORS_ALLOWED_ORIGINS: list[str] = ["http://localhost:5173"]
+
     model_config = SettingsConfigDict(
 
         env_file=".env",

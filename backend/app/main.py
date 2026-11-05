@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
  #   ├── Workout Router#
  #   └── Nutrition Router
 
+from app.config import settings
 from app.modules.health.api import router as health_router
 
 tags_metadata = [
@@ -80,9 +81,9 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-    ],
+    # Only the frontend may call the API from a browser; see
+    # CORS_ALLOWED_ORIGINS in app/config.py.
+    allow_origins=settings.CORS_ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
