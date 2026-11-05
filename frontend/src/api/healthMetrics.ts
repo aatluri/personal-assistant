@@ -1,4 +1,5 @@
 import type { HealthMetrics } from "../types/HealthMetrics";
+import { API_BASE_URL } from "./config";
 
 
 /*
@@ -25,7 +26,7 @@ export async function getHealthMetric(
 ): Promise<HealthMetrics | null> {
 
     const response = await fetch(
-        `http://localhost:8000/health/health-metrics/${date}`
+        `${API_BASE_URL}/health/health-metrics/${date}`
     );
 
     if (response.status === 404) {
@@ -156,7 +157,7 @@ export async function saveHealthMetric(
 
 
     const response = await fetch(
-        "http://localhost:8000/health/health-metrics",
+        `${API_BASE_URL}/health/health-metrics`,
         {
             method: "PUT",
             headers: {

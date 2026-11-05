@@ -6,6 +6,7 @@ frontend and backend.
 */
 
 import type { WorkoutMetrics } from "../types/WorkoutMetrics";
+import { API_BASE_URL } from "./config";
 
 
 /*
@@ -48,7 +49,7 @@ export async function getWorkoutMetricsByDate(
 ): Promise<WorkoutMetrics[]> {
 
     const response = await fetch(
-        `http://localhost:8000/health/workout-metrics?workout_date=${encodeURIComponent(date)}`
+        `${API_BASE_URL}/health/workout-metrics?workout_date=${encodeURIComponent(date)}`
     );
 
     if (!response.ok) {
@@ -183,7 +184,7 @@ export async function saveWorkoutMetric(
 
 
     const response = await fetch(
-        "http://localhost:8000/health/workout-metrics",
+        `${API_BASE_URL}/health/workout-metrics`,
         {
             method: "PUT",
 

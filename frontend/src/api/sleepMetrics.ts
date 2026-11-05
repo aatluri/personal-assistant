@@ -12,6 +12,7 @@ Responsibilities:
 */
 
 import type { SleepMetrics } from "../types/SleepMetrics";
+import { API_BASE_URL } from "./config";
 
 
 /*
@@ -38,7 +39,7 @@ export async function getSleepMetric(
 ): Promise<SleepMetrics | null> {
 
     const response = await fetch(
-        `http://localhost:8000/health/sleep-metrics/${date}`
+        `${API_BASE_URL}/health/sleep-metrics/${date}`
     );
 
     /*
@@ -152,7 +153,7 @@ export async function saveSleepMetric(
     };
 
     const response = await fetch(
-        "http://localhost:8000/health/sleep-metrics",
+        `${API_BASE_URL}/health/sleep-metrics`,
         {
             method: "PUT",
             headers: {

@@ -7,6 +7,7 @@ module only loads notifications.
 */
 
 import type { HeartRateNotification } from "../types/HeartRateNotification";
+import { API_BASE_URL } from "./config";
 
 
 /*
@@ -22,7 +23,7 @@ export async function getHeartRateNotificationsByDate(
 ): Promise<HeartRateNotification[]> {
 
     const response = await fetch(
-        `http://localhost:8000/health/heart-rate-notifications?notification_date=${encodeURIComponent(date)}`
+        `${API_BASE_URL}/health/heart-rate-notifications?notification_date=${encodeURIComponent(date)}`
     );
 
     if (!response.ok) {

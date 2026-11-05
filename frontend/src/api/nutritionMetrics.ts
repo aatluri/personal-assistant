@@ -12,6 +12,7 @@ Responsibilities:
 */
 
 import type { NutritionMetrics } from "../types/NutritionMetrics";
+import { API_BASE_URL } from "./config";
 
 
 /*
@@ -38,7 +39,7 @@ export async function getNutritionMetric(
 ): Promise<NutritionMetrics | null> {
 
     const response = await fetch(
-        `http://localhost:8000/health/nutrition-metrics/${date}`
+        `${API_BASE_URL}/health/nutrition-metrics/${date}`
     );
 
     /*
@@ -188,7 +189,7 @@ export async function saveNutritionMetric(
     };
 
     const response = await fetch(
-        "http://localhost:8000/health/nutrition-metrics",
+        `${API_BASE_URL}/health/nutrition-metrics`,
         {
             method: "PUT",
             headers: {

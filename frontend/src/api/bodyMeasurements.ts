@@ -11,6 +11,7 @@ Responsibilities:
 */
 
 import type { BodyMeasurements } from "../types/BodyMeasurements";
+import { API_BASE_URL } from "./config";
 
 
 /*
@@ -34,7 +35,7 @@ export async function getBodyMeasurement(
 ): Promise<BodyMeasurements | null> {
 
     const response = await fetch(
-        `http://localhost:8000/health/body-measurements/${date}`
+        `${API_BASE_URL}/health/body-measurements/${date}`
     );
 
     if (response.status === 404) {
@@ -210,7 +211,7 @@ export async function saveBodyMeasurement(
 
 
     const response = await fetch(
-        "http://localhost:8000/health/body-measurements",
+        `${API_BASE_URL}/health/body-measurements`,
         {
             method: "PUT",
 

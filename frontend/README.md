@@ -4,8 +4,9 @@ The frontend is a React + TypeScript single-page app, built with Vite, styled wi
 routed with React Router. Each page views and logs one metric for one date at a time, loading and
 saving through the backend REST API.
 
-The backend address (`http://localhost:8000`) is written directly in each `src/api/*.ts` file. There
-is no environment setting for it.
+The backend address is defined once, as `API_BASE_URL` in `src/api/config.ts`, and used by every
+file in `src/api`. It defaults to `http://localhost:8000` and can be changed with `VITE_API_BASE_URL`
+(see [Setup and Run](#setup-and-run)).
 
 ---
 
@@ -56,7 +57,8 @@ src/
 ├── pages/              One folder per page; page-specific sections live in its components/ folder
 ├── components/         Shared UI: PageHeader, DateSection, TextInput, CollapsibleCard, SaveButton,
 │                       Button, PageContainer, LoadingSpinner, NavigationItem, MoreMenu, ...
-├── api/                Backend calls and model conversion, one file per metric
+├── api/                Backend calls and model conversion, one file per metric;
+│                       config.ts holds the backend address (API_BASE_URL)
 ├── types/              TypeScript models, one per metric
 ├── utils/              createEmpty*() helpers and calculateSleepDuration()
 ├── test/setup.ts       Vitest setup (jest-dom matchers, cleanup after each test)
@@ -105,8 +107,17 @@ npm install        # first time, or after package.json changes
 npm run dev        # starts Vite at http://localhost:5173
 ```
 
-The backend must also be running on http://127.0.0.1:8000 for pages to load and save data. See the
+The backend must also be running for pages to load and save data. See the
 [backend README](../backend/README.md).
+
+**Backend address (optional):** the frontend calls the backend at `http://localhost:8000` by default.
+To use another address, create `frontend/.env` (ignored by git) with:
+
+```bash
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+Vite reads `.env` when the dev server starts, so restart `npm run dev` after changing it.
 
 ---
 
