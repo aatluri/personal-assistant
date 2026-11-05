@@ -245,11 +245,13 @@ Sheet. There are three kinds:
 | Test | What it checks | What it touches |
 |---|---|---|
 | `test_export_format_e2e.py` | Health Auto Export's real file format still matches the mappings: metric names, value fields, date formats and **units** (e.g. water in `fl_oz_us`, weight in `lb`, heart rate readings in `count/min`), over the latest 7 Health, Workout and Heart Rate Notifications exports | **Read-only:** reads recent exports from Drive; never imports, renames or writes anything |
-| `test_health_metrics_importer_e2e.py`, `test_workout_metrics_importer_e2e.py` | The whole pipeline (importer → backend → Sheet), using synthetic fixtures in `tests/test_data/e2e/` and hand-written expected values, including every unit conversion | Reuses the permanent `TEST_*-2099-01-01.json` file in the incoming folder: overwrites its content with the committed fixture, renames it so the importer recognises it, imports it, then restores its `TEST_` name and deletes the 2099-02-01 rows |
+| `test_health_metrics_importer_e2e.py`, `test_workout_metrics_importer_e2e.py`, `test_heart_rate_notifications_importer_e2e.py` | The whole pipeline (importer → backend → Sheet), using synthetic fixtures in `tests/test_data/e2e/` and hand-written expected values, including every unit conversion (and, for notifications, readings in time order and type labels) | Reuses the permanent `TEST_*-2099-01-01.json` file in the incoming folder: overwrites its content with the committed fixture, renames it so the importer recognises it, imports it, then restores its `TEST_` name and deletes the 2099-02-01 rows |
 | `test_*_file_archiver_e2e.py` | The archiver, using the same permanent `TEST_*` fixture files | Renames and moves those fixtures, then restores them |
 
-The two kinds of test share one permanent fixture per incoming folder (`TEST_HealthMetrics-2099-01-01.json`
-and `TEST_WorkoutMetrics-2099-01-01.json`), uploaded once by hand. Service accounts cannot create
+The tests use one permanent fixture per incoming folder (`TEST_HealthMetrics-2099-01-01.json`,
+`TEST_WorkoutMetrics-2099-01-01.json` and `TEST_HeartRateNotifications-2099-01-01.json`), uploaded
+once by hand. The Health and Workout fixtures are shared by the importer and archiver tests; the
+Heart Rate Notifications one is used only by its importer test. Service accounts cannot create
 files in a personal Google Drive (they have no storage quota), so the tests rename and reuse these
 files instead of creating new ones. If a run is interrupted and leaves a fixture under a temporary
 name, the next run of either test restores it.

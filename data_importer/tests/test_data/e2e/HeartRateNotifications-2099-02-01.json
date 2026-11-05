@@ -1,0 +1,60 @@
+{
+  "data": {
+    "heartRateNotifications": [
+      {
+        "heartNotification": "low_heart_rate_notification",
+        "threshold": 40,
+        "start": "2099-02-01 06:05:00 +0530",
+        "end": "2099-02-01 06:15:00 +0530",
+        "heartRateData": [
+          {
+            "qty": 39,
+            "units": "count/min",
+            "start": 300.0,
+            "end": 300.0
+          },
+          {
+            "qty": 38,
+            "units": "count/min",
+            "start": 100.0,
+            "end": 100.0
+          },
+          {
+            "qty": 40,
+            "units": "count/min",
+            "start": 200.0,
+            "end": 200.0
+          }
+        ],
+        "source": {
+          "name": "E2E Fixture Watch",
+          "identifier": "e2e.fixture"
+        }
+      },
+      {
+        "heartNotification": "high_heart_rate_notification",
+        "threshold": 120,
+        "start": "2099-02-01 18:30:00 +0530",
+        "end": "2099-02-01 18:40:00 +0530",
+        "heartRateData": [
+          {
+            "qty": 125,
+            "units": "count/min",
+            "start": 400.0,
+            "end": 400.0
+          },
+          {
+            "qty": 130.4,
+            "units": "count/min",
+            "start": 500.0,
+            "end": 500.0
+          }
+        ],
+        "source": {
+          "name": "E2E Fixture Watch",
+          "identifier": "e2e.fixture"
+        }
+      }
+    ]
+  }
+}

@@ -19,6 +19,28 @@ TEST_SOURCE = "E2E Test"
 
 DATETIME_FORMAT = "%B %d, %Y %H:%M:%S"
 
+# The test workout's start time as a datetime. Rows are matched on this,
+# not on the cell text, because a worksheet may display times without a
+# leading zero ("January 01, 2099 7:00:00").
+TEST_WORKOUT_START_DATETIME = datetime.strptime(
+    TEST_SHEET_WORKOUT_START_TIME,
+    DATETIME_FORMAT,
+)
+
+
+def is_test_workout_start_time(cell_value: str) -> bool:
+    """
+    Return True if a Workout Start Time cell holds the test start time.
+    """
+
+    try:
+        return (
+            datetime.strptime(cell_value, DATETIME_FORMAT)
+            == TEST_WORKOUT_START_DATETIME
+        )
+    except ValueError:
+        return False
+
 
 def delete_test_rows_from_google_sheets() -> None:
     """
@@ -48,8 +70,9 @@ def delete_test_rows_from_google_sheets() -> None:
 
         if (
             len(row) > start_time_column_index
-            and row[start_time_column_index]
-            == TEST_SHEET_WORKOUT_START_TIME
+            and is_test_workout_start_time(
+                row[start_time_column_index]
+            )
         ):
             matching_row_numbers.append(sheet_row_number)
 
@@ -73,9 +96,8 @@ def get_test_row_from_google_sheets() -> dict | None:
 
     for row in rows:
 
-        if (
-            row["Workout Start Time"]
-            == TEST_SHEET_WORKOUT_START_TIME
+        if is_test_workout_start_time(
+            str(row["Workout Start Time"])
         ):
             return row
 

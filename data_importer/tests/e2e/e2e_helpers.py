@@ -304,6 +304,14 @@ WORKOUT_FIXTURE_PERMANENT_NAME = "TEST_WorkoutMetrics-2099-01-01.json"
 WORKOUT_FIXTURE_TEST_PREFIX = "TEST_WorkoutMetrics-"
 WORKOUT_FIXTURE_IMPORT_NAME = "WorkoutMetrics-2099-02-01.json"
 
+HEART_RATE_NOTIFICATIONS_FIXTURE_PERMANENT_NAME = (
+    "TEST_HeartRateNotifications-2099-01-01.json"
+)
+HEART_RATE_NOTIFICATIONS_FIXTURE_TEST_PREFIX = "TEST_HeartRateNotifications-"
+HEART_RATE_NOTIFICATIONS_FIXTURE_IMPORT_NAME = (
+    "HeartRateNotifications-2099-02-01.json"
+)
+
 
 def health_metrics_fixture(
     drive_client: GoogleDriveClient,
@@ -340,4 +348,26 @@ def workout_metrics_fixture(
         permanent_name=WORKOUT_FIXTURE_PERMANENT_NAME,
         test_prefix=WORKOUT_FIXTURE_TEST_PREFIX,
         import_name=WORKOUT_FIXTURE_IMPORT_NAME,
+    )
+
+
+def heart_rate_notifications_fixture(
+    drive_client: GoogleDriveClient,
+) -> SharedFixture:
+    """
+    Find the shared Heart Rate Notifications fixture file in Drive.
+
+    Unlike the Health and Workout fixtures, this one is used only by the
+    importer pipeline test (there is no archiver E2E test for it).
+    """
+
+    return SharedFixture(
+        drive_client=drive_client,
+        incoming_folder_id=settings.HEART_RATE_NOTIFICATIONS_DRIVE_FOLDER_ID,
+        processed_folder_id=(
+            settings.HEART_RATE_NOTIFICATIONS_PROCESSED_DRIVE_FOLDER_ID
+        ),
+        permanent_name=HEART_RATE_NOTIFICATIONS_FIXTURE_PERMANENT_NAME,
+        test_prefix=HEART_RATE_NOTIFICATIONS_FIXTURE_TEST_PREFIX,
+        import_name=HEART_RATE_NOTIFICATIONS_FIXTURE_IMPORT_NAME,
     )
