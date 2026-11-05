@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overview Mockup</title>
+<!--
+  Static mockup of the Overview page (Day / Week / Month), revised to show
+  only what the stored data supports. All numbers are sample data.
+  See overview-design.md for the design notes. Open directly in a browser;
+  it is not part of the frontend build.
+-->
+<style>
+/* Layout: one 720px column; four headline tiles, then a 2-column card grid (1 column on phones). */
+:root{
+  --surface-0:#f5f4ef;--surface-1:#f0eee8;--surface-2:#ffffff;
+  --text-primary:#1f1e1c;--text-secondary:#5f5e5a;--text-muted:#888780;
+  --text-success:#3B6D11;--text-danger:#A32D2D;--text-warning:#854F0B;
+  --bg-warning:#FAEEDA;--border-warning:#FAC775;
+  --border:rgba(0,0,0,.12);--border-strong:rgba(0,0,0,.2);--radius:8px;
+  --sleep:#7F77DD;--sleep-deep:#534AB7;--sleep-rem:#AFA9EC;--sleep-awake:#B4B2A9;
+  --heart:#D85A30;--heart-bar:#F0997B;--activity:#1D9E75;--nutrition:#BA7517;
+  --macro-protein:#854F0B;--macro-carbs:#EF9F27;--macro-fat:#FAC775;--body:#888780;
+  --focus:#534AB7;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --surface-0:#1a1a19;--surface-1:#262624;--surface-2:#30302e;
+    --text-primary:#f1efe8;--text-secondary:#b4b2a9;--text-muted:#888780;
+    --text-success:#97C459;--text-danger:#F09595;--text-warning:#FAC775;
+    --bg-warning:#412402;--border-warning:#854F0B;
+    --border:rgba(255,255,255,.12);--border-strong:rgba(255,255,255,.22);
+    --sleep-awake:#6f6e69;--macro-protein:#C98A2E;--body:#a3a29b;--focus:#AFA9EC;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --surface-0:#1a1a19;--surface-1:#262624;--surface-2:#30302e;
+  --text-primary:#f1efe8;--text-secondary:#b4b2a9;--text-muted:#888780;
+  --text-success:#97C459;--text-danger:#F09595;--text-warning:#FAC775;
+  --bg-warning:#412402;--border-warning:#854F0B;
+  --border:rgba(255,255,255,.12);--border-strong:rgba(255,255,255,.22);
+  --sleep-awake:#6f6e69;--macro-protein:#C98A2E;--body:#a3a29b;--focus:#AFA9EC;
+  color-scheme:dark;
+}
+body{margin:0;background:var(--surface-0);color:var(--text-primary);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.page{max-width:720px;margin:0 auto;padding-block:24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font-size:14px;font-variant-numeric:tabular-nums}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+svg.i{width:16px;height:16px;flex:none;vertical-align:-3px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.title{font-size:22px;font-weight:500}
+.through{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
+.through svg.i{width:13px;height:13px}
+.seg{display:inline-flex;background:var(--surface-1);border-radius:var(--radius);padding:3px;gap:2px}
+.seg button{border:none;background:transparent;padding:5px 14px;font-size:13px;border-radius:6px;color:var(--text-secondary);cursor:pointer;font:inherit;font-size:13px}
+.seg button[aria-pressed=true]{background:var(--surface-2);color:var(--text-primary);box-shadow:0 0 0 .5px var(--border-strong)}
+.nav{display:flex;align-items:center;gap:4px}
+.nav button{border:none;background:transparent;padding:4px 6px;color:var(--text-secondary);cursor:pointer;border-radius:6px;display:flex}
+.nav button:disabled{opacity:.3;cursor:default}
+#plabel{font-weight:500;font-size:16px}
+#psub{font-size:12px;color:var(--text-secondary)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 10px;border-radius:var(--radius);background:var(--surface-1);color:var(--text-secondary)}
+.chip svg.i{width:14px;height:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--surface-1);border-radius:var(--radius);padding:12px 14px;min-width:0}
+.kpi .l{font-size:12px;color:var(--text-secondary)}
+.kpi .v{font-size:22px;font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:600px){.grid{grid-template-columns:minmax(0,1fr)}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{background:var(--surface-2);border:.5px solid var(--border);border-radius:12px;padding:14px 16px;min-width:0}
+.ch{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);margin-bottom:6px}
+.ch .cs{margin-left:auto;font-size:12px;color:var(--text-muted);text-align:right}
+.big{font-size:24px;font-weight:500;line-height:1.2}
+.unit{font-size:13px;color:var(--text-secondary);font-weight:400}
+.sub{font-size:12px;color:var(--text-secondary)}
+.d{font-size:12px;font-weight:400}.big .d{margin-left:6px}
+.good{color:var(--text-success)}.bad{color:var(--text-danger)}.neu{color:var(--text-secondary)}
+.bars{display:flex;align-items:flex-end;gap:3px;height:52px;margin-top:10px}
+.bars>*{flex:1;border:none;padding:0;border-radius:3px 3px 0 0;min-height:3px}
+.bars>button{cursor:pointer}
+.bars>button:hover{filter:brightness(1.12)}
+.bars .gap{height:3px;background:var(--border)}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);margin-top:4px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--text-muted);margin-top:4px}
+.sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-top:.5px solid var(--border);font-size:13px}
+.kv:first-child{border-top:none}
+.kv>span:first-child{color:var(--text-secondary)}
+.track{height:6px;background:var(--surface-1);border-radius:3px;overflow:hidden;display:flex}
+.alert{margin-top:12px;display:flex;align-items:center;gap:10px;background:var(--bg-warning);border-color:var(--border-warning);color:var(--text-warning);font-size:13px}
+.alert svg.i{width:18px;height:18px}
+.hint{font-size:11px;color:var(--text-muted);margin-top:10px}
+.notes{margin-top:24px;border-top:.5px solid var(--border-strong);padding-top:14px;font-size:13px;color:var(--text-secondary);display:grid;gap:12px}
+.notes h3{margin:0 0 4px;font-size:13px;font-weight:500;color:var(--text-primary)}
+.notes ul{margin:0;padding-left:18px;display:grid;gap:4px;max-width:65ch}
+</style>
+</head>
+<body>
+
+<div class="page">
+<h2 class="sr-only">Mockup of the Overview page with Day, Week and Month views, using sample data.</h2>
+
+<div class="row">
+  <div>
+    <div class="title">Overview</div>
+    <div class="through"><span data-i="calendar"></span>Data through Thu, Nov 5</div>
+  </div>
+  <div class="seg" role="group" aria-label="Period">
+    <button data-m="day" aria-pressed="false">Day</button><button data-m="week" aria-pressed="true">Week</button><button data-m="month" aria-pressed="false">Month</button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="nav">
+    <button id="prev" aria-label="Previous period"><span data-i="left"></span></button>
+    <span id="plabel"></span>
+    <button id="next" aria-label="Next period"><span data-i="right"></span></button>
+  </div>
+  <span id="psub"></span>
+</div>
+
+<div class="chips" id="chips"></div>
+
+<div class="kpis">
+  <div class="kpi"><div class="l">Steps <span id="k1s"></span></div><div class="v" id="k1"></div><div class="d" id="k1d"></div></div>
+  <div class="kpi"><div class="l">Sleep <span id="k2s"></span></div><div class="v" id="k2"></div><div class="d" id="k2d"></div></div>
+  <div class="kpi"><div class="l">Resting HR <span id="k3s"></span></div><div class="v" id="k3"></div><div class="d" id="k3d"></div></div>
+  <div class="kpi"><div class="l">Workouts</div><div class="v" id="k4"></div><div class="d neu" id="k4d"></div></div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="ch"><span data-i="moon" style="color:var(--sleep)"></span>Sleep<span class="cs" id="slc"></span></div>
+    <div class="big" id="slv"></div>
+    <div class="sub" id="sls"></div>
+    <div class="track" style="margin-top:10px;height:8px" id="stages"></div>
+    <div class="legend" id="stagel"><span><span class="sw" style="background:var(--sleep-deep)"></span>Deep</span><span><span class="sw" style="background:var(--sleep)"></span>Core</span><span><span class="sw" style="background:var(--sleep-rem)"></span>REM</span><span><span class="sw" style="background:var(--sleep-awake)"></span>Awake</span></div>
+    <div class="bars" id="slb"></div><div class="axis" id="sla"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span data-i="heart" style="color:var(--heart)"></span>Recovery<span class="cs" id="rcc"></span></div>
+    <div>
+      <div class="kv"><span>Resting HR</span><span><b style="font-weight:500" id="r1"></b> <span class="d" id="r1d"></span></span></div>
+      <div class="kv"><span>HRV</span><span><b style="font-weight:500" id="r2"></b> <span class="d" id="r2d"></span></span></div>
+      <div class="kv"><span>Blood oxygen</span><span><b style="font-weight:500" id="r3"></b> <span class="d" id="r3d"></span></span></div>
+      <div class="kv"><span>Respiratory rate</span><span><b style="font-weight:500" id="r4"></b> <span class="d" id="r4d"></span></span></div>
+    </div>
+    <div class="bars" id="rcb" style="height:40px"></div><div class="axis" id="rca"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span data-i="activity" style="color:var(--activity)"></span>Activity<span class="cs" id="acc"></span></div>
+    <div class="big"><span id="acv"></span> <span class="unit">steps</span></div>
+    <div class="sub" id="acs"></div>
+    <div class="bars" id="acb"></div><div class="axis" id="aca"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span data-i="utensils" style="color:var(--nutrition)"></span>Nutrition<span class="cs" id="nuc"></span></div>
+    <div class="big"><span id="nuv"></span> <span class="unit">kcal</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-top:10px"><span>Protein <b style="font-weight:500;color:var(--text-primary)" id="nup"></b></span><span>goal 140 g</span></div>
+    <div class="track" style="margin-top:4px"><div id="nupb" style="background:var(--nutrition)"></div></div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-top:8px"><span>Water <b style="font-weight:500;color:var(--text-primary)" id="nuw"></b></span><span>goal 3 L</span></div>
+    <div class="track" style="margin-top:4px"><div id="nuwb" style="background:var(--nutrition)"></div></div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-top:10px">Macros</div>
+    <div class="track" style="margin-top:4px;height:8px" id="macros"></div>
+    <div class="legend" id="macrol"></div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:8px" id="nucov"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span data-i="dumbbell" style="color:var(--activity)"></span>Training<span class="cs" id="trc"></span></div>
+    <div id="trl"></div>
+  </div>
+
+  <div class="card">
+    <div class="ch"><span data-i="scale" style="color:var(--body)"></span>Body<span class="cs" id="boc"></span></div>
+    <div class="big"><span id="bov"></span> <span class="unit">kg</span><span class="d" id="bod"></span></div>
+    <div class="sub" id="bos"></div>
+    <svg viewBox="0 0 100 34" preserveAspectRatio="none" style="width:100%;height:52px;margin-top:8px;color:var(--body)" aria-hidden="true"><polyline id="bol" fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke" points=""/></svg>
+    <div class="kv" style="border-top:.5px solid var(--border)"><span>Body fat</span><span id="bof"></span></div>
+    <div class="kv"><span>Waist</span><span id="bow"></span></div>
+  </div>
+</div>
+
+<div class="card alert" id="alertbox"><span data-i="alert"></span><span id="alert"></span></div>
+
+<div class="hint" id="hint"></div>
+
+<div class="notes">
+  <div>
+    <h3>Changed from the agreed mockup</h3>
+    <ul>
+      <li>Day view shows the last 7 days as daily bars, with the selected day highlighted. Steps are stored once per day, so hourly bars aren't possible.</li>
+      <li>"Data through" shows the latest date that has data, without a time.</li>
+      <li>Highlights use only stored data. "Longest run 8.2 km" replaces "New best 5k", because workouts have no split times.</li>
+      <li>Nutrition shows logged days instead of meals. Nutrition is stored as one total per day.</li>
+      <li>Recovery in Day view is labelled "today", because the values are daily, not morning readings.</li>
+      <li>In Week and Month views, tap a bar to open that day. The arrows step through days in Day view.</li>
+      <li>Icons come from the set the app already uses.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>Decided</h3>
+    <ul>
+      <li>A night of sleep belongs to the day you woke up, as Health Auto Export stores it: a night from Nov 5 23:40 to Nov 6 06:52 shows under Nov 6. Overview and the Sleep log page use the same date.</li>
+      <li>Goals: 10,000 steps, 140 g protein, 7 hours of sleep, 3 litres of water.</li>
+    </ul>
+  </div>
+  <div style="font-size:11px;color:var(--text-muted)">Sample data for illustration.</div>
+</div>
+</div>
+
+<script>
+var ICONS={
+  calendar:'<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
+  left:'<path d="m15 18-6-6 6-6"/>',
+  right:'<path d="m9 18 6-6-6-6"/>',
+  moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>',
+  activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+  utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+  dumbbell:'<path d="M6.5 6.5h11"/><path d="M6.5 17.5h11"/><path d="M6.5 6.5v11"/><path d="M17.5 6.5v11"/><path d="M3 9v6"/><path d="M21 9v6"/>',
+  scale:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+  alert:'<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+  flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+  trophy:'<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+  droplet:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>'
+};
+function icon(n){return '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[n]+'</svg>'}
+document.querySelectorAll('[data-i]').forEach(function(el){el.innerHTML=icon(el.dataset.i);el.style.display='inline-flex'});
+
+// Seeded random numbers, so the sample month looks the same on every load.
+function rnd(s){return function(){s=(s*9301+49297)%233280;return s/233280}}
+var r=rnd(7);
+function arr(n,b,v,gaps){return Array.from({length:n},function(_,i){return gaps&&gaps.indexOf(i)>=0?null:Math.round((b+(r()-.5)*v)*10)/10})}
+
+var TODAY=new Date(2026,10,5);
+var WEEK_START=new Date(2026,10,2);
+var MONTH_START=new Date(2026,9,1);
+
+var D={
+day:{
+  chips:[["target","Steps 8,240 of 10,000"],["target","Protein 92 of 140 g"],["droplet","Water 2.1 of 3 L"],["flame","Active energy 540 kcal"]],
+  k:["8,240","7h 12m","52","1"],ks:["","",""],
+  kd:[["↑ 1,100 vs usual","good"],["↑ 14m vs usual","good"],["↓ 3 vs usual","good"],["Strength · 55 min","neu"]],
+  sl:"last night",slv:"7h 12m",sls:"Bed 23:40 → woke 06:52 · goal 7h met",st:[18,52,22,8],
+  rc:"today · vs 30-day normal",r:["52 bpm","68 ms","97%","14.0 /min"],rd:[["↓ 3","good"],["↑ 9","good"],["normal","neu"],["normal","neu"]],
+  rcb:[55,54,56,53,54,55,52],
+  ac:"today",acv:"8,240",acs:"540 active kcal · 9 flights",acb:[10400,7100,12300,6900,9600,9100,8240],
+  nu:"today",nuv:"1,640",nup:"92 g",nupw:66,nuw:"2.1 L",nuww:70,mac:[22,48,30],nucov:"Logged today",
+  tr:"1 session",trl:[["Traditional strength training","17:05 · 55 min","412 kcal · 128 bpm"]],
+  bo:"latest",bov:"78.4",bod:["",""],bos:"Weighed 2 days ago",bol:arr(14,78.8,.8),bof:"18.6%",bow:"84 cm",
+  al:"1 low heart rate alert overnight · lowest 41 bpm at 03:12"
+},
+week:{
+  pl:"Nov 2 – 8",ps:"Week so far · 4 of 7 days",
+  chips:[["target","Protein goal met 3 of 4 days"],["moon","Sleep goal met 3 of 4 nights"],["flame","10k steps · 2-day streak"],["trophy","Best sleep Tue · 7h 48m"]],
+  k:["9,210","7h 11m","53","4"],ks:["avg","avg","avg"],
+  kd:[["↑ 6% vs last week","good"],["↑ 22m vs last week","good"],["↓ 2 vs last week","good"],["210 min · 2,310 kcal","neu"]],
+  sl:"avg per night · 4 nights so far",slv:"7h 11m",sls:"",st:[16,54,21,9],slb:[7.1,7.8,6.6,7.2,null,null,null],sla:["M","T","W","T","F","S","S"],
+  rc:"weekly average · vs last week",r:["53 bpm","61 ms","97%","14.2 /min"],rd:[["↓ 2","good"],["↑ 8","good"],["±0","neu"],["±0","neu"]],
+  rcb:[54,53,55,52,null,null,null],rca:["M","T","W","T","F","S","S"],
+  ac:"avg per day",acv:"9,210",acs:"36,840 total · 520 active kcal/day",acb:[11200,7800,9600,8240,null,null,null],aca:["M","T","W","T","F","S","S"],
+  nu:"avg per logged day",nuv:"2,180",nup:"118 g",nupw:84,nuw:"2.6 L",nuww:87,mac:[24,46,30],nucov:"Logged 4 of 4 days so far",
+  tr:"4 sessions",trl:[["Strength training","Mon · 55 min","398 kcal"],["Outdoor run","Tue · 6.2 km · 34 min","421 kcal"],["Strength training","Wed · 60 min","430 kcal"],["Strength training","Thu · 55 min","412 kcal"]],
+  bo:"this week",bov:"78.4",bod:["↓ 0.6 kg","good"],bos:"2 weigh-ins this week",bol:[79.0,78.9,78.7,78.4],bof:"18.6% (↓ 0.3)",bow:"84 cm (±0)",
+  al:"2 low heart rate alerts this week · lowest 39 bpm on Tue 03:12"
+},
+month:{
+  pl:"October 2026",ps:"Full month · 31 days",
+  chips:[["target","Protein goal met 19 of 26 logged days"],["moon","Sleep goal met 14 of 29 nights"],["flame","Longest 10k streak · 6 days"],["trophy","Longest run · 8.2 km on Oct 18"]],
+  k:["8,760","6h 54m","55","17"],ks:["avg","avg","avg"],
+  kd:[["↑ 3% vs Sep","good"],["↓ 9m vs Sep","bad"],["↓ 1 vs Sep","good"],["14h 20m · 9,840 kcal","neu"]],
+  sl:"avg per night · 29 of 31 nights",slv:"6h 54m",sls:"",st:[15,53,22,10],slb:arr(31,6.9,1.6,[12,13]),sla:["1","8","15","22","29"],
+  rc:"monthly average · vs Sep",r:["55 bpm","56 ms","97%","14.4 /min"],rd:[["↓ 1","good"],["↑ 3","good"],["±0","neu"],["↑ 0.2","neu"]],
+  rcb:arr(31,55,4),rca:["1","8","15","22","29"],
+  ac:"avg per day",acv:"8,760",acs:"271,560 total · 495 active kcal/day",acb:arr(31,8800,7000),aca:["1","8","15","22","29"],
+  nu:"avg per logged day",nuv:"2,240",nup:"124 g",nupw:89,nuw:"2.4 L",nuww:80,mac:[23,47,30],nucov:"Logged 26 of 31 days",
+  tr:"17 sessions",trl:[["Strength training","10 sessions · 9h 10m","5,620 kcal"],["Outdoor run","5 sessions · 31.4 km","2,710 kcal"],["Walk","2 sessions · 1h 40m","1,510 kcal"]],
+  bo:"this month",bov:"79.0",bod:["↓ 1.2 kg","good"],bos:"9 weigh-ins · 80.2 → 79.0 kg",bol:[80.2,80.0,80.1,79.8,79.6,79.7,79.3,79.2,79.0],bof:"18.9% (↓ 0.5)",bow:"84 cm (↓ 1)",
+  al:"6 low heart rate alerts in October · all overnight · lowest 38 bpm"
+}};
+
+var state={mode:"week",dayOffset:0};
+
+function $(id){return document.getElementById(id)}
+function dayFor(offset){var d=new Date(TODAY);d.setDate(d.getDate()-offset);return d}
+function fmtDay(d){return d.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
+function daysBefore(d){return Math.round((TODAY-d)/86400000)}
+function lastSevenInitials(end){var a=[];for(var i=6;i>=0;i--){var d=new Date(end);d.setDate(d.getDate()-i);a.push("MTWTFSS"[(d.getDay()+6)%7])}return a}
+function setDelta(el,d){el.textContent=d[0];el.className="d "+(d[1]||"")}
+
+// Draws a bar series. Missing days are drawn as gaps, never as zero.
+// highlightLast: Day view, where the selected day is the last bar.
+// onPick: Week/Month view, where tapping a bar opens that day.
+function bars(el,values,color,axis,axisEl,opts){
+  opts=opts||{};
+  var present=values.filter(function(v){return v!=null});
+  var max=Math.max.apply(null,present)||1;
+  el.innerHTML="";
+  values.forEach(function(v,i){
+    if(v==null){var g=document.createElement("div");g.className="gap";el.appendChild(g);return}
+    var b=document.createElement(opts.onPick?"button":"div");
+    b.style.height=Math.max(4,v/max*100)+"%";
+    b.style.background=color;
+    if(opts.highlightLast&&i<values.length-1)b.style.opacity=".35";
+    if(opts.onPick){b.type="button";b.setAttribute("aria-label",opts.label(i)+": "+v);b.onclick=function(){opts.onPick(i)}}
+    el.appendChild(b);
+  });
+  axisEl.innerHTML=axis.map(function(a){return "<span>"+a+"</span>"}).join("");
+}
+
+function openDay(date){
+  if(date>TODAY)return;
+  state.mode="day";state.dayOffset=daysBefore(date);render();
+}
+
+function render(){
+  var m=state.mode,x=D[m],isDay=m==="day";
+  var date=dayFor(state.dayOffset),isToday=state.dayOffset===0;
+
+  document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.m===m)});
+  $("plabel").textContent=isDay?fmtDay(date):x.pl;
+  $("psub").textContent=isDay?(isToday?"Today so far":"Full day"):x.ps;
+  $("prev").disabled=!isDay;
+  $("next").disabled=!isDay||isToday;
+  $("hint").textContent=isDay?"Use the arrows to step through days.":"Tap a bar to open that day.";
+
+  $("chips").innerHTML=x.chips.map(function(c){return '<span class="chip">'+icon(c[0])+c[1]+"</span>"}).join("");
+
+  ["k1","k2","k3","k4"].forEach(function(k,i){$(k).textContent=x.k[i];setDelta($(k+"d"),x.kd[i])});
+  $("k1s").textContent=x.ks[0];$("k2s").textContent=x.ks[1];$("k3s").textContent=x.ks[2];
+
+  var stageColors=["var(--sleep-deep)","var(--sleep)","var(--sleep-rem)","var(--sleep-awake)"];
+  $("slc").textContent=x.sl;$("slv").textContent=x.slv;$("sls").textContent=x.sls;$("sls").hidden=!x.sls;
+  $("stages").innerHTML=x.st.map(function(p,i){return '<div style="width:'+p+'%;background:'+stageColors[i]+'"></div>'}).join("");
+  // A night belongs to the day you woke up, as Health Auto Export stores it.
+  if(isDay&&!isToday)$("slc").textContent="the night before";
+  $("slb").hidden=isDay;$("sla").hidden=isDay;
+
+  var pick=null,label=null;
+  if(m==="week"){
+    pick=function(i){var d=new Date(WEEK_START);d.setDate(d.getDate()+i);openDay(d)};
+    label=function(i){var d=new Date(WEEK_START);d.setDate(d.getDate()+i);return fmtDay(d)};
+  }else if(m==="month"){
+    pick=function(i){var d=new Date(MONTH_START);d.setDate(d.getDate()+i);openDay(d)};
+    label=function(i){var d=new Date(MONTH_START);d.setDate(d.getDate()+i);return fmtDay(d)};
+  }
+  var pickOpts={onPick:pick,label:label};
+  var dayOpts={highlightLast:true};
+  var dayAxis=lastSevenInitials(date);
+
+  if(!isDay)bars($("slb"),x.slb,"var(--sleep)",x.sla,$("sla"),pickOpts);
+
+  $("rcc").textContent=x.rc;
+  ["r1","r2","r3","r4"].forEach(function(k,i){$(k).textContent=x.r[i];setDelta($(k+"d"),x.rd[i])});
+  bars($("rcb"),x.rcb,"var(--heart-bar)",isDay?dayAxis:x.rca,$("rca"),isDay?dayOpts:pickOpts);
+
+  $("acc").textContent=isDay?"today · last 7 days":x.ac;
+  if(isDay&&!isToday)$("acc").textContent="this day · last 7 days";
+  $("acv").textContent=x.acv;$("acs").textContent=x.acs;
+  bars($("acb"),x.acb,"var(--activity)",isDay?dayAxis:x.aca,$("aca"),isDay?dayOpts:pickOpts);
+
+  var macroColors=["var(--macro-protein)","var(--macro-carbs)","var(--macro-fat)"],macroNames=["Protein","Carbs","Fat"];
+  $("nuc").textContent=x.nu;$("nuv").textContent=x.nuv;$("nup").textContent=x.nup;$("nupb").style.width=x.nupw+"%";
+  $("nuw").textContent=x.nuw;$("nuwb").style.width=x.nuww+"%";
+  $("macros").innerHTML=x.mac.map(function(p,i){return '<div style="width:'+p+'%;background:'+macroColors[i]+'"></div>'}).join("");
+  $("macrol").innerHTML=x.mac.map(function(p,i){return '<span><span class="sw" style="background:'+macroColors[i]+'"></span>'+macroNames[i]+" "+p+"%</span>"}).join("");
+  $("nucov").textContent=isDay&&!isToday?"Logged":x.nucov;
+
+  $("trc").textContent=x.tr;
+  $("trl").innerHTML=x.trl.map(function(t){return '<div class="kv"><span><span style="color:var(--text-primary)">'+t[0]+'</span><br><span style="font-size:12px">'+t[1]+'</span></span><span style="font-size:12px;color:var(--text-secondary);align-self:center;text-align:right">'+t[2]+"</span></div>"}).join("");
+
+  $("boc").textContent=x.bo;$("bov").textContent=x.bov;setDelta($("bod"),x.bod);$("bos").textContent=x.bos;$("bof").textContent=x.bof;$("bow").textContent=x.bow;
+  var b=x.bol,mn=Math.min.apply(null,b),mx=Math.max.apply(null,b),rg=(mx-mn)||1;
+  $("bol").setAttribute("points",b.map(function(v,i){return (i/(b.length-1)*100).toFixed(1)+","+(30-(v-mn)/rg*26).toFixed(1)}).join(" "));
+
+  // The alert strip only appears when there are notifications; past
+  // sample days have none, to show the empty state.
+  var showAlert=!(isDay&&!isToday);
+  $("alertbox").hidden=!showAlert;
+  $("alert").textContent=x.al;
+}
+
+document.querySelectorAll(".seg button").forEach(function(b){b.onclick=function(){state.mode=b.dataset.m;state.dayOffset=0;render()}});
+$("prev").onclick=function(){state.dayOffset+=1;render()};
+$("next").onclick=function(){if(state.dayOffset>0){state.dayOffset-=1;render()}};
+render();
+</script>
+</body>
+</html>
