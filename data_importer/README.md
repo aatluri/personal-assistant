@@ -48,7 +48,7 @@ POST /health/archive  (called manually)
 | `app/clients/google_drive_client.py` | Lists, reads, renames and moves files in Google Drive. |
 | `app/clients/backend_client.py` | Sends payloads to the backend API. |
 | `app/config.py` | Settings loaded from `.env`. |
-| `scripts/import_historical_health_metrics.py` | One-off script for importing a large backlog of Health Metrics files. |
+| `scripts/import_historical_files.py` | Script for importing a large backlog of Health Metrics, Workout Metrics or Heart Rate Notifications files. |
 | `tests/` | Unit tests (mocked) and `tests/e2e/` (live services). |
 
 ---
@@ -178,18 +178,26 @@ response, longer than the backend's retries, so these pauses do not make files f
 
 ## Historical Import Script
 
-`scripts/import_historical_health_metrics.py` imports a large backlog of **Health Metrics** files
-(not workouts), oldest first. It reuses the same orchestrator as the import endpoint, one file at a
-time.
+`scripts/import_historical_files.py` imports a large backlog of files of one type, oldest first.
+It reuses the same orchestrator as that type's import endpoint, one file at a time.
 
 ```bash
 # from data_importer/, with .venv activated
-python -m scripts.import_historical_health_metrics
+python -m scripts.import_historical_files health
+python -m scripts.import_historical_files workout
+python -m scripts.import_historical_files heart-rate-notifications
+python -m scripts.import_historical_files all
 ```
 
-- Processes unprocessed and `FAILED_` files; skips `PROCESSED_` and `TEST_` files.
+- The data type is required, so running the script without one imports nothing. Each type's Drive
+  folder, filename rule and orchestrator are listed in `FILE_TYPES` at the top of the script;
+  supporting another export means adding an entry there.
+- `all` imports every type in `FILE_TYPES` order (health, heart rate notifications, then workouts,
+  so the small backlogs finish first), pausing between types. A failed file does not stop the run.
+- Processes unprocessed and `FAILED_` files; skips `PROCESSED_` and `TEST_` files and any name that
+  is not a recognised export filename.
 - Limits are constants at the top of the script (edit the file to change them):
-  - `MAX_FILES = 500`: maximum files per run.
+  - `MAX_FILES = 500`: maximum files per type in one run (so `all` can import up to 500 of each).
   - `BATCH_SIZE = 15` and `BATCH_DELAY_SECONDS = 60`: pause for a minute after every 15 files to
     stay within Google Sheets API quotas.
 

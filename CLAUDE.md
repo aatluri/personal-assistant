@@ -14,7 +14,7 @@ Rules marked *(current)* reflect decisions for the current phase and are expecte
   - any `*_e2e.py` test, i.e. anything run with `pytest -m e2e` (backend and `data_importer/tests/e2e/`;
     includes `backend/tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet and calls OpenAI)
   - `backend/tools/*` scripts
-  - data importer endpoints and `data_importer/scripts/import_historical_health_metrics.py`
+  - data importer endpoints and `data_importer/scripts/import_historical_files.py`
   - starting the backend to exercise write paths manually or through the UI
 - **Google Sheet structure** *(current)*: never change it automatically. If a feature needs a new
   worksheet, column, range, or other structural change, explain exactly what must change and why,
