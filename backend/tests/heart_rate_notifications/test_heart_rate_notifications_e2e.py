@@ -29,6 +29,25 @@ TEST_SHEET_START_TIME = "January 01, 2099 07:00:00"
 
 DATETIME_FORMAT = "%B %d, %Y %H:%M:%S"
 
+# The test notification's start time as a datetime. Rows are matched on
+# this, not on the cell text, because the worksheet displays times
+# without a leading zero ("January 01, 2099 7:00:00").
+TEST_START_DATETIME = datetime.strptime(TEST_SHEET_START_TIME, DATETIME_FORMAT)
+
+
+def is_test_start_time(cell_value: str) -> bool:
+    """
+    Return True if a StartDateTime cell holds the test start time.
+    """
+
+    try:
+        return (
+            datetime.strptime(cell_value, DATETIME_FORMAT)
+            == TEST_START_DATETIME
+        )
+    except ValueError:
+        return False
+
 
 def delete_test_rows_from_google_sheets() -> None:
     """
@@ -55,7 +74,7 @@ def delete_test_rows_from_google_sheets() -> None:
         sheet_row_number
         for sheet_row_number, row in enumerate(rows[1:], start=2)
         if len(row) > start_time_column_index
-        and row[start_time_column_index] == TEST_SHEET_START_TIME
+        and is_test_start_time(row[start_time_column_index])
     ]
 
     # Delete bottom-to-top so row numbers do not shift.
@@ -75,7 +94,7 @@ def get_test_row_from_google_sheets() -> dict | None:
     )
 
     for row in worksheet.get_all_records():
-        if row["StartDateTime"] == TEST_SHEET_START_TIME:
+        if is_test_start_time(str(row["StartDateTime"])):
             return row
 
     return None

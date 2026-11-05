@@ -1,6 +1,9 @@
 from unittest.mock import Mock, patch
 
-from app.clients.backend_client import BackendClient
+from app.clients.backend_client import (
+    BACKEND_TIMEOUT_SECONDS,
+    BackendClient,
+)
 
 
 @patch("app.clients.backend_client.httpx.put")
@@ -32,7 +35,7 @@ def test_update_health_metrics(mock_put):
     mock_put.assert_called_once_with(
         f"{client.base_url}/health/health-metrics",
         json=payload,
-        timeout=10.0,
+        timeout=BACKEND_TIMEOUT_SECONDS,
     )
 
     # Verify that HTTP errors are checked.
@@ -94,7 +97,7 @@ def test_update_nutrition_metrics(mock_put):
     mock_put.assert_called_once_with(
         f"{client.base_url}/health/nutrition-metrics",
         json=payload,
-        timeout=10.0,
+        timeout=BACKEND_TIMEOUT_SECONDS,
     )
 
     # Verify that HTTP errors are checked.
@@ -145,7 +148,7 @@ def test_update_sleep_metrics(mock_put):
     mock_put.assert_called_once_with(
         f"{client.base_url}/health/sleep-metrics",
         json=payload,
-        timeout=10.0,
+        timeout=BACKEND_TIMEOUT_SECONDS,
     )
 
     # Verify that HTTP errors are checked.
@@ -199,7 +202,7 @@ def test_update_workout_metrics(mock_put):
     mock_put.assert_called_once_with(
         f"{client.base_url}/health/workout-metrics",
         json=payload,
-        timeout=10.0,
+        timeout=BACKEND_TIMEOUT_SECONDS,
     )
 
     # Verify that HTTP errors are checked.
@@ -241,7 +244,7 @@ def test_update_body_measurements(mock_put):
     mock_put.assert_called_once_with(
         f"{client.base_url}/health/body-measurements",
         json=payload,
-        timeout=10.0,
+        timeout=BACKEND_TIMEOUT_SECONDS,
     )
 
     # Verify that HTTP errors are checked.
@@ -286,7 +289,7 @@ def test_update_heart_rate_notification(mock_put):
     mock_put.assert_called_once_with(
         f"{client.base_url}/health/heart-rate-notifications",
         json=payload,
-        timeout=10.0,
+        timeout=BACKEND_TIMEOUT_SECONDS,
     )
 
     # Verify that HTTP errors are checked.

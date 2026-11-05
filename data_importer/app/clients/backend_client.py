@@ -3,6 +3,13 @@ import httpx
 from app.config import settings
 
 
+# How long to wait for each backend response. The backend waits and
+# retries (up to about 75 seconds) when Google Sheets is rate-limited, so
+# this must be longer than that, or the importer would give up and mark
+# the file FAILED_ while the backend is still saving.
+BACKEND_TIMEOUT_SECONDS = 120.0
+
+
 class BackendClient:
     """
     HTTP client for communicating with the Personal Assistant backend.
@@ -25,7 +32,7 @@ class BackendClient:
         response = httpx.put(
             url,
             json=payload,
-            timeout=10.0,
+            timeout=BACKEND_TIMEOUT_SECONDS,
         )
 
         if response.status_code != 200:
@@ -52,7 +59,7 @@ class BackendClient:
         response = httpx.put(
             url,
             json=payload,
-            timeout=10.0,
+            timeout=BACKEND_TIMEOUT_SECONDS,
         )
 
         if response.status_code != 200:
@@ -78,7 +85,7 @@ class BackendClient:
         response = httpx.put(
             url,
             json=payload,
-            timeout=10.0,
+            timeout=BACKEND_TIMEOUT_SECONDS,
         )
 
         if response.status_code != 200:
@@ -103,7 +110,7 @@ class BackendClient:
         response = httpx.put(
             url,
             json=payload,
-            timeout=10.0,
+            timeout=BACKEND_TIMEOUT_SECONDS,
         )
 
         if response.status_code != 200:
@@ -131,7 +138,7 @@ class BackendClient:
         response = httpx.put(
             url,
             json=payload,
-            timeout=10.0,
+            timeout=BACKEND_TIMEOUT_SECONDS,
         )
 
         if response.status_code != 200:
@@ -159,7 +166,7 @@ class BackendClient:
         response = httpx.put(
             url,
             json=payload,
-            timeout=10.0,
+            timeout=BACKEND_TIMEOUT_SECONDS,
         )
 
         if response.status_code != 200:

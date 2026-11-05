@@ -68,7 +68,7 @@ backend/
 │   ├── main.py                  FastAPI app, CORS, root endpoint, includes the health router
 │   ├── config.py                Settings loaded from .env (the `settings` object)
 │   ├── database/
-│   │   └── sheets_client.py     Authenticated, cached Google Sheets client
+│   │   └── sheets_client.py     Authenticated, cached Google Sheets client (retries when rate-limited)
 │   ├── ai/
 │   │   └── openai_client.py     OpenAI client used for lab PDF extraction
 │   └── modules/health/
@@ -128,6 +128,12 @@ These apply to all six metric repositories (including Heart Rate Notifications):
   worksheet columns therefore requires a matching code change.
 - **Only repositories touch the Sheet.** Google Sheets access lives only in the
   `*_google_sheets_repository.py` files, `labs/lab_repository.py` and `database/sheets_client.py`.
+- **Rate limits are retried, not failed.** Google Sheets allows a limited number of requests per
+  minute, which bulk imports can exceed. `RetryingHTTPClient` in `database/sheets_client.py` then
+  prints a message in the backend's terminal (for example `Google Sheets rate limit reached;
+  waiting 10s before retrying (attempt 2 of 4)...`), waits and retries: 5, 10, 20 and 40 seconds,
+  about 75 seconds in total. Temporary Google server errors (5xx) are retried the same way; other
+  errors are raised immediately.
 
 ### Missing Sleep and Workout Durations
 

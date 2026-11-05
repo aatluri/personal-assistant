@@ -166,6 +166,13 @@ curl -X POST http://127.0.0.1:8001/health/archive
 
 Each import returns the number of files processed and the backend's response for each metric.
 
+**Large imports can pause.** Google Sheets limits how many requests the backend may make per
+minute. When a large import reaches that limit, the backend waits and retries, printing
+`Google Sheets rate limit reached; waiting …s before retrying …` in **the backend's terminal**,
+so an import of many records can take a few minutes. The importer waits up to
+`BACKEND_TIMEOUT_SECONDS` (120 seconds, in `app/clients/backend_client.py`) for each backend
+response, longer than the backend's retries, so these pauses do not make files fail.
+
 ---
 
 ## Historical Import Script
