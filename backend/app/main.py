@@ -37,6 +37,10 @@ tags_metadata = [
         "description": "Daily nutrition and dietary metrics.",
     },
     {
+        "name": "Heart Rate Notifications",
+        "description": "Low and high heart rate notifications from the watch.",
+    },
+    {
         "name": "Lab Reports",
         "description": "Blood test and laboratory reports.",
     },

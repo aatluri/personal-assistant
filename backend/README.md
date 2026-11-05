@@ -75,9 +75,10 @@ backend/
 │       ├── api.py               Every /health endpoint (metrics and labs)
 │       ├── body_measurements_metrics/  ┐
 │       ├── health_metrics/             │  One folder per metric module, each with:
-│       ├── nutrition_metrics/          │    *_schema.py
-│       ├── sleep_metrics/              │    *_service.py
-│       ├── workout_metrics/            ┘    *_google_sheets_repository.py
+│       ├── heart_rate_notifications/   │    *_schema.py
+│       ├── nutrition_metrics/          │    *_service.py
+│       ├── sleep_metrics/              │    *_google_sheets_repository.py
+│       ├── workout_metrics/            ┘
 │       └── labs/                Lab reports, results and marker configuration
 │                                (different pattern, see "Labs Module" below)
 ├── tools/                       Live connectivity checks (Google Sheets, OpenAI)
@@ -102,6 +103,7 @@ All endpoints are prefixed with `/health`. Swagger UI at http://127.0.0.1:8000/d
 | Nutrition Metrics | `GET /nutrition-metrics`, `GET /nutrition-metrics/{metric_date}`, `POST`, `PUT` | `HEALTH_NUTRITION_METRICS_WORKSHEET` | One per date |
 | Sleep Metrics | `GET /sleep-metrics`, `GET /sleep-metrics/{metric_date}`, `POST`, `PUT` | `HEALTH_SLEEP_METRICS_WORKSHEET` | One per date |
 | Workout Metrics | `GET /workout-metrics?workout_date=`, `GET /workout-metric?workout_start_time=`, `POST`, `PUT` | `HEALTH_WORKOUT_METRICS_WORKSHEET` | One per workout, matched by start time |
+| Heart Rate Notifications | `GET /heart-rate-notifications?notification_date=`, `GET /heart-rate-notification?start_time=`, `POST`, `PUT` | `HEALTH_HEART_RATE_NOTIFICATIONS_WORKSHEET` | One per notification, matched by start time. `readings` is the heart rate values as text, e.g. `"39, 40, 39"` |
 | Labs | Lab reports, lab results, marker definitions, reference ranges, interpretations, `POST /lab-reports/extract`, `POST /lab-reports/save` | `LAB_*_WORKSHEET` settings | See [Labs Module](#labs-module) |
 
 Also: `GET /` (API is running) and `GET /health/status` (health module status).
@@ -113,7 +115,7 @@ frontend and the data importer both use `PUT`.
 
 ## Rules Shared by the Metric Modules
 
-These apply to all five metric repositories:
+These apply to all six metric repositories (including Heart Rate Notifications):
 
 - **`PUT` is a partial update.** When a record already exists, only fields with a value overwrite it.
   A field sent as `null` keeps its existing value, so a field cannot be cleared through the API.
@@ -183,6 +185,7 @@ as `settings`. All of the following are required:
 | `HEALTH_NUTRITION_METRICS_WORKSHEET` | Worksheet name for Nutrition Metrics |
 | `HEALTH_SLEEP_METRICS_WORKSHEET` | Worksheet name for Sleep Metrics |
 | `HEALTH_WORKOUT_METRICS_WORKSHEET` | Worksheet name for Workout Metrics |
+| `HEALTH_HEART_RATE_NOTIFICATIONS_WORKSHEET` | Worksheet name for Heart Rate Notifications (`HR_Rate_Notifications`) |
 | `LAB_REPORTS_WORKSHEET` | Worksheet name for lab reports |
 | `LAB_RESULTS_WORKSHEET` | Worksheet name for lab results |
 | `LAB_MARKER_DEFINITIONS_WORKSHEET` | Worksheet name for lab marker definitions |

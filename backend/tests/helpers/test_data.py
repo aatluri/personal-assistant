@@ -15,6 +15,9 @@ from app.modules.health.health_metrics.health_metrics_schema import (
 from app.modules.health.nutrition_metrics.nutrition_metrics_schema import (
     NutritionMetrics,
 )
+from app.modules.health.heart_rate_notifications.heart_rate_notifications_schema import (
+    HeartRateNotification,
+)
 
 from datetime import date, datetime, timedelta
 
@@ -378,6 +381,61 @@ def create_health_metric_row(**overrides) -> dict:
 
         "Source": "Apple Watch",
         "Updated_DateTime": "October 22, 2026 14:00:00",
+    }
+
+    row.update(overrides)
+
+    return row
+
+
+# ---------------------------------------------------------------------
+# Heart Rate Notifications
+# ---------------------------------------------------------------------
+
+def create_heart_rate_notification(**overrides) -> HeartRateNotification:
+    """
+    Create a HeartRateNotification object used by repository and
+    service tests.
+
+    Individual fields can be overridden.
+    """
+
+    notification = HeartRateNotification(
+        date=date(2026, 10, 29),
+        notification_type="Low Heart Rate",
+        start_time=datetime(2026, 10, 29, 8, 0, 8),
+        end_time=datetime(2026, 10, 29, 8, 10, 8),
+        threshold_bpm=40,
+        min_heart_rate_bpm=39,
+        max_heart_rate_bpm=40,
+        avg_heart_rate_bpm=39.25,
+        readings="39, 40, 39, 39",
+        source="Health Auto Export",
+    )
+
+    return notification.model_copy(update=overrides)
+
+
+def create_heart_rate_notification_row(**overrides) -> dict:
+    """
+    Create a Google Sheets-style row (as returned by get_all_records())
+    used by repository helper tests.
+
+    Individual columns can be overridden.
+    """
+
+    row = {
+        "Date": "October 29, 2026",
+        "Notification Type": "Low Heart Rate",
+        "StartDateTime": "October 29, 2026 08:00:08",
+        "EndDateTime": "October 29, 2026 08:10:08",
+        "Threshold (bpm)": 40,
+        "Min Heart Rate (bpm)": 39,
+        "Max Heart Rate (bpm)": 40,
+        "Avg Heart Rate (bpm)": 39.25,
+        "Readings": "39, 40, 39, 39",
+        "Source": "Health Auto Export",
+        "Updated_DateTime": "October 29, 2026 09:00:00",
     }
 
     row.update(overrides)

@@ -33,6 +33,9 @@ from app.modules.health.health_metrics.health_metrics_schema import (
 from app.modules.health.nutrition_metrics.nutrition_metrics_schema import (
     NutritionMetrics,
 )
+from app.modules.health.heart_rate_notifications.heart_rate_notifications_schema import (
+    HeartRateNotification,
+)
 
 from app.modules.health.labs.lab_schemas import (
     LabReport,
@@ -57,6 +60,10 @@ from app.modules.health.nutrition_metrics.nutrition_metrics_service import (
 
 from app.modules.health.workout_metrics.workout_metrics_service import (
     WorkoutMetricsService,
+)
+
+from app.modules.health.heart_rate_notifications.heart_rate_notifications_service import (
+    HeartRateNotificationsService,
 )
 
 from app.modules.health.labs.lab_save_schemas import (
@@ -124,6 +131,8 @@ sleep_metrics_service = SleepMetricsService()
 health_metrics_service = HealthMetricsService()
 
 nutrition_metrics_service = NutritionMetricsService()
+
+heart_rate_notifications_service = HeartRateNotificationsService()
 
 
 @router.get("/status",tags=["API Health"],)
@@ -543,6 +552,100 @@ def update_nutrition_metric(
     )
 
     return nutrition_metric
+
+
+# -----------------------------------------------------------------------------
+# Heart Rate Notifications Endpoints
+#
+# Endpoints for creating, retrieving and updating heart rate notifications.
+# Each notification is identified by its start time.
+# -----------------------------------------------------------------------------
+
+@router.get(
+    "/heart-rate-notifications",
+    response_model=list[HeartRateNotification],
+    tags=["Heart Rate Notifications"],
+)
+def get_heart_rate_notifications(
+    notification_date: date | None = None,
+) -> list[HeartRateNotification]:
+    """
+    Return all heart rate notifications, or only those on
+    notification_date (earliest first) when it is supplied.
+    """
+
+    if notification_date is not None:
+        return heart_rate_notifications_service.get_heart_rate_notifications_by_date(
+            notification_date
+        )
+
+    return heart_rate_notifications_service.get_heart_rate_notifications()
+
+
+@router.get(
+    "/heart-rate-notification",
+    response_model=HeartRateNotification,
+    tags=["Heart Rate Notifications"],
+)
+def get_heart_rate_notification(
+    start_time: datetime,
+) -> HeartRateNotification:
+    """
+    Return the heart rate notification with the given start time,
+    supplied as a query parameter.
+    """
+
+    notification = heart_rate_notifications_service.get_heart_rate_notification(
+        start_time
+    )
+
+    if notification is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Heart rate notification not found.",
+        )
+
+    return notification
+
+
+@router.post(
+    "/heart-rate-notifications",
+    status_code=status.HTTP_201_CREATED,
+    tags=["Heart Rate Notifications"],
+)
+def create_heart_rate_notification(
+    notification: HeartRateNotification,
+) -> None:
+    """
+    Create a new heart rate notification record.
+    """
+
+    heart_rate_notifications_service.create_heart_rate_notification(
+        notification
+    )
+
+
+@router.put(
+    "/heart-rate-notifications",
+    response_model=HeartRateNotification,
+    tags=["Heart Rate Notifications"],
+)
+def update_heart_rate_notification(
+    notification: HeartRateNotification,
+) -> HeartRateNotification:
+    """
+    Update or create a heart rate notification. The start time in the
+    request body identifies the record.
+    """
+
+    heart_rate_notifications_service.upsert_heart_rate_notification(
+        notification.start_time,
+        notification,
+    )
+
+    return notification
+
+
 # =========================================================
 # LAB REPORTS
 # =========================================================
