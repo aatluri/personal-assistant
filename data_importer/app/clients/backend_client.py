@@ -141,3 +141,31 @@ class BackendClient:
         response.raise_for_status()
 
         return response.json()
+
+    def update_heart_rate_notification(
+        self,
+        payload: dict,
+    ) -> dict:
+        """
+        Send a heart rate notification to the Personal Assistant backend.
+
+        The backend updates the notification with the same start time,
+        or creates it. The Data Importer does not interact with Google
+        Sheets directly.
+        """
+
+        url = f"{self.base_url}/health/heart-rate-notifications"
+
+        response = httpx.put(
+            url,
+            json=payload,
+            timeout=10.0,
+        )
+
+        if response.status_code != 200:
+            print("Payload sent:", payload)
+            print("Backend response:", response.text)
+
+        response.raise_for_status()
+
+        return response.json()

@@ -6,4 +6,5 @@ PROCESSED_PREFIX = "PROCESSED_"
 # HealthMetrics-2026-10-12.json. Only files matching this pattern are imported.
 HEALTH_METRICS_FILE_PREFIX = "HealthMetrics-"
 WORKOUT_METRICS_FILE_PREFIX = "WorkoutMetrics-"
+HEART_RATE_NOTIFICATIONS_FILE_PREFIX = "HeartRateNotifications-"
 FILE_SUFFIX = ".json"

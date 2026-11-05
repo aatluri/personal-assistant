@@ -8,6 +8,7 @@ from app.modules.health.archivers.file_archiver import (
 from app.modules.health.constants import (
     FILE_SUFFIX,
     HEALTH_METRICS_FILE_PREFIX,
+    HEART_RATE_NOTIFICATIONS_FILE_PREFIX,
     WORKOUT_METRICS_FILE_PREFIX,
 )
 from app.modules.health.orchestrators.health_metrics_orchestrator import (
@@ -15,6 +16,9 @@ from app.modules.health.orchestrators.health_metrics_orchestrator import (
 )
 from app.modules.health.orchestrators.workout_metrics_orchestrator import (
     process_workout_metrics_files,
+)
+from app.modules.health.orchestrators.heart_rate_notifications_orchestrator import (
+    process_heart_rate_notifications_files,
 )
 
 app = FastAPI(
@@ -87,6 +91,31 @@ def import_workout_metrics(
     }
 
 
+@app.put("/health/import/heart-rate-notifications")
+def import_heart_rate_notifications(
+    file_name: str | None = None,
+):
+    """
+    Process Heart Rate Notifications files.
+
+    If file_name is provided, only that specific file
+    will be processed. Otherwise, all files in the
+    incoming folder will be processed.
+
+    Each file may contain several notifications.
+    """
+
+    results = process_heart_rate_notifications_files(
+        file_name=file_name,
+    )
+
+    return {
+        "status": "success",
+        "files_processed": len(results),
+        "results": results,
+    }
+
+
 @app.post("/health/archive")
 def archive_health_files():
     """
@@ -129,11 +158,27 @@ def archive_health_files():
         ),
     )
 
+    heart_rate_notifications_archived = archive_processed_files(
+        drive_client=drive_client,
+        source_folder_id=(
+            settings.HEART_RATE_NOTIFICATIONS_DRIVE_FOLDER_ID
+        ),
+        destination_folder_id=(
+            settings.HEART_RATE_NOTIFICATIONS_PROCESSED_DRIVE_FOLDER_ID
+        ),
+        file_prefix=HEART_RATE_NOTIFICATIONS_FILE_PREFIX,
+        file_suffix=FILE_SUFFIX,
+        archive_after_days=(
+            settings.DATA_IMPORTER_ARCHIVE_AFTER_DAYS
+        ),
+    )
+
     return {
         "status": "success",
         "files_archived": (
             len(health_metrics_archived)
             + len(workout_metrics_archived)
+            + len(heart_rate_notifications_archived)
         ),
         "health_metrics": {
             "files_archived": len(
@@ -146,5 +191,11 @@ def archive_health_files():
                 workout_metrics_archived
             ),
             "files": workout_metrics_archived,
+        },
+        "heart_rate_notifications": {
+            "files_archived": len(
+                heart_rate_notifications_archived
+            ),
+            "files": heart_rate_notifications_archived,
         },
     }

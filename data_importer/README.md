@@ -14,9 +14,10 @@ It never touches the Google Sheet. All writes go through the backend.
 Health Auto Export (automation)
         │
         ▼
-Google Drive incoming folder
+Google Drive incoming folders
   HealthMetrics-YYYY-MM-DD.json
   WorkoutMetrics-YYYY-MM-DD.json
+  HeartRateNotifications-YYYY-MM-DD.json
         │
         ▼
 PUT /health/import/...  (called manually)
@@ -58,6 +59,7 @@ POST /health/archive  (called manually)
 |---|---|---|---|
 | `HealthMetrics-YYYY-MM-DD.json` | health, nutrition, sleep, body measurements | `PUT /health/health-metrics`, `/health/nutrition-metrics`, `/health/sleep-metrics`, `/health/body-measurements` | One record per date for each metric |
 | `WorkoutMetrics-YYYY-MM-DD.json` | workouts | `PUT /health/workout-metrics` | One record per workout; the backend matches existing workouts by start time |
+| `HeartRateNotifications-YYYY-MM-DD.json` | heart rate notifications | `PUT /health/heart-rate-notifications` | One record per notification; the backend matches existing notifications by start time |
 
 Every payload is sent with `source: "Health Auto Export"`.
 
@@ -68,8 +70,8 @@ not treated as failed.
 
 ## File Lifecycle
 
-- **Filenames:** only `HealthMetrics-YYYY-MM-DD.json` and `WorkoutMetrics-YYYY-MM-DD.json`
-  (optionally with a `FAILED_` prefix) are imported. Any other file in the folder, such as a
+- **Filenames:** only `HealthMetrics-YYYY-MM-DD.json`, `WorkoutMetrics-YYYY-MM-DD.json` and
+  `HeartRateNotifications-YYYY-MM-DD.json` (optionally with a `FAILED_` prefix) are imported. Any other file in the folder, such as a
   `TEST_` fixture or a Drive duplicate like `HealthMetrics-2026-10-12 (1).json`, is skipped with a
   message and never imported. This also applies to a file requested with `?file_name=`. Files are
   processed **oldest first**, using the date in the filename. The filename prefixes and suffix are
@@ -105,8 +107,25 @@ Rounding:
 - **Body measurements** are kept as decimals (`value_type: "float"`).
 - **Sleep and workout** numbers are rounded to 2 decimal places.
 
-Timestamps (sleep and workout start/end times) are converted to ISO 8601. The record date comes from
-the source data's timestamp, not from the filename.
+Timestamps (sleep, workout and notification start/end times) are converted to ISO 8601. The record
+date comes from the source data's timestamp, not from the filename.
+
+### Heart Rate Notifications
+
+Each notification in `data.heartRateNotifications` becomes one record
+(`importers/heart_rate_notifications_importer.py`):
+
+- **Notification Type** is stored as a readable label: `low_heart_rate_notification` → "Low Heart
+  Rate", `high_heart_rate_notification` → "High Heart Rate",
+  `irregular_heart_rhythm_notification` → "Irregular Rhythm" (`NOTIFICATION_TYPE_LABELS`). Any other
+  type is stored as its raw text.
+- **Min, Max and Avg** heart rate are calculated from the readings (`heartRateData`): Min and Max as
+  whole numbers, Avg rounded to 2 decimal places.
+- **Readings** are the heart rate values in time order, as text separated by a comma and a space,
+  e.g. `"39, 40, 39, 39"`. The space matters: without it, Google Sheets could read `"39,40"` as the
+  number 3,940.
+- A missing threshold is sent empty; a notification without readings has empty Min, Max, Avg and
+  Readings; a notification without a start or end time is skipped.
 
 ---
 
@@ -137,6 +156,9 @@ curl -X PUT "http://127.0.0.1:8001/health/import/health-metrics?file_name=Health
 
 # Import every waiting Workout Metrics file
 curl -X PUT http://127.0.0.1:8001/health/import/workout-metrics
+
+# Import every waiting Heart Rate Notifications file
+curl -X PUT http://127.0.0.1:8001/health/import/heart-rate-notifications
 
 # Archive PROCESSED_ files older than DATA_IMPORTER_ARCHIVE_AFTER_DAYS
 curl -X POST http://127.0.0.1:8001/health/archive
@@ -181,6 +203,8 @@ naming it.
 | `HEALTH_METRICS_PROCESSED_DRIVE_FOLDER_ID` | Drive folder where archived Health Metrics files are moved |
 | `WORKOUT_METRICS_DRIVE_FOLDER_ID` | Drive folder where Workout Metrics files arrive |
 | `WORKOUT_METRICS_PROCESSED_DRIVE_FOLDER_ID` | Drive folder where archived Workout Metrics files are moved |
+| `HEART_RATE_NOTIFICATIONS_DRIVE_FOLDER_ID` | Drive folder where Heart Rate Notifications files arrive |
+| `HEART_RATE_NOTIFICATIONS_PROCESSED_DRIVE_FOLDER_ID` | Drive folder where archived Heart Rate Notifications files are moved |
 | `DATA_IMPORTER_ARCHIVE_AFTER_DAYS` | Age in days before a processed file is archived (default `30`) |
 | `GOOGLE_SHEETS_SPREADSHEET_ID` | **E2E tests only, optional.** The backend's spreadsheet ID, used by the importer E2E tests to delete the test rows they create. The importer itself never accesses the Sheet. |
 
@@ -213,7 +237,7 @@ Sheet. There are three kinds:
 
 | Test | What it checks | What it touches |
 |---|---|---|
-| `test_export_format_e2e.py` | Health Auto Export's real file format still matches the mappings: metric names, value fields, date formats and **units** (e.g. water in `fl_oz_us`, weight in `lb`), over the latest 7 exports | **Read-only:** reads recent exports from Drive; never imports, renames or writes anything |
+| `test_export_format_e2e.py` | Health Auto Export's real file format still matches the mappings: metric names, value fields, date formats and **units** (e.g. water in `fl_oz_us`, weight in `lb`, heart rate readings in `count/min`), over the latest 7 Health, Workout and Heart Rate Notifications exports | **Read-only:** reads recent exports from Drive; never imports, renames or writes anything |
 | `test_health_metrics_importer_e2e.py`, `test_workout_metrics_importer_e2e.py` | The whole pipeline (importer → backend → Sheet), using synthetic fixtures in `tests/test_data/e2e/` and hand-written expected values, including every unit conversion | Reuses the permanent `TEST_*-2099-01-01.json` file in the incoming folder: overwrites its content with the committed fixture, renames it so the importer recognises it, imports it, then restores its `TEST_` name and deletes the 2099-02-01 rows |
 | `test_*_file_archiver_e2e.py` | The archiver, using the same permanent `TEST_*` fixture files | Renames and moves those fixtures, then restores them |
 

@@ -27,6 +27,12 @@ from app.modules.health.orchestrators.health_metrics_orchestrator import (
 from app.modules.health.orchestrators.workout_metrics_orchestrator import (
     get_workout_metrics_file_date,
 )
+from app.modules.health.orchestrators.heart_rate_notifications_orchestrator import (
+    get_heart_rate_notifications_file_date,
+)
+from app.modules.health.importers.heart_rate_notifications_importer import (
+    NOTIFICATION_TYPE_LABELS,
+)
 
 
 """
@@ -329,4 +335,78 @@ def test_workout_export_format_e2e():
     assert not problems, (
         "Health Auto Export workout format no longer matches the "
         "mapping:\n  " + "\n  ".join(problems)
+    )
+
+
+def test_heart_rate_notification_export_format_e2e():
+
+    exports = read_recent_exports(
+        GoogleDriveClient(),
+        settings.HEART_RATE_NOTIFICATIONS_DRIVE_FOLDER_ID,
+        get_heart_rate_notifications_file_date,
+    )
+
+    notifications = [
+        (file_name, notification)
+        for file_name, export_data in exports
+        for notification in export_data["data"]["heartRateNotifications"]
+    ]
+
+    if not notifications:
+        pytest.skip(
+            "No notifications found in recent Heart Rate Notifications exports."
+        )
+
+    problems = []
+
+    for file_name, notification in notifications:
+
+        label = f"{file_name}: notification at {notification.get('start')!r}"
+
+        for field in ("heartNotification", "start", "end", "heartRateData"):
+            if field not in notification:
+                problems.append(f"{label} has no {field!r}")
+
+        for field in ("start", "end"):
+            if not parses_as_timestamp(notification.get(field)):
+                problems.append(
+                    f"{label}: {field} {notification.get(field)!r} does not "
+                    f"match {TIMESTAMP_FORMAT}"
+                )
+
+        threshold = notification.get("threshold")
+
+        if threshold is not None and not isinstance(threshold, (int, float)):
+            problems.append(f"{label}: threshold {threshold!r} is not a number")
+
+        notification_type = notification.get("heartNotification")
+
+        if notification_type not in NOTIFICATION_TYPE_LABELS:
+            warnings.warn(
+                f"{label}: notification type {notification_type!r} has no "
+                "readable label; add it to NOTIFICATION_TYPE_LABELS."
+            )
+
+        for reading in notification.get("heartRateData") or []:
+
+            if not isinstance(reading.get("qty"), (int, float)):
+                problems.append(
+                    f"{label}: reading qty {reading.get('qty')!r} is not a number"
+                )
+
+            if reading.get("units") != "count/min":
+                problems.append(
+                    f"{label}: reading units changed from 'count/min' to "
+                    f"{reading.get('units')!r}"
+                )
+
+            if not isinstance(reading.get("start"), (int, float)):
+                problems.append(
+                    f"{label}: reading start {reading.get('start')!r} is not a "
+                    "number, so readings cannot be put in time order"
+                )
+
+    assert not problems, (
+        "Health Auto Export heart rate notification format no longer "
+        "matches the importer:\n  " + "\n  ".join(problems)
     )

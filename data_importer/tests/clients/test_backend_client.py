@@ -249,3 +249,48 @@ def test_update_body_measurements(mock_put):
 
     # Verify that the backend response is returned to the caller.
     assert result == mock_response.json.return_value
+@patch("app.clients.backend_client.httpx.put")
+def test_update_heart_rate_notification(mock_put):
+
+    # Create the response that we want the mocked backend
+    # request to return.
+    mock_response = Mock()
+    mock_response.json.return_value = {
+        "date": "2026-10-29",
+        "notification_type": "Low Heart Rate",
+        "start_time": "2026-10-29T08:00:08",
+        "end_time": "2026-10-29T08:10:08",
+        "threshold_bpm": 40,
+        "readings": "39, 40, 39, 39",
+        "source": "Health Auto Export",
+    }
+
+    mock_put.return_value = mock_response
+
+    payload = {
+        "date": "2026-10-29",
+        "notification_type": "Low Heart Rate",
+        "start_time": "2026-10-29T08:00:08+05:30",
+        "end_time": "2026-10-29T08:10:08+05:30",
+        "threshold_bpm": 40,
+        "readings": "39, 40, 39, 39",
+        "source": "Health Auto Export",
+    }
+
+    client = BackendClient()
+
+    result = client.update_heart_rate_notification(payload)
+
+    # Verify that the Data Importer called the correct backend endpoint
+    # with the correct payload.
+    mock_put.assert_called_once_with(
+        f"{client.base_url}/health/heart-rate-notifications",
+        json=payload,
+        timeout=10.0,
+    )
+
+    # Verify that HTTP errors are checked.
+    mock_response.raise_for_status.assert_called_once()
+
+    # Verify that the backend response is returned to the caller.
+    assert result == mock_response.json.return_value

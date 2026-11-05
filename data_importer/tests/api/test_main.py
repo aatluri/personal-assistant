@@ -7,6 +7,7 @@ from app.main import app
 from app.modules.health.constants import (
     FILE_SUFFIX,
     HEALTH_METRICS_FILE_PREFIX,
+    HEART_RATE_NOTIFICATIONS_FILE_PREFIX,
     WORKOUT_METRICS_FILE_PREFIX,
 )
 
@@ -151,11 +152,69 @@ def test_import_workout_metrics_with_specific_file_name(
     }
 
 
-# Verify that archiving runs for both folders with the right settings
+# Verify that importing without a file name processes every waiting file.
+@patch("app.main.process_heart_rate_notifications_files")
+def test_import_heart_rate_notifications_processes_all_waiting_files(
+    mock_process_heart_rate_notifications_files,
+):
+
+    results = [
+        {"file_name": "HeartRateNotifications-2026-10-28.json"},
+        {"file_name": "HeartRateNotifications-2026-10-29.json"},
+    ]
+
+    mock_process_heart_rate_notifications_files.return_value = results
+
+    response = client.put("/health/import/heart-rate-notifications")
+
+    assert response.status_code == 200
+
+    mock_process_heart_rate_notifications_files.assert_called_once_with(
+        file_name=None,
+    )
+
+    assert response.json() == {
+        "status": "success",
+        "files_processed": 2,
+        "results": results,
+    }
+
+
+# Verify that a file name in the query string is passed to the orchestrator.
+@patch("app.main.process_heart_rate_notifications_files")
+def test_import_heart_rate_notifications_with_specific_file_name(
+    mock_process_heart_rate_notifications_files,
+):
+
+    results = [
+        {"file_name": "HeartRateNotifications-2026-10-29.json"},
+    ]
+
+    mock_process_heart_rate_notifications_files.return_value = results
+
+    response = client.put(
+        "/health/import/heart-rate-notifications",
+        params={"file_name": "HeartRateNotifications-2026-10-29.json"},
+    )
+
+    assert response.status_code == 200
+
+    mock_process_heart_rate_notifications_files.assert_called_once_with(
+        file_name="HeartRateNotifications-2026-10-29.json",
+    )
+
+    assert response.json() == {
+        "status": "success",
+        "files_processed": 1,
+        "results": results,
+    }
+
+
+# Verify that archiving runs for all three folders with the right settings
 # and returns the combined and per-folder results.
 @patch("app.main.archive_processed_files")
 @patch("app.main.GoogleDriveClient")
-def test_archive_archives_health_and_workout_files(
+def test_archive_archives_all_folders(
     mock_drive_client_class,
     mock_archive_processed_files,
 ):
@@ -171,10 +230,16 @@ def test_archive_archives_health_and_workout_files(
         "PROCESSED_WorkoutMetrics-2026-01-02.json",
     ]
 
-    # The first call archives Health Metrics, the second Workout Metrics.
+    notifications_archived = [
+        "PROCESSED_HeartRateNotifications-2026-01-01.json",
+    ]
+
+    # The calls archive Health Metrics, Workout Metrics, then Heart Rate
+    # Notifications.
     mock_archive_processed_files.side_effect = [
         health_archived,
         workout_archived,
+        notifications_archived,
     ]
 
     response = client.post("/health/archive")
@@ -202,11 +267,23 @@ def test_archive_archives_health_and_workout_files(
             file_suffix=FILE_SUFFIX,
             archive_after_days=settings.DATA_IMPORTER_ARCHIVE_AFTER_DAYS,
         ),
+        call(
+            drive_client=drive_client,
+            source_folder_id=(
+                settings.HEART_RATE_NOTIFICATIONS_DRIVE_FOLDER_ID
+            ),
+            destination_folder_id=(
+                settings.HEART_RATE_NOTIFICATIONS_PROCESSED_DRIVE_FOLDER_ID
+            ),
+            file_prefix=HEART_RATE_NOTIFICATIONS_FILE_PREFIX,
+            file_suffix=FILE_SUFFIX,
+            archive_after_days=settings.DATA_IMPORTER_ARCHIVE_AFTER_DAYS,
+        ),
     ]
 
     assert response.json() == {
         "status": "success",
-        "files_archived": 3,
+        "files_archived": 4,
         "health_metrics": {
             "files_archived": 1,
             "files": health_archived,
@@ -214,5 +291,9 @@ def test_archive_archives_health_and_workout_files(
         "workout_metrics": {
             "files_archived": 2,
             "files": workout_archived,
+        },
+        "heart_rate_notifications": {
+            "files_archived": 1,
+            "files": notifications_archived,
         },
     }
