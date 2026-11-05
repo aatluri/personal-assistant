@@ -14,6 +14,7 @@
 
 import {
     Apple,
+    BellRing,
     Dumbbell,
     HeartPulse,
     Moon,
@@ -368,6 +369,51 @@ function MoreMenu({
                                 "
                             >
                                 Log health metrics
+                            </p>
+
+                        </div>
+
+                    </Link>
+
+                    {/* Heart Rate Notifications */}
+                    <Link
+                        to="/heart-rate-notifications"
+                        onClick={onClose}
+                        className="
+                            flex
+                            items-center
+                            gap-4
+                            rounded-2xl
+                            px-4
+                            py-4
+                            transition-colors
+                            hover:bg-slate-50
+                        "
+                    >
+
+                        <BellRing
+                            size={24}
+                            className="text-rose-600"
+                        />
+
+                        <div>
+
+                            <p
+                                className="
+                                    font-medium
+                                    text-slate-900
+                                "
+                            >
+                                Heart Rate Notifications
+                            </p>
+
+                            <p
+                                className="
+                                    text-sm
+                                    text-slate-500
+                                "
+                            >
+                                View heart rate alerts
                             </p>
 
                         </div>

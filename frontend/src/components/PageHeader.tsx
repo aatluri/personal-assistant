@@ -19,11 +19,14 @@
     isDirty
         Indicates whether the page
         contains unsaved changes.
+
+        Optional: read-only pages leave it out,
+        and no save status is shown.
 */
 
 interface PageHeaderProps {
     title: string;
-    isDirty: boolean;
+    isDirty?: boolean;
 }
 
 function PageHeader({
@@ -53,35 +56,39 @@ function PageHeader({
                 {title}
             </h1>
 
-            <div
-                className="
-                    mt-3
-                    flex
-                    items-center
-                    justify-between
-                "
-            >
-                {/*
-                        Display the current save status.
+            {/*
+                    Display the current save status.
 
-                        The colour and text change depending
-                        on whether the page has unsaved changes.
-                */}
-                <p
-                    className={`
-                        text-sm
-                        font-medium
-                        ${
-                            isDirty
-                                ? "text-amber-600"
-                                : "text-green-600"
-                        }
-                    `}
+                    The colour and text change depending
+                    on whether the page has unsaved changes.
+                    Read-only pages pass no isDirty, so no
+                    status is shown.
+            */}
+            {isDirty !== undefined && (
+                <div
+                    className="
+                        mt-3
+                        flex
+                        items-center
+                        justify-between
+                    "
                 >
-                    {isDirty ? "● Unsaved Changes" : "✓ Saved"}
-                </p>
+                    <p
+                        className={`
+                            text-sm
+                            font-medium
+                            ${
+                                isDirty
+                                    ? "text-amber-600"
+                                    : "text-green-600"
+                            }
+                        `}
+                    >
+                        {isDirty ? "● Unsaved Changes" : "✓ Saved"}
+                    </p>
 
-            </div>
+                </div>
+            )}
 
         </div>
     );

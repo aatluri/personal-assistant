@@ -20,6 +20,7 @@ import * as sleepMetricsApi from "./api/sleepMetrics";
 import * as nutritionMetricsApi from "./api/nutritionMetrics";
 import * as healthMetricsApi from "./api/healthMetrics";
 import * as bodyMeasurementsApi from "./api/bodyMeasurements";
+import * as heartRateNotificationsApi from "./api/heartRateNotifications";
 
 
 vi.mock("./api/workoutMetrics", () => ({
@@ -45,6 +46,10 @@ vi.mock("./api/healthMetrics", () => ({
 vi.mock("./api/bodyMeasurements", () => ({
     getBodyMeasurement: vi.fn(),
     saveBodyMeasurement: vi.fn(),
+}));
+
+vi.mock("./api/heartRateNotifications", () => ({
+    getHeartRateNotificationsByDate: vi.fn(),
 }));
 
 
@@ -78,6 +83,10 @@ beforeEach(() => {
     vi.mocked(
         bodyMeasurementsApi.getBodyMeasurement
     ).mockResolvedValue(null);
+
+    vi.mocked(
+        heartRateNotificationsApi.getHeartRateNotificationsByDate
+    ).mockResolvedValue([]);
 
 });
 
@@ -216,6 +225,29 @@ describe("App", () => {
                 {
                     level: 1,
                     name: "Health Metrics",
+                }
+            )
+        ).toBeInTheDocument();
+
+    });
+
+
+    test("renders Heart Rate Notifications route", async () => {
+
+        window.history.pushState(
+            {},
+            "",
+            "/heart-rate-notifications"
+        );
+
+        render(<App />);
+
+        expect(
+            await screen.findByRole(
+                "heading",
+                {
+                    level: 1,
+                    name: "Heart Rate Notifications",
                 }
             )
         ).toBeInTheDocument();

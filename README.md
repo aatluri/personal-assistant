@@ -1,7 +1,7 @@
 # Personal Assistant
 
 A single-user, local-only application for logging and reviewing personal health data: nutrition,
-sleep, workouts, body measurements, general health metrics and lab results.
+sleep, workouts, body measurements, general health metrics, heart rate notifications and lab results.
 
 A Google Sheet is the application's data store.
 
@@ -39,11 +39,12 @@ frontend (React :5173) ──────► backend (FastAPI :8000) ──► G
 | [`data_importer/`](data_importer/README.md) | Imports exported health and workout files from Google Drive into the backend | Python, FastAPI | http://127.0.0.1:8001 |
 | [`docs/`](docs/ui/) | UI design notes | Markdown | — |
 
-The data importer exposes two import endpoints:
+The data importer exposes three import endpoints:
 
 - `PUT /health/import/health-metrics`: Health Metrics export files, each of which can contain
   health, nutrition, sleep and body measurement data
 - `PUT /health/import/workout-metrics`: Workout Metrics export files
+- `PUT /health/import/heart-rate-notifications`: Heart Rate Notifications export files
 
 ---
 
@@ -76,7 +77,8 @@ should point at `http://127.0.0.1:8000`.
 ## What Exists Today
 
 - **Frontend pages:** Nutrition Metrics, Sleep Metrics, Health Metrics, Body Measurements and
-  Workout Metrics, each for viewing and logging one date at a time.
+  Workout Metrics, each for viewing and logging one date at a time; and Heart Rate Notifications,
+  which shows the watch's heart rate alerts for a date (read-only, filled by the data importer).
 - **Labs:** backend endpoints for lab configuration, PDF extraction and saving reports exist, but
   there is no frontend for them yet.
 - **Placeholders:** Dashboard, History and Settings pages.

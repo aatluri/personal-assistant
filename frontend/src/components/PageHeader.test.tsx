@@ -94,4 +94,31 @@ describe("PageHeader", () => {
 
     });
 
+
+    // Verify that no save status is shown when isDirty is left out,
+    // as on read-only pages.
+    test("hides save status when isDirty is omitted", () => {
+
+        render(
+            <PageHeader
+                title="Heart Rate Notifications"
+            />
+        );
+
+        expect(
+            screen.getByRole("heading", {
+                name: "Heart Rate Notifications",
+            })
+        ).toBeInTheDocument();
+
+        expect(
+            screen.queryByText("✓ Saved")
+        ).not.toBeInTheDocument();
+
+        expect(
+            screen.queryByText("● Unsaved Changes")
+        ).not.toBeInTheDocument();
+
+    });
+
 });

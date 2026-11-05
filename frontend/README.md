@@ -74,6 +74,7 @@ src/
 | `/health-metrics` | `LogHealthMetrics` | `healthMetrics.ts` | `GET /health/health-metrics/{date}`, `PUT /health/health-metrics` |
 | `/body-measurements` | `LogBodyMeasurements` | `bodyMeasurements.ts` | `GET /health/body-measurements/{date}`, `PUT /health/body-measurements` |
 | `/workout-metrics` | `LogWorkoutMetrics` | `workoutMetrics.ts` | `GET /health/workout-metrics?workout_date=`, `PUT /health/workout-metrics` (several workouts per date) |
+| `/heart-rate-notifications` | `HeartRateNotifications` | `heartRateNotifications.ts` | `GET /health/heart-rate-notifications?notification_date=` (read-only: several notifications per date, no saving; `PageHeader` shows no save status) |
 | `/` | `Dashboard` | — | Placeholder |
 | `/history` | `History` | — | Placeholder |
 | `/settings` | `Settings` | — | Placeholder |

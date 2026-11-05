@@ -21,6 +21,7 @@ import LogWorkoutMetrics from "./pages/LogWorkoutMetrics/LogWorkoutMetrics";
 import LogSleepMetrics from "./pages/LogSleepMetrics/LogSleepMetrics";
 import LogNutritionMetrics from "./pages/LogNutritionMetrics/LogNutritionMetrics";
 import LogHealthMetrics from "./pages/LogHealthMetrics/LogHealthMetrics";
+import HeartRateNotifications from "./pages/HeartRateNotifications/HeartRateNotifications";
 
 
 function App() {
@@ -81,6 +82,11 @@ function App() {
                     <Route
                         path="/health-metrics"
                         element={<LogHealthMetrics />}
+                    />
+
+                    <Route
+                        path="/heart-rate-notifications"
+                        element={<HeartRateNotifications />}
                     />
 
                     <Route

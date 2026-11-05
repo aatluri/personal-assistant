@@ -14,6 +14,7 @@
 import {
     Apple,
     BarChart3,
+    BellRing,
     CalendarDays,
     Dumbbell,
     Ellipsis,
@@ -66,6 +67,12 @@ export const desktopNavigationItems = [
         label: "Health Metrics",
         shortLabel: "Health",
         icon: HeartPulse,
+    },
+    {
+        to: "/heart-rate-notifications",
+        label: "Heart Rate Notifications",
+        shortLabel: "HR Alerts",
+        icon: BellRing,
     },
     {
         to: "/history",
