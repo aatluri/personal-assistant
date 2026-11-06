@@ -1,12 +1,30 @@
 from collections.abc import Callable
 from datetime import datetime, timedelta
 import threading
+import time
+
+from pydantic import BaseModel
 
 
 # How long a source stays in the cache before it is read again. Saves
 # through the API mark the affected source as stale sooner, and the
 # Overview page's Refresh button reloads everything.
 CACHE_DURATION = timedelta(hours=12)
+
+
+class CacheSourceStatus(BaseModel):
+    """
+    The state of one cached source, for checking that the cache works.
+    Contains no data, only counts and times.
+    """
+
+    loaded: bool
+    rows: int | None = None
+    read_at: datetime | None = None
+    expires_at: datetime | None = None
+
+    # True after a save, until the source is read again.
+    stale: bool = False
 
 
 class DataCache:
@@ -58,12 +76,18 @@ class DataCache:
         with self._lock:
             entry = self._cache.get(source)
 
-            if (
-                entry is None
-                or source in self._stale
-                or self._now() - entry[0] >= CACHE_DURATION
-            ):
-                entry = self._load(source)
+            # Why the source must be read again, if it must.
+            if entry is None:
+                reason = "not loaded yet"
+            elif source in self._stale:
+                reason = "marked stale by a save"
+            elif self._now() - entry[0] >= CACHE_DURATION:
+                reason = "older than 12h"
+            else:
+                reason = None
+
+            if reason is not None:
+                entry = self._load(source, reason)
 
             return entry[1]
 
@@ -83,12 +107,16 @@ class DataCache:
 
     def refresh(self) -> None:
         """
-        Read every source again, even if cached.
+        Read every source again, even if cached (the Refresh button).
         """
 
-        with self._lock:
-            for source in self._loaders:
-                self._load(source)
+        count = len(self._loaders)
+
+        print(f"Data cache: refreshing all {count} sources...")
+
+        seconds = self._load_every_source("refresh")
+
+        print(f"Data cache: refreshed all {count} sources in {seconds:.1f}s")
 
 
     def load_all(self) -> None:
@@ -100,14 +128,72 @@ class DataCache:
         request tries again.
         """
 
+        count = len(self._loaders)
+
+        print(f"Data cache: loading all {count} sources at startup...")
+
         try:
-            self.refresh()
+            seconds = self._load_every_source("startup")
 
         except Exception as error:
             print(
-                "Data cache could not be loaded; it will be loaded "
+                "Data cache: could not load at startup; it will load "
                 f"on the next request. ({error})"
             )
+            return
+
+        print(
+            f"Data cache: loaded all {count} sources in {seconds:.1f}s "
+            "(startup)"
+        )
+
+
+    def _load_every_source(self, reason: str) -> float:
+        """
+        Read every source, holding the lock throughout so requests wait
+        for the whole load. Returns how long it took, in seconds.
+        """
+
+        started = time.monotonic()
+
+        with self._lock:
+            for source in self._loaders:
+                self._load(source, reason)
+
+        return time.monotonic() - started
+
+
+    def status(self) -> dict[str, CacheSourceStatus]:
+        """
+        Report each source's state: whether it is loaded, how many
+        rows, when it was read, when it expires, and whether it is
+        stale. Used to check that the cache is working.
+        """
+
+        with self._lock:
+            report = {}
+
+            for source in self._loaders:
+                entry = self._cache.get(source)
+
+                if entry is None:
+                    report[source] = CacheSourceStatus(
+                        loaded=False,
+                        stale=source in self._stale,
+                    )
+                    continue
+
+                read_at, rows = entry
+
+                report[source] = CacheSourceStatus(
+                    loaded=True,
+                    rows=len(rows),
+                    read_at=read_at,
+                    expires_at=read_at + CACHE_DURATION,
+                    stale=source in self._stale,
+                )
+
+            return report
 
 
     def _check_source(self, source: str) -> None:
@@ -120,12 +206,24 @@ class DataCache:
             raise ValueError(f"Unknown data cache source: {source}")
 
 
-    def _load(self, source: str) -> tuple[datetime, list]:
+    def _load(self, source: str, reason: str) -> tuple[datetime, list]:
         """
         Read one source into the cache. The caller holds the lock.
+
+        Prints a line for every read, with the reason, so the backend's
+        terminal shows when and why the Sheet is actually read (startup,
+        refresh, marked stale by a save, older than 12h, not loaded
+        yet). Using the cache prints nothing.
         """
 
+        started = time.monotonic()
+
         rows = self._loaders[source]()
+
+        print(
+            f"Data cache: read {source} ({len(rows)} rows) "
+            f"in {time.monotonic() - started:.1f}s ({reason})"
+        )
 
         entry = (self._now(), rows)
 

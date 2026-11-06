@@ -19,7 +19,7 @@ from fastapi import HTTPException
 from fastapi import Query
 from fastapi import status
 
-from app.data_cache import DataCache
+from app.data_cache import CacheSourceStatus, DataCache
 from app.modules.health.dashboard.dashboard_schema import (
     DashboardSummary,
     Period,
@@ -743,6 +743,24 @@ def get_dashboard_summary(
         data_cache.refresh()
 
     return dashboard_service.get_summary(period, summary_date)
+
+
+@router.get(
+    "/dashboard/cache",
+    response_model=dict[str, CacheSourceStatus],
+    tags=["Overview"],
+)
+def get_dashboard_cache_status() -> dict[str, CacheSourceStatus]:
+    """
+    Show the state of the shared data cache behind the Overview: for
+    each worksheet, whether it is loaded, how many rows, when it was
+    read, when it expires, and whether a save has marked it stale.
+
+    For checking that the cache works. Returns no health data, and
+    never reads the Sheet.
+    """
+
+    return data_cache.status()
 
 
 # =========================================================

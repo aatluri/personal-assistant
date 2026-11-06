@@ -56,6 +56,12 @@ settings
     # CORS_ALLOWED_ORIGINS=["http://localhost:5173","http://127.0.0.1:5173"]
     CORS_ALLOWED_ORIGINS: list[str] = ["http://localhost:5173"]
 
+    # Print a line for every request to Google Sheets, e.g.
+    # "Google Sheets: read Sleep_Metrics in 0.6s". Optional; set
+    # LOG_GOOGLE_SHEETS_REQUESTS=false in .env before a long import,
+    # which makes thousands of requests.
+    LOG_GOOGLE_SHEETS_REQUESTS: bool = True
+
     model_config = SettingsConfigDict(
 
         env_file=".env",

@@ -110,7 +110,7 @@ All endpoints are prefixed with `/health`. Swagger UI at http://127.0.0.1:8000/d
 | Workout Metrics | `GET /workout-metrics?workout_date=`, `GET /workout-metric?workout_start_time=`, `POST`, `PUT` | `HEALTH_WORKOUT_METRICS_WORKSHEET` | One per workout, matched by start time |
 | Heart Rate Notifications | `GET /heart-rate-notifications?notification_date=`, `GET /heart-rate-notification?start_time=`, `POST`, `PUT` | `HEALTH_HEART_RATE_NOTIFICATIONS_WORKSHEET` | One per notification, matched by start time. `readings` is the heart rate values as text, e.g. `"39, 40, 39"` |
 | Labs | Lab reports, lab results, marker definitions, reference ranges, interpretations, `POST /lab-reports/extract`, `POST /lab-reports/save` | `LAB_*_WORKSHEET` settings | See [Labs Module](#labs-module) |
-| Overview | `GET /dashboard/summary?period=day\|week\|month&date=YYYY-MM-DD&refresh=true` (`date` defaults to today; `refresh` is optional) | Reads the six metric worksheets through the data cache | Read-only. See [Overview and the Data Cache](#overview-and-the-data-cache) |
+| Overview | `GET /dashboard/summary?period=day\|week\|month&date=YYYY-MM-DD&refresh=true` (`date` defaults to today; `refresh` is optional), `GET /dashboard/cache` (the cache's state) | Reads the six metric worksheets through the data cache | Read-only. See [Overview and the Data Cache](#overview-and-the-data-cache) |
 
 Also: `GET /` (API is running) and `GET /health/status` (health module status).
 
@@ -136,6 +136,23 @@ Each request needs all six metric worksheets, so they are kept in memory by `Dat
   so they show straight away.
 - **Expiry:** each worksheet is read again after 12 hours (`CACHE_DURATION`).
 - **Refresh:** `refresh=true` reads every worksheet again, for edits made directly in Google Sheets.
+
+**Checking that it works:**
+
+- The backend's terminal shows every read of a worksheet and why it happened, e.g.
+  `Data cache: read sleep (610 rows) in 0.8s (marked stale by a save)`. The reasons are `startup`,
+  `refresh`, `marked stale by a save`, `older than 12h` and `not loaded yet`. Using the cache prints
+  nothing.
+- Loading at startup and refreshing are bracketed by a line before and after, e.g.
+  `Data cache: loading all 6 sources at startup...` and
+  `Data cache: loaded all 6 sources in 3.8s (startup)`, or
+  `Data cache: could not load at startup; it will load on the next request. (...)`.
+- Clicking around the Overview prints no `Google Sheets: ...` lines (see
+  [Rules Shared by the Metric Modules](#rules-shared-by-the-metric-modules)): its data comes from
+  the cache.
+- `GET /health/dashboard/cache` reports, for each worksheet, whether it is loaded, its row count,
+  when it was read, when it expires and whether it is stale. It returns no health data and never
+  reads the Sheet.
 
 Only the dashboards use the cache; the log pages always read the Sheet. The cache lives inside the
 backend process, so run the backend as **a single process** (one worker). With several workers or
@@ -165,6 +182,12 @@ These apply to all six metric repositories (including Heart Rate Notifications):
   waiting 10s before retrying (attempt 2 of 4)...`), waits and retries: 5, 10, 20 and 40 seconds,
   about 75 seconds in total. Temporary Google server errors (5xx) are retried the same way; other
   errors are raised immediately.
+- **Every Google Sheets request is logged.** `RetryingHTTPClient` also prints one line per request
+  that succeeds, naming the worksheet, e.g. `Google Sheets: read Workout_Metrics in 0.6s` or
+  `Google Sheets: write Sleep_Metrics in 0.4s` (`read spreadsheet details` is gspread looking up a
+  worksheet). Every repository, the labs code and the data cache use this client, so this shows
+  each time the backend actually calls Google. A long import makes thousands of requests: set
+  `LOG_GOOGLE_SHEETS_REQUESTS=false` in `.env` first.
 
 ### Missing Sleep and Workout Durations
 
@@ -211,7 +234,8 @@ pip freeze > requirements.txt
 ### Configuration
 
 Settings are loaded from `backend/.env` by `app/config.py` and are available throughout the backend
-as `settings`. All of the following are required, except `CORS_ALLOWED_ORIGINS`:
+as `settings`. All of the following are required, except `CORS_ALLOWED_ORIGINS` and
+`LOG_GOOGLE_SHEETS_REQUESTS`:
 
 | Variable | Purpose |
 |---|---|
@@ -230,6 +254,7 @@ as `settings`. All of the following are required, except `CORS_ALLOWED_ORIGINS`:
 | `LAB_MARKER_INTERPRETATIONS_WORKSHEET` | Worksheet name for lab marker interpretations |
 | `OPENAI_API_KEY` | OpenAI API key, used for lab PDF extraction |
 | `CORS_ALLOWED_ORIGINS` | **Optional.** Browser origins allowed to call the API (the frontend's address). Defaults to `["http://localhost:5173"]`; set a JSON list to change it, e.g. `["http://localhost:5173","http://127.0.0.1:5173"]` |
+| `LOG_GOOGLE_SHEETS_REQUESTS` | **Optional.** Print a line for every Google Sheets request (see "Every Google Sheets request is logged"). Defaults to `true`; set `false` before a long import |
 
 Create `.env` using the variable names in the table above. If one is missing, the backend fails at
 startup with an error naming it. `.env` and the credentials file are ignored by git.
@@ -314,8 +339,9 @@ Example:
 `tests/conftest.py` and skipped by default (`pytest.ini` sets `addopts = -m "not e2e"`). These are
 the end-to-end tests, which read and write the real Google Sheet through a running backend,
 `tests/dashboard/test_dashboard_e2e.py`, which only reads it (the Overview endpoint, checking rules
-that hold for any data), and `tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet
-and calls OpenAI.
+that hold for any data), `tests/dashboard/test_data_cache_e2e.py`, which checks the cache through
+`GET /health/dashboard/cache` (it reads, and its save test writes and deletes one 2099 Sleep row),
+and `tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet and calls OpenAI.
 
 The end-to-end tests create rows with clearly fake values (the year 2099, keys starting with
 `TEST_`, file names starting with `api_test_`) and delete them afterwards. Before deleting

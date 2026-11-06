@@ -128,7 +128,9 @@ and needs explicit approval.
   - each worksheet is read again after 12 hours;
   - every save through the API marks that worksheet as stale, so it is read again on the next
     Overview request (imports go through the API too, so they show straight away);
-  - a **Refresh** button reloads everything, for edits made directly in Google Sheets.
+  - a **Refresh** button reloads everything, for edits made directly in Google Sheets;
+  - every read prints a line in the backend's terminal, and `GET /health/dashboard/cache` shows
+    each worksheet's state (loaded, rows, read time, expiry, stale), to check that it works.
 
   Only the dashboards (Overview, and later Explore) use the cache. The log pages always read the
   Sheet, because they are used for editing and must show what is actually stored.

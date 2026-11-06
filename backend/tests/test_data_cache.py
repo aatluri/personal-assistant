@@ -157,3 +157,117 @@ def test_failed_load_all_does_not_raise_and_next_get_retries():
 
     assert cache.get("sleep") == ["sleep rows"]
     assert loaders["sleep"].call_count == 2
+
+
+# Verify that every read of a source prints a line, and a cached get
+# prints nothing, so the backend's terminal shows when the Sheet is read.
+def test_each_read_is_logged(capsys):
+
+    cache, _ = make_cache()
+
+    cache.get("sleep")
+    cache.get("sleep")
+
+    output = capsys.readouterr().out
+
+    assert output.count("Data cache: read sleep (1 rows) in") == 1
+
+
+# Verify that status reports each source: not loaded, loaded (rows, read
+# time, expiry), and stale after a save.
+def test_status_reports_each_source():
+
+    cache, _ = make_cache()
+
+    status = cache.status()
+
+    assert status["sleep"].loaded is False
+    assert status["sleep"].rows is None
+
+    cache.get("sleep")
+    cache.get("workouts")
+    cache.mark_stale("workouts")
+
+    status = cache.status()
+
+    assert status["sleep"].loaded is True
+    assert status["sleep"].rows == 1
+    assert status["sleep"].read_at == START
+    assert status["sleep"].expires_at == START + CACHE_DURATION
+    assert status["sleep"].stale is False
+
+    assert status["workouts"].stale is True
+
+
+# Verify that each single read says why it happened: not loaded yet,
+# marked stale by a save, or older than CACHE_DURATION.
+def test_reads_are_logged_with_their_reason(capsys):
+
+    clock = Clock(START)
+    cache, _ = make_cache(clock)
+
+    cache.get("sleep")
+    cache.mark_stale("sleep")
+    cache.get("sleep")
+    clock.now = START + CACHE_DURATION
+    cache.get("sleep")
+
+    lines = capsys.readouterr().out.splitlines()
+
+    assert len(lines) == 3
+    assert lines[0].endswith("(not loaded yet)")
+    assert lines[1].endswith("(marked stale by a save)")
+    assert lines[2].endswith("(older than 12h)")
+
+
+# Verify that loading at startup prints a line before and after, and
+# each read says "startup".
+def test_startup_load_is_logged(capsys):
+
+    cache, _ = make_cache()
+
+    cache.load_all()
+
+    lines = capsys.readouterr().out.splitlines()
+
+    assert lines[0] == "Data cache: loading all 2 sources at startup..."
+    assert lines[1].startswith("Data cache: read sleep (1 rows) in")
+    assert lines[1].endswith("(startup)")
+    assert lines[2].endswith("(startup)")
+    assert lines[3].startswith("Data cache: loaded all 2 sources in")
+    assert lines[3].endswith("(startup)")
+
+
+# Verify that a failed startup load says so, and does not claim to have
+# loaded.
+def test_failed_startup_load_is_logged(capsys):
+
+    cache, loaders = make_cache()
+
+    loaders["sleep"].side_effect = RuntimeError("Sheets unavailable")
+
+    cache.load_all()
+
+    output = capsys.readouterr().out
+
+    assert (
+        "Data cache: could not load at startup; it will load on the "
+        "next request. (Sheets unavailable)"
+    ) in output
+    assert "loaded all" not in output
+
+
+# Verify that a refresh prints a line before and after, and each read
+# says "refresh".
+def test_refresh_is_logged(capsys):
+
+    cache, _ = make_cache()
+
+    cache.refresh()
+
+    lines = capsys.readouterr().out.splitlines()
+
+    assert lines[0] == "Data cache: refreshing all 2 sources..."
+    assert lines[1].endswith("(refresh)")
+    assert lines[2].endswith("(refresh)")
+    assert lines[3].startswith("Data cache: refreshed all 2 sources in")

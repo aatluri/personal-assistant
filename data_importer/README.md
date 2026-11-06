@@ -206,6 +206,11 @@ python -m scripts.import_historical_files all
   - `MAX_FILES = 500`: maximum files per type in one run (so `all` can import up to 500 of each).
   - `BATCH_SIZE = 15` and `BATCH_DELAY_SECONDS = 60`: pause for a minute after every 15 files to
     stay within Google Sheets API quotas.
+- Before a long run, prepare the backend:
+  - Set `LOG_GOOGLE_SHEETS_REQUESTS=false` in `backend/.env`; otherwise the backend prints a line
+    for each of the thousands of Sheets requests.
+  - Start it with `fastapi dev app/main.py --no-reload`, so a code change does not restart it
+    mid-import.
 
 The same real-data warning applies.
 

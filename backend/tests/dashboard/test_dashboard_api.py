@@ -153,6 +153,41 @@ def test_get_dashboard_summary_rejects_invalid_input(overview, query):
 
 
 # ============================================================================
+# GET /health/dashboard/cache
+# ============================================================================
+
+
+# Verify that the cache status shows each worksheet as not loaded at
+# first, and loaded (with its row count and read time) after a summary.
+def test_get_dashboard_cache_status(overview):
+
+    response = client.get("/health/dashboard/cache")
+
+    assert response.status_code == 200
+    assert set(response.json()) == set(SOURCES)
+    assert response.json()["sleep"]["loaded"] is False
+
+    client.get("/health/dashboard/summary?period=week")
+
+    status = client.get("/health/dashboard/cache").json()
+
+    for source in SOURCES:
+        assert status[source]["loaded"] is True
+        assert status[source]["rows"] == 0
+        assert status[source]["read_at"] == "2026-11-05T12:00:00"
+        assert status[source]["stale"] is False
+
+
+# Verify that both Overview endpoints are listed under Overview in Swagger.
+def test_overview_endpoints_are_listed_under_overview_in_swagger():
+
+    paths = app.openapi()["paths"]
+
+    for path in ("/health/dashboard/summary", "/health/dashboard/cache"):
+        assert "Overview" in paths[path]["get"]["tags"]
+
+
+# ============================================================================
 # Saves mark the data cache as stale
 # ============================================================================
 
