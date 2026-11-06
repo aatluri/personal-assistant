@@ -12,7 +12,7 @@ Responsibilities:
   opens the browser's date picker, and the page shows the
   day, week or month containing the picked date.
 - Return to the current period with Today.
-- Show the period ("Nov 2 – 8") and how much of it has
+- Show the period ("Nov 2 – 8, 2026") and how much of it has
   happened ("Week so far · 4 of 7 days").
 */
 

@@ -4,7 +4,7 @@ Overview formatting
 Date arithmetic and text formatting for the Overview
 page. The backend computes the values; these helpers
 only turn them into what the page shows, e.g.
-"Nov 2 – 8", "7h 12m" or "↑ 14m vs last week".
+"Nov 2 – 8, 2026", "7h 12m" or "↑ 14m vs last week".
 
 Dates are YYYY-MM-DD strings, read as local dates.
 */
@@ -147,15 +147,22 @@ export function formatDay(date: string): string {
 
 
 /*
-The heading for the period:
-- Day:   "Thu, Nov 5"
-- Week:  "Nov 2 – 8", or "Oct 26 – Nov 1" across months
+The heading for the period, always with the year, since
+the page can show any period back to the first data:
+- Day:   "Thu, Nov 5, 2026"
+- Week:  "Nov 2 – 8, 2026", "Oct 26 – Nov 1, 2026" across
+         months, "Dec 28, 2026 – Jan 3, 2027" across years
 - Month: "October 2026"
 */
 export function formatPeriodLabel(summary: DashboardSummary): string {
 
     if (summary.period === "day") {
-        return formatDay(summary.date);
+        return parseDate(summary.date).toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        });
     }
 
     const start = parseDate(summary.start);
@@ -169,16 +176,21 @@ export function formatPeriodLabel(summary: DashboardSummary): string {
 
     const end = parseDate(summary.end);
 
-    const startText = start.toLocaleDateString("en-US", {
+    const monthDay = (date: Date) => date.toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
     });
 
+    if (end.getFullYear() !== start.getFullYear()) {
+        return `${monthDay(start)}, ${start.getFullYear()} – `
+            + `${monthDay(end)}, ${end.getFullYear()}`;
+    }
+
     const endText = end.getMonth() === start.getMonth()
         ? String(end.getDate())
-        : end.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        : monthDay(end);
 
-    return `${startText} – ${endText}`;
+    return `${monthDay(start)} – ${endText}, ${end.getFullYear()}`;
 
 }
 

@@ -122,7 +122,7 @@ describe("Overview", () => {
         );
 
         expect(screen.getByText("Data through Thu, Nov 5")).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Nov 2 – 8" })).toBeInTheDocument();
+        expect(screen.getByRole("heading", { name: "Nov 2 – 8, 2026" })).toBeInTheDocument();
         expect(screen.getByText("Week so far · 4 of 7 days")).toBeInTheDocument();
 
         expect(
@@ -197,7 +197,7 @@ describe("Overview", () => {
         fireEvent.click(await screen.findByRole("button", { name: "Day" }));
 
         expect(
-            await screen.findByRole("heading", { name: "Thu, Nov 5" })
+            await screen.findByRole("heading", { name: "Thu, Nov 5, 2026" })
         ).toBeInTheDocument();
 
         expect(dashboardApi.getDashboardSummary).toHaveBeenLastCalledWith(
@@ -226,7 +226,7 @@ describe("Overview", () => {
         fireEvent.click(screen.getByRole("button", { name: "Previous period" }));
 
         expect(
-            await screen.findByRole("heading", { name: "Oct 26 – Nov 1" })
+            await screen.findByRole("heading", { name: "Oct 26 – Nov 1, 2026" })
         ).toBeInTheDocument();
 
         expect(dashboardApi.getDashboardSummary).toHaveBeenLastCalledWith(
@@ -239,7 +239,7 @@ describe("Overview", () => {
         fireEvent.click(next);
 
         expect(
-            await screen.findByRole("heading", { name: "Nov 2 – 8" })
+            await screen.findByRole("heading", { name: "Nov 2 – 8, 2026" })
         ).toBeInTheDocument();
 
         expect(dashboardApi.getDashboardSummary).toHaveBeenLastCalledWith(
@@ -316,7 +316,7 @@ describe("Overview", () => {
 
         render(<Overview />);
 
-        await screen.findByRole("heading", { name: "Nov 2 – 8" });
+        await screen.findByRole("heading", { name: "Nov 2 – 8, 2026" });
 
         expect(screen.queryByRole("button", { name: "Today" })).not.toBeInTheDocument();
 
@@ -325,7 +325,7 @@ describe("Overview", () => {
         fireEvent.click(await screen.findByRole("button", { name: "Today" }));
 
         expect(
-            await screen.findByRole("heading", { name: "Nov 2 – 8" })
+            await screen.findByRole("heading", { name: "Nov 2 – 8, 2026" })
         ).toBeInTheDocument();
 
         expect(dashboardApi.getDashboardSummary).toHaveBeenLastCalledWith(
@@ -347,7 +347,7 @@ describe("Overview", () => {
 
         render(<Overview />);
 
-        await screen.findByRole("heading", { name: "Nov 2 – 8" });
+        await screen.findByRole("heading", { name: "Nov 2 – 8, 2026" });
 
         expect(
             screen.getByRole("button", { name: "Previous period" })

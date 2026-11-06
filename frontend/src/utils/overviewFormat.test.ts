@@ -87,15 +87,19 @@ describe("period text", () => {
 
         expect(
             formatPeriodLabel(periodSummary("day", "2026-11-05", "2026-11-05"))
-        ).toBe("Thu, Nov 5");
+        ).toBe("Thu, Nov 5, 2026");
 
         expect(
             formatPeriodLabel(periodSummary("week", "2026-11-02", "2026-11-08"))
-        ).toBe("Nov 2 – 8");
+        ).toBe("Nov 2 – 8, 2026");
 
         expect(
             formatPeriodLabel(periodSummary("week", "2026-10-26", "2026-11-01"))
-        ).toBe("Oct 26 – Nov 1");
+        ).toBe("Oct 26 – Nov 1, 2026");
+
+        expect(
+            formatPeriodLabel(periodSummary("week", "2026-12-28", "2027-01-03"))
+        ).toBe("Dec 28, 2026 – Jan 3, 2027");
 
         expect(
             formatPeriodLabel(periodSummary("month", "2026-10-01", "2026-10-31"))
