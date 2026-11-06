@@ -312,8 +312,10 @@ Example:
 
 **Live tests are opt-in.** Tests in files ending in `_e2e.py` are marked `e2e` by
 `tests/conftest.py` and skipped by default (`pytest.ini` sets `addopts = -m "not e2e"`). These are
-the end-to-end tests, which read and write the real Google Sheet through a running backend, and
-`tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet and calls OpenAI.
+the end-to-end tests, which read and write the real Google Sheet through a running backend,
+`tests/dashboard/test_dashboard_e2e.py`, which only reads it (the Overview endpoint, checking rules
+that hold for any data), and `tests/labs/test_lab_extraction_e2e.py`, which reads the live Sheet
+and calls OpenAI.
 
 The end-to-end tests create rows with clearly fake values (the year 2099, keys starting with
 `TEST_`, file names starting with `api_test_`) and delete them afterwards. Before deleting

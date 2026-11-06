@@ -89,10 +89,12 @@ def _recorded(value):
     """
     Return the value, or None when nothing was recorded.
 
-    For steps, sleep, calories, water and the recovery values (resting
-    heart rate, HRV, blood oxygen, respiratory rate), a 0 means the day
-    has no data (for example, the watch was not worn), so it is treated
-    as missing rather than pulling averages down.
+    For steps, sleep, calories, water, the recovery values (resting
+    heart rate, HRV, blood oxygen, respiratory rate) and body values
+    (weight, body fat, waist), a 0 means the day has no data (for
+    example, the watch was not worn, or a field was left at 0), so it
+    is treated as missing rather than pulling averages down or showing
+    as the latest measurement.
     """
 
     return None if not value else value
@@ -340,7 +342,7 @@ class DashboardService:
         measurement = data.body_by_date.get(day)
 
         if measurement is not None:
-            values.weight_kg = measurement.weight_kg
+            values.weight_kg = _recorded(measurement.weight_kg)
 
         return values
 
@@ -473,7 +475,7 @@ class DashboardService:
 
         def latest(field: str) -> BodyMeasurements | None:
             for row in reversed(up_to_end):
-                if getattr(row, field) is not None:
+                if _recorded(getattr(row, field)) is not None:
                     return row
             return None
 
@@ -481,7 +483,7 @@ class DashboardService:
             values = [
                 getattr(row, field)
                 for row in in_window
-                if getattr(row, field) is not None
+                if _recorded(getattr(row, field)) is not None
             ]
 
             if len(values) < 2:
@@ -496,7 +498,7 @@ class DashboardService:
             trend=[
                 BodyWeightPoint(date=row.date, weight_kg=row.weight_kg)
                 for row in in_window
-                if row.weight_kg is not None
+                if _recorded(row.weight_kg) is not None
             ],
         )
 

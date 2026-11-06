@@ -68,7 +68,9 @@ Work starts with **Overview**.
 
 ### Rules
 
-- Days with no data are shown as gaps, never as zeros, and averages ignore them.
+- Days with no data are shown as gaps, never as zeros, and averages ignore them. A recorded 0
+  also counts as no data for steps, sleep, calories, water, the recovery values and body values
+  (weight, body fat, waist): none of these is ever really 0.
   Show coverage ("Logged 5 of 7 days").
 - Compare each number with something: your 30-day baseline (Day) or the previous period
   (Week/Month).

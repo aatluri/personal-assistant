@@ -545,6 +545,34 @@ def test_body_summary_for_a_day_looks_back_30_days():
     assert body.weight_change_kg == -1.4
 
 
+# Verify that a 0 for weight, body fat or waist counts as not measured:
+# it is never the latest value, and is left out of the trend and change.
+def test_body_summary_ignores_zero_values():
+
+    service, _ = make_service(
+        body=[
+            *BODY,
+            BodyMeasurements(
+                date=date(2026, 11, 5),
+                weight_kg=0.0,
+                body_fat_percent=0.0,
+                waist_cm=0.0,
+            ),
+        ]
+    )
+
+    summary = service.get_summary("month", date(2026, 11, 5))
+    body = summary.body
+
+    assert body.latest_weight_kg == 78.6
+    assert body.latest_body_fat_percent == 19.0
+    assert body.latest_waist_cm == 84
+    assert body.weight_change_kg == -0.4
+    assert body.weigh_ins == 2
+
+    assert summary.days[4].weight_kg is None
+
+
 # Verify that a measurement after the period is not used as "latest".
 def test_body_summary_ignores_later_measurements():
 
