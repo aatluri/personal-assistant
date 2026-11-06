@@ -114,11 +114,22 @@ and needs explicit approval.
 - `GET /health/dashboard/summary?period=day|week|month&date=YYYY-MM-DD` returns the period's
   values, the previous period's values, per-day series for the small charts, coverage counts
   and highlights.
-- A `DashboardService` in `app/modules/health/dashboard/` holds the combining rules above and
-  reads through the existing services, following API → Service → Repository. Goals are in
-  `goals.py` in the same module.
-- A 60-second in-memory cache inside the dashboard service only, because each request reads
-  whole worksheets. Edits made on the log pages show on Overview within a minute.
+- A `DashboardService` in `app/modules/health/dashboard/` holds the combining rules above. It
+  reads the worksheets through the shared cache below, which reads them through the existing
+  services, following API → Service → Repository. Goals are in `goals.py` in the same module.
+- **Cache**: each request needs all six worksheets (about 12 Sheets requests), so the full
+  worksheets are kept in memory by `DataCache` (`backend/app/data_cache.py`). It is shared:
+  Explore will read the same cache, and other sources (such as labs) can be added as named
+  entries when a page needs them.
+  - loaded in the background when the backend starts (a failure is printed, and the next
+    request tries again);
+  - each worksheet is read again after 12 hours;
+  - every save through the API marks that worksheet as stale, so it is read again on the next
+    Overview request (imports go through the API too, so they show straight away);
+  - a **Refresh** button reloads everything, for edits made directly in Google Sheets.
+
+  Only the dashboards (Overview, and later Explore) use the cache. The log pages always read the
+  Sheet, because they are used for editing and must show what is actually stored.
 
 ## Frontend design
 
