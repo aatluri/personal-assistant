@@ -138,8 +138,9 @@ and needs explicit approval.
 ## Frontend design
 
 - The page stays at `/`; the navigation label changes from "Dashboard" to "Overview".
-- Charts are hand-written SVG (daily bars with gaps, a stacked bar, a sparkline). Explore will
-  probably need Recharts.
+- Charts are hand-written, with no chart library (`src/components/charts/`): daily bars with gaps
+  and a stacked bar are plain elements sized by percentage (so each bar can be a button), and the
+  weight sparkline is SVG. Explore will probably need Recharts.
 - Icons come from `lucide-react`, which the app already uses.
 
 ## Decisions

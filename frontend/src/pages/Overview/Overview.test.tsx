@@ -4,6 +4,7 @@ import {
     render,
     screen,
     waitFor,
+    within,
 } from "@testing-library/react";
 
 import {
@@ -24,6 +25,7 @@ import type { DashboardSummary, Period } from "../../types/DashboardSummary";
 import {
     makeDashboardSummary,
     makePeriodSummary,
+    makeWeekDays,
 } from "../../test/dashboardSummary";
 
 
@@ -138,17 +140,25 @@ describe("Overview", () => {
 
         render(<Overview />);
 
-        expect(await screen.findByText("9,210")).toBeInTheDocument();
-        expect(screen.getByText("↑ 6% vs last week")).toBeInTheDocument();
+        /*
+        The cards repeat some of these values, so look only
+        inside the headline numbers.
+        */
+        const headline = within(
+            await screen.findByRole("region", { name: "Headline numbers" })
+        );
 
-        expect(screen.getByText("7h 11m")).toBeInTheDocument();
-        expect(screen.getByText("↑ 22m vs last week")).toBeInTheDocument();
+        expect(headline.getByText("9,210")).toBeInTheDocument();
+        expect(headline.getByText("↑ 6% vs last week")).toBeInTheDocument();
 
-        expect(screen.getByText("53")).toBeInTheDocument();
-        expect(screen.getByText("↓ 2 vs last week")).toBeInTheDocument();
+        expect(headline.getByText("7h 11m")).toBeInTheDocument();
+        expect(headline.getByText("↑ 22m vs last week")).toBeInTheDocument();
 
-        expect(screen.getByText("4")).toBeInTheDocument();
-        expect(screen.getByText("210 min · 2,310 kcal")).toBeInTheDocument();
+        expect(headline.getByText("53")).toBeInTheDocument();
+        expect(headline.getByText("↓ 2 vs last week")).toBeInTheDocument();
+
+        expect(headline.getByText("4")).toBeInTheDocument();
+        expect(headline.getByText("210 min · 2,310 kcal")).toBeInTheDocument();
 
     });
 
@@ -167,8 +177,12 @@ describe("Overview", () => {
 
         render(<Overview />);
 
-        expect(await screen.findAllByText("–")).toHaveLength(3);
-        expect(screen.queryByText(/vs last week/)).not.toBeInTheDocument();
+        const headline = within(
+            await screen.findByRole("region", { name: "Headline numbers" })
+        );
+
+        expect(headline.getAllByText("–")).toHaveLength(3);
+        expect(headline.queryByText(/vs last week/)).not.toBeInTheDocument();
 
     });
 
@@ -232,6 +246,56 @@ describe("Overview", () => {
             "week",
             "2026-11-05"
         );
+
+    });
+
+
+    /*
+    Verify that tapping a day in a Week chart opens that
+    day in Day view.
+    */
+    test("opens a day when its bar is tapped", async () => {
+
+        vi.mocked(dashboardApi.getDashboardSummary).mockImplementation(
+            async (period) => period === "week"
+                ? makeDashboardSummary({
+                    days: makeWeekDays({ "2026-11-02": { steps: 9000 } }),
+                })
+                : CURRENT[period]
+        );
+
+        render(<Overview />);
+
+        fireEvent.click(
+            await screen.findByRole("button", { name: "Mon, Nov 2: 9,000 steps" })
+        );
+
+        await waitFor(() =>
+            expect(dashboardApi.getDashboardSummary).toHaveBeenLastCalledWith(
+                "day",
+                "2026-11-02"
+            )
+        );
+
+        expect(
+            screen.getByRole("button", { name: "Day" })
+        ).toHaveAttribute("aria-pressed", "true");
+
+    });
+
+
+    /*
+    Verify that the six cards are shown.
+    */
+    test("shows the six cards", async () => {
+
+        render(<Overview />);
+
+        for (const card of ["Sleep", "Recovery", "Activity", "Nutrition", "Training", "Body"]) {
+            expect(
+                await screen.findByRole("region", { name: card })
+            ).toBeInTheDocument();
+        }
 
     });
 

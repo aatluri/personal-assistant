@@ -16,15 +16,9 @@ import {
     formatMinutes,
     formatNumber,
     type Change,
-    type Tone,
 } from "../../../utils/overviewFormat";
 
-
-const TONE_CLASSES: Record<Tone, string> = {
-    good: "text-green-700",
-    bad: "text-red-700",
-    neutral: "text-slate-500",
-};
+import { TONE_CLASSES } from "./tones";
 
 
 /*
@@ -156,7 +150,8 @@ function HeadlineNumbers({ summary }: { summary: DashboardSummary }) {
 
     return (
 
-        <div
+        <section
+            aria-label="Headline numbers"
             className="
                 grid
                 grid-cols-2
@@ -205,7 +200,7 @@ function HeadlineNumbers({ summary }: { summary: DashboardSummary }) {
                 detail={describeWorkouts(summary)}
             />
 
-        </div>
+        </section>
 
     );
 

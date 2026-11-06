@@ -56,7 +56,9 @@ src/
 │   └── navigation.ts   Desktop sidebar items and mobile bottom-bar items
 ├── pages/              One folder per page; page-specific sections live in its components/ folder
 ├── components/         Shared UI: PageHeader, DateSection, TextInput, CollapsibleCard, SaveButton,
-│                       Button, PageContainer, LoadingSpinner, NavigationItem, MoreMenu, ...
+│                       Button, PageContainer, LoadingSpinner, NavigationItem, MoreMenu, ProgressBar,
+│                       ..., and charts/ (BarSeries, StackedBar, Sparkline: the Overview's
+│                       small charts, drawn without a chart library)
 ├── api/                Backend calls and model conversion, one file per metric, plus
 │                       dashboard.ts for the Overview; config.ts holds the backend
 │                       address (API_BASE_URL)
@@ -80,7 +82,7 @@ src/
 | `/body-measurements` | `LogBodyMeasurements` | `bodyMeasurements.ts` | `GET /health/body-measurements/{date}`, `PUT /health/body-measurements` |
 | `/workout-metrics` | `LogWorkoutMetrics` | `workoutMetrics.ts` | `GET /health/workout-metrics?workout_date=`, `PUT /health/workout-metrics` (several workouts per date) |
 | `/heart-rate-notifications` | `HeartRateNotifications` | `heartRateNotifications.ts` | `GET /health/heart-rate-notifications?notification_date=` (read-only: several notifications per date, no saving; `PageHeader` shows no save status) |
-| `/` | `Overview` | `dashboard.ts` | `GET /health/dashboard/summary?period=&date=&refresh=` (read-only: everything for a day, week or month, computed by the backend; see [`docs/dashboard/overview-design.md`](../docs/dashboard/overview-design.md)). Built so far: the period controls, Refresh, and the four headline numbers; the cards come next |
+| `/` | `Overview` | `dashboard.ts` | `GET /health/dashboard/summary?period=&date=&refresh=` (read-only: everything for a day, week or month, computed by the backend; see [`docs/dashboard/overview-design.md`](../docs/dashboard/overview-design.md)). Built: the period controls, Refresh, the four headline numbers, the six cards (Sleep, Recovery, Activity, Nutrition, Training, Body) and the heart rate alert strip; tapping a day in a Week or Month chart opens it. Highlights come next |
 | `/history` | `History` | — | Placeholder |
 | `/settings` | `Settings` | — | Placeholder |
 

@@ -6,17 +6,21 @@ import {
 
 import type { DashboardSummary } from "../types/DashboardSummary";
 
-import { makeDashboardSummary } from "../test/dashboardSummary";
+import { makeDailyValues, makeDashboardSummary } from "../test/dashboardSummary";
 
 import {
     describeChange,
+    formatChartLabels,
     formatComparisonLabel,
+    formatCount,
     formatDataThrough,
     formatHours,
     formatMinutes,
     formatNumber,
     formatPeriodLabel,
     formatPeriodProgress,
+    formatTime,
+    formatWeekday,
     shiftDate,
 } from "./overviewFormat";
 
@@ -239,6 +243,49 @@ describe("describeChange", () => {
 
         expect(describeChange(53, null, "vs Sep", false, asNumber))
             .toBeNull();
+
+    });
+
+});
+
+
+describe("card text", () => {
+
+    /*
+    Verify times, weekdays and counts.
+    */
+    test("formats times, weekdays and counts", () => {
+
+        expect(formatTime("2026-11-05T06:52:00")).toBe("06:52");
+        expect(formatWeekday("2026-11-03")).toBe("Tue");
+        expect(formatCount(1, "night")).toBe("1 night");
+        expect(formatCount(4, "night")).toBe("4 nights");
+
+    });
+
+
+    /*
+    Verify the chart labels: weekday initials for a week,
+    and only every 7th day for a month.
+    */
+    test("labels the chart days", () => {
+
+        const week = makeDashboardSummary({
+            days: ["2026-11-02", "2026-11-03", "2026-11-08"].map(
+                (date) => makeDailyValues({ date })
+            ),
+        });
+
+        expect(formatChartLabels(week)).toEqual(["M", "T", "S"]);
+
+        const month = makeDashboardSummary({
+            period: "month",
+            days: ["2026-10-01", "2026-10-02", "2026-10-08"].map(
+                (date) => makeDailyValues({ date })
+            ),
+        });
+
+        expect(formatChartLabels(month)).toEqual(["1", "", "8"]);
 
     });
 

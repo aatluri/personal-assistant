@@ -29,9 +29,16 @@ import {
 import LoadingSpinner from "../../components/LoadingSpinner";
 import PageContainer from "../../components/PageContainer";
 
+import ActivityCard from "./components/ActivityCard";
+import AlertStrip from "./components/AlertStrip";
+import BodyCard from "./components/BodyCard";
 import HeadlineNumbers from "./components/HeadlineNumbers";
+import NutritionCard from "./components/NutritionCard";
 import OverviewHeader from "./components/OverviewHeader";
 import PeriodControls from "./components/PeriodControls";
+import RecoveryCard from "./components/RecoveryCard";
+import SleepCard from "./components/SleepCard";
+import TrainingCard from "./components/TrainingCard";
 
 
 function Overview() {
@@ -167,6 +174,17 @@ function Overview() {
 
 
     /*
+    Tapping a day in a Week or Month chart opens that day.
+    */
+    function handleSelectDay(date: string) {
+
+        setPeriod("day");
+        setSelectedDate(date);
+
+    }
+
+
+    /*
     Display a loading indicator until the first summary
     arrives. Later loads keep the current summary on
     screen, dimmed, until the new one replaces it.
@@ -231,9 +249,21 @@ function Overview() {
                 {summary && (
                     <div
                         aria-busy={isLoading}
-                        className={isLoading ? "opacity-60" : ""}
+                        className={`space-y-4 ${isLoading ? "opacity-60" : ""}`}
                     >
                         <HeadlineNumbers summary={summary} />
+
+                        {/* Two columns on wider screens, one on phones. */}
+                        <div className="grid gap-4 md:grid-cols-2">
+                            <SleepCard summary={summary} onSelectDay={handleSelectDay} />
+                            <RecoveryCard summary={summary} onSelectDay={handleSelectDay} />
+                            <ActivityCard summary={summary} onSelectDay={handleSelectDay} />
+                            <NutritionCard summary={summary} />
+                            <TrainingCard summary={summary} />
+                            <BodyCard summary={summary} />
+                        </div>
+
+                        <AlertStrip summary={summary} />
                     </div>
                 )}
 

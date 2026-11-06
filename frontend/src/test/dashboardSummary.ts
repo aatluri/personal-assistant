@@ -8,9 +8,63 @@ they need.
 */
 
 import type {
+    DailyValues,
     DashboardSummary,
     PeriodSummary,
 } from "../types/DashboardSummary";
+
+
+/*
+One day with no data, for the cards' charts.
+*/
+export function makeDailyValues(
+    overrides: Partial<DailyValues> = {},
+): DailyValues {
+
+    return {
+        date: "2026-11-02",
+        steps: null,
+        activeEnergyKcal: null,
+        flightsClimbed: null,
+        sleepHours: null,
+        deepSleepHours: null,
+        coreSleepHours: null,
+        remSleepHours: null,
+        awakeHours: null,
+        sleepStartTime: null,
+        sleepEndTime: null,
+        restingHeartRateBpm: null,
+        heartRateVariabilityMs: null,
+        bloodOxygenSaturationPercent: null,
+        respiratoryRateBpm: null,
+        dietaryEnergyKcal: null,
+        proteinG: null,
+        carbohydratesG: null,
+        totalFatG: null,
+        waterMl: null,
+        workoutCount: 0,
+        workoutMinutes: 0,
+        weightKg: null,
+        ...overrides,
+    };
+
+}
+
+
+/*
+The 7 days of the sample week (Mon Nov 2 to Sun Nov 8),
+with the given values; days not listed have no data.
+*/
+export function makeWeekDays(
+    values: Record<string, Partial<DailyValues>> = {},
+): DailyValues[] {
+
+    return [2, 3, 4, 5, 6, 7, 8].map((day) => {
+        const date = `2026-11-0${day}`;
+        return makeDailyValues({ date, ...values[date] });
+    });
+
+}
 
 
 /*

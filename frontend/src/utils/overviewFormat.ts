@@ -77,6 +77,62 @@ export function shiftDate(
 
 
 /*
+"2026-11-05T06:52:00" -> "06:52"
+*/
+export function formatTime(dateTime: string): string {
+
+    return dateTime.substring(11, 16);
+
+}
+
+
+/*
+"2026-11-05" -> "Thu"
+*/
+export function formatWeekday(date: string): string {
+
+    return parseDate(date).toLocaleDateString("en-US", {
+        weekday: "short",
+    });
+
+}
+
+
+/*
+Axis labels for the cards' daily charts, one per day:
+weekday initials ("M T W T F S S") for a day or week,
+and only days 1, 8, 15, 22 and 29 for a month.
+*/
+export function formatChartLabels(summary: DashboardSummary): string[] {
+
+    return summary.days.map((day) => {
+
+        const date = parseDate(day.date);
+
+        if (summary.period === "month") {
+            return [1, 8, 15, 22, 29].includes(date.getDate())
+                ? String(date.getDate())
+                : "";
+        }
+
+        return "MTWTFSS"[(date.getDay() + 6) % 7];
+
+    });
+
+}
+
+
+/*
+"1 night", "4 nights"
+*/
+export function formatCount(count: number, noun: string): string {
+
+    return `${count} ${noun}${count === 1 ? "" : "s"}`;
+
+}
+
+
+/*
 "2026-11-05" -> "Thu, Nov 5"
 */
 export function formatDay(date: string): string {
