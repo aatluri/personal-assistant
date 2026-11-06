@@ -23,7 +23,8 @@ Every screen should have a single, obvious focal point.
 
 Examples:
 
-- **Dashboard** → Today's Progress
+- **Dashboard** → Today's Progress (built as the Overview page; see
+  [`docs/dashboard/overview-design.md`](../dashboard/overview-design.md))
 - **Blood Work** → Latest Health Score
 
 Users should immediately know where to look when they open a screen.

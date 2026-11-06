@@ -113,4 +113,5 @@ npm run lint
   `src/components/Button.tsx`.
 - **Labs frontend** is not built yet (backend endpoints exist). Do not start it until asked.
 - History and Settings pages are placeholders. The Overview page (`/`, which replaced the
-  Dashboard placeholder) is being built in steps; see `docs/dashboard/overview-design.md`.
+  Dashboard placeholder) is built; its design, rules and decisions are in
+  `docs/dashboard/overview-design.md`. The Explore page described there is not started.

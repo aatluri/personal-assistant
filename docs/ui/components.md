@@ -1,5 +1,10 @@
 # UI Components
 
+> **Note (November 2026):** the Dashboard has been built as the **Overview** page. Its design is
+> in [`docs/dashboard/overview-design.md`](../dashboard/overview-design.md), which replaces the
+> dashboard parts of this document (the "Dashboard Components" section, the "Statistic Tile",
+> and the Dashboard column of the usage table). The navigation now calls it "Overview".
+
 ## Purpose
 
 This document defines every reusable UI component used throughout the Personal Operating System.

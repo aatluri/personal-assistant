@@ -1,7 +1,10 @@
 # Dashboard design: Overview and Explore
 
-Status: **design agreed, not built yet.** Visual mockup: [`overview-mockup.html`](overview-mockup.html)
-(open it in a browser; all numbers are sample data).
+Status: **Overview built** (November 2026; Explore not started). Visual mockup:
+[`overview-mockup.html`](overview-mockup.html) (open it in a browser; all numbers are sample
+data). The mockup is the original sketch: the built page also has a date picker on the period
+label, a Today button and a Refresh button, and shows highlights as goal rings and record badges
+rather than the mockup's chips.
 
 This replaces the dashboard parts of the older `docs/ui/` documents.
 
@@ -168,12 +171,14 @@ Both groups wrap onto more lines when needed; an empty group is left out.
 - **Combined daily table**: one row per date with every metric as a column, built in the backend
   from the existing services. Workouts and HR notifications are rolled up per day, and sleep is
   placed by the sleep-date rule above. No Sheet changes are needed.
-- `GET /health/dashboard/summary?period=day|week|month&date=YYYY-MM-DD` returns the period's
-  values, the previous period's values, per-day series for the small charts, coverage counts
-  and highlights.
+- `GET /health/dashboard/summary?period=day|week|month&date=YYYY-MM-DD&refresh=true` returns
+  the period's values, what they are compared with, per-day series for the small charts,
+  coverage counts, highlights, and the data range (`data_from`, `data_through`). `date` defaults
+  to today; `refresh=true` reloads the cache first.
 - A `DashboardService` in `app/modules/health/dashboard/` holds the combining rules above. It
   reads the worksheets through the shared cache below, which reads them through the existing
-  services, following API → Service → Repository. Goals are in `goals.py` in the same module.
+  services, following API → Service → Repository. Goals are in `goals.py` and the highlight
+  rules in `highlights.py`, in the same module.
 - **Cache**: each request needs all six worksheets (about 12 Sheets requests), so the full
   worksheets are kept in memory by `DataCache` (`backend/app/data_cache.py`). It is shared:
   Explore will read the same cache, and other sources (such as labs) can be added as named
@@ -192,7 +197,8 @@ Both groups wrap onto more lines when needed; an empty group is left out.
 
 ## Frontend design
 
-- The page stays at `/`; the navigation label changes from "Dashboard" to "Overview".
+- The page is at `/` (`src/pages/Overview/`), and the navigation calls it "Overview" (it replaced
+  the Dashboard placeholder). Only `src/api/dashboard.ts` calls the backend.
 - Charts are hand-written, with no chart library (`src/components/charts/`): daily bars with gaps
   and a stacked bar are plain elements sized by percentage (so each bar can be a button), and the
   weight sparkline is SVG. Explore will probably need Recharts.
@@ -201,7 +207,8 @@ Both groups wrap onto more lines when needed; an empty group is left out.
 ## Decisions
 
 All open decisions are settled (November 2026): goals, sleep date, chart library, Day-view
-activity bars, "Data through" as a date, highlights from stored data only, the 60-second cache,
+activity bars, "Data through" as a date, highlights from stored data only (in their own file,
+all shown, drawn as rings and badges), the shared 12-hour cache with Refresh, the date picker,
 and the endpoint and navigation names. Details are in the sections above.
 
 ## Explore page (later)
