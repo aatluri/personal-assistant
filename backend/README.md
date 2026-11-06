@@ -66,15 +66,18 @@ Why the code is organised this way:
 ```text
 backend/
 ├── app/
-│   ├── main.py                  FastAPI app, CORS, root endpoint, includes the health router
+│   ├── main.py                  FastAPI app, CORS, root endpoint, includes the health router,
+│   │                            loads the data cache at startup
 │   ├── config.py                Settings loaded from .env (the `settings` object)
+│   ├── data_cache.py            In-memory cache of whole worksheets for the dashboards
 │   ├── database/
 │   │   ├── sheet_formats.py     Date and date-time formats used in the Sheet (DATE_FORMAT, DATETIME_FORMAT)
 │   │   └── sheets_client.py     Authenticated, cached Google Sheets client (retries when rate-limited)
 │   ├── ai/
 │   │   └── openai_client.py     OpenAI client used for lab PDF extraction
 │   └── modules/health/
-│       ├── api.py               Every /health endpoint (metrics and labs)
+│       ├── api.py               Every /health endpoint (metrics, Overview and labs)
+│       ├── dashboard/           The Overview page: goals, summary schema, DashboardService
 │       ├── body_measurements_metrics/  ┐
 │       ├── health_metrics/             │  One folder per metric module, each with:
 │       ├── heart_rate_notifications/   │    *_schema.py
@@ -107,11 +110,36 @@ All endpoints are prefixed with `/health`. Swagger UI at http://127.0.0.1:8000/d
 | Workout Metrics | `GET /workout-metrics?workout_date=`, `GET /workout-metric?workout_start_time=`, `POST`, `PUT` | `HEALTH_WORKOUT_METRICS_WORKSHEET` | One per workout, matched by start time |
 | Heart Rate Notifications | `GET /heart-rate-notifications?notification_date=`, `GET /heart-rate-notification?start_time=`, `POST`, `PUT` | `HEALTH_HEART_RATE_NOTIFICATIONS_WORKSHEET` | One per notification, matched by start time. `readings` is the heart rate values as text, e.g. `"39, 40, 39"` |
 | Labs | Lab reports, lab results, marker definitions, reference ranges, interpretations, `POST /lab-reports/extract`, `POST /lab-reports/save` | `LAB_*_WORKSHEET` settings | See [Labs Module](#labs-module) |
+| Overview | `GET /dashboard/summary?period=day\|week\|month&date=YYYY-MM-DD&refresh=true` (`date` defaults to today; `refresh` is optional) | Reads the six metric worksheets through the data cache | Read-only. See [Overview and the Data Cache](#overview-and-the-data-cache) |
 
 Also: `GET /` (API is running) and `GET /health/status` (health module status).
 
 For the metric modules, `POST` creates a record and `PUT` creates or updates one (an upsert). The
 frontend and the data importer both use `PUT`.
+
+---
+
+## Overview and the Data Cache
+
+`GET /health/dashboard/summary` returns everything the Overview page shows for a day, a week
+(Monday to Sunday) or a calendar month. The rules (averages over days with data, comparisons,
+coverage, body trends) are in `modules/health/dashboard/dashboard_service.py`; the design is in
+[`docs/dashboard/overview-design.md`](../docs/dashboard/overview-design.md).
+
+Each request needs all six metric worksheets, so they are kept in memory by `DataCache`
+(`app/data_cache.py`), created once in `api.py`:
+
+- **Startup:** `main.py` loads the cache in a background thread, so the backend starts straight
+  away. If loading fails, it prints a message and the first Overview request loads it.
+- **Saves:** every metric `POST` and `PUT` marks its worksheet as stale after a successful save,
+  so the next Overview request reads that worksheet again. Imports save through these endpoints,
+  so they show straight away.
+- **Expiry:** each worksheet is read again after 12 hours (`CACHE_DURATION`).
+- **Refresh:** `refresh=true` reads every worksheet again, for edits made directly in Google Sheets.
+
+Only the dashboards use the cache; the log pages always read the Sheet. The cache lives inside the
+backend process, so run the backend as **a single process** (one worker). With several workers or
+copies, each would have its own cache, and a save would only mark one of them stale.
 
 ---
 
@@ -217,6 +245,10 @@ and skips the Drive search. Do not switch it back to `client.open("<name>")`.
 ```bash
 fastapi dev app/main.py
 ```
+
+`fastapi dev` restarts the backend whenever a file under `backend/` changes. During a long import,
+start it with `fastapi dev app/main.py --no-reload` instead, so code changes do not restart it
+mid-import (a restart makes the file being imported fail; it is retried on the next run).
 
 Then check:
 
@@ -383,6 +415,10 @@ Example: adding a column to Nutrition Metrics.
 
 4. **API** (`app/modules/health/api.py`)
    - Add `GET`, `POST` and `PUT` endpoints, plus a tag in `tags_metadata` in `app/main.py`.
+   - Add a loader for the worksheet to `data_cache`, and call `data_cache.mark_stale("<source>")`
+     in the `POST` and `PUT` endpoints after the save, so the dashboards see changes.
+   - Add the new save routes to `SAVE_ROUTES` in `tests/dashboard/test_dashboard_api.py`. A test
+     fails for any metric save route that is not listed there.
 
 5. **Testing**
    - Add `tests/<name>/` with repository, service and API tests, using `tests/helpers/test_data.py`.

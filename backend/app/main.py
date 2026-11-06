@@ -1,3 +1,6 @@
+from contextlib import asynccontextmanager
+import threading
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -14,9 +17,14 @@ from fastapi.middleware.cors import CORSMiddleware
  #   └── Nutrition Router
 
 from app.config import settings
+from app.modules.health.api import data_cache
 from app.modules.health.api import router as health_router
 
 tags_metadata = [
+    {
+        "name": "Overview",
+        "description": "Everything the Overview page shows for a day, week or month.",
+    },
     {
         "name": "BodyMeasurement Metrics",
         "description": "Body weight and measurement records.",
@@ -68,6 +76,21 @@ tags_metadata = [
 ]
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """
+    Runs when the backend starts.
+
+    Fills the dashboards' data cache in a background thread, so the
+    backend is ready straight away instead of waiting for six worksheet
+    reads. If loading fails, the first Overview request loads it.
+    """
+
+    threading.Thread(target=data_cache.load_all, daemon=True).start()
+
+    yield
+
+
 # Create the main FastAPI application.
 
 # There is only ONE FastAPI app for the entire project.
@@ -77,6 +100,7 @@ app = FastAPI(
     description="Backend API for the Personal Assistant application.",
     version="0.1.0",
     openapi_tags=tags_metadata,
+    lifespan=lifespan,
 )
 
 app.add_middleware(

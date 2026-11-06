@@ -16,7 +16,17 @@ Google Sheets directly.
 from fastapi import APIRouter
 from datetime import date, datetime
 from fastapi import HTTPException
+from fastapi import Query
 from fastapi import status
+
+from app.data_cache import DataCache
+from app.modules.health.dashboard.dashboard_schema import (
+    DashboardSummary,
+    Period,
+)
+from app.modules.health.dashboard.dashboard_service import (
+    DashboardService,
+)
 
 from app.modules.health.body_measurements_metrics.body_measurements_schema import (
     BodyMeasurements,
@@ -135,6 +145,28 @@ nutrition_metrics_service = NutritionMetricsService()
 heart_rate_notifications_service = HeartRateNotificationsService()
 
 
+# The shared cache of whole worksheets used by the dashboards (the
+# Overview page), and the Overview's service. Each metric save endpoint
+# below marks its worksheet as stale after a successful save, so the
+# dashboards show the change on their next request. Imports save
+# through these endpoints too. See app/data_cache.py.
+
+data_cache = DataCache(
+    loaders={
+        "health": health_metrics_service.get_health_metrics,
+        "sleep": sleep_metrics_service.get_sleep_metrics,
+        "nutrition": nutrition_metrics_service.get_nutrition_metrics,
+        "body": body_measurements_service.get_body_measurements,
+        "workouts": workout_metrics_service.get_workout_metrics,
+        "notifications": (
+            heart_rate_notifications_service.get_heart_rate_notifications
+        ),
+    }
+)
+
+dashboard_service = DashboardService(data_cache)
+
+
 @router.get("/status",tags=["API Health"],)
 def get_health_status() -> dict[str, str]:
     """
@@ -189,6 +221,8 @@ def create_body_measurement(body_measurement: BodyMeasurements,) -> None:
         body_measurement
     )
 
+    data_cache.mark_stale("body")
+
 @router.put(
     "/body-measurements",
     response_model=BodyMeasurements,
@@ -208,6 +242,8 @@ def update_body_measurement(
         body_measurement.date,
         body_measurement,
     )
+
+    data_cache.mark_stale("body")
 
     return body_measurement
 
@@ -279,6 +315,8 @@ def create_workout_metric(
         workout_metric
     )
 
+    data_cache.mark_stale("workouts")
+
 
 @router.put(
     "/workout-metrics",
@@ -299,6 +337,8 @@ def update_workout_metric(
         workout_metric.workout_start_time,
         workout_metric,
     )
+
+    data_cache.mark_stale("workouts")
 
     return workout_metric
 
@@ -362,6 +402,8 @@ def create_sleep_metric(
         sleep_metric
     )
 
+    data_cache.mark_stale("sleep")
+
 
 @router.put(
     "/sleep-metrics",
@@ -382,6 +424,8 @@ def update_sleep_metric(
         sleep_metric.date,
         sleep_metric,
     )
+
+    data_cache.mark_stale("sleep")
 
     return sleep_metric
 
@@ -446,6 +490,8 @@ def create_health_metric(
         health_metric
     )
 
+    data_cache.mark_stale("health")
+
 
 @router.put(
     "/health-metrics",
@@ -466,6 +512,8 @@ def update_health_metric(
         health_metric.date,
         health_metric,
     )
+
+    data_cache.mark_stale("health")
 
     return health_metric
 
@@ -530,6 +578,8 @@ def create_nutrition_metric(
         nutrition_metric
     )
 
+    data_cache.mark_stale("nutrition")
+
 
 @router.put(
     "/nutrition-metrics",
@@ -550,6 +600,8 @@ def update_nutrition_metric(
         nutrition_metric.date,
         nutrition_metric,
     )
+
+    data_cache.mark_stale("nutrition")
 
     return nutrition_metric
 
@@ -624,6 +676,8 @@ def create_heart_rate_notification(
         notification
     )
 
+    data_cache.mark_stale("notifications")
+
 
 @router.put(
     "/heart-rate-notifications",
@@ -643,7 +697,52 @@ def update_heart_rate_notification(
         notification,
     )
 
+    data_cache.mark_stale("notifications")
+
     return notification
+
+
+# -----------------------------------------------------------------------------
+# Overview Endpoint
+#
+# Everything the Overview page shows for a day, week or month.
+# -----------------------------------------------------------------------------
+
+@router.get(
+    "/dashboard/summary",
+    response_model=DashboardSummary,
+    tags=["Overview"],
+)
+def get_dashboard_summary(
+    period: Period = Query(
+        description="day, week (Monday to Sunday) or month (calendar month).",
+    ),
+    summary_date: date | None = Query(
+        default=None,
+        alias="date",
+        description="Any date in the period, as YYYY-MM-DD. Defaults to today.",
+    ),
+    refresh: bool = Query(
+        default=False,
+        description=(
+            "Read every worksheet again before answering, instead of "
+            "using the cached data."
+        ),
+    ),
+) -> DashboardSummary:
+    """
+    Return the Overview for the day, week or month that contains
+    `date` (default: today). Weeks run Monday to Sunday.
+
+    The data comes from the shared cache. refresh=true reads every
+    worksheet again first (the page's Refresh button), for edits made
+    directly in Google Sheets.
+    """
+
+    if refresh:
+        data_cache.refresh()
+
+    return dashboard_service.get_summary(period, summary_date)
 
 
 # =========================================================
