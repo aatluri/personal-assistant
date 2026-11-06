@@ -40,9 +40,8 @@ Work starts with **Overview**.
 
 ### Layout (top to bottom)
 
-1. **Highlight chips**: goal hit rate, streaks, and bests for the period, using only stored
-   values (most steps, longest sleep, longest workout, furthest distance). Pace-based bests such
-   as "best 5k" are not possible: workouts have no split times.
+1. **Highlights** (goal rings and record badges): goal progress (Day), or goal hit rates, a step streak and bests for the
+   period (Week/Month). See Highlights below.
 2. **Four headline numbers**: steps, sleep, resting HR, workouts. Each is compared with your
    usual (Day) or with the previous period (Week/Month).
 3. **Six cards** (2 columns on desktop, 1 on mobile):
@@ -111,6 +110,58 @@ to Nov 6 07:00, or from Nov 6 01:00 to 07:00, shows under **Nov 6**.
 Goals live in a backend constants file, because the backend computes goal hit rates and
 streaks. Moving them to Settings later needs a new worksheet, which is a Sheet structure change
 and needs explicit approval.
+
+### Highlights
+
+The rules live in their own file, `backend/app/modules/health/dashboard/highlights.py`, because
+they are the part most likely to change. Each highlight is a small rule function; `DAY_RULES` and
+`PERIOD_RULES` list them in display order, so adding, removing or reordering one is a one-line
+change. **Every highlight that has data is shown** (there is no limit), and a rule with no data
+shows nothing (never "0/0").
+
+The backend writes every part of a highlight: a **topic** (`steps`, `sleep`, `protein`, `water`,
+`streak`, `best`), a **value** (e.g. `12/31`, `8h 00m`, `5 days`), a **caption** and optional
+**detail** (e.g. `days ≥ 10k steps`; `best sleep` · `May 14`), **progress** (0–1 for goals, none
+for records), whether the **goal was met**, and the whole highlight as a **sentence** (the
+wording below, used as its name for screen readers). The page only draws them, in two groups:
+
+- **Goal rings** (highlights with progress: Day goal progress, Week/Month hit rates): a ring filled
+  to the share completed, with the percentage inside, the value, and the caption with a small
+  topic icon (steps teal, sleep purple, protein amber, water blue) below. The ring's colour shows
+  how complete the goal is, by the percentage shown in the ring (rounded):
+
+  | Completion | Colour |
+  |---|---|
+  | 0% | empty ring, red "0%" |
+  | above 0, up to 30% | red |
+  | above 30, up to 50% | orange |
+  | above 50, up to 70% | amber |
+  | above 70, up to 90% | light green |
+  | above 90% | green |
+
+  A fully met goal (the day's goal reached, or met on every day) shows a tick instead of the
+  percentage. The bands are `COMPLETION_BANDS` in
+  `frontend/src/pages/Overview/components/Highlights.tsx`.
+- **Record badges** (highlights without progress: the step streak and the bests): gold pills,
+  "caption · **value** · detail", with a flame for the streak and a medal for bests.
+
+Both groups wrap onto more lines when needed; an empty group is left out.
+
+| View | Highlights, in order (as sentences) |
+|---|---|
+| Day | `Steps 8,240 of 10,000`, `Protein 92 of 140 g`, `Water 2.1 of 3 L`, `Sleep 7h 12m · goal 7h met` |
+| Week / Month | Goal hit rates over days with data: `Steps goal met 5 of 7 days`, `Protein goal met 3 of 4 logged days`, `Sleep goal met 2 of 4 nights`, `Water goal met 3 of 5 days`; then the step streak; `Best sleep Tue · 7h 48m`; `Most steps Sat · 14,320`; `Furthest workout · Outdoor Run 8.2 km on Oct 18` |
+
+- **Step streak**: consecutive days reaching the steps goal; a day with no data breaks it. A
+  period in progress shows the current streak, ending on its last day with data
+  (`10k steps · 2-day streak`); a finished period shows its longest
+  (`Longest 10k streak · 6 days`). Not shown below 2 days.
+- **Bests** need at least two days to compare. On a tie, the earlier day wins. Days are named by
+  weekday in a week ("Tue") and by date in a month ("Oct 18").
+- **Furthest workout** falls back to the **longest** workout when no workout has a distance
+  (e.g. only strength training).
+- Only stored values are used: pace-based bests such as "best 5k" are not possible, because
+  workouts have no split times.
 
 ## Backend design
 

@@ -7,6 +7,10 @@ from app.modules.health.body_measurements_metrics.body_measurements_schema impor
     BodyMeasurements,
 )
 from app.modules.health.dashboard import goals
+from app.modules.health.dashboard.highlights import (
+    HighlightContext,
+    build_highlights,
+)
 from app.modules.health.dashboard.dashboard_schema import (
     BodySummary,
     BodyWeightPoint,
@@ -239,6 +243,25 @@ class DashboardService:
 
         data_dates = self._data_dates(data, today)
 
+        summary_goals = Goals(
+            steps=goals.STEPS,
+            protein_g=goals.PROTEIN_G,
+            sleep_hours=goals.SLEEP_HOURS,
+            water_ml=goals.WATER_ML,
+        )
+
+        # The highlight rules (highlights.py) read the period's days up
+        # to today and its workouts.
+        highlights = build_highlights(
+            HighlightContext(
+                period=period,
+                days=self._period_days(data, start, end, today),
+                workouts=workouts,
+                goals=summary_goals,
+                is_current=is_current,
+            )
+        )
+
         return DashboardSummary(
             period=period,
             date=selected_date,
@@ -249,6 +272,7 @@ class DashboardService:
             is_current=is_current,
             data_from=min(data_dates, default=None),
             data_through=max(data_dates, default=None),
+            highlights=highlights,
             current=current,
             comparison=comparison,
             days=[
@@ -263,12 +287,7 @@ class DashboardService:
                 if start <= notification.date <= end
             ],
             body=self._body_summary(data, body_start, end, today),
-            goals=Goals(
-                steps=goals.STEPS,
-                protein_g=goals.PROTEIN_G,
-                sleep_hours=goals.SLEEP_HOURS,
-                water_ml=goals.WATER_ML,
-            ),
+            goals=summary_goals,
         )
 
 
@@ -350,6 +369,26 @@ class DashboardService:
         return values
 
 
+    def _period_days(
+        self,
+        data: _DashboardData,
+        start: date,
+        end: date,
+        today: date,
+    ) -> list[DailyValues]:
+        """
+        The daily values from start to end, or to today for a period in
+        progress (days to come have nothing to count).
+        """
+
+        last = min(end, today)
+
+        if last < start:
+            return []
+
+        return [self._daily_values(data, day) for day in _dates(start, last)]
+
+
     def _summarize(
         self,
         data: _DashboardData,
@@ -363,12 +402,7 @@ class DashboardService:
         """
 
         last = min(end, today)
-
-        days = (
-            [self._daily_values(data, day) for day in _dates(start, last)]
-            if last >= start
-            else []
-        )
+        days = self._period_days(data, start, end, today)
 
         def average(field: str) -> float | None:
             return _average([getattr(day, field) for day in days])

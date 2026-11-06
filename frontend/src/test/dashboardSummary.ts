@@ -121,6 +121,7 @@ export function makeDashboardSummary(
         isCurrent: true,
         dataFrom: "2022-01-01",
         dataThrough: "2026-11-05",
+        highlights: [],
 
         current: makePeriodSummary({
             stepsAverage: 9210,

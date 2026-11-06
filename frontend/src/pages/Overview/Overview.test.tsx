@@ -391,6 +391,43 @@ describe("Overview", () => {
 
 
     /*
+    Verify that the highlights are shown above the headline
+    numbers.
+    */
+    test("shows the highlights above the headline numbers", async () => {
+
+        vi.mocked(dashboardApi.getDashboardSummary).mockResolvedValue(
+            makeDashboardSummary({
+                highlights: [{
+                    topic: "streak",
+                    value: "2 days",
+                    label: "10k streak so far",
+                    detail: null,
+                    progress: null,
+                    goalMet: false,
+                    text: "10k steps · 2-day streak",
+                }],
+            })
+        );
+
+        render(<Overview />);
+
+        const highlights = await screen.findByRole("region", { name: "Highlights" });
+        const headline = screen.getByRole("region", { name: "Headline numbers" });
+
+        expect(
+            within(highlights).getByRole("listitem", { name: "10k steps · 2-day streak" })
+        ).toBeInTheDocument();
+
+        expect(
+            highlights.compareDocumentPosition(headline)
+            & Node.DOCUMENT_POSITION_FOLLOWING
+        ).toBeTruthy();
+
+    });
+
+
+    /*
     Verify that the six cards are shown.
     */
     test("shows the six cards", async () => {

@@ -77,7 +77,8 @@ backend/
 │   │   └── openai_client.py     OpenAI client used for lab PDF extraction
 │   └── modules/health/
 │       ├── api.py               Every /health endpoint (metrics, Overview and labs)
-│       ├── dashboard/           The Overview page: goals, summary schema, DashboardService
+│       ├── dashboard/           The Overview page: goals, summary schema, DashboardService, and
+│       │                        highlights.py (the highlight rules, in display order)
 │       ├── body_measurements_metrics/  ┐
 │       ├── health_metrics/             │  One folder per metric module, each with:
 │       ├── heart_rate_notifications/   │    *_schema.py

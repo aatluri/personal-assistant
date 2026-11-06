@@ -33,6 +33,7 @@ import ActivityCard from "./components/ActivityCard";
 import AlertStrip from "./components/AlertStrip";
 import BodyCard from "./components/BodyCard";
 import HeadlineNumbers from "./components/HeadlineNumbers";
+import Highlights from "./components/Highlights";
 import NutritionCard from "./components/NutritionCard";
 import OverviewHeader from "./components/OverviewHeader";
 import PeriodControls from "./components/PeriodControls";
@@ -278,6 +279,8 @@ function Overview() {
                         aria-busy={isLoading}
                         className={`space-y-4 ${isLoading ? "opacity-60" : ""}`}
                     >
+                        <Highlights highlights={summary.highlights} />
+
                         <HeadlineNumbers summary={summary} />
 
                         {/* Two columns on wider screens, one on phones. */}

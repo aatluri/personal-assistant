@@ -156,6 +156,53 @@ export interface BodySummary {
 }
 
 
+/*
+One highlight tile. The backend writes every part
+(backend/app/modules/health/dashboard/highlights.py);
+the page only draws it.
+*/
+export interface Highlight {
+
+    /*
+    Picks the tile's colour and icon.
+    */
+    topic: "steps" | "sleep" | "protein" | "water" | "streak" | "best";
+
+    /*
+    The big number, e.g. "12/31", "8h 00m", "5 days".
+    */
+    value: string;
+
+    /*
+    The caption, e.g. "days ≥ 10k steps", "best sleep".
+    */
+    label: string;
+
+    /*
+    An optional second line, e.g. "of 10,000", "May 14".
+    */
+    detail: string | null;
+
+    /*
+    0–1 for goals (a progress bar); null for streaks and
+    bests, which have no bar.
+    */
+    progress: number | null;
+
+    /*
+    The goal was reached (Day), or met on every day.
+    */
+    goalMet: boolean;
+
+    /*
+    The whole highlight as one sentence, e.g. "Steps goal
+    met 12 of 31 days": the tile's accessible name.
+    */
+    text: string;
+
+}
+
+
 export interface Goals {
     steps: number;
     proteinG: number;
@@ -179,6 +226,11 @@ export interface DashboardSummary {
     */
     dataFrom: string | null;
     dataThrough: string | null;
+
+    /*
+    Goal hit rates, streaks and bests, in display order.
+    */
+    highlights: Highlight[];
 
     current: PeriodSummary;
 

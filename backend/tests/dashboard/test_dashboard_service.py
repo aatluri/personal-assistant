@@ -618,6 +618,28 @@ def test_data_range_is_none_without_data():
     assert summary.data_through is None
 
 
+# Verify that the summary includes the period's highlights (the rules
+# themselves are tested in test_highlights.py).
+def test_summary_includes_highlights():
+
+    service, _ = make_service(
+        health=[
+            HealthMetrics(date=date(2026, 11, 2), step_count=11000),
+            HealthMetrics(date=date(2026, 11, 3), step_count=12000),
+            # Outside the week: not counted.
+            HealthMetrics(date=date(2026, 10, 30), step_count=3000),
+        ]
+    )
+
+    summary = service.get_summary("week", date(2026, 11, 5))
+
+    assert [h.text for h in summary.highlights] == [
+        "Steps goal met 2 of 2 days",
+        "10k steps · 2-day streak",
+        "Most steps Tue · 12,000",
+    ]
+
+
 # Verify that the goals are returned for the page.
 def test_summary_includes_the_goals():
 

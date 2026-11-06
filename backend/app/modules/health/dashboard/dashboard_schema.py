@@ -156,6 +156,37 @@ class Goals(BaseModel):
     water_ml: float
 
 
+class Highlight(BaseModel):
+    """
+    One highlight, e.g. "12/31 · days ≥ 10k steps" (a goal, with
+    progress) or "8h 00m · best sleep · May 14" (a record). Written by
+    the rules in highlights.py; the page only draws it.
+    """
+
+    # Picks the icon and colour on the page.
+    topic: Literal["steps", "sleep", "protein", "water", "streak", "best"]
+
+    # The big number, e.g. "12/31", "8h 00m", "5 days", "8.2 km".
+    value: str
+
+    # The caption, e.g. "days ≥ 10k steps", "best sleep".
+    label: str
+
+    # An optional second line, e.g. "of 10,000", "May 14".
+    detail: str | None = None
+
+    # 0-1 for goal progress and goal hit rates; None for records (the
+    # streak and bests), which have nothing to fill.
+    progress: float | None = None
+
+    # The day's goal was reached, or a goal was met on every day.
+    goal_met: bool = False
+
+    # The whole highlight as one sentence, e.g. "Steps goal met 12 of
+    # 31 days": its name for screen readers.
+    text: str
+
+
 class DashboardSummary(BaseModel):
     """
     Everything the Overview page shows for one Day, Week or Month.
@@ -173,6 +204,10 @@ class DashboardSummary(BaseModel):
     # the range the page lets the user move through.
     data_from: date | None = None
     data_through: date | None = None
+
+    # Goal hit rates, streaks and bests for the period, in display order
+    # (see highlights.py). Empty when there is no data.
+    highlights: list[Highlight] = []
 
     current: PeriodSummary
 
