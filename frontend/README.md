@@ -57,11 +57,14 @@ src/
 ├── pages/              One folder per page; page-specific sections live in its components/ folder
 ├── components/         Shared UI: PageHeader, DateSection, TextInput, CollapsibleCard, SaveButton,
 │                       Button, PageContainer, LoadingSpinner, NavigationItem, MoreMenu, ...
-├── api/                Backend calls and model conversion, one file per metric;
-│                       config.ts holds the backend address (API_BASE_URL)
-├── types/              TypeScript models, one per metric
-├── utils/              createEmpty*() helpers and calculateSleepDuration()
-├── test/setup.ts       Vitest setup (jest-dom matchers, cleanup after each test)
+├── api/                Backend calls and model conversion, one file per metric, plus
+│                       dashboard.ts for the Overview; config.ts holds the backend
+│                       address (API_BASE_URL)
+├── types/              TypeScript models, one per metric, plus DashboardSummary
+├── utils/              createEmpty*() helpers, calculateSleepDuration(), and the
+│                       Overview's date and number formatting (overviewFormat.ts)
+├── test/               Vitest setup (setup.ts: jest-dom matchers, cleanup after each
+│                       test) and sample Overview data for tests (dashboardSummary.ts)
 └── assets/             Static images
 ```
 
@@ -77,7 +80,7 @@ src/
 | `/body-measurements` | `LogBodyMeasurements` | `bodyMeasurements.ts` | `GET /health/body-measurements/{date}`, `PUT /health/body-measurements` |
 | `/workout-metrics` | `LogWorkoutMetrics` | `workoutMetrics.ts` | `GET /health/workout-metrics?workout_date=`, `PUT /health/workout-metrics` (several workouts per date) |
 | `/heart-rate-notifications` | `HeartRateNotifications` | `heartRateNotifications.ts` | `GET /health/heart-rate-notifications?notification_date=` (read-only: several notifications per date, no saving; `PageHeader` shows no save status) |
-| `/` | `Dashboard` | — | Placeholder |
+| `/` | `Overview` | `dashboard.ts` | `GET /health/dashboard/summary?period=&date=&refresh=` (read-only: everything for a day, week or month, computed by the backend; see [`docs/dashboard/overview-design.md`](../docs/dashboard/overview-design.md)). Built so far: the period controls, Refresh, and the four headline numbers; the cards come next |
 | `/history` | `History` | — | Placeholder |
 | `/settings` | `Settings` | — | Placeholder |
 
@@ -91,7 +94,7 @@ Both pages reload after saving, so the calculated value is shown straight away.
 **Navigation:**
 
 - The **desktop sidebar** lists the items in `desktopNavigationItems` (`src/navigation/navigation.ts`).
-- The **mobile bottom bar** shows Dashboard, History and More (`mobileNavigationItems`).
+- The **mobile bottom bar** shows Overview, History and More (`mobileNavigationItems`).
 - **More** opens `src/components/MoreMenu.tsx`, which keeps its **own hardcoded list** of pages. A new
   page must be added there as well as in `navigation.ts`.
 

@@ -21,6 +21,9 @@ import * as nutritionMetricsApi from "./api/nutritionMetrics";
 import * as healthMetricsApi from "./api/healthMetrics";
 import * as bodyMeasurementsApi from "./api/bodyMeasurements";
 import * as heartRateNotificationsApi from "./api/heartRateNotifications";
+import * as dashboardApi from "./api/dashboard";
+
+import { makeDashboardSummary } from "./test/dashboardSummary";
 
 
 vi.mock("./api/workoutMetrics", () => ({
@@ -50,6 +53,10 @@ vi.mock("./api/bodyMeasurements", () => ({
 
 vi.mock("./api/heartRateNotifications", () => ({
     getHeartRateNotificationsByDate: vi.fn(),
+}));
+
+vi.mock("./api/dashboard", () => ({
+    getDashboardSummary: vi.fn(),
 }));
 
 
@@ -88,6 +95,10 @@ beforeEach(() => {
         heartRateNotificationsApi.getHeartRateNotificationsByDate
     ).mockResolvedValue([]);
 
+    vi.mocked(
+        dashboardApi.getDashboardSummary
+    ).mockResolvedValue(makeDashboardSummary());
+
 });
 
 
@@ -101,7 +112,12 @@ beforeEach(() => {
 
 describe("App", () => {
 
-    test("renders Dashboard route", () => {
+    /*
+        The home page is the Overview (it replaced the
+        Dashboard placeholder), and the navigation names
+        it "Overview".
+    */
+    test("renders Overview route", async () => {
 
         window.history.pushState(
             {},
@@ -112,13 +128,18 @@ describe("App", () => {
         render(<App />);
 
         expect(
-            screen.getByRole(
+            await screen.findByRole(
                 "heading",
                 {
-                    name: /Dashboard/,
+                    level: 1,
+                    name: "Overview",
                 }
             )
         ).toBeInTheDocument();
+
+        expect(
+            screen.getAllByRole("link", { name: /Overview/ }).length
+        ).toBeGreaterThan(0);
 
     });
 

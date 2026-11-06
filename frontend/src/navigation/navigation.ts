@@ -34,8 +34,8 @@ import {
 export const desktopNavigationItems = [
     {
         to: "/",
-        label: "Dashboard",
-        shortLabel: "Dashboard",
+        label: "Overview",
+        shortLabel: "Overview",
         icon: BarChart3,
     },
     {
@@ -101,8 +101,8 @@ export const desktopNavigationItems = [
 export const mobileNavigationItems = [
     {
         to: "/",
-        label: "Dashboard",
-        shortLabel: "Dashboard",
+        label: "Overview",
+        shortLabel: "Overview",
         icon: BarChart3,
     },
     {

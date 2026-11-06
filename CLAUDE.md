@@ -112,4 +112,5 @@ npm run lint
 - `npm run lint` reports pre-existing errors in `src/api/workoutMetrics.ts` and
   `src/components/Button.tsx`.
 - **Labs frontend** is not built yet (backend endpoints exist). Do not start it until asked.
-- Dashboard, History, and Settings pages are placeholders.
+- History and Settings pages are placeholders. The Overview page (`/`, which replaced the
+  Dashboard placeholder) is being built in steps; see `docs/dashboard/overview-design.md`.

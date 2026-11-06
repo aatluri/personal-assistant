@@ -13,7 +13,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import AppShell from "./layouts/AppShell";
 
-import Dashboard from "./pages/Dashboard/Dashboard";
+import Overview from "./pages/Overview/Overview";
 import History from "./pages/History/History";
 import Settings from "./pages/Settings/Settings";
 import LogBodyMeasurements from "./pages/LogBodyMeasurements/LogBodyMeasurements";
@@ -56,7 +56,7 @@ function App() {
 
                     <Route
                         path="/"
-                        element={<Dashboard />}
+                        element={<Overview />}
                     />
 
                     <Route

@@ -81,7 +81,10 @@ should point at `http://127.0.0.1:8000`.
   which shows the watch's heart rate alerts for a date (read-only, filled by the data importer).
 - **Labs:** backend endpoints for lab configuration, PDF extraction and saving reports exist, but
   there is no frontend for them yet.
-- **Placeholders:** Dashboard, History and Settings pages.
+- **Overview** (the home page, replacing the Dashboard placeholder): how a day, week or month went,
+  at a glance. In progress: the period controls and headline numbers are built, the cards are next.
+  Design: [`docs/dashboard/overview-design.md`](docs/dashboard/overview-design.md).
+- **Placeholders:** History and Settings pages.
 
 ---
 
