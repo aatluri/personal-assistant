@@ -733,3 +733,59 @@ def test_process_heart_rate_notifications_files_does_not_import_requested_unreco
     drive_client.read_json_file.assert_not_called()
     drive_client.rename_file.assert_not_called()
     mock_import_heart_rate_notifications.assert_not_called()
+
+
+# Verify that when files are passed in (as the historical import script
+# does), the folder is not listed again and exactly those files are
+# imported.
+@patch(
+    "app.modules.health.orchestrators."
+    "heart_rate_notifications_orchestrator.import_heart_rate_notifications"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "heart_rate_notifications_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "heart_rate_notifications_orchestrator.GoogleDriveClient"
+)
+def test_process_heart_rate_notifications_files_uses_given_files_without_listing(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_heart_rate_notifications,
+):
+
+    drive_client = Mock()
+    backend_client = Mock()
+
+    mock_drive_client_class.return_value = drive_client
+    mock_backend_client_class.return_value = backend_client
+
+    export_data = {"data": {"metrics": []}}
+
+    drive_client.read_json_file.return_value = export_data
+    mock_import_heart_rate_notifications.return_value = []
+
+    results = process_heart_rate_notifications_files(
+        files=[
+            {
+                "id": "file-123",
+                "name": "HeartRateNotifications-2026-10-29.json",
+            }
+        ]
+    )
+
+    drive_client.list_files.assert_not_called()
+
+    drive_client.read_json_file.assert_called_once_with(
+        "file-123"
+    )
+
+    drive_client.rename_file.assert_called_once_with(
+        file_id="file-123",
+        new_name="PROCESSED_HeartRateNotifications-2026-10-29.json",
+    )
+
+    assert len(results) == 1
+    assert results[0]["file_name"] == "HeartRateNotifications-2026-10-29.json"

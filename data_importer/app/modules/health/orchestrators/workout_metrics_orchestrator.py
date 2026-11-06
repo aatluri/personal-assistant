@@ -17,10 +17,16 @@ from app.modules.health.constants import (
 
 def process_workout_metrics_files(
     file_name: str | None = None,
+    files: list[dict] | None = None,
 ) -> list[dict]:
     """
     Process all Workout Metrics JSON files currently waiting
     in the Google Drive incoming folder.
+
+    If files is provided (Drive files with "id" and "name", as
+    returned by list_files), those are used instead of listing the
+    folder again. The historical import script lists the folder once
+    and passes each file in this way.
 
     Only files named WorkoutMetrics-YYYY-MM-DD.json (optionally
     with a FAILED_ prefix) are imported. Any other file in the
@@ -32,9 +38,10 @@ def process_workout_metrics_files(
     drive_client = GoogleDriveClient()
     backend_client = BackendClient()
 
-    files = drive_client.list_files(
-        settings.WORKOUT_METRICS_DRIVE_FOLDER_ID
-    )
+    if files is None:
+        files = drive_client.list_files(
+            settings.WORKOUT_METRICS_DRIVE_FOLDER_ID
+        )
 
     # Successfully processed files remain in the incoming
     # folder until the separate archiver moves them.

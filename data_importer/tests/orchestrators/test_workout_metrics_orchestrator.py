@@ -733,3 +733,63 @@ def test_process_workout_metrics_files_does_not_import_requested_unrecognised_fi
     drive_client.read_json_file.assert_not_called()
     drive_client.rename_file.assert_not_called()
     mock_import_workout_metrics.assert_not_called()
+
+
+# Verify that when files are passed in (as the historical import script
+# does), the folder is not listed again and exactly those files are
+# imported.
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.import_workout_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_uses_given_files_without_listing(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_workout_metrics,
+):
+
+    drive_client = Mock()
+    backend_client = Mock()
+
+    mock_drive_client_class.return_value = drive_client
+    mock_backend_client_class.return_value = backend_client
+
+    export_data = {"data": {"workouts": []}}
+
+    drive_client.read_json_file.return_value = export_data
+    mock_import_workout_metrics.return_value = []
+
+    results = process_workout_metrics_files(
+        files=[
+            {
+                "id": "file-123",
+                "name": "WorkoutMetrics-2026-07-02.json",
+            }
+        ]
+    )
+
+    drive_client.list_files.assert_not_called()
+
+    drive_client.read_json_file.assert_called_once_with(
+        "file-123"
+    )
+
+    drive_client.rename_file.assert_called_once_with(
+        file_id="file-123",
+        new_name="PROCESSED_WorkoutMetrics-2026-07-02.json",
+    )
+
+    assert results == [
+        {
+            "file_name": "WorkoutMetrics-2026-07-02.json",
+            "workout_metrics": [],
+        }
+    ]

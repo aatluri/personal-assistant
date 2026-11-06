@@ -27,6 +27,7 @@ from app.modules.health.constants import (
 
 def process_health_metrics_files(
     file_name: str | None = None,
+    files: list[dict] | None = None,
 ) -> list[dict]:
     """
     Process Health Metrics JSON files currently waiting
@@ -35,6 +36,11 @@ def process_health_metrics_files(
     If file_name is provided, only that specific file
     will be processed. Otherwise, all unprocessed and
     failed files in the incoming folder will be processed.
+
+    If files is provided (Drive files with "id" and "name", as
+    returned by list_files), those are used instead of listing the
+    folder again. The historical import script lists the folder once
+    and passes each file in this way.
 
     Only files named HealthMetrics-YYYY-MM-DD.json (optionally
     with a FAILED_ prefix) are imported. Any other file in the
@@ -47,9 +53,10 @@ def process_health_metrics_files(
     drive_client = GoogleDriveClient()
     backend_client = BackendClient()
 
-    files = drive_client.list_files(
-        settings.HEALTH_METRICS_DRIVE_FOLDER_ID
-    )
+    if files is None:
+        files = drive_client.list_files(
+            settings.HEALTH_METRICS_DRIVE_FOLDER_ID
+        )
 
     # Processed files remain in the incoming folder until
     # the separate archive process moves them.

@@ -10,7 +10,7 @@ Usage (from data_importer/, with .venv activated):
 
 Each file is imported by the same orchestrator the import endpoint uses,
 one file at a time, with a pause after every batch to stay within the
-Google Sheets API quotas.
+Google Sheets API quotas. The Drive folder is listed only once per run.
 """
 
 import argparse
@@ -56,7 +56,7 @@ class FileType:
     # other name (including PROCESSED_ and TEST_ files).
     get_file_date: Callable[[str], date | None]
 
-    # The orchestrator that imports a single file by name.
+    # The orchestrator that imports the files it is given.
     process_files: Callable[..., list[dict]]
 
 
@@ -134,6 +134,10 @@ def get_historical_files(file_type: FileType) -> list[dict]:
 def import_historical_files(file_type: FileType) -> None:
     """
     Import the historical files of one type from oldest to newest.
+
+    The folder is listed once, here. Each file (with its Drive id) is
+    passed to the orchestrator, so it does not list the folder again
+    for every file.
     """
 
     files = get_historical_files(file_type)
@@ -161,7 +165,7 @@ def import_historical_files(file_type: FileType) -> None:
         )
 
         results = file_type.process_files(
-            file_name=file["name"]
+            files=[file]
         )
 
         if results:

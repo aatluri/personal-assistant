@@ -174,12 +174,18 @@ so an import of many records can take a few minutes. The importer waits up to
 `BACKEND_TIMEOUT_SECONDS` (120 seconds, in `app/clients/backend_client.py`) for each backend
 response, longer than the backend's retries, so these pauses do not make files fail.
 
+**Temporary Google Drive errors are retried.** If Drive returns a temporary error (HTTP 429 or
+5xx) while listing, downloading, renaming or moving a file, the request is retried up to
+`DRIVE_RETRIES` (5, in `app/clients/google_drive_client.py`) times, waiting longer each time.
+
 ---
 
 ## Historical Import Script
 
 `scripts/import_historical_files.py` imports a large backlog of files of one type, oldest first.
-It reuses the same orchestrator as that type's import endpoint, one file at a time.
+It reuses the same orchestrator as that type's import endpoint, one file at a time. The script
+lists the Drive folder once and passes each file to the orchestrator, so the folder is not listed
+again for every file.
 
 ```bash
 # from data_importer/, with .venv activated

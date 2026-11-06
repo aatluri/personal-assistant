@@ -911,3 +911,78 @@ def test_process_health_metrics_files_does_not_import_requested_unrecognised_fil
     drive_client.read_json_file.assert_not_called()
     drive_client.rename_file.assert_not_called()
     mock_import_health_metrics.assert_not_called()
+
+
+# Verify that when files are passed in (as the historical import script
+# does), the folder is not listed again and exactly those files are
+# imported.
+@patch(
+    "app.modules.health.orchestrators."
+    "health_metrics_orchestrator.import_body_measurements_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "health_metrics_orchestrator.import_sleep_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "health_metrics_orchestrator.import_nutrition_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "health_metrics_orchestrator.import_health_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "health_metrics_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "health_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_health_metrics_files_uses_given_files_without_listing(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_health_metrics,
+    mock_import_nutrition_metrics,
+    mock_import_sleep_metrics,
+    mock_import_body_measurements_metrics,
+):
+
+    drive_client = Mock()
+    backend_client = Mock()
+
+    mock_drive_client_class.return_value = drive_client
+    mock_backend_client_class.return_value = backend_client
+
+    export_data = {"data": {"metrics": []}}
+
+    drive_client.read_json_file.return_value = export_data
+
+    results = process_health_metrics_files(
+        files=[
+            {
+                "id": "file-123",
+                "name": "HealthMetrics-2026-10-12.json",
+            }
+        ]
+    )
+
+    drive_client.list_files.assert_not_called()
+
+    drive_client.read_json_file.assert_called_once_with(
+        "file-123"
+    )
+
+    mock_import_health_metrics.assert_called_once_with(
+        export_data,
+        backend_client,
+    )
+
+    drive_client.rename_file.assert_called_once_with(
+        file_id="file-123",
+        new_name="PROCESSED_HealthMetrics-2026-10-12.json",
+    )
+
+    assert len(results) == 1
+    assert results[0]["file_name"] == "HealthMetrics-2026-10-12.json"

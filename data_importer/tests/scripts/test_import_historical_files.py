@@ -190,7 +190,7 @@ def test_import_historical_files_imports_in_order_with_batch_pauses(
     mock_get_files.assert_called_once_with(file_type)
 
     assert file_type.process_files.call_args_list == [
-        call(file_name=file["name"])
+        call(files=[file])
         for file in files
     ]
 
@@ -238,7 +238,7 @@ def test_import_historical_files_stops_at_max_files(
     import_historical_files(file_type)
 
     assert file_type.process_files.call_args_list == [
-        call(file_name=file["name"])
+        call(files=[file])
         for file in files[:3]
     ]
 

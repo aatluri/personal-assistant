@@ -8,6 +8,14 @@ from googleapiclient.http import MediaIoBaseDownload, MediaIoBaseUpload
 from app.config import settings
 
 
+# How many times to retry a Drive request after a temporary error
+# (HTTP 429 or 5xx). Google's client library waits longer between each
+# attempt. Only requests that are safe to repeat are retried: listing,
+# downloading, renaming and moving. Creating a file is not, because a
+# retry after a lost response could create a duplicate.
+DRIVE_RETRIES = 5
+
+
 class GoogleDriveClient:
     """
     Client for communicating with Google Drive.
@@ -60,7 +68,7 @@ class GoogleDriveClient:
                 orderBy="modifiedTime",
                 pageSize=100,
                 pageToken=page_token,
-            ).execute()
+            ).execute(num_retries=DRIVE_RETRIES)
 
             files.extend(
                 response.get("files", [])
@@ -98,7 +106,9 @@ class GoogleDriveClient:
         done = False
 
         while not done:
-            _, done = downloader.next_chunk()
+            _, done = downloader.next_chunk(
+                num_retries=DRIVE_RETRIES
+            )
 
         file_buffer.seek(0)
 
@@ -121,7 +131,7 @@ class GoogleDriveClient:
                 "name": new_name,
             },
             fields="id, name",
-        ).execute()
+        ).execute(num_retries=DRIVE_RETRIES)
 
     def move_file(
         self,
@@ -141,7 +151,7 @@ class GoogleDriveClient:
             addParents=destination_folder_id,
             removeParents=source_folder_id,
             fields="id, name, parents",
-        ).execute()
+        ).execute(num_retries=DRIVE_RETRIES)
 
 
     def create_json_file(
