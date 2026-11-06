@@ -118,8 +118,13 @@ def test_period_dates(period, summary_date):
     assert summary["days_elapsed"] == summary["current"]["days"]
     assert 0 <= summary["days_elapsed"] <= summary["days_in_period"]
 
+    data_from = as_date(summary["data_from"])
     data_through = as_date(summary["data_through"])
-    assert data_through is None or data_through <= today
+
+    if data_through is None:
+        assert data_from is None
+    else:
+        assert data_from <= data_through <= today
 
 
 # Verify the chart days: consecutive dates ending on the period's end

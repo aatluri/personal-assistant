@@ -82,7 +82,7 @@ src/
 | `/body-measurements` | `LogBodyMeasurements` | `bodyMeasurements.ts` | `GET /health/body-measurements/{date}`, `PUT /health/body-measurements` |
 | `/workout-metrics` | `LogWorkoutMetrics` | `workoutMetrics.ts` | `GET /health/workout-metrics?workout_date=`, `PUT /health/workout-metrics` (several workouts per date) |
 | `/heart-rate-notifications` | `HeartRateNotifications` | `heartRateNotifications.ts` | `GET /health/heart-rate-notifications?notification_date=` (read-only: several notifications per date, no saving; `PageHeader` shows no save status) |
-| `/` | `Overview` | `dashboard.ts` | `GET /health/dashboard/summary?period=&date=&refresh=` (read-only: everything for a day, week or month, computed by the backend; see [`docs/dashboard/overview-design.md`](../docs/dashboard/overview-design.md)). Built: the period controls, Refresh, the four headline numbers, the six cards (Sleep, Recovery, Activity, Nutrition, Training, Body) and the heart rate alert strip; tapping a day in a Week or Month chart opens it. Highlights come next |
+| `/` | `Overview` | `dashboard.ts` | `GET /health/dashboard/summary?period=&date=&refresh=` (read-only: everything for a day, week or month, computed by the backend; see [`docs/dashboard/overview-design.md`](../docs/dashboard/overview-design.md)). Built: the period controls (‹ › arrows, a date picker on the period label to jump to any date, and Today), Refresh, the four headline numbers, the six cards (Sleep, Recovery, Activity, Nutrition, Training, Body) and the heart rate alert strip; tapping a day in a Week or Month chart opens it. Highlights come next |
 | `/history` | `History` | — | Placeholder |
 | `/settings` | `Settings` | — | Placeholder |
 

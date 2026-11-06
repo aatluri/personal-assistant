@@ -589,27 +589,33 @@ def test_body_summary_ignores_later_measurements():
 # ============================================================================
 
 
-# Verify that "data through" is the latest date with any data, ignoring
-# dates after today (such as leftover test rows dated 2099).
-def test_data_through_is_the_latest_past_date_with_data():
+# Verify that "data through" is the latest date with any data, and
+# "data from" the earliest, both ignoring dates after today (such as
+# leftover test rows dated 2099).
+def test_data_range_is_the_earliest_and_latest_past_dates_with_data():
 
     service, _ = make_service(
         health=[HealthMetrics(date=date(2026, 11, 3), step_count=5000)],
         sleep=[SleepMetrics(date=date(2026, 11, 4), total_sleep_duration_hr=7)],
+        body=[BodyMeasurements(date=date(2022, 1, 1), weight_kg=80)],
         nutrition=[NutritionMetrics(date=date(2099, 1, 1))],
     )
 
     summary = service.get_summary("day", date(2026, 11, 5))
 
+    assert summary.data_from == date(2022, 1, 1)
     assert summary.data_through == date(2026, 11, 4)
 
 
-# Verify that there is no "data through" date when there is no data.
-def test_data_through_is_none_without_data():
+# Verify that there is no data range when there is no data.
+def test_data_range_is_none_without_data():
 
     service, _ = make_service()
 
-    assert service.get_summary("day", date(2026, 11, 5)).data_through is None
+    summary = service.get_summary("day", date(2026, 11, 5))
+
+    assert summary.data_from is None
+    assert summary.data_through is None
 
 
 # Verify that the goals are returned for the page.

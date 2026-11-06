@@ -251,6 +251,112 @@ describe("Overview", () => {
 
 
     /*
+    Verify that picking a date in the date picker jumps
+    straight to the month containing it.
+    */
+    test("jumps to a picked date's month", async () => {
+
+        vi.mocked(dashboardApi.getDashboardSummary).mockImplementation(
+            async (period, date) => date === "2022-05-15"
+                ? makeDashboardSummary({
+                    period: "month",
+                    date: "2022-05-15",
+                    start: "2022-05-01",
+                    end: "2022-05-31",
+                    isCurrent: false,
+                })
+                : CURRENT[period]
+        );
+
+        render(<Overview />);
+
+        fireEvent.click(await screen.findByRole("button", { name: "Month" }));
+
+        fireEvent.change(screen.getByLabelText("Choose a date"), {
+            target: { value: "2022-05-15" },
+        });
+
+        expect(
+            await screen.findByRole("heading", { name: "May 2022" })
+        ).toBeInTheDocument();
+
+        expect(dashboardApi.getDashboardSummary).toHaveBeenLastCalledWith(
+            "month",
+            "2022-05-15"
+        );
+
+    });
+
+
+    /*
+    Verify that the date picker offers only dates from the
+    first data up to today.
+    */
+    test("limits the date picker to the data range", async () => {
+
+        render(<Overview />);
+
+        const picker = await screen.findByLabelText("Choose a date");
+
+        await waitFor(() =>
+            expect(picker).toHaveAttribute("min", "2022-01-01")
+        );
+
+        expect(picker).toHaveAttribute("max", "2026-11-05");
+        expect(picker).toHaveValue("2026-11-05");
+
+    });
+
+
+    /*
+    Verify that Today is hidden on the current period, and
+    on a past period returns to the current one.
+    */
+    test("returns to today with Today", async () => {
+
+        render(<Overview />);
+
+        await screen.findByRole("heading", { name: "Nov 2 – 8" });
+
+        expect(screen.queryByRole("button", { name: "Today" })).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", { name: "Previous period" }));
+
+        fireEvent.click(await screen.findByRole("button", { name: "Today" }));
+
+        expect(
+            await screen.findByRole("heading", { name: "Nov 2 – 8" })
+        ).toBeInTheDocument();
+
+        expect(dashboardApi.getDashboardSummary).toHaveBeenLastCalledWith(
+            "week",
+            "2026-11-05"
+        );
+
+    });
+
+
+    /*
+    Verify that Previous stops at the first period with data.
+    */
+    test("does not step back before the first data", async () => {
+
+        vi.mocked(dashboardApi.getDashboardSummary).mockResolvedValue(
+            makeDashboardSummary({ dataFrom: "2026-11-03" })
+        );
+
+        render(<Overview />);
+
+        await screen.findByRole("heading", { name: "Nov 2 – 8" });
+
+        expect(
+            screen.getByRole("button", { name: "Previous period" })
+        ).toBeDisabled();
+
+    });
+
+
+    /*
     Verify that tapping a day in a Week chart opens that
     day in Day view.
     */

@@ -119,6 +119,7 @@ export function makeDashboardSummary(
         daysInPeriod: 7,
         daysElapsed: 4,
         isCurrent: true,
+        dataFrom: "2022-01-01",
         dataThrough: "2026-11-05",
 
         current: makePeriodSummary({

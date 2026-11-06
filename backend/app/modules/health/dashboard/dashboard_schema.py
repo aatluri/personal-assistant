@@ -169,7 +169,9 @@ class DashboardSummary(BaseModel):
     days_elapsed: int
     is_current: bool
 
-    # The latest date (up to today) that has any data.
+    # The earliest and latest dates (up to today) that have any data:
+    # the range the page lets the user move through.
+    data_from: date | None = None
     data_through: date | None = None
 
     current: PeriodSummary

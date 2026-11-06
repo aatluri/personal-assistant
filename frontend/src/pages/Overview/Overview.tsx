@@ -174,6 +174,17 @@ function Overview() {
 
 
     /*
+    A date picked in the date picker: show the day, week
+    or month containing it, never past today.
+    */
+    function handleDateChange(date: string) {
+
+        setSelectedDate(date > today ? today : date);
+
+    }
+
+
+    /*
     Tapping a day in a Week or Month chart opens that day.
     */
     function handleSelectDay(date: string) {
@@ -203,6 +214,15 @@ function Overview() {
     const canGoNext =
         !isLoading && summary !== null && summary.end < today;
 
+    /*
+    The first period with data has no "previous": its start
+    is on or before the earliest date with data.
+    */
+    const canGoPrevious =
+        !isLoading
+        && summary !== null
+        && (summary.dataFrom === null || summary.start > summary.dataFrom);
+
 
     /*
     Page Layout
@@ -223,10 +243,17 @@ function Overview() {
                     period={period}
                     label={summary ? formatPeriodLabel(summary) : ""}
                     progress={summary ? formatPeriodProgress(summary) : ""}
+                    selectedDate={selectedDate}
+                    today={today}
+                    dataFrom={summary?.dataFrom ?? null}
+                    canGoPrevious={canGoPrevious}
                     canGoNext={canGoNext}
+                    isCurrent={summary?.isCurrent ?? true}
                     onPeriodChange={setPeriod}
                     onPrevious={() => handleStep(-1)}
                     onNext={() => handleStep(1)}
+                    onDateChange={handleDateChange}
+                    onToday={() => setSelectedDate(today)}
                 />
 
                 {loadError && (

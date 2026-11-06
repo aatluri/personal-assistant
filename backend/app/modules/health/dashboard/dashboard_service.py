@@ -237,6 +237,8 @@ class DashboardService:
             if start <= workout.date <= end
         ]
 
+        data_dates = self._data_dates(data, today)
+
         return DashboardSummary(
             period=period,
             date=selected_date,
@@ -245,7 +247,8 @@ class DashboardService:
             days_in_period=(end - start).days + 1,
             days_elapsed=current.days,
             is_current=is_current,
-            data_through=self._data_through(data, today),
+            data_from=min(data_dates, default=None),
+            data_through=max(data_dates, default=None),
             current=current,
             comparison=comparison,
             days=[
@@ -526,14 +529,18 @@ class DashboardService:
         return summary
 
 
-    def _data_through(
+    def _data_dates(
         self,
         data: _DashboardData,
         today: date,
-    ) -> date | None:
+    ) -> list[date]:
         """
-        The latest date, up to today, that has any data. Imports run
-        behind real time, so this tells the user how current the page is.
+        Every date, up to today, that has any data. Dates after today
+        (such as leftover 2099 test rows) are ignored.
+
+        The earliest is where the page's date picker and ‹ arrow stop;
+        the latest is "Data through", which tells the user how current
+        the page is, since imports run behind real time.
         """
 
         dates = [
@@ -545,6 +552,4 @@ class DashboardService:
             *(row.date for row in data.notifications),
         ]
 
-        past_dates = [day for day in dates if day <= today]
-
-        return max(past_dates, default=None)
+        return [day for day in dates if day <= today]

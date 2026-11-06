@@ -28,7 +28,11 @@ Work starts with **Overview**.
 
 ### Controls
 
-- `Day | Week | Month` segmented control, plus ‹ › arrows to step through periods.
+- `Day | Week | Month` segmented control, plus ‹ › arrows to step through periods, from the first
+  period with data (`data_from`) up to the current one.
+- Clicking the period label opens the browser's date picker (limited to `data_from` … today).
+  Picking any date shows the day, week or month containing it, so distant periods are one pick
+  away. A **Today** button, shown only away from the current period, returns to it.
 - Calendar periods: Mon–Sun weeks, calendar months. A current period shows "so far"
   ("Week so far · 4 of 7 days").
 - "Data through …" shows the latest date that has any data (a date, no time), because imports

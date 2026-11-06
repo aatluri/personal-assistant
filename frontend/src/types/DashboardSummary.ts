@@ -174,8 +174,10 @@ export interface DashboardSummary {
     isCurrent: boolean;
 
     /*
-    The latest date, up to today, that has any data.
+    The earliest and latest dates, up to today, that have
+    any data: the range the page lets the user move through.
     */
+    dataFrom: string | null;
     dataThrough: string | null;
 
     current: PeriodSummary;
