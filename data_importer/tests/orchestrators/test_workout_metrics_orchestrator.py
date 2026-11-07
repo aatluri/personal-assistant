@@ -793,3 +793,101 @@ def test_process_workout_metrics_files_uses_given_files_without_listing(
             "workout_metrics": [],
         }
     ]
+
+
+
+# ============================================================================
+# Files Health Auto Export may still update
+# ============================================================================
+
+
+# Verify that today's and yesterday's files are imported but keep their
+# plain name (a FAILED_ one gets its plain name back), so the next run
+# imports them again, while a 2-day-old file is marked as processed.
+@patch("app.modules.health.orchestrators.file_lifecycle.today")
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.import_workout_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_keeps_recent_files_for_reimport(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_workout_metrics,
+    mock_today,
+):
+
+    mock_today.return_value = date(2026, 11, 7)
+
+    drive_client = Mock()
+    mock_drive_client_class.return_value = drive_client
+    mock_backend_client_class.return_value = Mock()
+
+    drive_client.list_files.return_value = [
+        {"id": "file-today", "name": "WorkoutMetrics-2026-11-07.json"},
+        {"id": "file-yesterday", "name": "FAILED_WorkoutMetrics-2026-11-06.json"},
+        {"id": "file-old", "name": "WorkoutMetrics-2026-11-05.json"},
+    ]
+
+    drive_client.read_json_file.return_value = {"data": {}}
+    mock_import_workout_metrics.return_value = []
+
+    results = process_workout_metrics_files()
+
+    assert len(results) == 3
+    assert drive_client.read_json_file.call_count == 3
+
+    # Oldest first: the 2-day-old file is processed; yesterday's failed
+    # file gets its plain name back; today's keeps its name.
+    assert drive_client.rename_file.call_args_list == [
+        call(file_id="file-old", new_name="PROCESSED_WorkoutMetrics-2026-11-05.json"),
+        call(file_id="file-yesterday", new_name="WorkoutMetrics-2026-11-06.json"),
+    ]
+
+
+# Verify that a recent file that fails to import is still marked FAILED_.
+@patch("app.modules.health.orchestrators.file_lifecycle.today")
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.import_workout_metrics"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.BackendClient"
+)
+@patch(
+    "app.modules.health.orchestrators."
+    "workout_metrics_orchestrator.GoogleDriveClient"
+)
+def test_process_workout_metrics_files_marks_failed_recent_file(
+    mock_drive_client_class,
+    mock_backend_client_class,
+    mock_import_workout_metrics,
+    mock_today,
+):
+
+    mock_today.return_value = date(2026, 11, 7)
+
+    drive_client = Mock()
+    mock_drive_client_class.return_value = drive_client
+    mock_backend_client_class.return_value = Mock()
+
+    drive_client.list_files.return_value = [
+        {"id": "file-today", "name": "WorkoutMetrics-2026-11-07.json"},
+    ]
+
+    drive_client.read_json_file.side_effect = RuntimeError("Drive unavailable")
+
+    assert process_workout_metrics_files() == []
+
+    drive_client.rename_file.assert_called_once_with(
+        file_id="file-today",
+        new_name="FAILED_WorkoutMetrics-2026-11-07.json",
+    )

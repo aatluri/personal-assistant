@@ -2,6 +2,13 @@
 FAILED_PREFIX = "FAILED_"
 PROCESSED_PREFIX = "PROCESSED_"
 
+# Health Auto Export updates the files for today and yesterday on every
+# export (the same file in Drive). A file dated within this many days of
+# today can still change, so it is imported again on every run and only
+# renamed PROCESSED_ once it is this many days old (see
+# orchestrators/file_lifecycle.py).
+REIMPORT_DAYS = 2
+
 # Health Auto Export names its files <prefix>YYYY-MM-DD.json, for example
 # HealthMetrics-2026-10-12.json. Only files matching this pattern are imported.
 HEALTH_METRICS_FILE_PREFIX = "HealthMetrics-"

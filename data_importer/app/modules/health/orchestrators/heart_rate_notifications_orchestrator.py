@@ -12,6 +12,10 @@ from app.modules.health.constants import (
     FILE_SUFFIX,
     HEART_RATE_NOTIFICATIONS_FILE_PREFIX,
     PROCESSED_PREFIX,
+    REIMPORT_DAYS,
+)
+from app.modules.health.orchestrators.file_lifecycle import (
+    name_after_import,
 )
 
 
@@ -116,25 +120,35 @@ def process_heart_rate_notifications_files(
                 }
             )
 
-            # Remove FAILED_ if this is a successful retry,
-            # then mark the file as successfully processed.
+            # Remove FAILED_ if this is a successful retry. A file that
+            # Health Auto Export may still update (today's or yesterday's)
+            # keeps its plain name, so the next run imports it again; an
+            # older one is marked as processed (see file_lifecycle.py).
             original_name = current_file_name.removeprefix(
                 FAILED_PREFIX
             )
 
-            processed_name = (
-                f"{PROCESSED_PREFIX}{original_name}"
+            new_name = name_after_import(
+                original_name,
+                get_heart_rate_notifications_file_date(original_name),
             )
 
-            drive_client.rename_file(
-                file_id=file_id,
-                new_name=processed_name,
-            )
+            if new_name != current_file_name:
+                drive_client.rename_file(
+                    file_id=file_id,
+                    new_name=new_name,
+                )
 
-            print(
-                f"Successfully imported: "
-                f"{current_file_name}"
-            )
+            if new_name.startswith(PROCESSED_PREFIX):
+                print(
+                    f"Successfully imported: "
+                    f"{current_file_name}"
+                )
+            else:
+                print(
+                    f"Imported {current_file_name}; kept for re-import "
+                    f"until it is {REIMPORT_DAYS} days old"
+                )
 
         except Exception as error:
             print(

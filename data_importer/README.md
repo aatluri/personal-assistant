@@ -26,7 +26,9 @@ PUT /health/import/...  (called manually)
 orchestrator ──► importer + mapping (one per metric) ──► BackendClient ──► backend PUT /health/...
         │
         └── renames the file in Drive:
-              PROCESSED_<name>  on success
+              PROCESSED_<name>  on success, once the file is 2 days old
+              <name> (kept)     on success for today's and yesterday's files,
+                                which Health Auto Export may still update
               FAILED_<name>     on failure (retried next run)
 
 POST /health/archive  (called manually)
@@ -40,11 +42,11 @@ POST /health/archive  (called manually)
 | Path | Role |
 |---|---|
 | `app/main.py` | **Start here.** FastAPI endpoints for importing and archiving. |
-| `app/modules/health/orchestrators/` | Per-file loop: list files in Drive, run the importers, rename each file `PROCESSED_` or `FAILED_`. |
+| `app/modules/health/orchestrators/` | Per-file loop: list files in Drive, run the importers, rename each file `PROCESSED_` or `FAILED_` (today's and yesterday's keep their name, so they are imported again; see `file_lifecycle.py`). |
 | `app/modules/health/importers/` | One importer per metric. Turns the export JSON into a backend payload and sends it. |
 | `app/modules/health/mappings/` | For each backend field: the source metric name, which value to read, and any type or unit conversion. |
 | `app/modules/health/archivers/file_archiver.py` | Moves old `PROCESSED_` files into the processed folder. |
-| `app/modules/health/constants.py` | Shared values: the `PROCESSED_` and `FAILED_` prefixes, the filename prefixes and `.json` suffix, Health Auto Export's timestamp and filename date formats, the `SOURCE` label, and the unit-conversion factors. |
+| `app/modules/health/constants.py` | Shared values: the `PROCESSED_` and `FAILED_` prefixes, `REIMPORT_DAYS` (how long a file is imported again), the filename prefixes and `.json` suffix, Health Auto Export's timestamp and filename date formats, the `SOURCE` label, and the unit-conversion factors. |
 | `app/clients/google_drive_client.py` | Lists, reads, renames and moves files in Google Drive. |
 | `app/clients/backend_client.py` | Sends payloads to the backend API. |
 | `app/config.py` | Settings loaded from `.env`. |
@@ -76,10 +78,18 @@ not treated as failed.
   message and never imported. This also applies to a file requested with `?file_name=`. Files are
   processed **oldest first**, using the date in the filename. The filename prefixes and suffix are
   defined in `app/modules/health/constants.py`.
+- **Today's and yesterday's files are imported on every run.** Health Auto Export rewrites the
+  files for today and yesterday on each export (it updates the same file in Drive), so late
+  entries, such as nutrition logged the next day, or a second export the same day, end up in a file
+  that was already imported. After a successful import such a file **keeps its plain name**, so the
+  next run imports it again. Once its date is `REIMPORT_DAYS` (2) days old it can no longer change:
+  it is imported one last time and renamed `PROCESSED_`. Importing a file again is safe: the backend
+  updates the existing records instead of creating duplicates. The rule is in
+  `app/modules/health/orchestrators/file_lifecycle.py`.
 - **`PROCESSED_` files** are skipped. Imported files stay in the incoming folder with this prefix
   until they are archived.
 - **`FAILED_` files** are retried on every run. On success the `FAILED_` prefix is replaced with
-  `PROCESSED_`.
+  `PROCESSED_`, or, for today's and yesterday's files, removed (the plain name means "import again").
 - **A file fails as a whole.** If any one of its imports fails (for example sleep), the file is
   renamed `FAILED_`. Imports from that file that already succeeded are **not** rolled back.
   Retrying is safe because the backend updates the existing record instead of creating a duplicate.
