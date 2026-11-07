@@ -106,7 +106,7 @@ to Nov 6 07:00, or from Nov 6 01:00 to 07:00, shows under **Nov 6**.
 | Goal | Value |
 |---|---|
 | Steps | 10,000 per day |
-| Protein | 140 g per day |
+| Protein | 120 g per day |
 | Sleep | 7 hours per night |
 | Water | 3 litres per day |
 
@@ -152,7 +152,7 @@ Both groups wrap onto more lines when needed; an empty group is left out.
 
 | View | Highlights, in order (as sentences) |
 |---|---|
-| Day | `Steps 8,240 of 10,000`, `Protein 92 of 140 g`, `Water 2.1 of 3 L`, `Sleep 7h 12m · goal 7h met` |
+| Day | `Steps 8,240 of 10,000`, `Protein 92 of 120 g`, `Water 2.1 of 3 L`, `Sleep 7h 12m · goal 7h met` |
 | Week / Month | Goal hit rates over days with data: `Steps goal met 5 of 7 days`, `Protein goal met 3 of 4 logged days`, `Sleep goal met 2 of 4 nights`, `Water goal met 3 of 5 days`; then the step streak; `Best sleep Tue · 7h 48m`; `Most steps Sat · 14,320`; `Furthest workout · Outdoor Run 8.2 km on Oct 18` |
 
 - **Step streak**: consecutive days reaching the steps goal; a day with no data breaks it. A
